@@ -1,5 +1,7 @@
 # Meet Jeeves.
 
+_This was my first project and has since been retired._
+
 Read the background from its [original source](https://jeeves.preritdas.com). The read-me below includes information on how to setup the program from scratch and how to deploy it. The files in their full form are in the repository and are regularly updated when I make significant or necessary changes. As such, the code in the read-me is likely outdated and should only be used in context or as a guide for building the program.
 
 ----
