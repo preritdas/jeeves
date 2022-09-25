@@ -48,7 +48,7 @@ def requested_app(inbound: dict) -> Callable | None:
         raise errors.InvalidInbound("No app specified.")
 
     app_ref_loc = first_line.find("app:") + len("app:")
-    app_name = first_line[app_ref_loc:].strip()
+    app_name = first_line[app_ref_loc:].strip().lower()
 
     if not app_name in apps.PROGRAMS:
         return None
