@@ -2,7 +2,7 @@ import groceries
 import wordhunt
 
 
-def handler(content: str, user: str):
+def handler(content: str, options: dict):
     """Handler for apps."""
     available_apps = ""
     for app in PROGRAMS.keys():
