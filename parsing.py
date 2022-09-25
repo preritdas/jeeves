@@ -25,8 +25,8 @@ def is_concat(inbound: dict) -> bool:
     return "concat" in inbound
 
 
-def requested_app(inbound: dict) -> Callable | None:
-    """Returns the handler function of an app, or None
+def requested_app(inbound: dict) -> tuple[Callable | None, str]:
+    """Returns the handler function of an app and its name, or None
     if the app doesn't exist."""
     content: str = inbound["text"]
     first_line = (all_lines := content.splitlines())[0].lower()
@@ -40,7 +40,7 @@ def requested_app(inbound: dict) -> Callable | None:
     if not app_name in apps.PROGRAMS:
         return None
     
-    return apps.PROGRAMS.get(app_name, None)
+    return apps.PROGRAMS.get(app_name, None), app_name
 
 
 def check_permissions(user: str, app: str) -> bool:

@@ -22,3 +22,7 @@ class Nexmo:
     api_secret = _nexmo_keys["api_secret"]
     sender = _nexmo_keys["sender"]
     mynumber = _nexmo_keys["receiver"]
+
+
+class Deta:
+    project_key = keys["Deta"]["project_key"]
