@@ -1,2 +1,7 @@
 flask==2.2.2  # API
 nexmo==2.5.2  # respond with texts
+
+# Groceries
+pattern==3.6
+translators==5.4.2
+mypytoolkit>=1.5.60

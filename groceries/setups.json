@@ -1,0 +1,28 @@
+{
+    "Whole Foods": [
+        "fruit", 
+        "vegetables", 
+        "self care", 
+        "meat", 
+        "dairy", 
+        "drinks", 
+        "frozen",
+        "bread", 
+        "snacks", 
+        "ingredients", 
+        "appliances"
+    ],
+    "Giant Foods": [
+        "frozen",
+        "dairy", 
+        "self care", 
+        "drinks", 
+        "bread", 
+        "snacks", 
+        "appliances",
+        "ingredients", 
+        "meat", 
+        "fruit", 
+        "vegetables" 
+    ]
+}
