@@ -61,7 +61,12 @@ def main_handler():
 
     # Run the app
     content, options = parsing.app_content_options(inbound_sms_content)
-    response = requested_app(content, options)
+
+    try:
+        response = requested_app(content, options)
+    except Exception as e:
+        response = f"Unfortunately, that failed. '{str(e)}'"
+
     texts.send_message(response, sender)
 
     return "", 204
