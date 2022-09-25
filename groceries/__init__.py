@@ -1,11 +1,9 @@
 from . import classification
 
-def handler(content: str):
+def handler(content: str, options: dict):
     # Determine setup
-    setup = None
-    if "setup" in (first_line := content.splitlines()[0].lower()):
-        setup = first_line[7:].title()
-        content = "\n".join(content.splitlines()[1:])  # remove setup line
+    if "setup" in options: setup = options["setup"]
+    else: setup = None
 
     return classification.classify_grocery_list(content, setup=setup)
     
