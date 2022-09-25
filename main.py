@@ -2,19 +2,27 @@
 from flask import Flask, request
 
 # Apps
-import groceries
-import wordhunt
+import apps
 
 
 app = Flask(__name__)
 
 
-PROGRAMS = {
-    "groceries": groceries,
-    "wordhunt": wordhunt
-}
+@app.route("/inbound-sms")
+def main_handler():
+    """
+    Handle all inbound messages.
+    
+    Keep this as simple as possible, with plenty of outsourcing.
+    """
+    inbound_sms_content = request.get_json()
+    print("\n", inbound_sms_content, sep="")
+
+    if type(inbound_sms_content) is not dict:
+        return '', 400
 
 
-@app.route("/")
-def available_apps():
-    return "These are the available apps."
+
+
+if __name__ == '__main__':
+    apps.handler("a", "a")
