@@ -16,19 +16,6 @@ def assert_valid(inbound: dict) -> bool:
     if not "app:" in first_line:
         return False
 
-    # check_lines = all_lines[:]
-
-    # for line in all_lines:
-    #     if "options:" in line:
-    #         check_lines.remove(line)
-    #         break
-
-    # check_lines.pop(0)
-    # check_lines = [ele for ele in check_lines if ele]  # remove blank lines
-
-    # if not check_lines
-    #     return False
-
     return True
 
 
