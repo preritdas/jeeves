@@ -42,7 +42,7 @@ def requested_app(inbound: dict) -> Callable | None:
     """Returns the handler function of an app, or None
     if the app doesn't exist."""
     content: str = inbound["text"]
-    first_line = (all_lines := content.splitlines())[0]
+    first_line = (all_lines := content.splitlines())[0].lower()
 
     if not "app:" in first_line:
         raise errors.InvalidInbound("No app specified.")
