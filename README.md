@@ -12,4 +12,4 @@ Permissions should be a database. Write a `check_permissions` function, called i
 
 (This is for personal reference.)
 
-Each app needs a `handler` function callable under the app level, ex. in an app module's `__init__.py`. The handler *must* take exactly two arguments, `content: str` and `user: str`. In that order. Content is the inbound message's raw content. User is the phone number.
+Each app needs a `handler` function callable under the app level, ex. in an app module's `__init__.py`. The handler *must* take exactly two arguments, `content: str` and `user: str`. In that order. Content is the inbound message's raw content. User is the phone number. The handler must *always* return an HTTP response, ex. `return "", 204`. 
