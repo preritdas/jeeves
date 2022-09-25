@@ -63,15 +63,35 @@ def check_permissions(user: str, app: str) -> bool:
     return True
 
 
-def app_content(inbound: dict) -> str:
+def _parse_options(options: str) -> dict:
+    """Takes an options string and returns a dict."""
+    options = options.lower()
+    assert "options:" in options
+
+    options = options[len("options:"):].strip()
+    list_of_options = [ele.strip() for ele in options.split(",")]
+    
+    return_options = {}
+    for option in list_of_options:
+        key, val = (ele.strip() for ele in option.split("="))
+        return_options[key] = val
+    
+    return return_options
+
+
+def app_content_options(inbound: dict) -> tuple[str, dict]:
     """Returns app input content."""
     raw_content: str = inbound["text"]
     lines = raw_content.splitlines()
 
+    options = {}
     for pos, line in enumerate(lines):
         line = line.lower()
-        if "app:" in line or "options:" in line or line == "":
+        if "app:" in line or line == "": 
             continue
+        if "options:" in line:
+            options = _parse_options(line)
+
         break
     
-    return "\n".join(lines[pos:])
+    return "\n".join(lines[pos:]), options
