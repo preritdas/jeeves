@@ -9,7 +9,7 @@ import texts
 app = Flask(__name__)
 
 
-@app.route("/inbound-sms")
+@app.route("/inbound-sms", methods=["POST"])
 def main_handler():
     """
     Handle all inbound messages.
