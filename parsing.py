@@ -11,7 +11,7 @@ import apps
 def assert_valid(inbound: dict) -> bool:
     """Check that an inbound sms conforms to necessary structure."""
     content: str = inbound["text"]
-    first_line = (all_lines := content.splitlines())[0]
+    first_line = (all_lines := content.splitlines())[0].lower()
 
     if not "app:" in first_line:
         return False
