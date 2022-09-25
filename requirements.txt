@@ -1,0 +1,2 @@
+flask==2.2.2  # API
+nexmo==2.5.2  # respond with texts
