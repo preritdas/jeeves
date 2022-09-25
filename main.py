@@ -60,7 +60,7 @@ def main_handler():
 
     # Run the app
     content = parsing.app_content(inbound_sms_content)
-    response = requested_app(content, sender)
+    response = requested_app(content)
     texts.send_message(response, sender)
 
     return "", 204
