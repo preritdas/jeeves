@@ -1,0 +1,2 @@
+class InvalidInbound(Exception):
+    pass
