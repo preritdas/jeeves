@@ -69,6 +69,7 @@ def app_content(inbound: dict) -> str:
     lines = raw_content.splitlines()
 
     for pos, line in enumerate(lines):
+        line = line.lower()
         if "app:" in line or "options:" in line or line == "":
             continue
         break
