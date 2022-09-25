@@ -16,18 +16,18 @@ def assert_valid(inbound: dict) -> bool:
     if not "app:" in first_line:
         return False
 
-    check_lines = all_lines[:]
+    # check_lines = all_lines[:]
 
-    for line in all_lines:
-        if "options:" in line:
-            check_lines.remove(line)
-            break
+    # for line in all_lines:
+    #     if "options:" in line:
+    #         check_lines.remove(line)
+    #         break
 
-    check_lines.pop(0)
-    check_lines = [ele for ele in check_lines if ele]  # remove blank lines
+    # check_lines.pop(0)
+    # check_lines = [ele for ele in check_lines if ele]  # remove blank lines
 
-    if not check_lines:
-        return False
+    # if not check_lines
+    #     return False
 
     return True
 
@@ -47,12 +47,12 @@ def requested_app(inbound: dict) -> Callable | None:
     if not "app:" in first_line:
         raise errors.InvalidInbound("No app specified.")
 
-    app_ref_loc = first_line.find("app:")
+    app_ref_loc = first_line.find("app:") + len("app:")
     app_name = first_line[app_ref_loc:].strip()
 
     if not app_name in apps.PROGRAMS:
         return None
-
+    
     return apps.PROGRAMS.get(app_name, None)
 
 
@@ -72,7 +72,5 @@ def app_content(inbound: dict) -> str:
         if "app:" in line or "options:" in line or line == "":
             continue
         break
-    else:
-        raise errors.InvalidInbound("No content found.")
     
     return "\n".join(lines[pos:])
