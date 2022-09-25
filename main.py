@@ -3,6 +3,7 @@ from flask import Flask, request
 
 # Project
 import parsing
+import permissions
 import texts
 
 
@@ -41,7 +42,7 @@ def main_handler():
         return "", 204
 
     # App availablity
-    requested_app = parsing.requested_app(inbound_sms_content)
+    requested_app, app_name = parsing.requested_app(inbound_sms_content)
 
     if not requested_app:
         texts.send_message(
@@ -51,9 +52,9 @@ def main_handler():
         return "", 204
 
     # App permissions
-    if not parsing.check_permissions(sender, requested_app):
+    if not permissions.check_permissions(sender, app_name):
         texts.send_message(
-            f"It seems you don't have permission to use app '{requested_app}'.",
+            f"It seems you don't have permission to use app '{app_name}'.",
             sender
         )
         return "", 204
