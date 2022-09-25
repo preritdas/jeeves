@@ -91,6 +91,7 @@ def app_content_options(inbound: dict) -> tuple[str, dict]:
             continue
         if "options:" in line:
             options = _parse_options(line)
+            continue
 
         break
     
