@@ -56,7 +56,7 @@ def _parse_options(options: str) -> dict:
     assert "options:" in options
 
     options = options[len("options:"):].strip()
-    list_of_options = [ele.strip() for ele in options.split(",")]
+    list_of_options = [ele.strip() for ele in options.split(";")]
     
     return_options = {}
     for option in list_of_options:
