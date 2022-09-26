@@ -2,6 +2,9 @@ import permissions
 
 
 def handler(content: str, options: dict) -> str:
+    """Update permissions in the database."""
+    assert (content := content.lower()), "You must provide some content here."
+
     if options["action"] == "create":
         permissions.permissions_db.put(
             {
