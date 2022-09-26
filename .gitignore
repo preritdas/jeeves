@@ -1,5 +1,7 @@
 venv/
 win_venv/
+
 keys.ini
+config.ini
 
 __pycache__/
