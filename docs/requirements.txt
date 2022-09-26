@@ -1,0 +1,8 @@
+sphinx==5.2.1
+
+# Extensions
+myst-parser==0.18.0
+sphinx-tabs==3.4.1
+
+# Themes
+git+https://github.com/preritdas/sphinx_rtd_theme.git  # docutils version support
