@@ -26,3 +26,7 @@ class Nexmo:
 
 class Deta:
     project_key = keys["Deta"]["project_key"]
+
+
+class HumorAPI:
+    api_key = keys["Humor API"]["api_key"]
