@@ -18,7 +18,8 @@ def random_joke(tags: str):
 
 def handler(content: str, options: dict) -> str:
     if options.get("help", None):
-        return "You can supply the 'tags' option with comma " \
-            "separated values.\n\noptions: tags=nsfw,dark"
+        return "Get a random joke.\n\n" \
+            "Available options:\n" \
+            "- tags: comma separated categories, ex. nsfw,dark"
 
     return random_joke(options.get("tags", ""))
