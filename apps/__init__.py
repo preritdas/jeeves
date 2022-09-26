@@ -6,6 +6,7 @@ import echo
 import perms
 import jokes
 import weather
+import invite
 
 
 def handler(content: str, options: dict):
@@ -24,5 +25,6 @@ PROGRAMS = {
     "echo": echo.handler,
     "permissions": perms.handler,
     "jokes": jokes.handler,
-    "weather": weather.handler
+    "weather": weather.handler,
+    "invite": invite.handler
 }
