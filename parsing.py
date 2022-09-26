@@ -71,6 +71,7 @@ def app_content_options(inbound: dict) -> tuple[str, dict]:
     raw_content: str = inbound["text"]
     lines = raw_content.splitlines()
 
+    content = True
     options = {}
     for pos, line in enumerate(lines):
         line = line.lower()
@@ -81,5 +82,7 @@ def app_content_options(inbound: dict) -> tuple[str, dict]:
             continue
 
         break
-    
-    return "\n".join(lines[pos:]), options
+    else: 
+        content = False # if no other lines found
+
+    return "\n".join(lines[pos:]) if content else "", options
