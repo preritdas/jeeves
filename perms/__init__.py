@@ -9,8 +9,8 @@ def handler(content: str, options: dict[str, str]) -> str:
         return "Add permissions for a new user, or update those of a current one.\n\n" \
             "Message content should be the new permissions.\n\n" \
             "Available options:\n" \
-            "- action: REQUIRED, either 'create' or 'update'" \
-            "- phone: REQUIRED, phone number of new or existing user" \
+            "- action: REQUIRED, either 'create' or 'update'\n" \
+            "- phone: REQUIRED, phone number of new or existing user\n" \
             "- name: MAYBE, only needed if adding a new user."
 
     if options["action"] == "create":
