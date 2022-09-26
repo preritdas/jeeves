@@ -9,7 +9,9 @@ def handler(content: str, options: dict):
     if options.get("help", None):
         return "Organize your grocery list by item category.\n\n" \
             "Available options:\n" \
-            "- setup: custom store setup, ex. whole foods"
+            "- setup: custom store setup, ex. whole foods\n" \
+            "- add: add to a previous grocery list, ex. yes\n" \
+            "- id: required with 'add', previous list ID"
 
     # Options
     setup = options.get("setup", None)
