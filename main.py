@@ -25,18 +25,18 @@ def main_handler():
 
     sender = inbound_sms_content["msisdn"]
 
-    # Valid assertion
-    if not parsing.assert_valid(inbound_sms_content):
-        texts.send_message(
-            "Your message was invalid and unrecognized.",
-            sender
-        )
-        return "", 204
-
     # No concat assertion
     if parsing.is_concat(inbound_sms_content):
         texts.send_message(
             "Your message was too long. It was split by your carrier.",
+            sender
+        )
+        return "", 204
+
+    # Valid assertion
+    if not parsing.assert_valid(inbound_sms_content):
+        texts.send_message(
+            "Your message was invalid and unrecognized.",
             sender
         )
         return "", 204
