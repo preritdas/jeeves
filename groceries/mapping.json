@@ -68,7 +68,8 @@
         "beef",
         "roast beef",
         "lamb chop",
-        "ham"
+        "ham",
+        "fish"
     ],
     "dairy": [
         "cheese",
@@ -117,7 +118,8 @@
         "chips",
         "cookies",
         "dog treat",
-        "cashew"
+        "cashew",
+        "frozen pea"
     ],
     "ingredients": [
         "olive oil",
