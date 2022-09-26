@@ -1,5 +1,6 @@
 import groceries
 import wordhunt
+import echo
 
 
 def handler(content: str, options: dict):
@@ -14,5 +15,6 @@ def handler(content: str, options: dict):
 PROGRAMS = {
     "apps": handler,
     "groceries": groceries.handler,
-    "wordhunt": wordhunt.handler
+    "wordhunt": wordhunt.handler,
+    "echo": echo.handler
 }
