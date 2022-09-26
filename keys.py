@@ -30,3 +30,7 @@ class Deta:
 
 class HumorAPI:
     api_key = keys["Humor API"]["api_key"]
+
+
+class OpenWeatherMap:
+    api_key = keys["OpenWeatherMap"]["api_key"]
