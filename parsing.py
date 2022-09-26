@@ -50,7 +50,7 @@ def check_permissions(user: str, app: str) -> bool:
     return True
 
 
-def _parse_options(options: str) -> dict:
+def _parse_options(options: str) -> dict[str, str]:
     """Takes an options string and returns a dict."""
     options = options.lower()
     assert "options:" in options
