@@ -2,6 +2,7 @@ import groceries
 import wordhunt
 import echo
 import perms
+import jokes
 
 
 def handler(content: str, options: dict):
@@ -18,5 +19,6 @@ PROGRAMS = {
     "groceries": groceries.handler,
     "wordhunt": wordhunt.handler,
     "echo": echo.handler,
-    "permissions": perms.handler
+    "permissions": perms.handler,
+    "jokes": jokes.handler
 }
