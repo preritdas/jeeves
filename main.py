@@ -16,7 +16,6 @@ def main_handler(inbound_sms_content: dict):
     
     Keep this as simple as possible, with plenty of outsourcing.
     """
-
     sender = inbound_sms_content["msisdn"]
 
     # No concat assertion
@@ -66,7 +65,7 @@ def main_handler(inbound_sms_content: dict):
     return "", 204
 
 
-@app.route("/", methods=["POST"])
+@app.route("/inbound-sms", methods=["POST"])
 def main_handler_wrapper():
     inbound_sms_content = request.get_json()
     print("\n", inbound_sms_content, sep="")
