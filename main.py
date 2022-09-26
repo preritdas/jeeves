@@ -10,18 +10,12 @@ import texts
 app = Flask(__name__)
 
 
-@app.route("/inbound-sms", methods=["POST"])
-def main_handler():
+def main_handler(inbound_sms_content: dict):
     """
     Handle all inbound messages.
     
     Keep this as simple as possible, with plenty of outsourcing.
     """
-    inbound_sms_content = request.get_json()
-    print("\n", inbound_sms_content, sep="")
-
-    if type(inbound_sms_content) is not dict:
-        return "", 400
 
     sender = inbound_sms_content["msisdn"]
 
@@ -70,3 +64,14 @@ def main_handler():
     texts.send_message(response, sender)
 
     return "", 204
+
+
+@app.route("/", methods=["POST"])
+def main_handler_wrapper():
+    inbound_sms_content = request.get_json()
+    print("\n", inbound_sms_content, sep="")
+
+    if type(inbound_sms_content) is not dict:
+        return "", 400
+    
+    return main_handler(inbound_sms_content)
