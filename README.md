@@ -16,4 +16,10 @@ Each app needs a `handler` function callable under the app level, ex. in an app 
 
 Read options with `dict.get` supplying a default option value if the option isn't provided. For example, WordHunt options in the handler...
 
+A handler's function signature should be as follows.
+
+```python
+def handler(content: str, options: dict) -> str
+```
+
 https://github.com/preritdas/personal-api/blob/a5ff2d2af5b567d0a2dac8b20cddce4a12064f3a/wordhunt/__init__.py#L4-L10
