@@ -6,3 +6,6 @@ deta==1.1.0
 pattern==3.6
 translators==5.4.2
 mypytoolkit>=1.5.60
+
+# Jokes
+requests==2.28.1
