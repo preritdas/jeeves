@@ -20,7 +20,7 @@ def handler(content: str, options: dict) -> str:
     invite_content = "Good day, sir. My man has invited you to avail of my services. " \
         "Text me 'app: apps' to see what I can do.\n\n" \
         "To view an app's help, send 'options: help = yes' below your " \
-        "app name statement.",
+        "app name statement."
 
     texts.send_message(invite_content, recipient)
 
