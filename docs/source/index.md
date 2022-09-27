@@ -5,6 +5,7 @@ Welcome to my Personal API docs. Currently the only thing deployed is Inbound SM
 ```{toctree}
 :caption: Inbound SMS
 
+inbound-sms/overview
 inbound-sms/apps
 inbound-sms/echo
 inbound-sms/groceries
