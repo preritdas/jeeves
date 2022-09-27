@@ -1,5 +1,6 @@
 venv/
 win_venv/
+wsl_venv/
 
 keys.ini
 config.ini
