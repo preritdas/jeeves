@@ -1,5 +1,7 @@
 # Personal API
 
+Documentation: [api.preritdas.com](https://api.preritdas.com). 
+
 
 ## Structure Notes
 
