@@ -5,3 +5,6 @@ keys.ini
 config.ini
 
 __pycache__/
+
+# Firebase
+firebase-debug.log
