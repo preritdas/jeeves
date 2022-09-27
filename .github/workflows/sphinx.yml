@@ -1,0 +1,39 @@
+name: docs
+
+on:
+  push:
+    paths:
+      - docs/source/*
+  pull_request:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+        
+      - name: Upgrade pip
+        run: pip install -U pip setuptools wheel
+
+      - name: Install docs dependencies
+        run: pip install -r docs/requirements.txt
+
+      - name: Build docs with Sphinx
+        run: cd docs && make html && cd ..
+
+      - name: Commit updated docs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@no-reply@github.com"
+          git add docs/build/*
+          git commit -m "Build documentation."
+          git push
