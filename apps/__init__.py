@@ -1,4 +1,4 @@
-"""Registered apps"""
+"""Registered apps."""
 # Apps
 import groceries
 import wordhunt
