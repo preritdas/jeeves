@@ -27,15 +27,15 @@ As long as this message is under 160 characters, it's accepted and handled inter
 :pyobject: assert_valid
 ```
 
-2. Then, the server ensures the inbound message is not part of a series of concatenated messages. If a text message is sent with more than 160 characters, Nexmo chops it up and pings the server once for each concatenated block.  
+2. Then, the server ensures the inbound message is not part of a series of concatenated messages. If a text message is sent with more than 160 characters, Nexmo chops it up and pings the server once for each concatenated block.
 
 ```{literalinclude} ../../../parsing.py
 :pyobject: is_concat
-```  
+```
 
 The server is run using `gunicorn` with several workers. With only one worker, it's entirely possible to handle concatenated messages as one large text block by caching/storing inbound messages. With multiple workers, however, each works independently. The server is designed such that each worker can handle an inbound text message from start to finish.
 
-3. The requested app is then checked for existence. All applets are registered within the [apps](apps) app.  
+3. The requested app is then checked for existence. All applets are registered within the [apps](apps) app.
 
 ```{literalinclude} ../../../apps/__init__.py
 ```
