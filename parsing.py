@@ -25,7 +25,7 @@ def is_concat(inbound: dict) -> bool:
     return "concat" in inbound
 
 
-def requested_app(inbound: dict) -> tuple[Callable | None, str]:
+def requested_app(inbound: dict) -> tuple[Callable, str] | None:
     """Returns the handler function of an app and its name, or None
     if the app doesn't exist."""
     content: str = inbound["text"]
