@@ -43,13 +43,6 @@ def requested_app(inbound: dict) -> tuple[Callable | None, str]:
     return apps.PROGRAMS.get(app_name, None), app_name
 
 
-def check_permissions(user: str, app: str) -> bool:
-    """Checks if a user has access to an app.
-    
-    Implement this later. For now, everyone has access."""
-    return True
-
-
 def _parse_options(options: str) -> dict[str, str]:
     """Takes an options string and returns a dict."""
     options = options.lower()
