@@ -42,7 +42,12 @@ def store_use(
 
 
 def usage_summary(date: dt.date = None) -> str:
-    """Generates a usage summary based on the database."""
+    """
+    Generates a usage summary based on the database.
+    
+    If `date` parameter is not given, statistics are generated for 
+    the current day.
+    """
     logs = usage_db.fetch().items
 
     today = date or dt.date.today()
