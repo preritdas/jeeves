@@ -65,7 +65,7 @@ def main_handler(inbound_sms_content: dict):
         response = f"Unfortunately, that failed. '{str(e)}'"
 
     texts.send_message(response, sender)
-    usage.store_use(
+    usage.log_use(
         phone_number = sender,
         app_name = app_name,
         content = content,
