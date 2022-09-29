@@ -8,6 +8,7 @@ import keys
 
 deta = deta.Deta(keys.Deta.project_key)
 usage_db = deta.Base("usage")
+permissions_db = deta.Base("permissions")
 
 
 DT_FORMAT_DATE = "%Y-%m-%d"
@@ -15,7 +16,7 @@ DT_FORMAT_TIME = "%H:%M:%S"
 DT_FORMAT = " ".join([DT_FORMAT_DATE, DT_FORMAT_TIME])
 
 
-def store_use(
+def log_use(
     phone_number: str, 
     app_name: str, 
     content: str, 
@@ -39,6 +40,22 @@ def store_use(
     }
 
     usage_db.put(payload)
+
+
+def _phone_to_name(phone_number: str) -> str:
+    """
+    Attempts to convert a phone number to a name. If not possible,
+    the phone number is returned.
+
+    Assuming all users were initialized in the permissions database, which is
+    in fact necessary, all converstions theoretically should be successful.
+    """
+    users = permissions_db.fetch({"Phone": phone_number}).items
+
+    if len(users) != 1: 
+        return phone_number
+
+    return users[0]["Name"]
 
 
 def usage_summary(date: dt.date = None) -> str:
@@ -66,5 +83,18 @@ def usage_summary(date: dt.date = None) -> str:
 
         app_pings[log["App"]] += 1
 
+    
+    person_uses = {}
+    for log in today_logs:
+        person = _phone_to_name(log["Phone"])
+
+        if person not in person_uses:
+            person_uses[person] = 1
+            continue
+        
+        person_uses[person] += 1
+
+
     return f"On {today.strftime(DT_FORMAT_DATE)}, I was pinged {total_pings} times." \
-        f"App-specific pings are below.\n\n{app_pings}"
+        f"App-specific pings are below.\n\n{app_pings}" \
+        f"\n\nPerson-specific pings:\n\n{person_uses}"
