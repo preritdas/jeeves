@@ -53,7 +53,7 @@ def usage_summary(date: dt.date = None) -> str:
     today = date or dt.date.today()
     today_logs = []
     for log in logs:
-        if dt.datetime.strptime(log["Time"], DT_FORMAT).date == today:
+        if dt.datetime.strptime(log["Time"], DT_FORMAT).date() == today:
             today_logs.append(log)
 
     total_pings = len(today_logs)
