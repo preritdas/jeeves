@@ -1,4 +1,4 @@
-import parsing
+import utils
 
 from . import classification
 from permissions import deta
@@ -15,7 +15,7 @@ APP_OPTIONS = {
 grocery_db = deta.Base("groceries")
 
 
-@parsing.app_handler(APP_HELP, APP_OPTIONS)
+@utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict):
     # Options
     setup = options.get("setup", None)

@@ -1,6 +1,6 @@
 import requests
 
-import parsing
+import utils
 import keys
 
 
@@ -23,6 +23,6 @@ def random_joke(tags: str):
     return response.json()["joke"]
 
 
-@parsing.app_handler(APP_HELP, APP_OPTIONS)
+@utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     return random_joke(options.get("tags", ""))

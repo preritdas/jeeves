@@ -1,5 +1,5 @@
 """Invite a new user to use Jeeves."""
-import parsing
+import utils
 
 import texts
 
@@ -10,7 +10,7 @@ APP_OPTIONS = {
 }
 
 
-@parsing.app_handler(APP_HELP, APP_OPTIONS)
+@utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     """Invite new user."""
     if not "recipient" in options:

@@ -1,4 +1,4 @@
-import parsing
+import utils
 
 from . import wordhunt
 
@@ -11,7 +11,7 @@ APP_OPTIONS = {
 }
 
 
-@parsing.app_handler(APP_HELP, APP_OPTIONS)
+@utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict):
     height = options.get("height", 4)
     width = options.get("width", 4)

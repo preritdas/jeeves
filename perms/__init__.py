@@ -1,4 +1,4 @@
-import parsing
+import utils
 import permissions
 
 
@@ -13,7 +13,7 @@ APP_OPTIONS = {
 }
 
 
-@parsing.app_handler(APP_HELP, APP_OPTIONS)
+@utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Update permissions in the database."""
     assert (content := content.lower()), "You must provide the user's permissions " \

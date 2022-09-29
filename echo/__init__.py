@@ -1,5 +1,5 @@
 import texts
-import parsing
+import utils 
 
 
 APP_HELP = "Send a message (content) to someone else on my behalf."
@@ -8,7 +8,7 @@ APP_OPTIONS = {
 }
 
 
-@parsing.app_handler(APP_HELP, APP_OPTIONS)
+@utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     """Send texts."""
     if not "recipient" in options:
