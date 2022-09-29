@@ -1,6 +1,8 @@
 # Apps
 
-Apps app.
+
+Display a list of available apps. These are not filtered by permissions. Takes no options.
+
 
 `````{tabs}
 
