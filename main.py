@@ -1,6 +1,9 @@
 # External
 from flask import Flask, request
 
+# Local
+import datetime as dt
+
 # Project
 import parsing
 import permissions
@@ -66,8 +69,9 @@ def main_handler(inbound_sms_content: dict):
         phone_number = sender,
         app_name = app_name,
         content = content,
-        options = options
-    )
+        options = options,
+        time = dt.datetime.now().time
+    ) 
 
     return "", 204
 
