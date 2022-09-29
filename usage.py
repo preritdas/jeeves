@@ -66,7 +66,7 @@ def usage_summary(date: dt.date | str = None) -> str:
     the current day.
     """
     if isinstance(date, str):
-        date = dt.datetime.strftime(date, DT_FORMAT_DATE)
+        date = dt.datetime.strptime(date, DT_FORMAT_DATE)
 
     logs = usage_db.fetch().items
 
