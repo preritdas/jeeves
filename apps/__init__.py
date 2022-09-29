@@ -1,4 +1,7 @@
 """Registered apps."""
+# Project
+import parsing
+
 # Apps
 import groceries
 import wordhunt
@@ -9,6 +12,7 @@ import weather
 import invite
 
 
+@parsing.app_handler(app_help = "See a list of available apps.")
 def handler(content: str, options: dict):
     """Handler for apps."""
     available_apps = ""

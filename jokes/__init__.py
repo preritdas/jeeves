@@ -1,6 +1,13 @@
 import requests
 
+import parsing
 import keys
+
+
+APP_HELP = "Get a random joke."
+APP_OPTIONS = {
+    "tags": "comma separated categories, ex. nsft,dark"
+}
 
 
 def random_joke(tags: str):
@@ -16,10 +23,6 @@ def random_joke(tags: str):
     return response.json()["joke"]
 
 
+@parsing.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
-    if options.get("help", None):
-        return "Get a random joke.\n\n" \
-            "Available options:\n" \
-            "- tags: comma separated categories, ex. nsfw,dark"
-
     return random_joke(options.get("tags", ""))

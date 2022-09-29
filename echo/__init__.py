@@ -1,14 +1,16 @@
-from re import L
 import texts
+import parsing
 
 
+APP_HELP = "Send a message (content) to someone else on my behalf."
+APP_OPTIONS = {
+    "recipient": "recipient's phone number"
+}
+
+
+@parsing.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     """Send texts."""
-    if options.get("help", None):
-        return "Send a message (content) to someone else on my behalf. \n\n" \
-            "Available options:\n" \
-            "- recipient: recipient's phone number"
-
     if not "recipient" in options:
         return "You must provide the recipient's phone number as an option."
     

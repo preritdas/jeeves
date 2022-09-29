@@ -1,20 +1,22 @@
 """Weather data."""
+import parsing
 import config
 
 from . import data
 from .data import kelvin_to_farenheit as farenheit
 
 
+APP_HELP = "Get weather data."
+APP_OPTIONS = {
+    "city": f"OPTIONAL, default is {config.Weather.default_city}",
+    "state": "OPTIONAL, U.S. state, city is usually sufficient",
+    "country": "OPTIONAL, ISO code, city is usuaully sufficient"
+}
+
+
+@parsing.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     """Weather data."""
-    if options.get("help", None):
-        return "Get weather data.\n\n" \
-            "Available options: \n" \
-            f"- city: OPTIONAL, default is {config.Weather.default_city}" \
-            "- state: OPTIONAL, U.S. state, city is usually sufficient" \
-            "- country: OPTIONAL, ISO code, city is usually sufficient"
-
-
     city = options.get("city", config.Weather.default_city)
     state = options.get("state", "")
     country = options.get("country", "")

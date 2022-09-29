@@ -1,14 +1,18 @@
 """Invite a new user to use Jeeves."""
+import parsing
+
 import texts
 
 
+APP_HELP = "Invite someone to use Jeeves' services."
+APP_OPTIONS = {
+    "recipient": "REQUIRED, phone number of the invitee"
+}
+
+
+@parsing.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     """Invite new user."""
-    if options.get("help", None):
-        return "Invite someone to use Jeeves' services.\n\n" \
-            "Available options:\n" \
-            f"- recipient: REQUIRED, phone number of the invitee"
-
     if not "recipient" in options:
         return "You must provide a recipient's phone number as an option."
     

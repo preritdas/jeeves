@@ -1,18 +1,22 @@
+import parsing
+
 from . import classification
 from permissions import deta
+
+
+APP_HELP = "Organize your grocery list into categories."
+APP_OPTIONS = {
+    "setup": "custom store setups, ex. whole foods",
+    "add": "add to a previous grocery list, ex. yes",
+    "id": "required with 'add', previous list ID"
+}
 
 
 grocery_db = deta.Base("groceries")
 
 
+@parsing.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict):
-    if options.get("help", None):
-        return "Organize your grocery list by item category.\n\n" \
-            "Available options:\n" \
-            "- setup: custom store setup, ex. whole foods\n" \
-            "- add: add to a previous grocery list, ex. yes\n" \
-            "- id: required with 'add', previous list ID"
-
     # Options
     setup = options.get("setup", None)
 

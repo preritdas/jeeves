@@ -1,17 +1,23 @@
+import parsing
 import permissions
 
 
+APP_HELP = (
+    "Add permissions for a new user or update those of a current one. "
+    "Message content should be the new permissions."
+)
+APP_OPTIONS = {
+    "action": "REQUIRED, either 'create' or 'update'",
+    "phone": "REQUIRED, phone number of new or existing user",
+    "name": "MAYBE, only needed if adding a new user."
+}
+
+
+@parsing.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Update permissions in the database."""
-    assert (content := content.lower()), "You must provide some content here."
-
-    if options.get("help", None):
-        return "Add permissions for a new user, or update those of a current one.\n\n" \
-            "Message content should be the new permissions.\n\n" \
-            "Available options:\n" \
-            "- action: REQUIRED, either 'create' or 'update'\n" \
-            "- phone: REQUIRED, phone number of new or existing user\n" \
-            "- name: MAYBE, only needed if adding a new user."
+    assert (content := content.lower()), "You must provide the user's permissions " \
+        "as content."
 
     if options["action"] == "create":
         # Check for existence

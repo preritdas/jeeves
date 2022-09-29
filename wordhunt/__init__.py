@@ -1,14 +1,18 @@
+import parsing
+
 from . import wordhunt
 
 
-def handler(content: str, options: dict):
-    if options.get("help", None):
-        return "Solve a WordHunt board.\n\n" \
-            "Available options:\n" \
-            "- height: board height, default 4" \
-            "- width: board width, default 4" \
-            "- limit: results limit, default 20"
+APP_HELP = "Solve a WordHunt board."
+APP_OPTIONS = {
+    "height": "board height, default 4",
+    "width": "board width, default 4",
+    "limit": "max number of results, default 20"
+}
 
+
+@parsing.app_handler(APP_HELP, APP_OPTIONS)
+def handler(content: str, options: dict):
     height = options.get("height", 4)
     width = options.get("width", 4)
     limit = options.get("limit", 20)
