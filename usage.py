@@ -58,13 +58,16 @@ def _phone_to_name(phone_number: str) -> str:
     return users[0]["Name"]
 
 
-def usage_summary(date: dt.date = None) -> str:
+def usage_summary(date: dt.date | str = None) -> str:
     """
     Generates a usage summary based on the database.
     
     If `date` parameter is not given, statistics are generated for 
     the current day.
     """
+    if isinstance(date, str):
+        date = dt.datetime.strftime(DT_FORMAT_DATE)
+
     logs = usage_db.fetch().items
 
     today = date or dt.date.today()
