@@ -10,6 +10,11 @@ deta = deta.Deta(keys.Deta.project_key)
 usage_db = deta.Base("usage")
 
 
+DT_FORMAT_DATE = "%Y-%m-%d"
+DT_FORMAT_TIME = "%H:%M:%S"
+DT_FORMAT = " ".join([DT_FORMAT_DATE, DT_FORMAT_TIME])
+
+
 def store_use(
     phone_number: str, 
     app_name: str, 
@@ -30,23 +35,30 @@ def store_use(
         "App": app_name,
         "Content": content,
         "Options": options,
-        "Time": time.strftime("%H:%M:%S")
+        "Time": time.strftime(DT_FORMAT)
     }
 
     usage_db.put(payload)
 
 
-def usage_summary() -> str:
+def usage_summary(date: dt.date = None) -> str:
     """Generates a usage summary based on the database."""
     logs = usage_db.fetch().items
 
-    total_pings = len(logs)
+    today = date or dt.date.today()
+    today_logs = []
+    for log in logs:
+        if dt.datetime.strptime(log["Time"], DT_FORMAT).date == today:
+            today_logs.append(log)
+
+    total_pings = len(today_logs)
     
     app_pings = {}
-    for log in logs:
+    for log in today_logs:
         if log["App"] not in app_pings:
             app_pings[log["App"]] = 1
 
         app_pings[log["App"]] += 1
 
-
+    return f"On {today.strftime(DT_FORMAT_DATE)}, I was pinged {total_pings} times." \
+        f"App-specific pings are below.\n\n{app_pings}"
