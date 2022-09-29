@@ -3,13 +3,13 @@
 import utils
 
 # Apps
-import groceries
-import wordhunt
-import echo
-import perms
-import jokes
-import weather
-import invite
+import app_groceries
+import app_wordhunt
+import app_echo
+import app_permissions
+import app_jokes
+import app_weather
+import app_invite
 
 
 @utils.app_handler(app_help = "See a list of available apps.")
@@ -24,11 +24,11 @@ def handler(content: str, options: dict):
 
 PROGRAMS = {
     "apps": handler,
-    "groceries": groceries.handler,
-    "wordhunt": wordhunt.handler,
-    "echo": echo.handler,
-    "permissions": perms.handler,
-    "jokes": jokes.handler,
-    "weather": weather.handler,
-    "invite": invite.handler
+    "groceries": app_groceries.handler,
+    "wordhunt": app_wordhunt.handler,
+    "echo": app_echo.handler,
+    "permissions": app_permissions.handler,
+    "jokes": app_jokes.handler,
+    "weather": app_weather.handler,
+    "invite": app_invite.handler
 }
