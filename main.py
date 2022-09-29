@@ -5,6 +5,7 @@ from flask import Flask, request
 import parsing
 import permissions
 import texts
+import usage
 
 
 app = Flask(__name__)
@@ -61,6 +62,12 @@ def main_handler(inbound_sms_content: dict):
         response = f"Unfortunately, that failed. '{str(e)}'"
 
     texts.send_message(response, sender)
+    usage.store_use(
+        phone_number = sender,
+        app_name = app_name,
+        content = content,
+        options = options
+    )
 
     return "", 204
 
