@@ -18,6 +18,7 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/tabs.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -45,7 +46,10 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="apps.html">Apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="echo.html">Echo</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Groceries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Groceries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#formatting-guidelines">Formatting guidelines</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="invite.html">Invite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jokes.html">Jokes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="permissions.html">Permissions</a></li>
@@ -80,7 +84,54 @@
              
   <section id="groceries">
 <h1>Groceries<a class="headerlink" href="#groceries" title="Permalink to this heading"></a></h1>
-<p>Groceries app.</p>
+<p>Organize a grocery list by category and location for shopping at peak efficiency.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Sample Text</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Sample Response</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>app: groceries
+options: add = yes; id = 9a8scd; setup = whole foods
+
+2 apples
+3 bananas
+chicken
+snacks
+1 hair dye
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>List ID: 7asdc87
+
+Fruit:
+- 2 apples
+- 3 bananas
+- blueberries
+
+Self Care:
+- 1 hair dye
+
+Meat:
+- chicken
+- 1 lamb
+- 2 sausages
+
+Snacks
+- Snacks
+</pre></div>
+</div>
+</div></div>
+<section id="formatting-guidelines">
+<h2>Formatting guidelines<a class="headerlink" href="#formatting-guidelines" title="Permalink to this heading"></a></h2>
+<p>There really aren’t any hard guidelines, just a few things to be aware of to avoid crashing the classification algorithm.</p>
+<ul class="simple">
+<li><p>Don’t used dashed lists.</p></li>
+<li><p>New line for each item.</p></li>
+<li><p>Quantities go at the beginning, in numeric form. They are optional.</p></li>
+<li><p>Add special options in parenthesis, ex. <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">apples</span> <span class="pre">(the</span> <span class="pre">good</span> <span class="pre">ones)</span></code></p></li>
+<li><p>Setup is optional. It efficiently reorders the categories based on store layout.</p>
+<ul>
+<li><p>Setup line is case insensitive</p></li>
+<li><p>Line between setup and content is unnecessary</p></li>
+</ul>
+</li>
+</ul>
+</section>
 </section>
 
 

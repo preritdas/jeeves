@@ -37,7 +37,7 @@ The server is run using `gunicorn` with several workers. With only one worker, i
 
 3. The requested app is then checked for existence. All applets are registered within the [apps](apps) app.
 
-```{literalinclude} ../../../apps/__init__.py
+```{literalinclude} ../../../app_apps/__init__.py
 ```
 
 
@@ -55,7 +55,7 @@ def handler(content: str, options: dict) -> str
 
 Because options are (obviously) optional, they should be read with the `dict.get` method, supplying a default value if the option isn't provided. For example, the WordHunt handler is below.
 
-```{literalinclude} ../../../wordhunt/__init__.py
+```{literalinclude} ../../../app_wordhunt/__init__.py
 :pyobject: handler
 ```
 
