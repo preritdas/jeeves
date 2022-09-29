@@ -60,8 +60,9 @@ def usage_summary(date: dt.date = None) -> str:
     
     app_pings = {}
     for log in today_logs:
-        if log["App"] not in app_pings:
+        if log["App"] not in app_pings: 
             app_pings[log["App"]] = 1
+            continue
 
         app_pings[log["App"]] += 1
 
