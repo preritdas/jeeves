@@ -70,7 +70,7 @@ def main_handler(inbound_sms_content: dict):
         app_name = app_name,
         content = content,
         options = options,
-        time = dt.datetime.now().time
+        time = dt.datetime.now()
     ) 
 
     return "", 204
