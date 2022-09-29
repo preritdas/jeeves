@@ -115,7 +115,7 @@ def _classify_items(grocery_list: str, setup: str) -> dict[str, list[tuple[int, 
     return _order_classification(return_classifications, setup=setup)
 
 
-def _format_list(item_list: dict[str, list[tuple[int, str]]]) -> str:
+def _format_list(item_list: dict[str, list[tuple[int | str, str]]]) -> str:
     """Turn the classified list into a string grocery list."""
     return_str = ""
     for category, items in item_list.items():
@@ -123,7 +123,7 @@ def _format_list(item_list: dict[str, list[tuple[int, str]]]) -> str:
         return_str += f"{category.title()}: \n"
 
         for pos, item in enumerate(items): 
-            return_str += f"- {item[0]} {item[1]}".strip()
+            return_str += f"- {str(item[0]) + ' ' if item[0] else ''}{item[1]}".strip()
             if pos < len(items) - 1: return_str += '\n'
 
         return_str += "\n\n"
