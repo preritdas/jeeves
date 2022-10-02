@@ -1,3 +1,8 @@
+[pytest](https://github.com/preritdas/personal-api/actions/workflows/pytest.yml/badge.svg)
+[docs](https://github.com/preritdas/personal-api/actions/workflows/sphinx.yml/badge.svg)
+[firebase](https://github.com/preritdas/personal-api/actions/workflows/firebase-hosting-merge.yml/badge.svg)
+
+
 # Personal API
 
 Documentation: [api.preritdas.com](https://api.preritdas.com). 
