@@ -3,7 +3,7 @@ import utils
 import usage
 
 
-APP_HELP = "Usage."
+APP_HELP = "Get a usage report."
 APP_OPTIONS = {
     "date": "Date for usage metrics, ex. 2022-09-27"
 }
