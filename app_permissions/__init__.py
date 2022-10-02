@@ -26,14 +26,14 @@ def handler(content: str, options: dict[str, str]) -> str:
         )
         if len(db_res.items) > 0:
             return f"{options['name'].title()} already exists, with " \
-                f"permissions {db_res[0]['Permissions']}."
+                f"permissions {db_res.items[0]['Permissions']}."
 
         db_res = permissions.permissions_db.fetch(
             query = {"Phone": options['phone']}
         )
         if len(db_res.items) > 0:
             return f"{options['phone'].title()} already exists, with " \
-                f"permissions {db_res[0]['Permissions']}."
+                f"permissions {db_res.items[0]['Permissions']}."
 
         permissions.permissions_db.put(
             {
