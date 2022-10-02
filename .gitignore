@@ -9,3 +9,6 @@ __pycache__/
 
 # Firebase
 firebase-debug.log
+
+# Coverage
+.coverage
