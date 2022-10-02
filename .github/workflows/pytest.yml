@@ -30,6 +30,11 @@ jobs:
       - name: Install test dependencies
         run: pip install pytest pytest-cov coverage-badge
 
+      - name: Inject keys and config
+        run: |
+          echo -en '${{ secrets.KEYS_INI }}' >> keys.ini
+          echo -en '${{ secrets.CONFIG_INI }}' >> config.ini
+
       - name: Run tests with pytest
         run: python -m pytest --cov
 
