@@ -22,7 +22,7 @@ def db_init():
     permissions_db.put(
         {
             "Name": "Prerit Das",
-            "Phone": "14259023246",
+            "Phone": keys.Nexmo.mynumber,
             "Permissions": "all"
         }
     )
