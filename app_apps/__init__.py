@@ -1,6 +1,7 @@
 """Registered apps."""
 # Project
 import utils
+import permissions
 
 # Apps
 import app_groceries
@@ -15,12 +16,19 @@ import app_usage
 
 @utils.app_handler(app_help = "See a list of available apps.")
 def handler(content: str, options: dict):
-    """Handler for apps."""
+    """Handler for apps. Filters by permissions."""
+    accessible_apps: list[str] = [
+        app for app in PROGRAMS.keys() if permissions.check_permissions(
+            phone = options.get("inbound_phone"),
+            app_name = app
+        )
+    ]
+
     available_apps = ""
-    for app in sorted(PROGRAMS.keys()):
+    for app in sorted(accessible_apps):
         available_apps += f"\n{app}"
 
-    return f"The following apps are available.\n{available_apps}"
+    return f"The following apps are available to you.\n{available_apps}"
 
 
 PROGRAMS = {
