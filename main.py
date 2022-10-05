@@ -20,7 +20,7 @@ def main_handler(inbound_sms_content: dict):
     
     Keep this as simple as possible, with plenty of outsourcing.
     """
-    sender = inbound_sms_content["msisdn"]
+    sender: str = inbound_sms_content["msisdn"]
 
     # No concat assertion
     if parsing.is_concat(inbound_sms_content):
@@ -58,6 +58,7 @@ def main_handler(inbound_sms_content: dict):
 
     # Run the app
     content, options = parsing.app_content_options(inbound_sms_content)
+    options["inbound_phone"] = sender
 
     try:
         response = requested_app(content, options)
