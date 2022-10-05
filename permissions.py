@@ -1,5 +1,5 @@
 """
-Read persmissions stored in a Deta Base.
+Read permissions stored in a Deta Base.
 """
 # External
 import deta
