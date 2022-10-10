@@ -14,3 +14,7 @@ config.read(
 
 class Weather:
     default_city = config["Weather"]["default_city"]
+
+
+class Groceries:
+    translation = config["Translation"]["translation"]
