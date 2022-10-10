@@ -2,11 +2,17 @@
 Responsible for turning a list of groceries with quantity into a classified
 ordered list.
 """
-# External
-import translators
-
 # Project
+import config
 from . import grocery_utils
+
+
+# Optional translation
+if config.Groceries.translation:
+    import translators
+    translate = lambda phrase: translators.google(phrase)
+else:
+    translate = lambda phrase: phrase
 
 
 def _parse_list(grocery_list: str) -> set[tuple[int, str]]:
@@ -32,8 +38,8 @@ def _parse_list(grocery_list: str) -> set[tuple[int, str]]:
     for item in grocery_list_split:
         split = item.split()
 
-        try: item_tup = int(split[0]), translators.google(" ".join(split[1:]))
-        except ValueError: item_tup = "", translators.google(" ".join(split))
+        try: item_tup = int(split[0]), translate(" ".join(split[1:]))
+        except ValueError: item_tup = "", translate(" ".join(split))
 
         items.append(tuple(item_tup))
 
