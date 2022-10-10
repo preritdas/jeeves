@@ -22,9 +22,8 @@ def test_handler():
     )
 
     assert "List ID" in res
-    assert "Apples" in res
-    assert "Bananas" in res
-    assert "Chicken in res"
+    assert all(item in res for item in test_items)
+    assert "Chicken" in res
 
 
 def test_help():
