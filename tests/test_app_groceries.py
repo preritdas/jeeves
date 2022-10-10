@@ -13,7 +13,7 @@ def test_handler():
     )
 
     assert "List ID" in res
-    assert "Apples" in res
+    assert all(item in res for item in test_items)
 
     # Test adding items with last feature
     res = app_groceries.handler(
@@ -22,7 +22,6 @@ def test_handler():
     )
 
     assert "List ID" in res
-    assert all(item in res for item in test_items)
     assert "Chicken" in res
 
 
