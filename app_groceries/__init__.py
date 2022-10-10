@@ -11,8 +11,8 @@ from permissions import deta
 APP_HELP = "Organize your grocery list into categories."
 APP_OPTIONS = {
     "setup": "custom store setups, ex. whole foods",
-    "add": "add to a previous grocery list, ex. yes",
-    "id": "required with 'add', previous list ID"
+    "add": "ID of a previous list to add to it. "
+        "ex. 'last' for your latest list, or the raw ID."
 }
 
 
