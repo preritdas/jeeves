@@ -25,9 +25,11 @@ config.read(
 
 
 class Weather:
-    default_city = config["Weather"]["default_city"]
+    DEFAULT_CITY = config["Weather"]["default_city"]
 
 
 class Groceries:
-    translation = True if config["Groceries"]["translation"].lower().strip() == "true" \
+    TRANSLATION = True if config["Groceries"]["translation"].lower().strip() == "true" \
         else False
+
+    FULL_DT_FORMAT = "%Y-%m-%d %H-%M-%S"

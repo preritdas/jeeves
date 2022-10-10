@@ -8,7 +8,7 @@ from . import grocery_utils
 
 
 # Optional translation
-if config.Groceries.translation:
+if config.Groceries.TRANSLATION:
     import translators
     translate = lambda phrase: translators.google(phrase)
 else:
