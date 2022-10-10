@@ -24,6 +24,15 @@ def test_handler():
     assert "List ID" in res
     assert "Chicken" in res
 
+    # Test no list found
+    assert not "List ID" in app_groceries.handler(
+        content = "Apples",
+        options = {
+            "inbound_phone": "10000000000",
+            "add": "last"
+        }
+    )
+
 
 def test_help():
     res = app_groceries.handler(
