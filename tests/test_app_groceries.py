@@ -4,7 +4,7 @@ import app_groceries
 def test_handler():
     res = app_groceries.handler(
         content = "Apples\nBananas",
-        options = {"setup": "whole foods"}
+        options = {"setup": "whole foods", "inbound_phone": "12223334455"}
     )
 
     assert "List ID" in res
