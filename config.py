@@ -17,4 +17,4 @@ class Weather:
 
 
 class Groceries:
-    translation = config["Translation"]["translation"]
+    translation = config["Groceries"]["translation"]
