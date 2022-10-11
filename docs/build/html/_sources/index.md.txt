@@ -12,6 +12,7 @@ inbound-sms/groceries
 inbound-sms/invite
 inbound-sms/jokes
 inbound-sms/permissions
+inbound-sms/rt
 inbound-sms/usage
 inbound-sms/weather
 inbound-sms/wordhunt
