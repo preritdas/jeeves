@@ -6,9 +6,7 @@ import mypytoolkit as kit
 import json
 import os
 
-import nltk; nltk.download(['omw-1.4', 'wordnet', 'wordnet_ic', 'sentiwordnet'], quiet=True, raise_on_error=True)
-from pattern import en as pattern
-
+import inflect; inflect_engine = inflect.engine()
 
 # ---- CONSTANTS ---- 
 
@@ -38,7 +36,14 @@ def pluralize(word: str) -> str:
     Use the pattern library to smartly and correctly pluralize the word.
     """
     assert isinstance(word, str)
-    return pattern.pluralize(word, custom=PLURAL_REPLACEMENTS)
+
+    if word in PLURAL_REPLACEMENTS:
+        return PLURAL_REPLACEMENTS[word]
+
+    if not (plural := inflect_engine.plural_noun(word)):
+        return word
+
+    return plural
 
 
 def singularize(word: str) -> str:
@@ -46,5 +51,11 @@ def singularize(word: str) -> str:
     Use the pattern library to smartly and correctly pluralize the word.
     """
     assert isinstance(word, str)
-    return pattern.singularize(word, SINGULAR_REPLACEMENTS)
- 
+
+    if word in SINGULAR_REPLACEMENTS:
+        return SINGULAR_REPLACEMENTS[word]
+
+    if not (singular := inflect_engine.singular_noun(word)):
+        return word
+
+    return singular

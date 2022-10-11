@@ -3,7 +3,7 @@ nexmo==2.5.2  # respond with texts
 deta==1.1.0
 
 # Groceries
-pattern==3.6
+inflect==6.0.0
 translators==5.4.2
 mypytoolkit>=1.5.60
 

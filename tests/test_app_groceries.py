@@ -34,6 +34,22 @@ def test_handler():
     )
 
 
+def test_singularization():
+    """
+    Ensure singularization/pluralization is working in the classifiation mechanism.
+    """
+    WEIRD_ITEMS = ["blueberries", "lamb", "chicken"]
+
+    res = app_groceries.handler(
+        content = "\n".join(WEIRD_ITEMS),
+        options = {"inbound_phone": "12223334455"}
+    )
+
+    test_res = res.lower()
+    assert "fruit" in test_res  # make sure 'blueberries' was properly categorized
+    assert "meat" in test_res
+
+
 def test_paranthesis():
     """Options, ex. chicken (good kind)"""
     res = app_groceries.handler(
