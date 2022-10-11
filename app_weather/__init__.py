@@ -23,6 +23,9 @@ def handler(content: str, options: dict) -> str:
 
     weather = data.current_weather(city, state, country)
 
+    if not type(weather) is dict:
+        return f"There was an error. {weather}"
+
     return f"It's currently {farenheit(weather['main']['temp'])} degrees outside. " \
         f"Today's high will be {farenheit(weather['main']['temp_max'])} degrees; " \
         f"the low will be {farenheit(weather['main']['temp_min'])} degrees. " \

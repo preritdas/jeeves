@@ -30,12 +30,16 @@ def current_weather(
     city: str,
     state: str = "", 
     country: str = ""
-):
-    """Current weather."""
-    if state:
-        assert len(state) == 2, "State must be a two digit code."
-    if country:
-        assert len(country) == 2, "Country must be a two digit code."
+) -> dict | str:
+    """
+    Current weather. A successful response is JSON. A string return value
+    indicates an error to be sent back to the user, where the string content is 
+    the error message.
+    """
+    if state and len(state) != 2:
+        return "State must be a two digit code."
+    if country and len(country) != 2:
+        return "Country must be a two digit code."
 
     response = requests.get(
         WEATHER_ENDPOINT, 
@@ -45,9 +49,9 @@ def current_weather(
         }
     )
 
-    response = response.json()
+    response: dict = response.json()
 
     if "message" in response and response["message"] == "city not found":
-        return None
+        return f"The city '{city}' was not found."
     
     return response
