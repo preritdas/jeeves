@@ -9,7 +9,7 @@ Organize a grocery list by category and location for shopping at peak efficiency
 
 ```text
 app: groceries
-options: add = yes; id = 9a8scd; setup = whole foods
+options: add = last; setup = whole foods
 
 2 apples
 3 bananas
