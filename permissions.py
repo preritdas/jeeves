@@ -28,6 +28,11 @@ def db_init():
     )
 
 
+# If there's nothing in the database, initialize it.
+if not permissions_db.fetch().items:
+    db_init()
+
+
 def check_permissions(phone: str, app_name: str) -> bool:
     items = permissions_db.fetch(query={"Phone": phone}).items
 
