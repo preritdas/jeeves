@@ -12,6 +12,7 @@ import app_jokes
 import app_weather
 import app_invite
 import app_usage
+import app_rt
 
 
 @utils.app_handler(app_help = "See a list of available apps.")
@@ -40,5 +41,6 @@ PROGRAMS = {
     "jokes": app_jokes.handler,
     "weather": app_weather.handler,
     "invite": app_invite.handler,
-    "usage": app_usage.handler
+    "usage": app_usage.handler,
+    "rt": app_rt.handler
 }
