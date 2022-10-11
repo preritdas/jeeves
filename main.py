@@ -86,3 +86,8 @@ def main_handler_wrapper():
         return "", 400
     
     return main_handler(inbound_sms_content)
+
+
+@app.route("/")
+def test():
+    return "All working here."
