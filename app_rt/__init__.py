@@ -4,7 +4,7 @@ import rottentomatoes as rt
 import utils
 
 
-APP_HELP = "Rotten tomatoes info on movies. Specify the movie title as message content."
+APP_HELP = "Rotten Tomatoes info on movies. Specify the movie title as message content."
 
 
 @utils.app_handler(APP_HELP)
