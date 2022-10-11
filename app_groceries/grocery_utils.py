@@ -36,7 +36,7 @@ def pluralize(word: str) -> str:
     Use the pattern library to smartly and correctly pluralize the word.
     """
     assert isinstance(word, str)
-    return inflect_engine.plural_noun(word)
+    return PLURAL_REPLACEMENTS.get(word, inflect_engine.plural_noun(word))
 
 
 def singularize(word: str) -> str:
@@ -44,5 +44,5 @@ def singularize(word: str) -> str:
     Use the pattern library to smartly and correctly pluralize the word.
     """
     assert isinstance(word, str)
-    return inflect_engine.singular_noun(word)
+    return SINGULAR_REPLACEMENTS.get(word, inflect_engine.singular_noun(word))
  
