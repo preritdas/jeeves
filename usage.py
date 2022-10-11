@@ -22,8 +22,8 @@ def log_use(
     content: str, 
     options: dict, 
     time: dt.time
-) -> None:
-    """Store a use to the database."""
+) -> str:
+    """Store a use to the database. Returns the key of the new db entry."""
     # Check all are string except options (dict) and time
     assert all(
         isinstance(param, str) for param in [
@@ -39,7 +39,8 @@ def log_use(
         "Time": time.strftime(DT_FORMAT)
     }
 
-    usage_db.put(payload)
+    res: dict = usage_db.put(payload)
+    return res["key"]
 
 
 def _phone_to_name(phone_number: str) -> str:
