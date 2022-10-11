@@ -24,3 +24,8 @@ def test_custom_permissions():
     assert permissions.check_permissions(
         "00000000000", "groceries"
     )
+
+
+def test_db_init():
+    key = permissions.db_init()
+    permissions.permissions_db.delete(key)
