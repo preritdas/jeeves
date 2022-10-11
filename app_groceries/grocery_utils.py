@@ -6,7 +6,7 @@ import mypytoolkit as kit
 import json
 import os
 
-import nltk; nltk.download('omw-1.4', quiet=True, raise_on_error=True)
+import nltk; nltk.download(['omw-1.4', 'wordnet', 'wordnet_ic', 'sentiwordnet'], quiet=True, raise_on_error=True)
 from pattern import en as pattern
 
 
