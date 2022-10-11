@@ -36,6 +36,28 @@ def test_handler():
 
     assert "Successfully changed" in res
 
+    # Test updating query by name
+    res = app_permissions.handler(
+        content = "all",
+        options = {
+            "action": "update",
+            "name": "git pytest"
+        }
+    )
+
+    assert "successfully" in res.lower()
+
+    # Test updating with none found
+    res = app_permissions.handler(
+        content = "all",
+        options = {
+            "action": "update",
+            "name": "87asdcgaysdc"
+        }
+    )
+
+    assert "No users were found" in res or "Nobody with name" in res
+
 
 def test_help():
     res = app_permissions.handler(
