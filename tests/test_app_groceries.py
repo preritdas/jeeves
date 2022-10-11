@@ -34,6 +34,20 @@ def test_handler():
     )
 
 
+def test_paranthesis():
+    """Options, ex. chicken (good kind)"""
+    res = app_groceries.handler(
+        content = "chicken (good kind)",
+        options = {
+            "inbound_phone": "12223334455"
+        }
+    )
+
+    assert res
+    assert "List ID" in res
+    assert "(good kind)" in res
+
+
 def test_help():
     res = app_groceries.handler(
         content = "",
