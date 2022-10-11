@@ -21,7 +21,7 @@ def log_use(
     app_name: str, 
     content: str, 
     options: dict, 
-    time: dt.time
+    time: dt.date
 ) -> str:
     """Store a use to the database. Returns the key of the new db entry."""
     # Check all are string except options (dict) and time
