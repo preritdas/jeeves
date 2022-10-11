@@ -51,25 +51,29 @@ def handler(content: str, options: dict[str, str]) -> str:
         name_query = False
         if options.get("name", None):  # if name is provided
             db_res = permissions.permissions_db.fetch(
-                {"Name": options["name"]}
+                {"Name": options["name"].title()}
             )
             if len(db_res.items) == 1:
                 name_query = True
 
         if not name_query:
+            if not (name := options.get("phone", None)):
+                return f"Nobody with name '{name}' was found, and you didn't provide " \
+                    "a phone number."
+
             db_res = permissions.permissions_db.fetch(
                 {"Phone": options["phone"]}
-            ).items
+            )
 
-        if len(db_res) > 1:
+        if len(db_res.items) > 1:
             return f"Many users were found with the phone number {options['phone']}. " \
                 "Correct this."
 
-        if len(db_res) == 0:
+        if len(db_res.items) == 0:
             return "No users were found with those options."
 
-        key = db_res[0]["key"]
-        name = db_res[0]["Name"]
+        key = db_res.items[0]["key"]
+        name = db_res.items[0]["Name"]
         permissions.permissions_db.update(
             {
                 "Permissions": content 
