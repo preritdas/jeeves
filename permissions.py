@@ -12,20 +12,23 @@ deta = deta.Deta(keys.Deta.project_key)
 permissions_db = deta.Base("permissions")
 
 
-def db_init():
+def db_init() -> str:
     """
     If there's nothing in the Base, fire it up with the proper
-    fields and formatting.
+    fields and formatting. Returns the key of the added field
+    for testing purposes (so it can be removed automatically in a test environment).
 
-    Call this function manually.
+    This function was designed to be called manually.
     """
-    permissions_db.put(
+    db_res: dict = permissions_db.put(
         {
             "Name": "Prerit Das",
             "Phone": keys.Nexmo.mynumber,
             "Permissions": "all"
         }
     )
+
+    return db_res["key"]
 
 
 # If there's nothing in the database, initialize it.
