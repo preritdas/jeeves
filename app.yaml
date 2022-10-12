@@ -7,4 +7,5 @@ resources:
   memory_gb: 2
 
 # Latency - resident instance
-min_idle_instances: 1
+automatic_scaling:
+  min_idle_instances: 1
