@@ -99,6 +99,12 @@ options: setup = whole foods; add = true; id = 87asdf6
 ice cream
 </pre></div>
 </div>
+<p>It’s necessary for messages to have <code class="docutils literal notranslate"><span class="pre">app:</span> <span class="pre">app_name</span></code> in the first line. Subsequent options are optional. For example, <code class="docutils literal notranslate"><span class="pre">app:</span> <span class="pre">apps</span></code> is a valid full message, and will return a <a class="reference internal" href="apps.html"><span class="doc std std-doc">list of all available apps</span></a>.</p>
+<p>Passing <code class="docutils literal notranslate"><span class="pre">options:</span> <span class="pre">help</span> <span class="pre">=</span> <span class="pre">yes</span></code> to any app will return the app’s guide, with information on its behavior and available options. This works on <em>all</em> apps, and is part of the structure, thanks to the <code class="docutils literal notranslate"><span class="pre">utils.app_handler</span></code> wrapper.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@utils</span><span class="o">.</span><span class="n">app_handler</span><span class="p">(</span><span class="n">APP_NAME</span><span class="p">,</span> <span class="n">APP_OPTIONS</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</pre></div>
+</div>
 <section id="validation">
 <h2>Validation<a class="headerlink" href="#validation" title="Permalink to this heading"></a></h2>
 <p>As long as this message is under 160 characters, it’s accepted and handled internally. If it’s more than 160 characters or otherwise fails basic validation, an error text message is sent back.</p>
@@ -201,7 +207,7 @@ ice cream
 <section id="parsing">
 <h2>Parsing<a class="headerlink" href="#parsing" title="Permalink to this heading"></a></h2>
 <p>Once a text message is received and has passed basic validation, some simple functions are used to determine the requested app and to parse the given options.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">requested_app</span><span class="p">(</span><span class="n">inbound</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">requested_app</span><span class="p">(</span><span class="n">inbound</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Callable</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Returns the handler function of an app and its name, or None</span>
 <span class="sd">    if the app doesn&#39;t exist.&quot;&quot;&quot;</span>
     <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">inbound</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
@@ -214,7 +220,7 @@ ice cream
     <span class="n">app_name</span> <span class="o">=</span> <span class="n">first_line</span><span class="p">[</span><span class="n">app_ref_loc</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">app_name</span> <span class="ow">in</span> <span class="n">app_apps</span><span class="o">.</span><span class="n">PROGRAMS</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">app_name</span>
     
     <span class="k">return</span> <span class="n">app_apps</span><span class="o">.</span><span class="n">PROGRAMS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">app_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">app_name</span>
 </pre></div>

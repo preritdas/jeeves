@@ -17,6 +17,16 @@ options: setup = whole foods; add = true; id = 87asdf6
 ice cream
 ```
 
+It's necessary for messages to have `app: app_name` in the first line. Subsequent options are optional. For example, `app: apps` is a valid full message, and will return a [list of all available apps](apps.md). 
+
+Passing `options: help = yes` to any app will return the app's guide, with information on its behavior and available options. This works on _all_ apps, and is part of the structure, thanks to the `utils.app_handler` wrapper.
+
+```python
+@utils.app_handler(APP_NAME, APP_OPTIONS)
+def handler(content: str, options: dict) -> str
+```
+
+
 ## Validation
 
 As long as this message is under 160 characters, it's accepted and handled internally. If it's more than 160 characters or otherwise fails basic validation, an error text message is sent back.
