@@ -99,6 +99,6 @@ def usage_summary(date: dt.date | str = None) -> str:
         person_uses[person] += 1
 
 
-    return f"On {today.strftime(DT_FORMAT_DATE)}, I was pinged {total_pings} times." \
+    return f"On {today.strftime(DT_FORMAT_DATE)}, I was pinged {total_pings} times. " \
         f"App-specific pings are below.\n\n{app_pings}" \
         f"\n\nPerson-specific pings:\n\n{person_uses}"
