@@ -5,3 +5,6 @@ runtime: python310
 # 502 bad gateway
 resources:
   memory_gb: 2
+
+# Latency - resident instance
+min_idle_instances: 1
