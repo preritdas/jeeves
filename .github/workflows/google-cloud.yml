@@ -9,12 +9,13 @@ on:
       - completed
     branches:
       - master
-  workflow_dispatch:
+# workflow_dispatch: (disabled due to workflow_run.conclusion == 'success' check)
 
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout repository code
