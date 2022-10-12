@@ -28,8 +28,8 @@ def test_no_recipient():
 
 def test_invalid_phone():
     res = app_invite.handler(
-        content = "",
-        options = {"recipient": "97asdc6d99", "preview": "yes"}
+        content = "97asdc6d99",
+        options = {"preview": "yes"}
     )
 
     assert "invalid" in res.lower()
