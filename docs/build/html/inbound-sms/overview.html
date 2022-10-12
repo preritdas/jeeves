@@ -92,7 +92,7 @@
 </div>
 <p>When a text message is sent to the receiver number, Nexmo sends a <code class="docutils literal notranslate"><span class="pre">POST</span></code> request to the server containing the text content, sender information, and any relevant metadata. A typical message takes the following format.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>app: groceries
-options: setup = whole foods; add = true; id = 87asdf6
+options: setup = whole foods; add = last
 
 2 bananas
 3 apples
@@ -105,6 +105,8 @@ ice cream
 <span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </pre></div>
 </div>
+<p>Currently, this structure is necessary so all information is carefully and accurately passed to the appropriate app handler. Inbound message content is parsed absolutely—if you misspell “app” or “content” in your message, you’ll be sent an “invalid content” text response.</p>
+<p>Eventually, I hope to not replace the absolute parsing but add a new natural language layer, where inbound messages are first parsed using natural language. For example, sending <code class="docutils literal notranslate"><span class="pre">&quot;Get</span> <span class="pre">info</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">movie</span> <span class="pre">a</span> <span class="pre">few</span> <span class="pre">good</span> <span class="pre">men&quot;</span></code> would trigger the <a class="reference internal" href="rt.html"><span class="doc std std-doc">rt</span></a> app. If NLP parsing fails, default to absolute parsing.</p>
 <section id="validation">
 <h2>Validation<a class="headerlink" href="#validation" title="Permalink to this heading"></a></h2>
 <p>As long as this message is under 160 characters, it’s accepted and handled internally. If it’s more than 160 characters or otherwise fails basic validation, an error text message is sent back.</p>
