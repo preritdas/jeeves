@@ -7,9 +7,8 @@ import app_invite
 
 def test_handler():
     res = app_invite.handler(
-        content = "",
+        content = "12223334455",
         options = {
-            "recipient": "2223334455",
             "preview": "yes"
         }
     )
