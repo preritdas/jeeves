@@ -3,6 +3,12 @@
 Organize a grocery list by category and location for shopping at peak efficiency.
 
 
+| Option | Description |
+| --- | --- |
+| add | If you want to append the contents of the current message to a previous list, properly re-sorted. This could also be useful if working with a long grocery list, breaching the 160 character text limit. |
+| setup | Custom grocery setup, ex. `whole foods`, to order the list categories according to the store layout. Maximum shopping efficiency. |
+
+
 `````{tabs}
 
 ````{tab} Sample Text
