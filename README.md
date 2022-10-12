@@ -14,7 +14,7 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 (This is for personal reference.)
 
-Permissions should be a database. Write a `check_permissions` function, called in `app.route("/inbound-sms")`. 
+[x] Permissions should be a database. Write a `check_permissions` function, called in `app.route("/inbound-sms")`. 
 
 
 ## Style Guide
