@@ -4,7 +4,10 @@ import utils
 import texts
 
 
-APP_HELP = "Invite someone to use Jeeves' services."
+APP_HELP = (
+    "Invite someone to use Jeeves' services. Specify the recipient's phone "
+    "number in the message content."
+)
 APP_OPTIONS = {
     "recipient": "REQUIRED, phone number of the invitee",
     "preview": "OPTIONAL, if provided, doesn't text the recipient"
@@ -14,11 +17,11 @@ APP_OPTIONS = {
 @utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     """Invite new user."""
-    if not "recipient" in options:
-        return "You must provide a recipient's phone number as an option."
+    if not content:
+        return "You must provide a recipient's phone number as message content."
     
     try:
-        int(recipient := options["recipient"])
+        int(recipient := content)
     except ValueError:
         return "Invalid phone number."
     
