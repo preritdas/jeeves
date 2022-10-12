@@ -2,6 +2,7 @@
 ![coverage](tests/badge.svg)
 ![docs](https://github.com/preritdas/personal-api/actions/workflows/sphinx.yml/badge.svg)
 ![firebase](https://github.com/preritdas/personal-api/actions/workflows/firebase-hosting-merge.yml/badge.svg)
+![gcp](https://github.com/preritdas/personal-api/actions/workflows/google-cloud.yml/badge.svg)
 
 
 # Personal API
