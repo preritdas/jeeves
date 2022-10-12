@@ -10,7 +10,7 @@ When a text message is sent to the receiver number, Nexmo sends a `POST` request
 
 ```text
 app: groceries
-options: setup = whole foods; add = true; id = 87asdf6
+options: setup = whole foods; add = last
 
 2 bananas
 3 apples
@@ -25,6 +25,10 @@ Passing `options: help = yes` to any app will return the app's guide, with infor
 @utils.app_handler(APP_NAME, APP_OPTIONS)
 def handler(content: str, options: dict) -> str
 ```
+
+Currently, this structure is necessary so all information is carefully and accurately passed to the appropriate app handler. Inbound message content is parsed absolutely---if you misspell "app" or "content" in your message, you'll be sent an "invalid content" text response. 
+
+Eventually, I hope to not replace the absolute parsing but add a new natural language layer, where inbound messages are first parsed using natural language. For example, sending `"Get info on the movie a few good men"` would trigger the [rt](rt.md) app. If NLP parsing fails, default to absolute parsing.
 
 
 ## Validation
