@@ -1,3 +1,7 @@
 # For GCP App Engine
 
 runtime: python310
+
+# 502 bad gateway
+resources:
+  memory_gb: 4
