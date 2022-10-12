@@ -4,4 +4,4 @@ runtime: python310
 
 # 502 bad gateway
 resources:
-  memory_gb: 4
+  memory_gb: 2
