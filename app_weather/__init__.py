@@ -10,7 +10,7 @@ APP_HELP = "Get weather data."
 APP_OPTIONS = {
     "city": f"OPTIONAL, default is {config.Weather.DEFAULT_CITY}",
     "state": "OPTIONAL, U.S. state, city is usually sufficient",
-    "country": "OPTIONAL, ISO code, city is usuaully sufficient"
+    "country": "OPTIONAL, ISO code, city is usually sufficient"
 }
 
 
