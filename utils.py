@@ -8,7 +8,7 @@ def app_handler(app_help: str, app_options: dict = {}):
     app_help += "\n\n"
 
     def wrapper_func(function):
-        def inner(content: str, options: dict[str, str]):
+        def inner(content: str, options: dict[str, str]) -> str:
             if not "help" in options:
                 return function(content, options)
 
