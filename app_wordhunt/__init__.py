@@ -12,9 +12,7 @@ APP_OPTIONS = {
 
 
 @utils.app_handler(APP_HELP, APP_OPTIONS)
-def handler(content: str, options: dict):
-    return "This app is temporarily disabled due to API operation timeout issues."
-
+def handler(content: str, options: dict) -> str:
     height = options.get("height", 4)
     width = options.get("width", 4)
     limit = options.get("limit", 20)
