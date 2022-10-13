@@ -18,6 +18,7 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/tabs.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -80,7 +81,62 @@
              
   <section id="wordhunt">
 <h1>WordHunt<a class="headerlink" href="#wordhunt" title="Permalink to this heading"></a></h1>
-<p>WordHunt app.</p>
+<p>Solve a WordHunt board (Game Pigeon).</p>
+<a class="reference internal image-reference" href="https://i.stack.imgur.com/JsxLT.jpg"><img alt="my-picture1" src="https://i.stack.imgur.com/JsxLT.jpg" style="width: 200px;" /></a>
+<p>APP_HELP = “Solve a WordHunt board.”
+APP_OPTIONS = {
+“height”: “board height, default 4”,
+“width”: “board width, default 4”,
+“limit”: “max number of results, default 20”
+}</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>height</p></td>
+<td><p>Board height. Default is 4.</p></td>
+</tr>
+<tr class="row-odd"><td><p>width</p></td>
+<td><p>Board width. Default is 4.</p></td>
+</tr>
+<tr class="row-even"><td><p>limit</p></td>
+<td><p>Max number of results. Default is 20.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Sample Text</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Sample Response</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>app: wordhunt
+oatrihpshtnrenei
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2, 2 - haptens
+2, 2 - haptene
+3, 2 - pterins
+4, 2 - staithe
+1, 3 - hennier
+1, 3 - henners
+2, 3 - tenners
+2, 2 - hapten
+3, 2 - pterin
+4, 2 - sprint
+4, 2 - sprent
+4, 2 - staith
+1, 3 - henner
+2, 3 - tenner
+3, 3 - niente
+4, 3 - rennet
+1, 4 - enters
+4, 4 - inners
+4, 4 - inters
+2, 1 - apter
+2, 2 - haith
+</pre></div>
+</div>
+</div></div>
+<p>The coordinates, ex. <code class="docutils literal notranslate"><span class="pre">2,</span> <span class="pre">2</span></code>, are board coordinates, starting at <code class="docutils literal notranslate"><span class="pre">1,</span> <span class="pre">1</span></code> (not <code class="docutils literal notranslate"><span class="pre">0,</span> <span class="pre">0</span></code>). The results are sorted first by number of points, then by board position.</p>
 </section>
 
 
