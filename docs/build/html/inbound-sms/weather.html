@@ -18,6 +18,7 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/tabs.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -81,7 +82,34 @@
              
   <section id="weather">
 <h1>Weather<a class="headerlink" href="#weather" title="Permalink to this heading"></a></h1>
-<p>Weather app.</p>
+<p>Weather summary and data highlights.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>city</p></td>
+<td><p>Optional. The default is set in <code class="docutils literal notranslate"><span class="pre">config.ini</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>state</p></td>
+<td><p>Optional. A U.S. state, if the <code class="docutils literal notranslate"><span class="pre">city</span></code> is in the U.S. The city is usually sufficient.</p></td>
+</tr>
+<tr class="row-even"><td><p>country</p></td>
+<td><p>Optional, a country ISO code. As with <code class="docutils literal notranslate"><span class="pre">state</span></code>, the <code class="docutils literal notranslate"><span class="pre">city</span></code> is usually sufficient.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Sample Text</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Sample Response</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>app: weather
+options: city = london
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>It&#39;s currently 57 degrees outside. Today&#39;s high will be 58 degrees; the low will be 55 degrees. The sun will set at 5:12 pm.
+</pre></div>
+</div>
+</div></div>
 </section>
 
 
