@@ -44,5 +44,5 @@ PROGRAMS = {
     "invite": app_invite.handler,
     "usage": app_usage.handler,
     "rt": app_rt.handler,
-    "cocktails": app_cocktails
+    "cocktails": app_cocktails.handler
 }
