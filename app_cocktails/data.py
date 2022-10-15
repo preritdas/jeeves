@@ -55,8 +55,4 @@ def random_cocktail() -> Drink:
         "instructions": raw_drink["strInstructions"]
     }
 
-    return Drink(
-        name = drink_attrs["name"], 
-        ingredients = drink_attrs["ingredients"],
-        instructions = drink_attrs["instructions"]
-    )
+    return Drink(**drink_attrs)
