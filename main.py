@@ -43,7 +43,7 @@ def main_handler(inbound_sms_content: dict):
 
     if not requested_app:
         texts.send_message(
-            f"App '{requested_app}' does not exist.",
+            f"That app does not exist.",
             sender
         )
         return "", 204
