@@ -1,8 +1,29 @@
 """Gather data from APIs for cocktail info."""
 import requests
 
+from dataclasses import dataclass
+
 
 ENDPOINT = "https://www.thecocktaildb.com/api/json/v1/1/"
+
+
+@dataclass
+class Drink:
+    """Class for holding drink information, with string formatting."""
+    name: str
+    ingredients: dict[str, str]
+    instructions: str
+
+    def __str__(self) -> str:
+        """String format the drink."""
+        ingredients_list = []
+        for ingredient, amount in self.ingredients.items():
+            ingredients_list.append(f"{ingredient.lower()} - {amount.lower()}")
+
+        ingredients_str = "\n".join(ingredients_list)
+
+        return f"Behold, the {self.name.title()}. Here's what you'll need.\n\n" \
+            f"{ingredients_str}\n\n{self.instructions}\n\nEnjoy!"
 
 
 def _parse_ingredients(raw_drink: dict) -> dict:
@@ -19,7 +40,7 @@ def _parse_ingredients(raw_drink: dict) -> dict:
     return all_ingredients
 
 
-def random_cocktail() -> dict:
+def random_cocktail() -> Drink:
     """Get a random cocktail."""
     response = requests.get(ENDPOINT + "random.php").json()
     
@@ -34,4 +55,8 @@ def random_cocktail() -> dict:
         "instructions": raw_drink["strInstructions"]
     }
 
-    return drink_attrs
+    return Drink(
+        name = drink_attrs["name"], 
+        ingredients = drink_attrs["ingredients"],
+        instructions = drink_attrs["instructions"]
+    )
