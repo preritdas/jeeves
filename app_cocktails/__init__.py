@@ -21,7 +21,7 @@ def handler(content: str, options: dict) -> str:
         drinks = data.search_cocktails(content)
 
         if not drinks:
-            return f"No drink was found with the name {content}."
+            return f"I didn't find any drinks with the query '{content}'."
 
         return data.concat_drinks(drinks, limit=config.Cocktails.RESULT_LIMIT)
 
