@@ -2,6 +2,7 @@
 import utils
 
 from . import data
+from . import errors  # unit tests
 
 
 APP_HELP = (
