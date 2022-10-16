@@ -20,6 +20,7 @@ def send_message(content: str, recipient: str):
 
     sms.send_message(
         {
+            "type": "unicode",
             "from": keys.Nexmo.sender,
             "to": recipient,
             "text": str(content)
