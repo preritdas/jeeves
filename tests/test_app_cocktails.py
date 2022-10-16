@@ -26,7 +26,7 @@ def test_no_query_found():
     res = app_cocktails.handler("lmfao", {"inbound_phone": "12223334455"})
 
     # Assert no drink found messages
-    assert "no drink" in res.lower()
+    assert "find any drink" in res.lower()
 
 
 def test_no_drink_found_error():
