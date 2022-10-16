@@ -55,20 +55,28 @@ class Drink:
 
         return drinks
 
-
-    def __str__(self) -> str:
-        """String format the drink."""
+    @property
+    def str_ingredients(self) -> str:
+        """String formatted list of ingredients."""
         ingredients_list = []
         for ingredient, amount in self.ingredients.items():
             ingredients_list.append(f"{ingredient.lower()} - {amount.lower()}")
 
-        ingredients_str = "\n".join(ingredients_list)
+        return "\n".join(ingredients_list)
 
+    @property
+    def basic_format(self) -> str:
+        """String format but without the 'behold's etc."""
+        return f"The {self.name.title()}.\n\nIngredients:\n{self.str_ingredients}\n\n" \
+            f"Instructions:\n{self.instructions}"
+
+    def __str__(self) -> str:
+        """String format the drink."""
         return f"Behold, the {self.name.title()}. Here's what you'll need.\n\n" \
-            f"{ingredients_str}\n\n{self.instructions}\n\nEnjoy!"
+            f"{self.str_ingredients}\n\n{self.instructions}\n\nEnjoy!"
 
 
-def search_cocktail(cocktail_name: str) -> list[Drink]:
+def search_cocktails(cocktail_name: str) -> list[Drink]:
     """
     Search cocktails matching the query `cocktail_name`. 
     If no cocktail is found, returns an empty list.
@@ -79,6 +87,12 @@ def search_cocktail(cocktail_name: str) -> list[Drink]:
         return None
 
     return Drink.from_response(response, all_drinks=True)
+
+
+def concat_drinks(drinks: list[Drink], limit: int = 100) -> str:
+    """String format a list of drinks together."""
+    return "I have a few drinks for you.\n\n" + \
+        "\n\n----\n\n".join(drink.basic_format for drink in drinks[:limit])
 
 
 def _parse_ingredients(raw_drink: dict) -> dict[str, str]:
