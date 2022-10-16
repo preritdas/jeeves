@@ -14,7 +14,7 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 (This is for personal reference.)
 
-[x] Permissions should be a database. Write a `check_permissions` function, called in `app.route("/inbound-sms")`. 
+All done
 
 
 ## Style Guide
@@ -22,6 +22,13 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 (This is for personal reference.)
 
 Each app needs a `handler` function callable under the app level, ex. in an app module's `__init__.py`. The handler *must* take exactly two arguments, `content: str` and `options: dict`. Content is the inbound message's raw content. The handler must return string content to be texted back to the user. The main handler always passes an `inbound_phone` key in the `options` dictionary to each app.
+
+```python
+# Default options payload
+options: dict[str, str] = {
+    "inbound_phone": "12223334455"
+}
+```
 
 Read options with `dict.get` supplying a default option value if the option isn't provided. For example, WordHunt options in the handler...
 
