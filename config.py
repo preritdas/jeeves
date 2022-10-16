@@ -33,3 +33,7 @@ class Groceries:
         else False
 
     FULL_DT_FORMAT = "%Y-%m-%d %H-%M-%S"
+
+
+class Cocktails:
+    RESULT_LIMIT = int(config["Cocktails"]["result_limit"])
