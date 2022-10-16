@@ -90,7 +90,17 @@ def search_cocktails(cocktail_name: str) -> list[Drink]:
 
 
 def concat_drinks(drinks: list[Drink], limit: int = 100) -> str:
-    """String format a list of drinks together."""
+    """
+    String format a list of drinks together.
+    If there's only one drink, return the full string formatting.
+    If there are no drinks (empty list) return a 'no drinks' statement.
+    """
+    if not drinks:
+        return "There are no drinks."
+
+    if len(drinks) == 1:
+        return str(drinks[0])
+
     return "I have a few drinks for you.\n\n" + \
         "\n\n----\n\n".join(drink.basic_format for drink in drinks[:limit])
 
