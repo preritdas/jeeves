@@ -82,7 +82,7 @@ def test_view_permissions():
         "",
         {"inbound_phone": "12223334455", "action": "view", "phone": "11011011100"}
     )
-    assert "wasn't found" in res
+    assert "doesn't exist" in res
 
     # Test too many
     res = app_permissions.handler(
