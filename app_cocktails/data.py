@@ -1,6 +1,7 @@
 """Gather data from APIs for cocktail info."""
 # External
 import requests
+import emoji
 
 # Local
 from dataclasses import dataclass
@@ -73,7 +74,7 @@ class Drink:
     def __str__(self) -> str:
         """String format the drink."""
         return f"Behold, the {self.name.title()}. Here's what you'll need.\n\n" \
-            f"{self.str_ingredients}\n\n{self.instructions}\n\nEnjoy!"
+            f"{self.str_ingredients}\n\n{self.instructions}\n\nEnjoy. {emoji.emojize(":clinking_glasses:")}"
 
 
 def search_cocktails(cocktail_name: str) -> list[Drink]:
