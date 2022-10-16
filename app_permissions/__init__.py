@@ -7,17 +7,21 @@ APP_HELP = (
     "Message content should be the new permissions."
 )
 APP_OPTIONS = {
-    "action": "REQUIRED, either 'create' or 'update'",
-    "phone": "REQUIRED, phone number of new or existing user",
-    "name": "MAYBE, only needed if adding a new user."
+    "action": "REQUIRED, either 'create', 'update', or 'view'.",
+    "phone": "REQUIRED, phone number of new or existing user.",
+    "name": "MAYBE, only needed if adding a new user, or for convenience."
 }
 
 
 @utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Update permissions in the database."""
-    assert (content := content.lower()), "You must provide the user's permissions " \
-        "as content."
+    if not "action" in options:
+        return "You must provide an action. See app help, options: help = yes."
+
+    if options["actino"] != "view" and not content:
+        return "You must provide the user's permissions as content when not using " \
+            "the view action."
 
     if options["action"] == "view":
         if "phone" in options:
