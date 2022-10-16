@@ -59,6 +59,39 @@ def test_handler():
     assert "No users were found" in res or "Nobody with name" in res
 
 
+def test_view_permissions():
+    """
+    Note on the duplicates test: Duplicate Name is a name used twice in the 
+    permissions database to facilitate this test.
+    """
+    res = app_permissions.handler(
+        "",
+        {"inbound_phone": "12223334455", "action": "view", "name": "git pytest"}
+    )
+    assert "all" in res
+
+    # Test with phone query
+    res = app_permissions.handler(
+        "",
+        {"inbound_phone": "12223334455", "action": "view", "phone": "12223334455"}
+    )
+    assert "all" in res
+
+    # Test no result query
+    res = app_permissions.handler(
+        "",
+        {"inbound_phone": "12223334455", "action": "view", "phone": "11011011100"}
+    )
+    assert "wasn't found" in res
+
+    # Test too many
+    res = app_permissions.handler(
+        "",
+        {"inbound_phone": "12223334455", "action": "view", "name": "duplicate name"}
+    )
+    assert "multiple people were found" in res.lower()
+
+
 def test_help():
     res = app_permissions.handler(
         content = "",

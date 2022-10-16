@@ -19,6 +19,28 @@ def handler(content: str, options: dict[str, str]) -> str:
     assert (content := content.lower()), "You must provide the user's permissions " \
         "as content."
 
+    if options["action"] == "view":
+        if "phone" in options:
+            db_res = permissions.permissions_db.fetch(
+                query = {"Phone": options["phone"]}
+            )
+
+            return db_res.items[0]["Permissions"]
+
+        db_res = permissions.permissions_db.fetch(
+            query = {"Name": options["name"]}
+        )
+
+        if len(db_res.items) == 0:
+            return f"'{options['name'].title()} wasn't found. Try with a phone number."
+
+        if len(db_res.items) > 1:
+            return f"Multiple people were found with the name '{options['name'].title()}." \
+                "Try re-querying with an absolute phone number, then check the database " \
+                "to make sure this isn't a mistake."
+
+        return db_res.items[0]["Permissions"]
+
     if options["action"] == "create":
         # Check for existence
         db_res = permissions.permissions_db.fetch(
