@@ -13,6 +13,7 @@ Welcome to my Personal API docs. Currently the only thing deployed is Inbound SM
 
 inbound-sms/overview
 inbound-sms/apps
+inbound-sms/cocktails
 inbound-sms/echo
 inbound-sms/groceries
 inbound-sms/invite

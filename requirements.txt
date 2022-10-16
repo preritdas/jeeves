@@ -1,14 +1,17 @@
 flask==2.2.2  # API
 nexmo==2.5.2  # respond with texts
-deta==1.1.0
+deta==1.1.0  # permissions
 
 # Groceries
-inflect==6.0.0
-translators==5.4.2
-mypytoolkit>=1.5.60
+inflect==6.0.0  # word singularization and pluralization
+translators==5.4.2  # optional item translation
+mypytoolkit>=1.5.60  # utils
 
 # Jokes
-requests==2.28.1
+requests==2.28.1  # ping Humor API
 
 # Rotten Tomatoes
-rottentomatoes-python==0.4.0
+rottentomatoes-python==0.4.0  # movie data retrieval
+
+# Cocktails
+emoji==2.1.0  # emojis in drink formatting
