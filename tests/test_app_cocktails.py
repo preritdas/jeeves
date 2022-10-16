@@ -38,6 +38,11 @@ def test_no_drink_found_error():
         )
 
 
+def test_drink_concat():
+    assert type(app_cocktails.data.concat_drinks([])) is str
+    assert "behold" in app_cocktails.data.concat_drinks([app_cocktails.data.Drink("test", {"ing": "1"}, "stuff")]).lower()
+
+
 def test_help():
     help_text = app_cocktails.handler(
         "", 
