@@ -20,7 +20,7 @@ class Drink:
     instructions: str
 
     @classmethod
-    def from_response(cls, response: requests.Response):
+    def from_response(cls, response: requests.Response, all_drinks: bool = False):
         """
         Return a `Drink` instance based on a raw response from the API.
         This could be more convenient than inputting the name, ingredients, and
@@ -34,13 +34,27 @@ class Drink:
         assert response
         assert len(response["drinks"]) >= 1
 
-        raw_drink = response["drinks"][0]
+        if not all_drinks:
+            raw_drink = response["drinks"][0]
 
-        return cls(
-            name = raw_drink["strDrink"].strip(),
-            ingredients = _parse_ingredients(raw_drink),
-            instructions = raw_drink["strInstructions"].strip()
-        )
+            return cls(
+                name = raw_drink["strDrink"].strip(),
+                ingredients = _parse_ingredients(raw_drink),
+                instructions = raw_drink["strInstructions"].strip()
+            )
+
+        drinks: list[Drink] = []
+        for raw_drink in response["drinks"]:
+            drinks.append(
+                cls(
+                    name = raw_drink["strDrink"].strip(),
+                    ingredients = _parse_ingredients(raw_drink),
+                    instructions = raw_drink["strInstructions"].strip()
+                )
+            )
+
+        return drinks
+
 
     def __str__(self) -> str:
         """String format the drink."""
@@ -54,20 +68,20 @@ class Drink:
             f"{ingredients_str}\n\n{self.instructions}\n\nEnjoy!"
 
 
-def search_cocktail(cocktail_name: str) -> Drink | None:
+def search_cocktail(cocktail_name: str) -> list[Drink]:
     """
-    Search for a cocktail by the name `cocktail_name`. 
-    If no cocktail is found, returns `None`.
+    Search cocktails matching the query `cocktail_name`. 
+    If no cocktail is found, returns an empty list.
     """
     response = requests.get(ENDPOINT + f"search.php?s={cocktail_name.strip()}")
 
     if not response.json()["drinks"]:
         return None
 
-    return Drink.from_response(response)
+    return Drink.from_response(response, all_drinks=True)
 
 
-def _parse_ingredients(raw_drink: dict) -> dict:
+def _parse_ingredients(raw_drink: dict) -> dict[str, str]:
     """Returns a dictionary mapping between ingredient names and their quantities."""
     all_ingredients = {}
 
@@ -75,8 +89,14 @@ def _parse_ingredients(raw_drink: dict) -> dict:
         if not raw_drink[(loc := f"strIngredient{n_ingredient}")]:
             break
     
-        all_ingredients[raw_drink[loc].strip()] = \
-            raw_drink[f"strMeasure{n_ingredient}"].strip()
+        measurement: str | None = raw_drink[f"strMeasure{n_ingredient}"]
+
+        if measurement:
+            measurement = measurement.strip()
+        else:
+            measurement = "Up to you."
+
+        all_ingredients[raw_drink[loc].strip()] = measurement
 
     return all_ingredients
 
