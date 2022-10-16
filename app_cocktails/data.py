@@ -74,7 +74,8 @@ class Drink:
     def __str__(self) -> str:
         """String format the drink."""
         return f"Behold, the {self.name.title()}. Here's what you'll need.\n\n" \
-            f"{self.str_ingredients}\n\n{self.instructions}\n\nEnjoy. {emoji.emojize(":clinking_glasses:")}"
+            f"{self.str_ingredients}\n\n{self.instructions}\n\nEnjoy. " \
+            f"{emoji.emojize(':clinking_glasses:')}"
 
 
 def search_cocktails(cocktail_name: str) -> list[Drink]:
