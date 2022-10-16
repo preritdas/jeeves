@@ -16,6 +16,8 @@ APP_OPTIONS = {
 @utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Update permissions in the database."""
+    content = content.lower()  # all db permissions are in lower case
+
     if not "action" in options:
         return "You must provide an action. See app help, options: help = yes."
 
