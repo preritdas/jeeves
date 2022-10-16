@@ -1,4 +1,7 @@
 """Test the cocktails app."""
+import pytest
+import requests
+
 import app_cocktails
 
 
@@ -24,6 +27,15 @@ def test_no_query_found():
 
     # Assert no drink found messages
     assert "no drink" in res.lower()
+
+
+def test_no_drink_found_error():
+    with pytest.raises(app_cocktails.errors.DrinkNotFoundError):
+        app_cocktails.data.Drink.from_response(
+            requests.get(
+                app_cocktails.data.ENDPOINT + "search.php?s=lmfao"
+            )
+        )
 
 
 def test_help():
