@@ -32,11 +32,11 @@ def handler(content: str, options: dict[str, str]) -> str:
             return db_res.items[0]["Permissions"]
 
         db_res = permissions.permissions_db.fetch(
-            query = {"Name": options["name"]}
+            query = {"Name": options["name"].title()}
         )
 
         if len(db_res.items) == 0:
-            return f"'{options['name'].title()} wasn't found. Try with a phone number."
+            return f"'{options['name'].title()}' wasn't found. Try with a phone number."
 
         if len(db_res.items) > 1:
             return f"Multiple people were found with the name '{options['name'].title()}." \
