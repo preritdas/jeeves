@@ -29,6 +29,13 @@ def handler(content: str, options: dict[str, str]) -> str:
                 query = {"Phone": options["phone"]}
             )
 
+            if len(db_res.items) == 0:
+                return f"{options['phone']} doesn't exist in the database."
+
+            if len(db_res.items) > 1:
+                return f"{options['phone']} exists multiple times in the database. " \
+                    "This is almost definitely a mistake."
+
             return db_res.items[0]["Permissions"]
 
         db_res = permissions.permissions_db.fetch(
