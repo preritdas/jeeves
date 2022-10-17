@@ -39,7 +39,8 @@
         "baby spinach bag",
         "asparagus",
         "cabbage",
-        "bean sprout"
+        "bean sprout",
+        "garlic pod"
     ],
     "self care": [
         "shampoo",
@@ -75,6 +76,7 @@
     "dairy": [
         "cheese",
         "cheddar cheese",
+        "Parmesan cheese", 
         "milk",
         "whole milk",
         "whole lactaid",
@@ -123,7 +125,8 @@
         "pea",
         "ramen",
         "instant ramen",
-        "instant noodle"
+        "instant noodle",
+        "pine nut"
     ],
     "ingredients": [
         "olive oil",
