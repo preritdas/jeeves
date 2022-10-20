@@ -45,6 +45,7 @@ jobs:
           coverage-badge -o tests/badge.svg -f
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull
           git add tests/badge.svg
           git commit --author="Prerit Das <preritdas@gmail.com>" -m "Update coverage badge post unit tests."
           git push
