@@ -3,6 +3,7 @@ from flask import Flask, request
 
 # Local
 import datetime as dt
+import threading
 
 # Project
 import parsing
@@ -14,7 +15,7 @@ import usage
 app = Flask(__name__)
 
 
-def main_handler(inbound_sms_content: dict):
+def main_handler(inbound_sms_content: dict) -> tuple[str, int]:
     """
     Handle all inbound messages.
     
@@ -83,9 +84,17 @@ def main_handler_wrapper():
     print("\n", inbound_sms_content, sep="")
 
     if type(inbound_sms_content) is not dict:
-        return "", 400
+        return "Not JSON format.", 400
+
+    process_inbound_thread = threading.Thread(
+        target = main_handler,
+        kwargs = {
+            "inbound_sms_content": inbound_sms_content
+        }
+    )
     
-    return main_handler(inbound_sms_content)
+    process_inbound_thread.start()  # process the message after returning success
+    return "", 204
 
 
 @app.route("/")
