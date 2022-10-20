@@ -1,4 +1,4 @@
-import os
+"""Backend for generating solutions to a WordHunt board."""
 from .dictionary import dictionary
 
 
@@ -33,12 +33,13 @@ def create_board(board: str, width: int, height) -> Board:
     Gathers letters from user input and returns a two-dimensional array.
     """
     letters = list(board.lower())
-    if not len(letters) == width * height: raise ValueError("A board has 16 total letters.")
+    if not len(letters) == width * height:
+        raise ValueError("A board has 16 total letters.")
 
     board = []
     counter = 0
-    for _ in range(height): 
-        board.append(letters[counter:counter+width])
+    for _ in range(height):
+        board.append(letters[counter : counter + width])
         counter += width
 
     return Board(board)
@@ -48,6 +49,7 @@ def _circle_around(coordinates: tuple[int, int], board: Board) -> list[tuple[int
     """
     Returns all coordinate possibilities of circling around a letter by coordinate.
     """
+
     def on_grid(coordinates: tuple[int, int]):
         if 0 <= coordinates[0] <= board.x_top:
             if 0 <= coordinates[1] <= board.y_top:
@@ -70,7 +72,7 @@ def _circle_around(coordinates: tuple[int, int], board: Board) -> list[tuple[int
     possibilities.append((c[x] - 1, c[y] - 1))
 
     for coordinate in possibilities[:]:
-        if not on_grid(coordinate): 
+        if not on_grid(coordinate):
             possibilities.remove(coordinate)
 
     return possibilities
@@ -79,49 +81,126 @@ def _circle_around(coordinates: tuple[int, int], board: Board) -> list[tuple[int
 def all_possibilities(board: Board):
     words: list[tuple[tuple[int, int], str]] = []
 
-    def duplicate(word) -> bool: return word in [_[1] for _ in words]
+    def duplicate(word) -> bool:
+        return word in [_[1] for _ in words]
 
     for y, row in enumerate(board.board):
         for x, char in enumerate(row):
             for p2 in _circle_around((x, y), board):
                 for p3 in _circle_around(p2, board):
-                    if p3 in [(x, y), p2]: continue
+                    if p3 in [(x, y), p2]:
+                        continue
                     word = "".join([char, board.query(*p2), board.query(*p3)])
-                    if not duplicate(word) and is_word(word): words.append(((x, y), word))
+                    if not duplicate(word) and is_word(word):
+                        words.append(((x, y), word))
                     for p4 in _circle_around(p3, board):
-                        if p4 in [(x, y), p2, p3]: continue
-                        word = "".join([char, board.query(*p2), board.query(*p3), board.query(*p4)])
-                        if not duplicate(word) and is_word(word): words.append(((x, y), word))
+                        if p4 in [(x, y), p2, p3]:
+                            continue
+                        word = "".join(
+                            [char, board.query(*p2), board.query(*p3), board.query(*p4)]
+                        )
+                        if not duplicate(word) and is_word(word):
+                            words.append(((x, y), word))
                         for p5 in _circle_around(p4, board):
-                            if p5 in [(x, y), p2, p3, p4]: continue
-                            word = "".join([char, board.query(*p2), board.query(*p3), board.query(*p4), board.query(*p5)])
-                            if not duplicate(word) and is_word(word): words.append(((x, y), word))
+                            if p5 in [(x, y), p2, p3, p4]:
+                                continue
+                            word = "".join(
+                                [
+                                    char,
+                                    board.query(*p2),
+                                    board.query(*p3),
+                                    board.query(*p4),
+                                    board.query(*p5),
+                                ]
+                            )
+                            if not duplicate(word) and is_word(word):
+                                words.append(((x, y), word))
                             for p6 in _circle_around(p5, board):
-                                if p6 in [(x, y), p2, p3, p4, p5]: continue
-                                word = "".join([char, board.query(*p2), board.query(*p3), board.query(*p4), board.query(*p5), board.query(*p6)])
-                                if not duplicate(word) and is_word(word): words.append(((x, y), word))
+                                if p6 in [(x, y), p2, p3, p4, p5]:
+                                    continue
+                                word = "".join(
+                                    [
+                                        char,
+                                        board.query(*p2),
+                                        board.query(*p3),
+                                        board.query(*p4),
+                                        board.query(*p5),
+                                        board.query(*p6),
+                                    ]
+                                )
+                                if not duplicate(word) and is_word(word):
+                                    words.append(((x, y), word))
                                 for p7 in _circle_around(p6, board):
-                                    if p7 in [(x, y), p2, p3, p4, p5, p6]: continue
-                                    word = "".join([char, board.query(*p2), board.query(*p3), board.query(*p4), board.query(*p5), board.query(*p6), board.query(*p7)])
-                                    if not duplicate(word) and is_word(word): words.append(((x, y), word))
+                                    if p7 in [(x, y), p2, p3, p4, p5, p6]:
+                                        continue
+                                    word = "".join(
+                                        [
+                                            char,
+                                            board.query(*p2),
+                                            board.query(*p3),
+                                            board.query(*p4),
+                                            board.query(*p5),
+                                            board.query(*p6),
+                                            board.query(*p7),
+                                        ]
+                                    )
+                                    if not duplicate(word) and is_word(word):
+                                        words.append(((x, y), word))
                                     for p8 in _circle_around(p7, board):
-                                        if p8 in [(x, y), p2, p3, p4, p5, p6, p7]: continue
-                                        word = "".join([char, board.query(*p2), board.query(*p3), board.query(*p4), board.query(*p5), board.query(*p6), board.query(*p7), board.query(*p8)])
-                                        if not duplicate(word) and is_word(word): words.append(((x, y), word))
+                                        if p8 in [(x, y), p2, p3, p4, p5, p6, p7]:
+                                            continue
+                                        word = "".join(
+                                            [
+                                                char,
+                                                board.query(*p2),
+                                                board.query(*p3),
+                                                board.query(*p4),
+                                                board.query(*p5),
+                                                board.query(*p6),
+                                                board.query(*p7),
+                                                board.query(*p8),
+                                            ]
+                                        )
+                                        if not duplicate(word) and is_word(word):
+                                            words.append(((x, y), word))
                                         for p9 in _circle_around(p8, board):
-                                            if p9 in [(x, y), p2, p3, p4, p5, p6, p7, p8]: continue
-                                            word = "".join([char, board.query(*p2), board.query(*p3), board.query(*p4), board.query(*p5), board.query(*p6), board.query(*p7), board.query(*p8), board.query(*p9)])
-                                            if not duplicate(word) and is_word(word): words.append(((x, y), word))
+                                            if p9 in [
+                                                (x, y),
+                                                p2,
+                                                p3,
+                                                p4,
+                                                p5,
+                                                p6,
+                                                p7,
+                                                p8,
+                                            ]:
+                                                continue
+                                            word = "".join(
+                                                [
+                                                    char,
+                                                    board.query(*p2),
+                                                    board.query(*p3),
+                                                    board.query(*p4),
+                                                    board.query(*p5),
+                                                    board.query(*p6),
+                                                    board.query(*p7),
+                                                    board.query(*p8),
+                                                    board.query(*p9),
+                                                ]
+                                            )
+                                            if not duplicate(word) and is_word(word):
+                                                words.append(((x, y), word))
 
     # Sort result
-    return sorted(words, key = lambda val: len(val[1]), reverse=True) 
+    return sorted(words, key=lambda val: len(val[1]), reverse=True)
 
 
 def print_results(possibilities: list[tuple[int, int], str], limit: int = 1000):
     res = ""
     for pos, possibility in enumerate(possibilities):
-        current = (f"{possibility[0][0]+1}, {possibility[0][1]+1} - {possibility[1]}\n")
+        current = f"{possibility[0][0]+1}, {possibility[0][1]+1} - {possibility[1]}\n"
         res += current
-        if pos == limit: return res
-    
+        if pos == limit:
+            return res
+
     return res
