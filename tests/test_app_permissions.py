@@ -96,6 +96,15 @@ def test_duplicate_phones():
     assert "exists multiple times" in res
     assert "mistake" in res  # duplicate phones should never happen
 
+    # Test it in the update action
+    res = app_permissions.handler(
+        content = "something",
+        options = {"action": "update", "phone": "11111111111"}
+    )
+
+    assert "Many users were found" in res
+    assert "Correct this" in res  # duplicate phones should never happen
+
 
 def test_no_name_found():
     res = app_permissions.handler(
@@ -104,6 +113,15 @@ def test_no_name_found():
     )
 
     assert "wasn't found" in res
+
+
+def test_no_users_found():
+    res = app_permissions.handler(
+        content = "something",
+        options = {"action": "update", "name": "none", "phone": "2"}
+    )
+
+    assert "No users were found" in res
 
 
 def test_view_permissions():
