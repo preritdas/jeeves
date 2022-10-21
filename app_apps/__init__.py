@@ -25,11 +25,8 @@ def handler(content: str, options: dict):
             app_name = app
         )
     ]
-
-    available_apps = ""
-    for app in sorted(accessible_apps):
-        available_apps += f"\n{app}"
-
+        
+    available_apps = "\n".join(accessible_apps)
     return f"The following apps are available to you.\n{available_apps}"
 
 
