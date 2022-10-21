@@ -2,7 +2,9 @@ import app_apps
 
 
 def test_handler():
-    assert "The following apps are available" in app_apps.handler("", {})
+    assert "The following apps are available" in app_apps.handler(
+        "", {"inbound_phone": "12223334455"}
+    )
 
 
 def test_program_list():
