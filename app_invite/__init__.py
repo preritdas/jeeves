@@ -31,7 +31,7 @@ def handler(content: str, options: dict) -> str:
         "app name statement.\n\n" \
         "app: jokes\noptions: help = yes"
 
-    if options.get("preview", None):
+    if options.get("preview"):
         return f"Preview of message to be sent to {recipient} below.\n\n{invite_content}"
 
     texts.send_message(invite_content, recipient)

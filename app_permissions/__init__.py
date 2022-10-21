@@ -84,7 +84,7 @@ def handler(content: str, options: dict[str, str]) -> str:
 
     if options["action"] == "update":
         name_query = False
-        if options.get("name", None):  # if name is provided
+        if options.get("name"):  # if name is provided
             db_res = permissions.permissions_db.fetch(
                 {"Name": options["name"].title()}
             )
@@ -92,7 +92,7 @@ def handler(content: str, options: dict[str, str]) -> str:
                 name_query = True
 
         if not name_query:
-            if not (name := options.get("phone", None)):
+            if not (name := options.get("phone")):
                 return f"Nobody with name '{name}' was found, and you didn't provide " \
                     "a phone number."
 

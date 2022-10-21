@@ -100,7 +100,7 @@ This has to be turned into a dictionary.
 Currently all option values are interpreted as strings. No conversions are made to numeric or boolean types. Any type-specific checking must (currently) happen at the applet level. So, within an app, the following lines will check if an optional boolean was set as true.
 
 ```python
-if options.get("do_something", None):
+if options.get("do_something"):
     ...
 ```
 

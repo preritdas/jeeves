@@ -40,7 +40,7 @@ def requested_app(inbound: dict) -> tuple[Callable | None, str]:
     if not app_name in app_apps.PROGRAMS:
         return None, app_name
     
-    return app_apps.PROGRAMS.get(app_name, None), app_name
+    return app_apps.PROGRAMS.get(app_name), app_name
 
 
 def _parse_options(options: str) -> dict[str, str]:

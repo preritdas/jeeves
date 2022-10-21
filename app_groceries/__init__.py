@@ -38,9 +38,9 @@ def latest_grocery_list(phone: str) -> dict:
 @utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict):
     # Options
-    setup = options.get("setup", None)
+    setup = options.get("setup")
 
-    if (list_id := options.get("add", None)):
+    if (list_id := options.get("add")):
         # Get the user's last list
         old_list = latest_grocery_list(options["inbound_phone"]) if list_id == "last" \
             else grocery_db.get(list_id)
