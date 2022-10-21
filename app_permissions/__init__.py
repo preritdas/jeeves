@@ -1,3 +1,4 @@
+"""Applet to create and update user permissions."""
 import utils
 import permissions
 
@@ -93,8 +94,7 @@ def handler(content: str, options: dict[str, str]) -> str:
 
         if not name_query:
             if not options.get("phone"):
-                return f"Nobody with name '{name}' was found, and you didn't provide " \
-                    "a phone number."
+                return f"Nobody was found, and you didn't provide a phone number."
 
             db_res = permissions.permissions_db.fetch(
                 {"Phone": options["phone"]}
