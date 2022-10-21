@@ -1,3 +1,4 @@
+from re import L
 import app_echo
 
 
@@ -10,6 +11,15 @@ def test_handler():
     )
 
     assert "The following message was sent" in res
+
+
+def test_no_phone():
+    res = app_echo.handler(
+        content = "Doesn't matter.",
+        options = {}
+    )
+
+    assert "You must provide" in res
 
 
 def test_help():
