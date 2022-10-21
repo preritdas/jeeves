@@ -92,7 +92,7 @@ def handler(content: str, options: dict[str, str]) -> str:
                 name_query = True
 
         if not name_query:
-            if not (name := options.get("phone")):
+            if not options.get("phone"):
                 return f"Nobody with name '{name}' was found, and you didn't provide " \
                     "a phone number."
 
