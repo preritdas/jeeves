@@ -21,7 +21,7 @@ def handler(content: str, options: dict):
     """Handler for apps. Filters by permissions."""
     accessible_apps: list[str] = [
         app for app in PROGRAMS.keys() if permissions.check_permissions(
-            phone = options.get("inbound_phone"),
+            phone = options["inbound_phone"],
             app_name = app
         )
     ]
