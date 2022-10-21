@@ -56,7 +56,13 @@ def test_handler():
         }
     )
 
-    assert "No users were found" in res or "Nobody with name" in res
+    cases = [
+        "No users were found",
+        "Nobody with name",
+        "Nobody was found"
+    ]
+
+    assert any(case in res for case in cases)
 
 
 def test_view_permissions():
