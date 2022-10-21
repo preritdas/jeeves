@@ -1,6 +1,8 @@
 """Applet to create and update user permissions."""
 import utils
-import permissions
+
+from . import query
+from . import operations
 
 
 APP_HELP = (
@@ -19,101 +21,48 @@ def handler(content: str, options: dict[str, str]) -> str:
     """Update permissions in the database."""
     content = content.lower()  # all db permissions are in lower case
 
-    if not "action" in options:
+    if not (action := options.get("action")):
         return "You must provide an action. See app help, options: help = yes."
 
     if options["action"] != "view" and not content:
         return "You must provide the user's permissions as content when not using " \
             "the view action."
 
-    if options["action"] == "view":
-        if "phone" in options:
-            db_res = permissions.permissions_db.fetch(
-                query = {"Phone": options["phone"]}
-            )
+    key = query.query(options.get("name", ""), options.get("phone", ""))
 
-            if len(db_res.items) == 0:
-                return f"{options['phone']} doesn't exist in the database."
-
-            if len(db_res.items) > 1:
-                return f"{options['phone']} exists multiple times in the database. " \
-                    "This is almost definitely a mistake."
-
-            return db_res.items[0]["Permissions"]
-
-        db_res = permissions.permissions_db.fetch(
-            query = {"Name": options["name"].title()}
-        )
-
-        if len(db_res.items) == 0:
-            return f"'{options['name'].title()}' wasn't found. Try with a phone number."
-
-        if len(db_res.items) > 1:
-            return f"Multiple people were found with the name '{options['name'].title()}." \
-                "Try re-querying with an absolute phone number, then check the database " \
-                "to make sure this isn't a mistake."
-
-        return db_res.items[0]["Permissions"]
-
-    if options["action"] == "create":
-        # Check for existence
-        db_res = permissions.permissions_db.fetch(
-            query = {"Name": options["name"].title()}
-        )
-
-        if len(db_res.items) > 0:
-            return f"{options['name'].title()} already exists, with " \
-                f"permissions {db_res.items[0]['Permissions']}."
-
-        db_res = permissions.permissions_db.fetch(
-            query = {"Phone": options['phone']}
-        )
-
-        if len(db_res.items) > 0:
-            return f"{options['phone'].title()} already exists, with " \
-                f"permissions {db_res.items[0]['Permissions']}."
-
-        permissions.permissions_db.put(
-            {
-                "Name": options["name"].title(),
-                "Phone": options["phone"],
-                "Permissions": content
-            }
-        )
+    if action == "create":
+        if not (name := options.get("name")) or not (phone := options.get("phone")):
+            return "You must provide both a name and phone number " \
+                "when creating permissions."
         
-        return f"Added permissions for {options['name'].title()}. {content}."
+        if key:
+            return f"Permissions already exist for {name.title()}."
 
-    if options["action"] == "update":
-        name_query = False
-        if options.get("name"):  # if name is provided
-            db_res = permissions.permissions_db.fetch(
-                {"Name": options["name"].title()}
-            )
-            if len(db_res.items) == 1:
-                name_query = True
+        operations.create_permissions(name, phone, content)
+        return f"Successfully created permissions for {name.title()}."
 
-        if not name_query:
-            if not options.get("phone"):
-                return f"Nobody was found, and you didn't provide a phone number."
+    if action == "view":
+        if not key:
+            return "I didn't find an entry based on the name and/or phone " \
+                "you provided."
+        
+        return f"The permissions for {query.name(key)} are below." \
+            f"\n\n{operations.read_permissions(key)}"
 
-            db_res = permissions.permissions_db.fetch(
-                {"Phone": options["phone"]}
-            )
+    if action == "update":
+        if not key:
+            return "I didn't find an entry based on the name and/or phone " \
+                "you provided."
 
-        if len(db_res.items) > 1:
-            return f"Many users were found with the phone number {options['phone']}. " \
-                "Correct this."
+        operations.update_permissions(key, content)
+        return f"Successfully updated {query.name(key)}'s permissions."
+        
 
-        if len(db_res.items) == 0:
-            return "No users were found with those options."
+    if action == "delete":
+        if not key:
+            return "I didn't find an entry based on the name and/or phone " \
+                "you provided."
 
-        key = db_res.items[0]["key"]
-        name = db_res.items[0]["Name"]
-        permissions.permissions_db.update(
-            {
-                "Permissions": content 
-            },
-            key = key
-        )
-
-        return f"Successfully changed {name}'s permissions to {content}."
+        operations.delete_permissions(key)
+        return f"Successfully deleted the permissions entry of {query.name(key)}."
+        
