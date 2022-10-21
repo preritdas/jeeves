@@ -65,6 +65,47 @@ def test_handler():
     assert any(case in res for case in cases)
 
 
+def test_no_action():
+    res = app_permissions.handler(
+        content = "",
+        options = {}
+    )
+
+    assert "You must provide an action" in res
+
+
+def test_no_content():
+    res = app_permissions.handler(
+        content = "",
+        options = {"action": "update"}
+    )
+
+    assert "You must provide" in res
+
+
+def test_duplicate_phones():
+    """
+    11111111111 is a double entry in the permissions database, purely
+    for the sake of this test.
+    """
+    res = app_permissions.handler(
+        content = "something",
+        options = {"action": "view", "phone": "11111111111"}
+    )
+
+    assert "exists multiple times" in res
+    assert "mistake" in res  # duplicate phones should never happen
+
+
+def test_no_name_found():
+    res = app_permissions.handler(
+        content = "something",
+        options = {"action": "view", "name": "i dont exist"}
+    )
+
+    assert "wasn't found" in res
+
+
 def test_view_permissions():
     """
     Note on the duplicates test: Duplicate Name is a name used twice in the 
