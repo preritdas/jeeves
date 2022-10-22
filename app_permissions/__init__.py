@@ -24,7 +24,7 @@ def handler(content: str, options: dict[str, str]) -> str:
     if not (action := options.get("action")):
         return "You must provide an action. See app help, options: help = yes."
 
-    if options["action"] != "view" and not content:
+    if options["action"] not in {"view", "delete"} and not content:
         return "You must provide the user's permissions as content when not using " \
             "the view action."
 
