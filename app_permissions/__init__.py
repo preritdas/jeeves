@@ -63,6 +63,7 @@ def handler(content: str, options: dict[str, str]) -> str:
             return "I didn't find an entry based on the name and/or phone " \
                 "you provided."
 
+        name = query.name(key)
         operations.delete_permissions(key)
-        return f"Successfully deleted the permissions entry of {query.name(key)}."
+        return f"Successfully deleted the permissions entry of {name}."
         
