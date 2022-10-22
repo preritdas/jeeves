@@ -5,6 +5,9 @@ from permissions import permissions_db
 class QueryError(Exception):
     pass
 
+class QueryParameterError(Exception):
+    pass
+
 
 def query(name: str = "", phone: str = "") -> str:
     """
@@ -13,6 +16,10 @@ def query(name: str = "", phone: str = "") -> str:
 
     Raises 
     """
+    if not name and not phone:
+        raise QueryParameterError("You must provide either a name or phone number.")
+
+
     if phone:
         db_res = permissions_db.fetch(
             {
@@ -33,7 +40,7 @@ def query(name: str = "", phone: str = "") -> str:
 
     db_res = permissions_db.fetch(
         {
-            "Name": name
+            "Name": name.title()
         }
     )
 
@@ -50,7 +57,7 @@ def query(name: str = "", phone: str = "") -> str:
 
 def name(key: str) -> str:
     """Gets the name of an entry based on key."""
-    return permissions_db.get(key)["Name"].title()
+    return permissions_db.get(key)["Name"]
 
 
 def phone(key: str) -> str:
