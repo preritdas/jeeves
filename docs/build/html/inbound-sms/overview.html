@@ -165,11 +165,8 @@ ice cream
             <span class="n">app_name</span> <span class="o">=</span> <span class="n">app</span>
         <span class="p">)</span>
     <span class="p">]</span>
-
-    <span class="n">available_apps</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">accessible_apps</span><span class="p">):</span>
-        <span class="n">available_apps</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">app</span><span class="si">}</span><span class="s2">&quot;</span>
-
+        
+    <span class="n">available_apps</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">accessible_apps</span><span class="p">)</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;The following apps are available to you.</span><span class="se">\n</span><span class="si">{</span><span class="n">available_apps</span><span class="si">}</span><span class="s2">&quot;</span>
 
 

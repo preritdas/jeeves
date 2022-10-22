@@ -1,166 +1,175 @@
+"""Test the permissions app."""
+import pytest
+
+import random
+import string
+
 import app_permissions
 
 
 def test_handler():
-    res = app_permissions.handler(
-        content = "all",
-        options = {
-            "action": "create",
-            "phone": "12223334455",
-            "name": "git pytest"
-        }
-    )
-
-    assert "Added permissions" in res or "Git Pytest already exists" in res
-
-    # Test querying with a wrong name
-    res = app_permissions.handler(
-        content = "all",
-        options = {
-            "action": "create",
-            "phone": "12223334455",
-            "name": "bad name"
-        }
-    )
-
-    assert "12223334455 already exists" in res
-
-    # Test updating
-    res = app_permissions.handler(
-        content = "all",
-        options = {
-            "action": "update",
-            "phone": "12223334455"
-        }
-    )
-
-    assert "Successfully changed" in res
-
-    # Test updating query by name
-    res = app_permissions.handler(
-        content = "all",
-        options = {
-            "action": "update",
-            "name": "git pytest"
-        }
-    )
-
-    assert "successfully" in res.lower()
-
-    # Test updating with none found
-    res = app_permissions.handler(
-        content = "all",
-        options = {
-            "action": "update",
-            "name": "87asdcgaysdc"
-        }
-    )
-
-    cases = [
-        "No users were found",
-        "Nobody with name",
-        "Nobody was found"
-    ]
-
-    assert any(case in res for case in cases)
+    """Just make sure it's working."""
+    assert app_permissions.handler("", {"inbound_phone": "12223334455"})
 
 
 def test_no_action():
+    """Test behavior when no action is specified."""
     res = app_permissions.handler(
         content = "",
-        options = {}
+        options = {"inbound_phone": "12223334455"}
     )
 
     assert "You must provide an action" in res
 
 
-def test_no_content():
+def test_missing_content():
+    """Test behavior when content is missing and the action isn't viewing."""
     res = app_permissions.handler(
         content = "",
-        options = {"action": "update"}
+        options = {
+            "inbound_phone": "12223334455",
+            "action": "update"
+        }
     )
 
-    assert "You must provide" in res
+    assert "as content when" in res
 
 
-def test_duplicate_phones():
-    """
-    11111111111 is a double entry in the permissions database, purely
-    for the sake of this test.
-    """
+# ---- Create ----
+
+def test_creating_deleting():
+    """These are tested together so that the created user can be deleted."""
+    random_name = "".join(
+        random.sample(
+            population = string.ascii_letters,
+            k = 8
+        )
+    )
+
     res = app_permissions.handler(
-        content = "something",
-        options = {"action": "view", "phone": "11111111111"}
+        content = "groceries",
+        options = {
+            "inbound_phone": "12223334455",
+            "action": "create",
+            "name": random_name,
+            "phone": "12344322343"
+        }
     )
 
-    assert "exists multiple times" in res
-    assert "mistake" in res  # duplicate phones should never happen
+    assert "Successfully created" in res
 
-    # Test it in the update action
-    res = app_permissions.handler(
-        content = "something",
-        options = {"action": "update", "phone": "11111111111"}
-    )
-
-    assert "Many users were found" in res
-    assert "Correct this" in res  # duplicate phones should never happen
-
-
-def test_no_name_found():
-    res = app_permissions.handler(
-        content = "something",
-        options = {"action": "view", "name": "i dont exist"}
-    )
-
-    assert "wasn't found" in res
-
-
-def test_no_users_found():
-    res = app_permissions.handler(
-        content = "something",
-        options = {"action": "update", "name": "none", "phone": "2"}
-    )
-
-    assert "No users were found" in res
-
-
-def test_view_permissions():
-    """
-    Note on the duplicates test: Duplicate Name is a name used twice in the 
-    permissions database to facilitate this test.
-    """
-    res = app_permissions.handler(
-        "",
-        {"inbound_phone": "12223334455", "action": "view", "name": "git pytest"}
-    )
-    assert "all" in res
-
-    # Test with phone query
-    res = app_permissions.handler(
-        "",
-        {"inbound_phone": "12223334455", "action": "view", "phone": "12223334455"}
-    )
-    assert "all" in res
-
-    # Test no result query
-    res = app_permissions.handler(
-        "",
-        {"inbound_phone": "12223334455", "action": "view", "phone": "11011011100"}
-    )
-    assert "doesn't exist" in res
-
-    # Test too many
-    res = app_permissions.handler(
-        "",
-        {"inbound_phone": "12223334455", "action": "view", "name": "duplicate name"}
-    )
-    assert "multiple people were found" in res.lower()
-
-
-def test_help():
+    # Delete this user
     res = app_permissions.handler(
         content = "",
-        options = {"help": "yes"}
+        options = {
+            "inbound_phone": "12223334455",
+            "action": "delete",
+            "name": random_name
+        }
     )
 
-    assert "'create'" in res
+    assert "Successfully deleted" in res
+
+
+def test_create_permissions_exist():
+    res = app_permissions.handler(
+        content = "something",
+        options = {
+            "action": "create",
+            "name": "git pytest",
+            "phone": "12223334455"
+        }
+    )
+
+    assert "already exist" in res
+
+
+def test_no_data_create():
+    res = app_permissions.handler(
+        content = "something",
+        options = {
+            "action": "create"
+        }
+    )
+
+    assert "both a name and phone number" in res
+
+
+# ---- View ----
+
+def test_view():
+    res = app_permissions.handler(
+        content = "",
+        options = {
+            "action": "view",
+            "name": "git pytest"
+        }
+    )
+
+    assert "are below" in res
+    assert "all" in res
+
+
+def test_view_none_found():
+    res = app_permissions.handler(
+        content = "",
+        options = {
+            "action": "view",
+            "name": "i dont exist"
+        }
+    )
+
+    assert "I didn't find an" in res
+
+
+# ---- Update ----
+
+def test_update():
+    res = app_permissions.handler(
+        content = "all",
+        options = {
+            "action": "update",
+            "name": "git pytest"
+        }
+    )
+
+    assert "Successfully updated" in res
+    assert "all" in res
+
+
+def test_update_none_found():
+    res = app_permissions.handler(
+        content = "something",
+        options = {
+            "action": "update",
+            "name": "i dont exist"
+        }
+    )
+
+    assert "I didn't find an" in res
+
+
+# ---- Delete ----
+
+def test_delete_none_found():
+    res = app_permissions.handler(
+        content = "something",
+        options = {
+            "action": "delete",
+            "name": "i dont exist"
+        }
+    )
+
+    assert "I didn't find an" in res
+
+
+# ---- Errors ----
+
+def test_query_error():
+    # By name
+    with pytest.raises(app_permissions.query.QueryError):
+        app_permissions.query.query(name="dup namephone")
+
+    # By phone
+    with pytest.raises(app_permissions.query.QueryError):
+        app_permissions.query.query(phone="10101010101")

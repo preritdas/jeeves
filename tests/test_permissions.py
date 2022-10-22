@@ -17,12 +17,8 @@ def test_check_permissions():
 
 
 def test_custom_permissions():
-    assert not permissions.check_permissions(
-        "00000000000", "wordhunt"
-    )
-
     assert permissions.check_permissions(
-        "00000000000", "groceries"
+        "10101010101", "groceries"
     )
 
 
