@@ -5,9 +5,6 @@ from permissions import permissions_db
 class QueryError(Exception):
     pass
 
-class QueryParameterError(Exception):
-    pass
-
 
 def query(name: str = "", phone: str = "") -> str:
     """
@@ -17,7 +14,7 @@ def query(name: str = "", phone: str = "") -> str:
     Raises 
     """
     if not name and not phone:
-        raise QueryParameterError("You must provide either a name or phone number.")
+        return ""
 
 
     if phone:
