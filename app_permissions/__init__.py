@@ -55,7 +55,8 @@ def handler(content: str, options: dict[str, str]) -> str:
                 "you provided."
 
         operations.update_permissions(key, content)
-        return f"Successfully updated {query.name(key)}'s permissions."
+        return f"Successfully updated {query.name(key)}'s permissions." \
+            f"\n\n{query.value(key)}"
         
 
     if action == "delete":

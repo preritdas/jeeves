@@ -60,3 +60,8 @@ def name(key: str) -> str:
 def phone(key: str) -> str:
     """Gets the phone number of an entry based on key."""
     return permissions_db.get(key)["Phone"]
+
+
+def value(key: str) -> str:
+    """Gets the permissions value of an entry based on key."""
+    return permissions_db.get(key)["Permissions"]
