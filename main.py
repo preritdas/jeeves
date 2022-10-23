@@ -1,3 +1,8 @@
+"""
+Create the main Flask application and define the handlers to route inbound requests
+to the correct app. Use threading to instantly return a response at the inbound-sms
+endpoint.
+"""
 # External
 from flask import Flask, request
 
