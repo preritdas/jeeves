@@ -8,7 +8,7 @@ from flask import Flask, request
 
 # Local
 import datetime as dt
-import threading
+import multiprocessing
 
 # Project
 import parsing
@@ -91,14 +91,14 @@ def main_handler_wrapper():
     if type(inbound_sms_content) is not dict:
         return "Not JSON format.", 400
 
-    process_inbound_thread = threading.Thread(
+    process_inbound = multiprocessing.Process(
         target = main_handler,
         kwargs = {
             "inbound_sms_content": inbound_sms_content
         }
     )
     
-    process_inbound_thread.start()  # process the message after returning success
+    process_inbound.start()  # process the message after returning success
     return "", 204
 
 
