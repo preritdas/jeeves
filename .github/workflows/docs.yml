@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - docs/source/**/**.*
+    branches: [master]
+  workflow_dispatch:
 
 
 jobs:
