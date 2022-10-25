@@ -4,12 +4,10 @@ on:
   push:
     paths:
       - docs/source/**/**.*
-  pull_request:
-  workflow_dispatch:
 
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,12 +28,10 @@ jobs:
       - name: Build docs with Sphinx
         run: cd docs && make html && cd ..
 
-      - name: Commit updated docs
-        continue-on-error: true
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@no-reply@github.com"
-          git pull
-          git add docs/build/*
-          git commit -m "Build documentation."
-          git push
+      - name: Publish docs to Firebase
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRERITDAS_API }}'
+          channelId: live
+          projectId: preritdas-api
