@@ -9,11 +9,11 @@
 Documentation: [api.preritdas.com](https://api.preritdas.com). 
 
 
-## Structure Notes
+## Notes
 
 (This is for personal reference.)
 
-All done
+[ ] Tests are passing on Python 3.11. CI tests are held at Python 3.10 as that's the latest runtime currently supported on App Engine. Once App Engine supports the Python 3.11 runtime, both the runtimes on App Engine and CI here will be bumped.
 
 
 ## Style Guide
