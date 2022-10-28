@@ -1,6 +1,6 @@
 # For GCP App Engine
 
-runtime: python310
+runtime: python311
 
 # Latency - resident instance
 instance_class: F4
