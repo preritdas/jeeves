@@ -2,6 +2,9 @@ venv/
 win_venv/
 wsl_venv/
 
+# Private IDE config files
+.vscode/
+
 keys.ini
 config.ini
 
