@@ -37,9 +37,12 @@ jobs:
           echo -en '${{ secrets.CONFIG_INI }}' >> config.ini
 
       - name: Run tests with pytest
-        run: python -m pytest --cov
+        run: pytest --cov
 
-      - name: Update tests coverage badge
+      - name: Generate coverage badge for tests
+        run: coverage-badge -o tests/badge.svg -f
+
+      - name: Commit coverage badge back to repo
         continue-on-error: true
         run: |
           coverage-badge -o tests/badge.svg -f
