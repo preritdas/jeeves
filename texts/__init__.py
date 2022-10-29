@@ -6,6 +6,7 @@ import nexmo
 
 # Project
 import keys
+import config
 
 
 sms = nexmo.Sms(
@@ -14,13 +15,13 @@ sms = nexmo.Sms(
 )
 
 
-def send_message(content: str, recipient: str, sandbox: bool = False) -> bool:
+def send_message(content: str, recipient: str) -> bool:
     """
     Send a text message. Returns True if the request succeeded, or False if it failed.
     """
     assert isinstance(recipient, str)
 
-    if sandbox:
+    if config.General.SANDBOX_MODE:
         return True
 
     vonage_res = sms.send_message(

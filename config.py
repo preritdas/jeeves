@@ -4,6 +4,8 @@ Read config values.
 Requires a config.ini file with sections for each class below, in the following
 format.
 
+[General]
+sandbox_mode = false
 
 [Weather]
 default_city = London
@@ -24,16 +26,20 @@ config.read(
 )
 
 
+class General:
+    SANDBOX_MODE: bool = True if config["General"]["sandbox_mode"].lower() == "true" else False
+
+
 class Weather:
-    DEFAULT_CITY = config["Weather"]["default_city"]
+    DEFAULT_CITY: str = config["Weather"]["default_city"]
 
 
 class Groceries:
-    TRANSLATION = True if config["Groceries"]["translation"].lower().strip() == "true" \
+    TRANSLATION: bool = True if config["Groceries"]["translation"].lower().strip() == "true" \
         else False
 
-    FULL_DT_FORMAT = "%Y-%m-%d %H-%M-%S"
+    FULL_DT_FORMAT: str = "%Y-%m-%d %H-%M-%S"
 
 
 class Cocktails:
-    RESULT_LIMIT = int(config["Cocktails"]["result_limit"])
+    RESULT_LIMIT: int = int(config["Cocktails"]["result_limit"])
