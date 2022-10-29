@@ -11,6 +11,8 @@ usage_db = deta.Base("usage")
 permissions_db = deta.Base("permissions")
 
 
+# Standardized date and time formats
+
 DT_FORMAT_DATE = "%Y-%m-%d"
 DT_FORMAT_TIME = "%H:%M:%S"
 DT_FORMAT = " ".join([DT_FORMAT_DATE, DT_FORMAT_TIME])
@@ -21,9 +23,12 @@ def log_use(
     app_name: str, 
     content: str, 
     options: dict, 
-    time: dt.date
+    time: dt.date | dt.datetime = None
 ) -> str:
-    """Store a use to the database. Returns the key of the new db entry."""
+    """
+    Store a use to the database. Returns the key of the new db entry.
+    If no time is given directly, the exact time of function call is used.
+    """
     # Check all are string except options (dict) and time
     assert all(
         isinstance(param, str) for param in [
@@ -36,7 +41,7 @@ def log_use(
         "App": app_name,
         "Content": content,
         "Options": options,
-        "Time": time.strftime(DT_FORMAT)
+        "Time": time.strftime(DT_FORMAT) or dt.datetime.now().strftime(DT_FORMAT)
     }
 
     res: dict = usage_db.put(payload)

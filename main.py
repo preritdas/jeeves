@@ -76,8 +76,7 @@ def main_handler(inbound_sms_content: dict) -> tuple[str, int]:
         phone_number = sender,
         app_name = app_name,
         content = content,
-        options = options,
-        time = dt.datetime.now()
+        options = options
     ) 
 
     return "", 204
