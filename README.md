@@ -13,11 +13,11 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 (This is for personal reference.)
 
-## CI/CD
+### CI/CD
 
 [ ] Tests are passing on Python 3.11. CI tests are held at Python 3.10 as that's the latest runtime currently supported on App Engine. Once App Engine supports the Python 3.11 runtime, both the runtimes on App Engine and CI here will be bumped.
 
-## Tests
+### Tests
 
 Tests can be run out of the box (with all the [requirements](tests/requirements.txt)) with the `pytest` command (or `python -m pytest`). For coverage, use `pytest --cov`, and for an html coverage report, use `pytest --cov --covreport html`. 
 
@@ -36,6 +36,10 @@ For VS Code testing integration, include these lines in `.vscode/setings.json`.
 ```
 
 This will automatically generate an html coverage report whenever tests are run.
+
+### Notes
+
+- Try not to run tests concurrently as objects are created in the production database and tested against. For example, if two tests are run at the same time, and both tests create a temporary user in the permissions database, one or both of the tests should fail as a `QueryError` would be raised on discovering duplicate users (when not expected).
 
 ## Style Guide
 
