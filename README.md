@@ -13,6 +13,10 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 (This is for personal reference.)
 
+### Versions
+
+[ ] Translation is currently disabled because when installing the `translators` library in Python 3.11, building `lxml` fails. There is no active change to production behavior for now because translation is disabled in [config.ini](config.ini).
+
 ### CI/CD
 
 [ ] Tests are passing on Python 3.11. CI tests are held at Python 3.10 as that's the latest runtime currently supported on App Engine. Once App Engine supports the Python 3.11 runtime, both the runtimes on App Engine and CI here will be bumped.
@@ -63,5 +67,3 @@ A handler's function signature should be as follows.
 ```python
 def handler(content: str, options: dict) -> str
 ```
-
-

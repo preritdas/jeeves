@@ -3,8 +3,8 @@ nexmo==2.5.2  # respond with texts
 deta==1.1.0  # permissions
 
 # Groceries
-inflect==6.0.0  # word singularization and pluralization
-translators==5.4.2  # optional item translation
+inflect==6.0.2  # word singularization and pluralization
+# translators==5.4.2  # optional item translation, broken in 3.11 (lxml) as of 10-29-22
 mypytoolkit>=1.5.60  # utils
 
 # Jokes
