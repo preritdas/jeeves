@@ -1,6 +1,7 @@
 import random
 
 import app_groceries
+from app_groceries import grocery_utils
 
 
 def test_handler():
@@ -62,6 +63,17 @@ def test_paranthesis():
     assert res
     assert "List ID" in res
     assert "(good kind)" in res
+
+
+def test_pluralization():
+    # Test normal pluralization
+    assert grocery_utils.pluralize("tank") == "tanks"
+
+    # Test manual substitution pluralization
+    assert grocery_utils.pluralize("pork") == "pork"
+
+    # Test already plural
+    assert grocery_utils.pluralize("beans") == "beans"
 
 
 def test_help():

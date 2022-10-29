@@ -40,10 +40,11 @@ def pluralize(word: str) -> str:
     if word in PLURAL_REPLACEMENTS:
         return PLURAL_REPLACEMENTS[word]
 
-    if not (plural := inflect_engine.plural_noun(word)):
+    # If the word is already plural
+    if inflect_engine.singular_noun(word) == inflect_engine.plural(word):
         return word
 
-    return plural
+    return inflect_engine.plural_noun(word)
 
 
 def singularize(word: str) -> str:
