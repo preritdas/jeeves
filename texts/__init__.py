@@ -14,11 +14,16 @@ sms = nexmo.Sms(
 )
 
 
-def send_message(content: str, recipient: str):
-    """Send a text message."""
+def send_message(content: str, recipient: str, sandbox: bool = False) -> bool:
+    """
+    Send a text message. Returns True if the request succeeded, or False if it failed.
+    """
     assert isinstance(recipient, str)
 
-    sms.send_message(
+    if sandbox:
+        return True
+
+    vonage_res = sms.send_message(
         {
             "type": "unicode",
             "from": keys.Nexmo.sender,
@@ -26,3 +31,5 @@ def send_message(content: str, recipient: str):
             "text": str(content)
         }
     )
+
+    return True if vonage_res["messages"][0]["status"] == "0" else False
