@@ -2,7 +2,10 @@
 Test the invite app. Make sure to pass "preview" to all the handler options 
 (except help) to prevent actual text messages from being sent.
 """
+import nexmo  # mock an invalid client
+
 import app_invite
+import keys
 
 # Fixtures
 from . import default_options
@@ -38,10 +41,17 @@ def test_invalid_phone():
     assert "invalid" in res.lower()
 
 
-def test_inviting(default_options, mocker):
+def test_inviting(mocker, default_options):
     mocker.patch("config.General.SANDBOX_MODE", True)
     res = app_invite.handler("14259023246", default_options)
     assert "Successfully invited" in res
+
+
+def test_failed_delivery(mocker, default_options):
+    """Mock a bad API key."""
+    mocker.patch("texts.sms", nexmo.Sms(key=keys.Nexmo.API_KEY, secret="invalid"))
+    res = app_invite.handler("14259023246", default_options)
+    assert "There was an error" in res
 
 
 def test_help():
