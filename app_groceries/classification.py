@@ -9,8 +9,10 @@ from . import grocery_utils
 
 # Optional translation
 if config.Groceries.TRANSLATION:
-    import translators
-    translate = lambda phrase: translators.google(phrase)
+    # DISABLE TRANSLATORS FOR NOW DUE TO LXML ISSUES IN PY 3.11
+    # import translators
+    # translate = lambda phrase: translators.google(phrase)
+    translate = lambda phrase: phrase
 else:
     translate = lambda phrase: phrase
 

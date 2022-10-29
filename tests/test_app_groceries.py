@@ -3,6 +3,9 @@ import random
 import app_groceries
 from app_groceries import grocery_utils
 
+# Fixtures
+from . import default_options
+
 
 def test_handler():
     ITEMS = ["Apples", "Bananas", "Blueberries", "snacks", "pears", "limes", "lamb"]
@@ -32,6 +35,27 @@ def test_handler():
             "inbound_phone": "10000000000",
             "add": "last"
         }
+    )
+
+
+def test_no_category(default_options):
+    res = app_groceries.handler(
+        "random", default_options
+    )
+
+    assert "random" in res
+
+
+def test_translation(mocker, default_options):
+    """
+    MOCKING DOESN'T WORK HERE.
+
+    For now, just test using the correct translation function, as translation is 
+    temporarily disabled due to lxml issues with Python 3.11.
+    """
+    mocker.patch("config.Groceries.TRANSLATION", True)  # doesn't work
+    assert "apples" in app_groceries.handler(
+        "apples", default_options
     )
 
 
