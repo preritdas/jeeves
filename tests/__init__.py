@@ -35,8 +35,8 @@ def temp_usage_logs():
         },
         {
             "phone_number": "12223334455",
-            "app_name": "cocktails",
-            "content": "vesper",
+            "app_name": "groceries",
+            "content": "chicken",
             "options": {"inbound_phone": "12223334455"},
             "time": dt.datetime.now()
         }
