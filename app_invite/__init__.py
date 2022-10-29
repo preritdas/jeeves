@@ -34,7 +34,8 @@ def handler(content: str, options: dict) -> str:
     if options.get("preview"):
         return f"Preview of message to be sent to {recipient} below.\n\n{invite_content}"
 
-    texts.send_message(invite_content, recipient)
+    if not texts.send_message(invite_content, recipient):
+        return "There was an error delivering that text message to the recipient."
 
     return f"Successfully invited {recipient}. The message sent is below. " \
         f"\n\n{invite_content}"
