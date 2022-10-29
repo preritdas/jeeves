@@ -35,7 +35,7 @@ def test_log_use():
 
 
 def test_phone_to_name(user_git_pytest):
-    assert usage._phone_to_name("12223334455") == "Git Pytest"
+    assert usage._phone_to_name(user_git_pytest["Phone"]) == "Git Pytest"
     assert usage._phone_to_name("11234567890") == "11234567890"
 
 
