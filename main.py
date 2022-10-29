@@ -7,8 +7,7 @@ endpoint.
 from flask import Flask, request
 
 # Local
-import datetime as dt
-import multiprocessing
+import threading
 
 # Project
 import parsing
@@ -90,7 +89,7 @@ def main_handler_wrapper():
     if type(inbound_sms_content) is not dict:
         return "Not JSON format.", 400
 
-    process_inbound = multiprocessing.Process(
+    process_inbound = threading.Thread(
         target = main_handler,
         kwargs = {
             "inbound_sms_content": inbound_sms_content
@@ -103,4 +102,4 @@ def main_handler_wrapper():
 
 @app.route("/")
 def test():
-    return "All working here."
+    return f"All working here.", 200
