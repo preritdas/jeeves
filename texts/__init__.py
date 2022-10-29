@@ -8,6 +8,7 @@ import nexmo
 import keys
 import config
 
+
 nexmo_client = nexmo.Client(
     key = keys.Nexmo.API_KEY,
     secret = keys.Nexmo.API_SECRET
@@ -28,7 +29,7 @@ def send_message(content: str, recipient: str) -> bool:
     vonage_res = sms.send_message(
         {
             "type": "unicode",
-            "from": keys.Nexmo.sender,
+            "from": keys.Nexmo.SENDER,
             "to": recipient,
             "text": str(content)
         }

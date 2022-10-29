@@ -20,7 +20,7 @@ class Nexmo:
 
     API_KEY = _nexmo_keys["api_key"]
     API_SECRET = _nexmo_keys["api_secret"]
-    sender = _nexmo_keys["sender"]
+    SENDER = _nexmo_keys["sender"]
     MY_NUMBER = _nexmo_keys["receiver"]
 
 
