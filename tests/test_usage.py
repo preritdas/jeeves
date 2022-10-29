@@ -5,6 +5,9 @@ import random
 
 import usage
 
+# Fixtures
+from . import temp_usage_log
+
 
 def test_log_use():
     TEST_APP_RANDOM = "".join(random.sample(string.ascii_letters, 10))
@@ -34,3 +37,15 @@ def test_log_use():
 def test_phone_to_name():
     assert usage._phone_to_name("12223334455") == "Git Pytest"
     assert usage._phone_to_name("11234567890") == "11234567890"
+
+
+# ---- Usage summary
+
+def test_usage_summary_string_date():
+    """Test the generation of a string usage summary based on various inputs."""
+    assert usage.usage_summary(dt.datetime.today().strftime(usage.DT_FORMAT_DATE))
+
+
+def test_usage_summary_fake_log(temp_usage_log):
+    assert temp_usage_log
+    assert "29" in usage.usage_summary()
