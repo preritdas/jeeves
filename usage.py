@@ -26,7 +26,7 @@ def log_use(
     app_name: str, 
     content: str, 
     options: dict, 
-    time: dt.date | dt.datetime = None
+    time: dt.datetime | None = None
 ) -> str:
     """
     Store a use to the database. Returns the key of the new db entry.
@@ -39,12 +39,18 @@ def log_use(
         ]
     )
 
+    if time: 
+        assert isinstance(time, dt.datetime)
+        time = time.strftime(DT_FORMAT)
+    else: 
+        time = dt.datetime.now().strftime(DT_FORMAT)
+
     payload = {
         "Phone": phone_number,
         "App": app_name,
         "Content": content,
         "Options": options,
-        "Time": time.strftime(DT_FORMAT) or dt.datetime.now().strftime(DT_FORMAT)
+        "Time": time
     }
 
     res: dict = usage_db.put(payload)
