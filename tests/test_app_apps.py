@@ -1,9 +1,12 @@
 import app_apps
 
+# Pytest fixtures
+from . import default_options
 
-def test_handler():
+
+def test_handler(default_options):
     assert "The following apps are available" in app_apps.handler(
-        "", {"inbound_phone": "12223334455"}
+        "", default_options
     )
 
 
