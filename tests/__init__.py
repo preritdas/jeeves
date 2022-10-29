@@ -4,9 +4,10 @@ import pytest
 import datetime as dt
 
 import usage  # fixture for temporary logs for report
+import permissions  # fixtures for temporary users
 
 
-@pytest.fixture()
+@pytest.fixture
 def default_inbound() -> dict[str, str]:
     return {
         "msisdn": "12223334455",
@@ -14,9 +15,50 @@ def default_inbound() -> dict[str, str]:
     }
 
 
-@pytest.fixture()
+@pytest.fixture
 def default_options() -> dict[str, str]:
     return {"inbound_phone": "12223334455"}
+
+
+@pytest.fixture(scope="session")
+def user_git_pytest() -> dict[str, str]:
+    """Temporary user with maximum permissions."""
+    user_attrs = {
+        "Name": "Git Pytest",
+        "Permissions": "all",
+        "Phone": "12223334455"
+    }
+
+    key = permissions.permissions_db.put(user_attrs)["key"]
+    yield user_attrs
+    permissions.permissions_db.delete(key)
+
+
+@pytest.fixture(scope="session")
+def users_dup_namephone() -> list[dict[str, str]]:
+    """
+    Temporary users with the same name and phone number to test
+    handling duplicate entries.
+    """
+    users = [
+        {
+            "Name": "Dup Namephone",
+            "Permissions": "groceries",
+            "Phone": "10101010101"
+        },
+        {
+            "Name": "Dup Namephone",
+            "Permissions": "apps",
+            "Phone": "10101010101"
+        },
+    ]
+
+    keys = [permissions.permissions_db.put(payload)["key"] for payload in users]
+    yield users
+
+    # Remove the temporary entries
+    for key in keys:
+        permissions.permissions_db.delete(key)
 
 
 @pytest.fixture(scope="module")

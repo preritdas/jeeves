@@ -6,7 +6,7 @@ import random
 import usage
 
 # Fixtures
-from . import temp_usage_logs
+from . import temp_usage_logs, user_git_pytest
 
 
 def test_log_use():
@@ -34,7 +34,7 @@ def test_log_use():
     usage.usage_db.delete(key)
 
 
-def test_phone_to_name():
+def test_phone_to_name(user_git_pytest):
     assert usage._phone_to_name("12223334455") == "Git Pytest"
     assert usage._phone_to_name("11234567890") == "11234567890"
 

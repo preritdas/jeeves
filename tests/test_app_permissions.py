@@ -6,6 +6,9 @@ import string
 
 import app_permissions
 
+# Fixtures
+from . import user_git_pytest, users_dup_namephone, default_options
+
 
 def test_handler():
     """Just make sure it's working."""
@@ -37,7 +40,7 @@ def test_missing_content():
 
 # ---- Create ----
 
-def test_creating_deleting():
+def test_creating_deleting(default_options):
     """These are tested together so that the created user can be deleted."""
     random_name = "".join(
         random.sample(
@@ -49,7 +52,7 @@ def test_creating_deleting():
     res = app_permissions.handler(
         content = "groceries",
         options = {
-            "inbound_phone": "12223334455",
+            "inbound_phone": default_options["inbound_phone"],
             "action": "create",
             "name": random_name,
             "phone": "12344322343"
@@ -62,7 +65,7 @@ def test_creating_deleting():
     res = app_permissions.handler(
         content = "",
         options = {
-            "inbound_phone": "12223334455",
+            "inbound_phone": default_options["inbound_phone"],
             "action": "delete",
             "name": random_name
         }
@@ -71,13 +74,13 @@ def test_creating_deleting():
     assert "Successfully deleted" in res
 
 
-def test_create_permissions_exist():
+def test_create_permissions_exist(user_git_pytest):
     res = app_permissions.handler(
         content = "something",
         options = {
             "action": "create",
-            "name": "git pytest",
-            "phone": "12223334455"
+            "name": user_git_pytest["Name"],
+            "phone": user_git_pytest["Phone"]
         }
     )
 
@@ -97,12 +100,12 @@ def test_no_data_create():
 
 # ---- View ----
 
-def test_view():
+def test_view(user_git_pytest):
     res = app_permissions.handler(
         content = "",
         options = {
             "action": "view",
-            "name": "git pytest"
+            "name": user_git_pytest["Name"].lower()
         }
     )
 
@@ -124,12 +127,12 @@ def test_view_none_found():
 
 # ---- Update ----
 
-def test_update():
+def test_update(user_git_pytest):
     res = app_permissions.handler(
         content = "all",
         options = {
             "action": "update",
-            "name": "git pytest"
+            "name": user_git_pytest["Name"].lower()
         }
     )
 
@@ -165,7 +168,7 @@ def test_delete_none_found():
 
 # ---- Errors ----
 
-def test_query_error():
+def test_query_error(users_dup_namephone):
     # By name
     with pytest.raises(app_permissions.query.QueryError):
         app_permissions.query.query(name="dup namephone")
