@@ -4,6 +4,9 @@ Test the invite app. Make sure to pass "preview" to all the handler options
 """
 import app_invite
 
+# Fixtures
+from . import default_options
+
 
 def test_handler():
     res = app_invite.handler(
@@ -33,6 +36,12 @@ def test_invalid_phone():
     )
 
     assert "invalid" in res.lower()
+
+
+def test_inviting(default_options, mocker):
+    mocker.patch("config.General.SANDBOX_MODE", True)
+    res = app_invite.handler("14259023246", default_options)
+    assert "Successfully invited" in res
 
 
 def test_help():
