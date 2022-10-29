@@ -8,11 +8,12 @@ import nexmo
 import keys
 import config
 
-
-sms = nexmo.Sms(
+nexmo_client = nexmo.Client(
     key = keys.Nexmo.api_key,
     secret = keys.Nexmo.api_secret
 )
+
+sms = nexmo.Sms(nexmo_client)
 
 
 def send_message(content: str, recipient: str) -> bool:
