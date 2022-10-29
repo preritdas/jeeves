@@ -20,7 +20,7 @@ def default_options() -> dict[str, str]:
     return {"inbound_phone": "12223334455"}
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def user_git_pytest() -> dict[str, str]:
     """Temporary user with maximum permissions."""
     user_attrs = {
@@ -34,7 +34,7 @@ def user_git_pytest() -> dict[str, str]:
     permissions.permissions_db.delete(key)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def users_dup_namephone() -> list[dict[str, str]]:
     """
     Temporary users with the same name and phone number to test
@@ -61,7 +61,7 @@ def users_dup_namephone() -> list[dict[str, str]]:
         permissions.permissions_db.delete(key)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def temp_usage_logs():
     """
     Generate two temporary elements in the usage log so a usage report
