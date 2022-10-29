@@ -6,7 +6,7 @@ import random
 import usage
 
 # Fixtures
-from . import temp_usage_log
+from . import temp_usage_logs
 
 
 def test_log_use():
@@ -46,6 +46,6 @@ def test_usage_summary_string_date():
     assert usage.usage_summary(dt.datetime.today().strftime(usage.DT_FORMAT_DATE))
 
 
-def test_usage_summary_fake_log(temp_usage_log):
-    assert temp_usage_log
+def test_usage_summary_fake_log(temp_usage_logs):
+    assert type(temp_usage_logs) is list
     assert "29" in usage.usage_summary()

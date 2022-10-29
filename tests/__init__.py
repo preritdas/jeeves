@@ -20,19 +20,31 @@ def default_options() -> dict[str, str]:
 
 
 @pytest.fixture(scope="module")
-def temp_usage_log():
+def temp_usage_logs():
     """
-    Generate a temporary element in the usage log so a usage report
+    Generate two temporary elements in the usage log so a usage report
     can be generated on that log. Delete the log afterwards.
     """
-    usage_payload = {
-        "phone_number": "12223334455",
-        "app_name": "groceries",
-        "content": "apples\nbananas",
-        "options": {"setup": "whole foods"},
-        "time": dt.datetime.now()
-    }
+    usage_payloads = [
+        {
+            "phone_number": "12223334455",
+            "app_name": "groceries",
+            "content": "apples\nbananas",
+            "options": {"setup": "whole foods"},
+            "time": dt.datetime.now()
+        },
+        {
+            "phone_number": "12223334455",
+            "app_name": "cocktails",
+            "content": "vesper",
+            "options": {"inbound_phone": "12223334455"},
+            "time": dt.datetime.now()
+        }
+    ]
 
-    key = usage.log_use(**usage_payload)
-    yield usage_payload
-    usage.usage_db.delete(key)  # remove the temporary log
+    keys = [usage.log_use(**payload) for payload in usage_payloads]
+    yield usage_payloads
+
+    # Remove the temporary logs
+    for key in keys:
+        usage.usage_db.delete(key)
