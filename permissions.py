@@ -8,7 +8,7 @@ import deta
 import keys
 
 
-deta = deta.Deta(keys.Deta.project_key)
+deta = deta.Deta(keys.Deta.PROJECT_KEY)
 permissions_db = deta.Base("permissions")
 
 
@@ -23,7 +23,7 @@ def db_init() -> str:
     db_res: dict = permissions_db.put(
         {
             "Name": "Prerit Das",
-            "Phone": keys.Nexmo.mynumber,
+            "Phone": keys.Nexmo.MY_NUMBER,
             "Permissions": "all"
         }
     )

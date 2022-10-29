@@ -18,19 +18,19 @@ class Nexmo:
     """Sending text messages."""
     _nexmo_keys = keys["Nexmo"]
 
-    api_key = _nexmo_keys["api_key"]
-    api_secret = _nexmo_keys["api_secret"]
+    API_KEY = _nexmo_keys["api_key"]
+    API_SECRET = _nexmo_keys["api_secret"]
     sender = _nexmo_keys["sender"]
-    mynumber = _nexmo_keys["receiver"]
+    MY_NUMBER = _nexmo_keys["receiver"]
 
 
 class Deta:
-    project_key = keys["Deta"]["project_key"]
+    PROJECT_KEY = keys["Deta"]["project_key"]
 
 
 class HumorAPI:
-    api_key = keys["Humor API"]["api_key"]
+    API_KEY = keys["Humor API"]["api_key"]
 
 
 class OpenWeatherMap:
-    api_key = keys["OpenWeatherMap"]["api_key"]
+    API_KEY = keys["OpenWeatherMap"]["api_key"]

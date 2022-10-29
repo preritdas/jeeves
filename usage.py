@@ -9,7 +9,7 @@ import datetime as dt
 import keys
 
 
-deta = deta.Deta(keys.Deta.project_key)
+deta = deta.Deta(keys.Deta.PROJECT_KEY)
 usage_db = deta.Base("usage")
 permissions_db = deta.Base("permissions")
 

@@ -9,8 +9,8 @@ import keys
 import config
 
 nexmo_client = nexmo.Client(
-    key = keys.Nexmo.api_key,
-    secret = keys.Nexmo.api_secret
+    key = keys.Nexmo.API_KEY,
+    secret = keys.Nexmo.API_SECRET
 )
 
 sms = nexmo.Sms(nexmo_client)

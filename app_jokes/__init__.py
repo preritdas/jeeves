@@ -16,7 +16,7 @@ def random_joke(tags: str):
         endpoint,
         params = {
             "include-tags": tags,
-            "api-key": keys.HumorAPI.api_key
+            "api-key": keys.HumorAPI.API_KEY
         }
     )
 
