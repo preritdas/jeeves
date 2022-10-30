@@ -62,3 +62,8 @@ There really aren't any hard guidelines, just a few things to be aware of to avo
 - Setup is optional. It efficiently reorders the categories based on store layout. 
   - Setup line is case insensitive
   - Line between setup and content is unnecessary
+
+
+## Translation
+
+Translation is currently disabled due to issues with the [translators](https://pypi.org/projects/translators) module in Python 3.11. 
