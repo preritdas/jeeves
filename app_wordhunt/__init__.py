@@ -25,5 +25,4 @@ def handler(content: str, options: dict) -> str:
         return f"The board is {height} tall and {width} wide, but you provided a " \
             f"{len(content)} long board."
 
-    res = wordhunt.all_possibilities(wordhunt.create_board(content, width, height))
-    return wordhunt.print_results(res, limit)
+    return wordhunt.Board.from_letters(content, width, height).print_results(limit)

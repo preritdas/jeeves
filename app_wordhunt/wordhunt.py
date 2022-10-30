@@ -16,6 +16,28 @@ class Board:
         self.width = len(board[0])
         self.x_top = self.width - 1
         self.y_top = self.height - 1
+        self.results = []
+
+    @classmethod
+    def from_letters(cls, letters: str, width: int, height: int) -> "Board":
+        """
+        Gathers letters from user input and returns a two-dimensional array.
+        """
+        letters = list(letters.lower())
+        if not len(letters) == (total_chars := width * height):
+            raise ValueError(
+                f"A board with the dimensions you specified has {total_chars} "
+                "total letters."
+            )
+
+        board = []
+        counter = 0
+        for _ in range(height):
+            board.append(letters[counter : counter + width])
+            counter += width
+
+        return cls(board)
+        
 
     def query(self, x: int, y: int):
         """
@@ -24,25 +46,18 @@ class Board:
         """
         return self.board[y][x]
 
+    def solve(self) -> list[tuple[int, int], str]:
+        self.results = all_possibilities(self)
+        return self.results
+
+    def print_results(self, limit: int = 1000):
+        if not self.results:
+            self.solve()
+
+        return print_results(self.results, limit=limit)
+
     def __str__(self):
         return "\n".join([str(row) for row in self.board])
-
-
-def create_board(board: str, width: int, height) -> Board:
-    """
-    Gathers letters from user input and returns a two-dimensional array.
-    """
-    letters = list(board.lower())
-    if not len(letters) == width * height:
-        raise ValueError("A board has 16 total letters.")
-
-    board = []
-    counter = 0
-    for _ in range(height):
-        board.append(letters[counter : counter + width])
-        counter += width
-
-    return Board(board)
 
 
 def _circle_around(coordinates: tuple[int, int], board: Board) -> list[tuple[int, int]]:
@@ -195,7 +210,7 @@ def all_possibilities(board: Board):
     return sorted(words, key=lambda val: len(val[1]), reverse=True)
 
 
-def print_results(possibilities: list[tuple[int, int], str], limit: int = 1000):
+def print_results(possibilities: list[tuple[int, int], str], limit: int = 1000) -> str:
     res = ""
     for pos, possibility in enumerate(possibilities):
         current = f"{possibility[0][0]+1}, {possibility[0][1]+1} - {possibility[1]}\n"
