@@ -1,5 +1,16 @@
 """
-Read keys.ini and parse.
+Read keys.ini and parse. Supply keys.ini in the following format.
+
+
+[Nexmo]
+api_key = 
+api_secret = 
+sender = 
+receiver = 
+
+
+[Deta]
+...
 """
 import os
 import configparser
