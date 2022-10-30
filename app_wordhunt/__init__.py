@@ -1,7 +1,8 @@
 """WordHunt board solving app."""
 import utils
 
-from . import wordhunt
+import pyximport; pyximport.install(language_level=3)
+from . import cy_wordhunt as wordhunt
 
 
 APP_HELP = "Solve a WordHunt board. Content is the board - top to bottom, left to right."

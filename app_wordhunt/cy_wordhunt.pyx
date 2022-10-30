@@ -1,8 +1,12 @@
 """Backend for generating solutions to a WordHunt board."""
-from .dictionary import dictionary
+from .dictionary import load_dict
 
 
-def is_word(word: str) -> bool:
+# Load the dictionary
+cdef set dictionary = load_dict()
+
+
+cdef is_word(word: str):
     """
     Checks if a word is a valid dictionary word.
     """
@@ -10,7 +14,7 @@ def is_word(word: str) -> bool:
 
 
 class Board:
-    def __init__(self, board: list[list[str]]):
+    def __init__(self, board: list):
         self.board = board
         self.height = len(board)
         self.width = len(board[0])
@@ -23,15 +27,15 @@ class Board:
         """
         Gathers letters from user input and returns a two-dimensional array.
         """
-        letters = list(letters.lower())
-        if not len(letters) == (total_chars := width * height):
+        cdef int total_characters = width * height
+        if not len(letters) == total_characters:
             raise ValueError(
-                f"A board with the dimensions you specified has {total_chars} "
+                f"A board with the dimensions you specified has {total_characters} "
                 "total letters."
             )
 
-        board = []
-        counter = 0
+        cdef list board = []
+        cdef int counter = 0
         for _ in range(height):
             board.append(letters[counter : counter + width])
             counter += width
@@ -46,7 +50,7 @@ class Board:
         """
         return self.board[y][x]
 
-    def solve(self) -> list[tuple[int, int], str]:
+    def solve(self) -> list:
         self.results = all_possibilities(self)
         return self.results
 
@@ -60,12 +64,11 @@ class Board:
         return "\n".join([str(row) for row in self.board])
 
 
-def _circle_around(coordinates: tuple[int, int], board: Board) -> list[tuple[int, int]]:
+cdef list _circle_around(tuple coordinates, board: Board):
     """
     Returns all coordinate possibilities of circling around a letter by coordinate.
     """
-
-    def on_grid(coordinates: tuple[int, int]):
+    def on_grid(coordinates: tuple):
         if 0 <= coordinates[0] <= board.x_top:
             if 0 <= coordinates[1] <= board.y_top:
                 return True
@@ -73,10 +76,10 @@ def _circle_around(coordinates: tuple[int, int], board: Board) -> list[tuple[int
 
     # Aliases
     c = coordinates
-    x = 0
-    y = 1
+    cdef int x = 0
+    cdef int y = 1
 
-    possibilities = []
+    cdef list possibilities = []
     possibilities.append((c[x], c[y] - 1))
     possibilities.append((c[x] + 1, c[y] - 1))
     possibilities.append((c[x] + 1, c[y]))
@@ -94,25 +97,40 @@ def _circle_around(coordinates: tuple[int, int], board: Board) -> list[tuple[int
 
 
 def all_possibilities(board: Board):
-    words: list[tuple[tuple[int, int], str]] = []
+    cdef list wordstuple = []
 
     def duplicate(word) -> bool:
         return word in [_[1] for _ in words]
 
+    cdef int y
+    cdef str row
+    cdef int x
+    cdef str character
+    cdef list words = []
+
+    cdef tuple p2
+    cdef tuple p3
+    cdef tuple p4
+    cdef tuple p5
+    cdef tuple p6
+    cdef tuple p7
+    cdef tuple p8
+    cdef tuple p9
+
     for y, row in enumerate(board.board):
-        for x, char in enumerate(row):
+        for x, character in enumerate(row):
             for p2 in _circle_around((x, y), board):
                 for p3 in _circle_around(p2, board):
                     if p3 in [(x, y), p2]:
                         continue
-                    word = "".join([char, board.query(*p2), board.query(*p3)])
+                    word: str = "".join([character, board.query(*p2), board.query(*p3)])
                     if not duplicate(word) and is_word(word):
                         words.append(((x, y), word))
                     for p4 in _circle_around(p3, board):
                         if p4 in [(x, y), p2, p3]:
                             continue
                         word = "".join(
-                            [char, board.query(*p2), board.query(*p3), board.query(*p4)]
+                            [character, board.query(*p2), board.query(*p3), board.query(*p4)]
                         )
                         if not duplicate(word) and is_word(word):
                             words.append(((x, y), word))
@@ -121,7 +139,7 @@ def all_possibilities(board: Board):
                                 continue
                             word = "".join(
                                 [
-                                    char,
+                                    character,
                                     board.query(*p2),
                                     board.query(*p3),
                                     board.query(*p4),
@@ -135,7 +153,7 @@ def all_possibilities(board: Board):
                                     continue
                                 word = "".join(
                                     [
-                                        char,
+                                        character,
                                         board.query(*p2),
                                         board.query(*p3),
                                         board.query(*p4),
@@ -150,7 +168,7 @@ def all_possibilities(board: Board):
                                         continue
                                     word = "".join(
                                         [
-                                            char,
+                                            character,
                                             board.query(*p2),
                                             board.query(*p3),
                                             board.query(*p4),
@@ -166,7 +184,7 @@ def all_possibilities(board: Board):
                                             continue
                                         word = "".join(
                                             [
-                                                char,
+                                                character,
                                                 board.query(*p2),
                                                 board.query(*p3),
                                                 board.query(*p4),
@@ -192,7 +210,7 @@ def all_possibilities(board: Board):
                                                 continue
                                             word = "".join(
                                                 [
-                                                    char,
+                                                    character,
                                                     board.query(*p2),
                                                     board.query(*p3),
                                                     board.query(*p4),

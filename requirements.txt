@@ -15,3 +15,6 @@ rottentomatoes-python==0.4.0  # movie data retrieval
 
 # Cocktails
 emoji==2.1.0  # emojis in drink formatting
+
+# Wordhunt
+cython==0.29.32
