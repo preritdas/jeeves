@@ -1,5 +1,9 @@
 """Backend for generating solutions to a WordHunt board."""
-from .dictionary import dictionary
+from dictionary import load_dict
+
+
+# Load the dictionary
+cdef set dictionary = load_dict()
 
 
 cdef is_word(word: str):
