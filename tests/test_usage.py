@@ -48,4 +48,4 @@ def test_usage_summary_string_date():
 
 def test_usage_summary_fake_log(temp_usage_logs):
     assert type(temp_usage_logs) is list
-    assert int(dt.datetime.today().day) in usage.usage_summary()
+    assert str(dt.datetime.today().day) in usage.usage_summary()
