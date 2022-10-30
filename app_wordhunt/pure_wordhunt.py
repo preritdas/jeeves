@@ -1,5 +1,9 @@
 """Backend for generating solutions to a WordHunt board."""
-from .dictionary import dictionary
+from .dictionary import load_dict
+
+
+# Load the dictionary
+dictionary: set[str] = load_dict()
 
 
 def is_word(word: str) -> bool:
