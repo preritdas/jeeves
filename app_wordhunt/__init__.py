@@ -1,7 +1,7 @@
 """WordHunt board solving app."""
 import utils
 
-import pyximport; pyximport.install()
+import pyximport; pyximport.install(language_level=3)
 from . import cy_wordhunt as wordhunt
 
 
