@@ -50,7 +50,8 @@ def handler(content: str, options: dict[str, str]) -> str:
 
     if options.get("action") == "close":
         if not content:
-            return "When closing, provide the phrase as content."
+            if not (content := actions.query_phrase(options["inbound_phone"])):
+                return "When closing, provide the phrase as content."
 
         return actions.close(sender=options["inbound_phone"], phrase=content)
 
