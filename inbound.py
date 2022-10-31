@@ -8,9 +8,14 @@ import texts
 import usage
 
 
-def main_handler(inbound_sms_content: dict) -> tuple[str, int]:
+def main_handler(inbound_sms_content: dict) -> dict[str, tuple | str]:
     """
-    Handle all inbound messages.
+    Handle all inbound messages. Returns a dictionary in the following format.
+
+    {
+        "response": "That app does not exist."  # what's texted to the user
+        "http": ("", 204)  # what's returned (not actually) by HTTP
+    }
     
     Keep this as simple as possible, with plenty of outsourcing.
     """
@@ -18,48 +23,39 @@ def main_handler(inbound_sms_content: dict) -> tuple[str, int]:
 
     # No concat assertion
     if parsing.is_concat(inbound_sms_content):
-        texts.send_message(
-            "Your message was too long. It was split by your carrier.",
-            sender
-        )
-        return "", 204
+        text_response = "Your message was too long. It was split by your carrier."
+        texts.send_message(text_response, sender)
+        return {"response": text_response, "http": ("", 204)}
 
     # Valid assertion
     if not parsing.assert_valid(inbound_sms_content):
-        texts.send_message(
-            "Your message was invalid and unrecognized.",
-            sender
-        )
-        return "", 204
+        text_response = "Your message was invalid and unrecognized.",
+        return {"response": text_response, "http": ("", 204)}
 
     # App availablity
     requested_app, app_name = parsing.requested_app(inbound_sms_content)
 
     if not requested_app:
-        texts.send_message(
-            f"That app does not exist.",
-            sender
-        )
-        return "", 204
+        text_response = f"That app does not exist.",
+        texts.send_message(text_response, sender)
+        return {"response": text_response, "http": ("", 204)}
 
     # App permissions
     if not permissions.check_permissions(sender, app_name):
-        texts.send_message(
-            f"It seems you don't have permission to use app '{app_name}'.",
-            sender
-        )
-        return "", 204
+        text_response = f"It seems you don't have permission to use app '{app_name}'."
+        texts.send_message(text_response, sender)
+        return {"response": text_response, "http": ("", 204)}
 
     # Run the app
     content, options = parsing.app_content_options(inbound_sms_content)
     options["inbound_phone"] = sender
 
     try:
-        response = requested_app(content, options)
+        text_response = requested_app(content, options)
     except Exception as e:
-        response = f"Unfortunately, that failed. '{str(e)}'"
+        text_response = f"Unfortunately, that failed. '{str(e)}'"
 
-    texts.send_message(response, sender)
+    texts.send_message(text_response, sender)
     usage.log_use(
         phone_number = sender,
         app_name = app_name,
@@ -67,4 +63,4 @@ def main_handler(inbound_sms_content: dict) -> tuple[str, int]:
         options = options
     ) 
 
-    return "", 204
+    return {"response": text_response, "http": ("", 204)}
