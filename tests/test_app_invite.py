@@ -7,9 +7,6 @@ import nexmo  # mock an invalid client
 import app_invite
 import keys
 
-# Fixtures
-from . import default_options, default_inbound
-
 
 def test_handler():
     res = app_invite.handler(

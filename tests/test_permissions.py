@@ -8,9 +8,6 @@ causing un-tested-for results.
 """
 import permissions
 
-# Fixtures
-from . import user_git_pytest, users_dup_namephone, default_inbound
-
 
 def test_check_permissions(user_git_pytest):
     assert permissions.check_permissions(
