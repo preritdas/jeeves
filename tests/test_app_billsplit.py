@@ -34,7 +34,7 @@ def test_full_flow(mocker, default_options):
     res = app_billsplit.handler("13", default_options)
     assert "has been created" in res
 
-    session_phrase = res[-5:]
+    session_phrase = res[-11:]  # three three-letter words + two spaces
 
     # Test participation
     res = app_billsplit.handler("15", {"inbound_phone": "11234567890", "phrase": session_phrase})

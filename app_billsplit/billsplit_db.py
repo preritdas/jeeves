@@ -1,5 +1,6 @@
 """Database handling for the billsplit app."""
 import deta
+import requests
 
 import string
 import random
@@ -48,7 +49,9 @@ class Session:
     def new(cls, sender: str, total: float, tip: float) -> "Session":
         """Create a new session from scratch."""
         def _generate_phrase():
-            return "".join(random.sample(string.ascii_lowercase, 5))
+            response = requests.get("https://www.mit.edu/~ecprice/wordlist.10000")
+            words = [word.decode("ascii") for word in response.content.splitlines() if len(word) == 3]
+            return " ".join(random.sample(words, 3))
 
         phrase = _generate_phrase()
         attempts = 0
