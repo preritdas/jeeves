@@ -13,6 +13,10 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 (This is for personal reference.)
 
+### To do
+
+[ ] Bill split app - ability to circumvent providing phrase if you're only involved in one split. Same if you're the original creator closing a session.
+
 ### Versions
 
 [ ] Translation is currently disabled because when installing the `translators` library in Python 3.11, building `lxml` fails. There is no active change to production behavior for now because translation is disabled in [config.ini](config.ini).
