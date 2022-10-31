@@ -46,6 +46,34 @@ For VS Code testing integration, include these lines in `.vscode/setings.json`.
 
 This will automatically generate an html coverage report whenever tests are run.
 
+Also, the following script can be used to check if production databases were modified because of a test. (Make sure the API is down before trusting the results.)
+
+```python
+import pytest
+
+from permissions import permissions_db
+from usage import usage_db
+from app_groceries import grocery_db
+from app_billsplit.billsplit_db import db as billsplit_db
+
+
+permissions_pre = permissions_db.fetch()
+usage_pre = usage_db.fetch()
+grocery_pre = grocery_db.fetch()
+billsplit_pre = billsplit_db.fetch()
+
+
+# RUN TESTS
+pytest.main()
+
+
+# Compare
+print(permissions_pre == permissions_db.fetch())
+print(usage_pre == usage_db.fetch())
+print(grocery_pre == grocery_db.fetch())
+print(billsplit_pre == billsplit_db.fetch())
+```
+
 ### Notes
 
 - Try not to run tests concurrently as objects are created in the production database and tested against. For example, if two tests are run at the same time, and both tests create a temporary user in the permissions database, one or both of the tests should fail as a `QueryError` would be raised on discovering duplicate users (when not expected).
