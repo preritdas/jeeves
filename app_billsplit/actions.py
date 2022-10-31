@@ -14,6 +14,20 @@ def _person_active(phone: str) -> bool:
     return False
 
 
+def query_phrase(phone: str) -> str:
+    """
+    If the phone is only involved in one active session, return the phrase.
+    If they're in multiple or none, return an empty string.
+    """
+    active_sessions = db.fetch({"Active": True}).items
+    appearances = [session for session in active_sessions if phone in session["People"]]
+
+    if len(appearances) == 1:
+        return appearances[0]["Phrase"]
+
+    return ""
+
+
 def create_session(sender: str, total: float, tip: float) -> str:
     """Create a session."""
     if _person_active(sender):
