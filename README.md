@@ -13,6 +13,8 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 (This is for personal reference.)
 
+[ ] Modify the Git Pytest fixture so that the name and phone number are random, thereby theoretically allowing multiple test sessions to run at the same time. This currently causes problems in pull requests, where tests are run concurrently triggered by both push and PR. 
+
 ### Versions
 
 [ ] Translation is currently disabled because when installing the `translators` library in Python 3.11, building `lxml` fails. There is no active change to production behavior for now because translation is disabled in [config.ini](config.ini).
