@@ -14,6 +14,7 @@ import app_invite
 import app_usage
 import app_rt
 import app_cocktails
+import app_billsplit
 
 
 @utils.app_handler(app_help = "See a list of available apps.")
@@ -41,5 +42,6 @@ PROGRAMS = {
     "invite": app_invite.handler,
     "usage": app_usage.handler,
     "rt": app_rt.handler,
-    "cocktails": app_cocktails.handler
+    "cocktails": app_cocktails.handler,
+    "billsplit": app_billsplit.handler
 }
