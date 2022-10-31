@@ -15,7 +15,8 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 ### To do
 
-[ ] Modify the Git Pytest fixture so that the name and phone number are random, thereby theoretically allowing multiple test sessions to run at the same time. This currently causes problems in pull requests, where tests are run concurrently triggered by both push and PR. 
+[ ] Docs for `billsplit` app.
+
 
 ### Versions
 
