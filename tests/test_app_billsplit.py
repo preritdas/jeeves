@@ -44,6 +44,10 @@ def test_full_flow(mocker, default_options):
     res = app_billsplit.handler(session_phrase, {"inbound_phone": default_options["inbound_phone"], "action": "status"})
     assert "active" in res.lower()
 
+    # Test status with no phrase provided (query)
+    res = app_billsplit.handler("", {"inbound_phone": default_options["inbound_phone"], "action": "status"})
+    assert "active" in res.lower()
+
     # Test closing not as the original creator
     res = app_billsplit.handler(
         session_phrase,
@@ -74,6 +78,25 @@ def test_full_flow(mocker, default_options):
     # Cleanup - delete the database entry
     session_key = billsplit_db.db.fetch({"Phrase": session_phrase}).items[0]["key"]
     billsplit_db.db.delete(session_key)
+
+
+def test_close_no_phrase(mocker, default_options):
+    # Ensure no texts are actually sent in the process
+    mocker.patch("app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
+
+    # Create a session
+    app_billsplit.handler(
+        content = "15", 
+        options = {
+            **default_options,
+            "action": "start", 
+            "total": "100"
+        }
+    )
+
+    # Close the session with no phrase
+    res = app_billsplit.handler("", {**default_options, "action": "close"})
+    assert "close" in res.lower()
 
 
 # ---- Unique features ----
