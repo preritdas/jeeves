@@ -4,7 +4,7 @@ import app_groceries
 from app_groceries import grocery_utils
 
 # Fixtures
-from . import default_options
+from . import default_options, default_inbound
 
 
 def test_handler():

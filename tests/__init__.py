@@ -2,31 +2,40 @@
 import pytest
 
 import datetime as dt
+import string
+import random
 
 import usage  # fixture for temporary logs for report
 import permissions  # fixtures for temporary users
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def default_inbound() -> dict[str, str]:
+    random_inbound = "".join(
+        [str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) for _ in range(10)]
+    )
+
     return {
-        "msisdn": "12223334455",
+        "msisdn": random_inbound,
         "text": "app: apps"
     }
 
 
 @pytest.fixture
-def default_options() -> dict[str, str]:
-    return {"inbound_phone": "12223334455"}
+def default_options(default_inbound) -> dict[str, str]:
+    return {"inbound_phone": default_inbound["msisdn"]}
 
 
-@pytest.fixture
-def user_git_pytest() -> dict[str, str]:
-    """Temporary user with maximum permissions."""
+@pytest.fixture(scope="session")
+def user_git_pytest(default_inbound) -> dict[str, str]:
+    """Temporary random user with maximum permissions."""
+    first_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
+    last_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
+
     user_attrs = {
-        "Name": "Git Pytest",
+        "Name": f"{first_name} {last_name}",
         "Permissions": "all",
-        "Phone": "12223334455"
+        "Phone": default_inbound["msisdn"]
     }
 
     key = permissions.permissions_db.put(user_attrs)["key"]
@@ -34,22 +43,29 @@ def user_git_pytest() -> dict[str, str]:
     permissions.permissions_db.delete(key)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def users_dup_namephone() -> list[dict[str, str]]:
     """
     Temporary users with the same name and phone number to test
     handling duplicate entries.
     """
+    first_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
+    last_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
+
+    phone_number = "".join(
+        [str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) for _ in range(10)]
+    )
+
     users = [
         {
-            "Name": "Dup Namephone",
+            "Name": " ".join([first_name, last_name]),
             "Permissions": "groceries",
-            "Phone": "10101010101"
+            "Phone": phone_number
         },
         {
-            "Name": "Dup Namephone",
+            "Name": " ".join([first_name, last_name]),
             "Permissions": "apps",
-            "Phone": "10101010101"
+            "Phone": phone_number
         },
     ]
 

@@ -7,7 +7,7 @@ import string
 import app_permissions
 
 # Fixtures
-from . import user_git_pytest, users_dup_namephone, default_options
+from . import user_git_pytest, users_dup_namephone, default_options, default_inbound
 
 
 def test_handler():
@@ -171,8 +171,8 @@ def test_delete_none_found():
 def test_query_error(users_dup_namephone):
     # By name
     with pytest.raises(app_permissions.query.QueryError):
-        app_permissions.query.query(name="dup namephone")
+        app_permissions.query.query(name=users_dup_namephone[0]["Name"])
 
     # By phone
     with pytest.raises(app_permissions.query.QueryError):
-        app_permissions.query.query(phone="10101010101")
+        app_permissions.query.query(phone=users_dup_namephone[0]["Phone"])
