@@ -43,15 +43,16 @@ def handler(content: str, options: dict[str, str]) -> str:
 
     if options.get("action") == "status":
         if not content:
-            return "You must provide the unique phrase as content."
+            if not (content := actions.query_phrase(options["inbound_phone"])):
+                return "You must provide the unique phrase as content."
 
-        return actions.status(content)
+        return actions.status(phrase=content)
 
     if options.get("action") == "close":
         if not content:
             return "When closing, provide the phrase as content."
 
-        return actions.close(options["inbound_phone"], content)
+        return actions.close(sender=options["inbound_phone"], phrase=content)
 
     # Participating
     if not "phrase" in options:
