@@ -5,6 +5,15 @@ from app_groceries import grocery_utils
 from app_groceries import grocery_db
 
 
+def cleanup(res: str) -> None:
+    """
+    Takes a grocery res (with List ID: asdfasdf) etc. and removes that
+    entry from the groceries database.
+    """
+    list_id = res[len("List ID") + 2:res.find("\n")]
+    grocery_db.delete(list_id)
+
+
 def test_handler():
     ITEMS = ["Apples", "Bananas", "Blueberries", "snacks", "pears", "limes", "lamb"]
     test_items = random.sample(ITEMS, 2)  # get a few random items for testing
@@ -27,12 +36,10 @@ def test_handler():
     assert "Chicken" in test_last_res
 
     # Cleanup original list
-    list_id = res[len("List ID") + 2:res.find("\n")]
-    grocery_db.delete(list_id)
+    cleanup(res)
 
     # Cleanup last test list
-    list_id = test_last_res[len("List ID") + 2:res.find("\n")]
-    grocery_db.delete(list_id)
+    cleanup(test_last_res)
 
     # Test no list found
     assert not "List ID" in app_groceries.handler(
@@ -51,9 +58,8 @@ def test_no_category(default_options):
 
     assert "random" in res
 
-    # Cleanup 
-    list_id = res[len("List ID") + 2:res.find("\n")]
-    grocery_db.delete(list_id)
+    # Cleanup
+    cleanup(res)
 
 
 def test_translation(mocker, default_options):
@@ -71,8 +77,7 @@ def test_translation(mocker, default_options):
     assert "apples" in res
 
     # Cleanup
-    list_id = res[len("List ID") + 2:res.find("\n")]
-    grocery_db.delete(list_id)
+    cleanup(res)
 
 
 def test_singularization():
@@ -91,8 +96,7 @@ def test_singularization():
     assert "meat" in test_res
 
     # Cleanup
-    list_id = res[len("List ID") + 2:res.find("\n")]
-    grocery_db.delete(list_id)
+    cleanup(res)
 
 
 def test_paranthesis():
@@ -109,8 +113,7 @@ def test_paranthesis():
     assert "(good kind)" in res
 
     # Cleanup
-    list_id = res[len("List ID") + 2:res.find("\n")]
-    grocery_db.delete(list_id)
+    cleanup(res)
 
 
 def test_pluralization():
