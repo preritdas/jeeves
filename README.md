@@ -15,7 +15,7 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 ### To do
 
-[ ] Bill split app - ability to circumvent providing phrase if you're only involved in one split. Same if you're the original creator closing a session.
+[ ] Modify the Git Pytest fixture so that the name and phone number are random, thereby theoretically allowing multiple test sessions to run at the same time. This currently causes problems in pull requests, where tests are run concurrently triggered by both push and PR. 
 
 ### Versions
 
