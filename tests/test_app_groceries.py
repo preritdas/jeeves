@@ -2,6 +2,7 @@ import random
 
 import app_groceries
 from app_groceries import grocery_utils
+from app_groceries import grocery_db
 
 
 def test_handler():
@@ -17,13 +18,21 @@ def test_handler():
     assert all(item in res for item in test_items)
 
     # Test adding items with last feature
-    res = app_groceries.handler(
+    test_last_res = app_groceries.handler(
         content = "Chicken",
         options = {"inbound_phone": "12223334455", "add": "last"}
     )
 
-    assert "List ID" in res
-    assert "Chicken" in res
+    assert "List ID" in test_last_res
+    assert "Chicken" in test_last_res
+
+    # Cleanup original list
+    list_id = res[len("List ID") + 2:res.find("\n")]
+    grocery_db.delete(list_id)
+
+    # Cleanup last test list
+    list_id = test_last_res[len("List ID") + 2:res.find("\n")]
+    grocery_db.delete(list_id)
 
     # Test no list found
     assert not "List ID" in app_groceries.handler(
@@ -42,6 +51,10 @@ def test_no_category(default_options):
 
     assert "random" in res
 
+    # Cleanup 
+    list_id = res[len("List ID") + 2:res.find("\n")]
+    grocery_db.delete(list_id)
+
 
 def test_translation(mocker, default_options):
     """
@@ -50,10 +63,16 @@ def test_translation(mocker, default_options):
     For now, just test using the correct translation function, as translation is 
     temporarily disabled due to lxml issues with Python 3.11.
     """
-    mocker.patch("config.Groceries.TRANSLATION", True)  # doesn't work
-    assert "apples" in app_groceries.handler(
+    mocker.patch("app_groceries.classification.config.Groceries.TRANSLATION", True)  # doesn't work
+    res = app_groceries.handler(
         "apples", default_options
     )
+
+    assert "apples" in res
+
+    # Cleanup
+    list_id = res[len("List ID") + 2:res.find("\n")]
+    grocery_db.delete(list_id)
 
 
 def test_singularization():
@@ -71,6 +90,10 @@ def test_singularization():
     assert "fruit" in test_res  # make sure 'blueberries' was properly categorized
     assert "meat" in test_res
 
+    # Cleanup
+    list_id = res[len("List ID") + 2:res.find("\n")]
+    grocery_db.delete(list_id)
+
 
 def test_paranthesis():
     """Options, ex. chicken (good kind)"""
@@ -84,6 +107,10 @@ def test_paranthesis():
     assert res
     assert "List ID" in res
     assert "(good kind)" in res
+
+    # Cleanup
+    list_id = res[len("List ID") + 2:res.find("\n")]
+    grocery_db.delete(list_id)
 
 
 def test_pluralization():
