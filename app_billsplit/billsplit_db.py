@@ -11,15 +11,6 @@ import texts
 deta_client = deta.Deta(keys.Deta.PROJECT_KEY)
 db = deta_client.Base("billsplit")
 
-{
-    "Phrase": "cat dog mouth",
-    "Total": 98.23,
-    "People": {
-        "12223334455": 15  # suggested tip
-    },
-    "Active": True
-}
-
 
 class SessionNotFoundError(Exception):
     """If a session is queried by phrase but doesn't exist."""
@@ -28,9 +19,10 @@ class SessionNotFoundError(Exception):
 
 class Session:
     """A bill splitting session."""
-    def __init__(self, phrase: str, total: float, people: dict[str, float], active: bool) -> None:
+    def __init__(self, phrase: str, total: float, creator: str, people: dict[str, float], active: bool) -> None:
         self.phrase = phrase
         self.total = float(total)
+        self.creator = creator
         self.people = people
         self.active = active
 
@@ -51,14 +43,15 @@ class Session:
         new_obj = cls(
             phrase = "".join(random.sample(string.ascii_lowercase, 5)),
             total = float(total),
+            creator = sender,
             people = {sender: tip},
             active = True
         )
 
-        new_obj.create()
+        new_obj.create(creator_phone=sender)
         return new_obj
 
-    def create(self) -> str:
+    def create(self, creator_phone: str) -> str:
         """
         Deploys the session to the database. Returns the unique key, not the phrase.
         If the session has already been deployed, an empty string is returned.
@@ -70,6 +63,7 @@ class Session:
             {
                 "Phrase": self.phrase,
                 "Total": self.total,
+                "Creator": str(creator_phone),
                 "People": self.people,
                 "Active": self.active
             }
@@ -115,6 +109,7 @@ class Session:
         return cls(
             phrase = session["Phrase"],
             total = float(session["Total"]),
+            creator = session["Creator"],
             people = session["People"],
             active = session["Active"]
         )
@@ -135,7 +130,7 @@ class Session:
         individual_amount = final_total / len(self.people)
 
         for person in self.people:
-            texts.send_message(f"You owe {individual_amount}.", person)
+            texts.send_message(f"You owe ${individual_amount:.2f}.", person)
 
         self._post()
 
@@ -143,19 +138,3 @@ class Session:
         self._download()
         return f"This is a session with the phrase {self.phrase}, total {self.total}, " \
             f"and {self.person_count} people participating. {self.deployed = }."
-
-
-def test_run():
-    session = Session.new("14259023246", 100, 12)
-    print(session)
-
-    phrase = session.phrase
-
-    query_session = Session.from_database(phrase)
-    print(query_session)
-
-    query_session.log_person("12223334455", 13.2)
-    print(query_session)
-
-    query_session.finalize()
-    print(query_session)
