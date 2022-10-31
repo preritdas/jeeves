@@ -25,7 +25,6 @@ def test_stringify_session_obj(temporary_session):
 
 # ---- Full flow ----
 
-
 def test_full_flow(mocker, default_options):
     """Test the full logic flow of a session playing out."""
     # Ensure no texts are actually sent in the process
@@ -81,7 +80,6 @@ def test_full_flow(mocker, default_options):
 
 
 # ---- Unique features ----
-
 
 def test_handler(default_options):
     res = app_billsplit.handler("", default_options)
