@@ -114,7 +114,7 @@ class Session:
         if len(db_query) > 1:
             raise Exception(
                 "Multiple sessions found with the same phrase." 
-                "This shoudl never be triggered. Check the database."
+                "This should never be triggered. Check the database."
             )
 
         session = db_query[0]
