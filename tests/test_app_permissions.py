@@ -6,9 +6,6 @@ import string
 
 import app_permissions
 
-# Fixtures
-from . import user_git_pytest, users_dup_namephone, default_options, default_inbound
-
 
 def test_handler():
     """Just make sure it's working."""

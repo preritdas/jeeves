@@ -5,9 +5,6 @@ import random
 
 import usage
 
-# Fixtures
-from . import temp_usage_logs, user_git_pytest, default_inbound
-
 
 def test_log_use():
     TEST_APP_RANDOM = "".join(random.sample(string.ascii_letters, 10))

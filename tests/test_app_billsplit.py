@@ -4,9 +4,6 @@ import pytest
 import app_billsplit
 from app_billsplit.actions import billsplit_db
 
-# Fixtures
-from . import default_options, default_inbound
-
 
 @pytest.fixture
 def temporary_session(default_inbound):
