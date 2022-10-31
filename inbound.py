@@ -29,14 +29,14 @@ def main_handler(inbound_sms_content: dict) -> dict[str, tuple | str]:
 
     # Valid assertion
     if not parsing.assert_valid(inbound_sms_content):
-        text_response = "Your message was invalid and unrecognized.",
+        text_response = "Your message was invalid and unrecognized."
         return {"response": text_response, "http": ("", 204)}
 
     # App availablity
     requested_app, app_name = parsing.requested_app(inbound_sms_content)
 
     if not requested_app:
-        text_response = f"That app does not exist.",
+        text_response = f"That app does not exist."
         texts.send_message(text_response, sender)
         return {"response": text_response, "http": ("", 204)}
 
