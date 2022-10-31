@@ -40,8 +40,20 @@ class Session:
     @classmethod
     def new(cls, sender: str, total: float, tip: float) -> "Session":
         """Create a new session from scratch."""
+        def _generate_phrase():
+            return "".join(random.sample(string.ascii_lowercase, 5))
+
+        phrase = _generate_phrase()
+        attempts = 0
+        while len(db.fetch({"Phrase": phrase}).items) != 0:
+            phrase = _generate_phrase()
+            attempts += 1
+
+            if attempts > 20:
+                raise Exception("20 attempts were made to generate a unique phrase.")
+
         new_obj = cls(
-            phrase = "".join(random.sample(string.ascii_lowercase, 5)),
+            phrase = phrase,
             total = float(total),
             creator = sender,
             people = {sender: tip},
