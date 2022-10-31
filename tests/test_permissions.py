@@ -1,27 +1,26 @@
 """
 Check permissions. 
 
-12223334455 is a custom testing number used in the permissions
-database. It has permissions to use _all_ apps. 
-
-00000000000 is a custom testing number
-in the permissions database. It has permissions to use _only_ the groceries app.
+Using session scoped fixtures, defined in tests/__init__.py, for the users formerly
+Git Pytest and Dup Namephone. Their names and phone numbers are now randomized so tests
+can be run concurrently without causing errors with duplicate values in the database
+causing un-tested-for results.
 """
 import permissions
 
 # Fixtures
-from . import user_git_pytest, users_dup_namephone
+from . import user_git_pytest, users_dup_namephone, default_inbound
 
 
 def test_check_permissions(user_git_pytest):
     assert permissions.check_permissions(
-        "12223334455", "wordhunt"
+        user_git_pytest["Phone"], "wordhunt"
     )
 
 
 def test_custom_permissions(users_dup_namephone):
     assert permissions.check_permissions(
-        "10101010101", "groceries"
+        users_dup_namephone[0]["Phone"], "groceries"
     )
 
 

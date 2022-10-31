@@ -1,7 +1,7 @@
 import app_apps
 
 # Pytest fixtures
-from . import default_options
+from . import default_options, default_inbound
 
 
 def test_handler(default_options):

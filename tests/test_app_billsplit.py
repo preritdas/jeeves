@@ -5,12 +5,12 @@ import app_billsplit
 from app_billsplit.actions import billsplit_db
 
 # Fixtures
-from . import default_options
+from . import default_options, default_inbound
 
 
 @pytest.fixture
-def temporary_session():
-    new_session = billsplit_db.Session.new("12223334455", 100, 10)
+def temporary_session(default_inbound):
+    new_session = billsplit_db.Session.new(default_inbound["msisdn"], 100, 10)
     yield new_session.phrase
     billsplit_db.db.delete(new_session.key)
 
