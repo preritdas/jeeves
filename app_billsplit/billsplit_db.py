@@ -19,7 +19,14 @@ class SessionNotFoundError(Exception):
 
 class Session:
     """A bill splitting session."""
-    def __init__(self, phrase: str, total: float, creator: str, people: dict[str, float], active: bool) -> None:
+    def __init__(
+        self, 
+        phrase: str, 
+        total: float, 
+        creator: str, 
+        people: dict[str, float], 
+        active: bool
+    ) -> None:
         self.phrase = phrase
         self.total = float(total)
         self.creator = creator
@@ -141,8 +148,11 @@ class Session:
         final_total = self.total + (self.total * (final_tip / 100))
         individual_amount = final_total / len(self.people)
 
+        message = f"The tab is closed, with an average tip of {final_tip:.2f}%. " \
+            f"Your portion is ${individual_amount:.2f}."
+
         for person in self.people:
-            texts.send_message(f"You owe ${individual_amount:.2f}.", person)
+            texts.send_message(message, person)
 
         self._post()
 
