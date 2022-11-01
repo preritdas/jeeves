@@ -21,14 +21,14 @@ import app_billsplit
 def handler(content: str, options: dict):
     """Handler for apps. Filters by permissions."""
     accessible_apps: list[str] = [
-        app for app in PROGRAMS.keys() if permissions.check_permissions(
+        f"- {app}" for app in PROGRAMS.keys() if permissions.check_permissions(
             phone = options["inbound_phone"],
             app_name = app
         )
     ]
         
     available_apps = "\n".join(accessible_apps)
-    return f"The following apps are available to you.\n{available_apps}"
+    return f"The following apps are available to you.\n\n{available_apps}"
 
 
 PROGRAMS = {
