@@ -28,7 +28,7 @@ def handler(content: str, options: dict):
     ]
         
     available_apps = "\n".join(accessible_apps)
-    return f"The following apps are available to you.\n\n{available_apps}"
+    return f"The following apps are available to you - filtered by your permissions.\n\n{available_apps}"
 
 
 PROGRAMS = {
