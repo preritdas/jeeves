@@ -3,13 +3,17 @@
 Get a random recommended cocktail with ingredients and instructions. This app currently takes no options, but soon will take a drink name as a content query.
 
 
-````{tabs}
-```{tab} Sample Text
+`````{tabs}
+````{tab} Sample Text
+```text
 
 app: cocktails
 ```
+````
 
-```{tab} Sample Response
+````{tab} Sample Response
+```text
+
 Behold, the Aviation. Here's what you'll need.
 
 gin - 4.5 cl
@@ -21,3 +25,4 @@ Add all ingredients into cocktail shaker filled with ice. Shake well and strain 
 Enjoy!
 ```
 ````
+`````
