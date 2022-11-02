@@ -10,16 +10,19 @@ Easily start a bill splitting session, with suggested tips, and split the cost. 
 | total | Only if you are creating a new session with `options: action = start`. |
 
 
-````{tabs}
-```{tab} Sample Text
-
+`````{tabs}
+````{tab} Sample Text
+```text
 app: billsplit
 options: phrase = top gun dog
 
 14
 ```
+````
 
-```{tab} Sample Response
+````{tab} Sample Response
+```text
 You're in! 14.00% tip suggested.
 ```
 ````
+`````
