@@ -85,7 +85,7 @@ def test_close_no_phrase(mocker, default_options):
     mocker.patch("app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
 
     # Create a session
-    app_billsplit.handler(
+    res = app_billsplit.handler(
         content = "15", 
         options = {
             **default_options,
@@ -94,9 +94,45 @@ def test_close_no_phrase(mocker, default_options):
         }
     )
 
+    phrase = res[-11:]
+
     # Close the session with no phrase
     res = app_billsplit.handler("", {**default_options, "action": "close"})
     assert "close" in res.lower()
+
+    # Cleanup
+    app_billsplit.actions.db.delete(
+        app_billsplit.actions.db.fetch({"Phrase": phrase}).items[0]["key"]
+    )
+
+
+def test_close_no_phrase_multiple_sessions(default_options):
+    """
+    Ensure an error is reported to user if they are involved in
+    multiple sessions but try to close a session with no phrase.
+    """
+    session_1 = app_billsplit.actions.billsplit_db.Session.new(
+        sender = default_options["inbound_phone"],
+        total = 95,
+        tip = 12
+    )
+
+    session_2 = app_billsplit.actions.billsplit_db.Session.new(
+        sender = default_options["inbound_phone"],
+        total = 91,
+        tip = 14
+    )
+
+    # Try closing a session without a key
+    res = app_billsplit.handler(
+        "", {**default_options, "action": "close"}
+    )
+
+    assert "provide the phrase" in res.lower()
+
+    # Cleanup
+    app_billsplit.actions.db.delete(session_1.key)
+    app_billsplit.actions.db.delete(session_2.key)
 
 
 # ---- Unique features ----
