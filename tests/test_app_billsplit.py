@@ -186,6 +186,35 @@ def test_non_unique_phrase(mocker):
     app_billsplit.actions.db.delete(original_session.key)
 
 
+def test_multiple_phrases_from_database():
+    """
+    Test error raised when creating a `Session` using `.from_database`
+    when there already exists a session with that phrase.
+    
+    Note that this should never happen as phrase duplication is handled on the
+    creation side.
+    """
+    session = app_billsplit.actions.billsplit_db.Session.new("00000000000", 100, 15)
+
+    # Deploy a new session to the database with the same phrase
+    dup_key = app_billsplit.actions.db.put(
+        {
+            "Active": False,
+            "Creator": "00000000000",
+            "People": {"00000000000": 14},
+            "Phrase": session.phrase,
+            "Total": 98
+        }
+    )["key"]
+
+    with pytest.raises(Exception):
+        load_dup_session_fail = app_billsplit.actions.billsplit_db.Session.from_database(session.phrase)
+
+    # Cleanup
+    app_billsplit.actions.db.delete(session.key)
+    app_billsplit.actions.db.delete(dup_key)
+
+
 # ---- Not enough information - handler errors ----
 
 def test_start_with_no_total(default_options):
