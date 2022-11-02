@@ -268,13 +268,6 @@ def test_status_no_phrase(default_options):
     assert "phrase" in res.lower()
 
 
-def test_close_no_phrase(default_options):
-    default_options["action"] = "close"
-    res = app_billsplit.handler("", default_options)
-
-    assert "provide the phrase" in res.lower()
-
-
 def test_participate_invalid_tip(default_options, temporary_session):
     res = app_billsplit.handler(
         content = "weird", 
