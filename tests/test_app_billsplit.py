@@ -215,6 +215,18 @@ def test_multiple_phrases_from_database():
     app_billsplit.actions.db.delete(dup_key)
 
 
+def test_key_from_non_deployed():
+    session = app_billsplit.actions.billsplit_db.Session(
+        phrase = "top gun dog",
+        total = 100,
+        creator = "00000000000",
+        people = {"00000000000": 13},
+        active = True
+    )
+
+    assert not session.key
+
+
 # ---- Not enough information - handler errors ----
 
 def test_start_with_no_total(default_options):
