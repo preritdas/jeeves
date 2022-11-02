@@ -33,10 +33,10 @@ def latest_grocery_list(phone: str) -> dict:
             config.Groceries.FULL_DT_FORMAT
         )
     )
-    
+
 
 @utils.app_handler(APP_HELP, APP_OPTIONS)
-def handler(content: str, options: dict):
+def handler(content: str, options: dict) -> str:
     # Options
     setup = options.get("setup")
 
