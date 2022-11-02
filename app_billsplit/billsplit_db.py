@@ -18,6 +18,12 @@ class SessionNotFoundError(Exception):
     pass
 
 
+def _generate_phrase():
+    response = requests.get("https://www.mit.edu/~ecprice/wordlist.10000")
+    words = [word.decode("ascii") for word in response.content.splitlines() if len(word) == 3]
+    return " ".join(random.sample(words, 3))
+
+
 class Session:
     """A bill splitting session."""
     def __init__(
@@ -48,12 +54,8 @@ class Session:
     @classmethod
     def new(cls, sender: str, total: float, tip: float) -> "Session":
         """Create a new session from scratch."""
-        def _generate_phrase():
-            response = requests.get("https://www.mit.edu/~ecprice/wordlist.10000")
-            words = [word.decode("ascii") for word in response.content.splitlines() if len(word) == 3]
-            return " ".join(random.sample(words, 3))
-
         phrase = _generate_phrase()
+
         attempts = 0
         while len(db.fetch({"Phrase": phrase}).items) != 0:
             phrase = _generate_phrase()
