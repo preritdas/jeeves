@@ -9,7 +9,7 @@ on:
 
 
 jobs:
-  build-and-publish:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,6 +29,28 @@ jobs:
 
       - name: Build docs with Sphinx
         run: cd docs && make html && cd ..
+
+      - name: Upload doc build as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs build
+          path: docs/build
+
+  publish:
+    needs: build
+    if: needs.build.result == 'success'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v3
+
+      - name: Download the latest docs build
+        uses: actions/download-artifact@v3
+        with:
+          name: docs build
+          path: docs/build
 
       - name: Publish docs to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
