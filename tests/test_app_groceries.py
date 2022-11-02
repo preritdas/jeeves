@@ -34,6 +34,7 @@ def test_handler():
 
     assert "List ID" in test_last_res
     assert "Chicken" in test_last_res
+    assert "Bananas" in test_last_res
 
     # Cleanup original list
     cleanup(res)
