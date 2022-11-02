@@ -112,7 +112,9 @@ class Session:
     @property
     def key(self) -> str:
         """Unique database key, *not the Phrase*."""
-        if not self.deployed: return ""
+        if not db.fetch(dict(Phrase=self.phrase)).items:
+            return ""
+
         return db.fetch(dict(Phrase=self.phrase)).items[0]["key"]
 
     @classmethod
