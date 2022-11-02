@@ -27,6 +27,32 @@ def default_options(default_inbound) -> dict[str, str]:
 
 
 @pytest.fixture(scope="session")
+def user_only_groceries() -> dict[str, str]:
+    """
+    Temporary user who only has access to the groceries app.
+
+    Test calling another app with only these permissions to test
+    permissions edge case.
+    """
+    first_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
+    last_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
+
+    phone = "".join(
+        [str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) for _ in range(10)]
+    )
+
+    user_attrs = {
+        "Name": f"{first_name} {last_name}",
+        "Permissions": "groceries",
+        "Phone": phone
+    }
+
+    key = permissions.permissions_db.put(user_attrs)["key"]
+    yield user_attrs
+    permissions.permissions_db.delete(key)
+
+
+@pytest.fixture(scope="session")
 def user_git_pytest(default_inbound) -> dict[str, str]:
     """Temporary random user with maximum permissions."""
     first_name = "".join(random.sample(string.ascii_lowercase, 5)).title()

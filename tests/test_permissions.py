@@ -37,6 +37,16 @@ def test_no_permissions_user_exists(users_dup_namephone):
     )
 
 
+def test_wrong_app_permissions(user_only_groceries):
+    """
+    Test the edge case in which a user has access to a limitied, specific set
+    of apps but tries to use another app which he doesn't have access to.
+    """
+    assert not permissions.check_permissions(
+        user_only_groceries["Phone"], "cocktails"
+    )
+
+
 def test_db_init():
     key = permissions.db_init()
     permissions.permissions_db.delete(key)
