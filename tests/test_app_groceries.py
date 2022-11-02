@@ -14,13 +14,13 @@ def cleanup(res: str) -> None:
     grocery_db.delete(list_id)
 
 
-def test_handler():
+def test_handler(default_options):
     ITEMS = ["Apples", "Bananas", "Blueberries", "snacks", "pears", "limes", "lamb"]
     test_items = random.sample(ITEMS, 2)  # get a few random items for testing
 
     res = app_groceries.handler(
         content = "\n".join(test_items),
-        options = {"setup": "whole foods", "inbound_phone": "12223334455"}
+        options = {**default_options, "setup": "whole foods"}
     )
 
     assert "List ID" in res
@@ -29,7 +29,7 @@ def test_handler():
     # Test adding items with last feature
     test_last_res = app_groceries.handler(
         content = "Chicken",
-        options = {"inbound_phone": "12223334455", "add": "last"}
+        options = {**default_options, "add": "last"}
     )
 
     assert "List ID" in test_last_res
