@@ -5,6 +5,9 @@ on:
     paths:
       - docs/source/**/**.*
     branches: [master]
+  pull_request:
+    paths:
+      - docs/source/**/**.*
   workflow_dispatch:
 
 
@@ -31,6 +34,7 @@ jobs:
         run: cd docs && make html && cd ..
 
       - name: Upload doc build as an artifact
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v3
         with:
           name: docs build
@@ -38,7 +42,7 @@ jobs:
 
   publish:
     needs: build
-    if: needs.build.result == 'success'
+    if: needs.build.result == 'success' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
 
     runs-on: ubuntu-latest
 
