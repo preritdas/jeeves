@@ -50,3 +50,10 @@ def test_wrong_app_permissions(user_only_groceries):
 def test_db_init():
     key = permissions.db_init()
     permissions.permissions_db.delete(key)
+
+
+def test_auto_db_init(mocker):
+    """The line is still not being run, 36 of permissions.py."""
+    mocker.patch("permissions.deta.base.FetchResponse.items", [])
+
+    assert not permissions.permissions_db.fetch().items
