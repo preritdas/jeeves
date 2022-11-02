@@ -5,7 +5,7 @@ import utils
 import config
 
 from . import classification
-from permissions import deta
+from permissions import deta_client
 
 
 APP_HELP = "Organize your grocery list into categories."
@@ -16,7 +16,7 @@ APP_OPTIONS = {
 }
 
 
-grocery_db = deta.Base("groceries")
+grocery_db = deta_client.Base("groceries")
 
 
 def latest_grocery_list(phone: str) -> dict:

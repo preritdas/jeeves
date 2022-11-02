@@ -8,8 +8,8 @@ import deta
 import keys
 
 
-deta = deta.Deta(keys.Deta.PROJECT_KEY)
-permissions_db = deta.Base("permissions")
+deta_client = deta.Deta(keys.Deta.PROJECT_KEY)
+permissions_db = deta_client.Base("permissions")
 
 
 def db_init() -> str:
