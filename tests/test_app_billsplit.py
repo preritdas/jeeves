@@ -172,6 +172,20 @@ def test_no_session_found_close(default_options):
     assert "No session was found" in res
 
 
+def test_non_unique_phrase(mocker):
+    """Mock the `_generate_phrase` function."""
+    mocker.patch("app_billsplit.actions.billsplit_db._generate_phrase", return_value="def not new")
+    assert app_billsplit.actions.billsplit_db._generate_phrase() == "def not new"
+
+    # Temporarily create that session
+    original_session = app_billsplit.actions.billsplit_db.Session.new("00000000000", 100, 15)
+
+    with pytest.raises(Exception):
+        new_session = app_billsplit.actions.billsplit_db.Session.new("00000000000", 100, 15)
+
+    app_billsplit.actions.db.delete(original_session.key)
+
+
 # ---- Not enough information - handler errors ----
 
 def test_start_with_no_total(default_options):
