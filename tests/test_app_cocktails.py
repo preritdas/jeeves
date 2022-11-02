@@ -38,6 +38,15 @@ def test_no_drink_found_error():
         )
 
 
+def test_not_all_drinks():
+    response = requests.get(app_cocktails.data.ENDPOINT + "search.php?s=tequila")
+    drink = app_cocktails.data.Drink.from_response(response, all_drinks=False)
+
+    assert drink
+    assert drink.basic_format
+    assert str(drink)
+
+
 def test_drink_concat():
     assert type(app_cocktails.data.concat_drinks([])) is str
     assert "behold" in app_cocktails.data.concat_drinks(
