@@ -116,6 +116,10 @@ class Session:
     @classmethod
     def from_database(cls, phrase: str) -> "Session":
         """Create a `Session` object based on a phrase from the database."""
+        # Cleanup the phrase - whitespace in between words
+        phrase = " ".join(word.strip() for word in phrase.strip().split(" ") if word)
+
+        # Search for items with that phrase (ideally only 1)
         db_query = db.fetch(dict(Phrase=phrase)).items
 
         if len(db_query) == 0:
