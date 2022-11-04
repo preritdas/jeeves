@@ -98,5 +98,5 @@ https://github.com/preritdas/personal-api/blob/a5ff2d2af5b567d0a2dac8b20cddce4a1
 A handler's function signature should be as follows.
 
 ```python
-def handler(content: str, options: dict) -> str
+def handler(content: str, options: dict[str, str]) -> str
 ```
