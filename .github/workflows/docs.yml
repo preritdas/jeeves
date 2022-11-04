@@ -31,7 +31,9 @@ jobs:
         run: pip install -r docs/requirements.txt
 
       - name: Build docs with Sphinx
-        run: sphinx-build docs/source docs/build -W
+        run: |
+          mkdir docs/source/_static
+          sphinx-build docs/source docs/build -W
 
       - name: Upload doc build as an artifact
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
