@@ -4,7 +4,7 @@ import pytest
 import random
 import string
 
-import app_permissions
+from apps import app_permissions
 
 
 def test_handler():

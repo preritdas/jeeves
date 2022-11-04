@@ -1,8 +1,8 @@
 """Test the billsplit app."""
 import pytest
 
-import app_billsplit
-from app_billsplit.actions import billsplit_db
+from apps import app_billsplit
+from apps.app_billsplit.actions import billsplit_db
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def test_stringify_session_obj(temporary_session):
 def test_full_flow(mocker, default_options):
     """Test the full logic flow of a session playing out."""
     # Ensure no texts are actually sent in the process
-    mocker.patch("app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
+    mocker.patch("apps.app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
 
     # Test creation
     default_options["action"] = "start"
@@ -82,7 +82,7 @@ def test_full_flow(mocker, default_options):
 
 def test_close_no_phrase(mocker, default_options):
     # Ensure no texts are actually sent in the process
-    mocker.patch("app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
+    mocker.patch("apps.app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
 
     # Create a session
     res = app_billsplit.handler(
@@ -152,7 +152,7 @@ def test_start_session_person_active(temporary_session, default_options):
 
 
 def test_closing(mocker, temporary_session, default_options):
-    mocker.patch("app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
+    mocker.patch("apps.app_billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
 
     default_options["action"] = "close"
 
@@ -210,7 +210,7 @@ def test_no_session_found_close(default_options):
 
 def test_non_unique_phrase(mocker):
     """Mock the `_generate_phrase` function."""
-    mocker.patch("app_billsplit.actions.billsplit_db._generate_phrase", return_value="def not new")
+    mocker.patch("apps.app_billsplit.actions.billsplit_db._generate_phrase", return_value="def not new")
     assert app_billsplit.actions.billsplit_db._generate_phrase() == "def not new"
 
     # Temporarily create that session

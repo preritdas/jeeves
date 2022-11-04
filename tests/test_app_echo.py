@@ -1,10 +1,10 @@
 """Test the echo app."""
-import app_echo
+from apps import app_echo
 
 
 def test_handler(mocker):
     # Ensure the text isn't actually sent, using sandbox mode.
-    mocker.patch("app_echo.texts.config.General.SANDBOX_MODE", True)
+    mocker.patch("apps.app_echo.texts.config.General.SANDBOX_MODE", True)
 
     res = app_echo.handler(
         content = "This is the message.",

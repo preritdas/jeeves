@@ -2,7 +2,7 @@
 import pytest
 import requests
 
-import app_cocktails
+from apps import app_cocktails
 
 
 def test_handler():

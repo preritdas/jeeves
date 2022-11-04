@@ -1,4 +1,4 @@
-import app_weather
+from apps import app_weather
 
 
 def test_handler():

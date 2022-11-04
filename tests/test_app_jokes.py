@@ -1,4 +1,4 @@
-import app_jokes
+from apps import app_jokes
 
 
 def test_handler():

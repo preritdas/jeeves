@@ -1,16 +1,16 @@
-import app_apps
+import apps
 
 
 def test_handler(default_options):
-    assert "The following apps are available" in app_apps.handler(
+    assert "The following apps are available" in apps.handler(
         "", default_options
     )
 
 
 def test_program_list():
-    assert type(app_apps.PROGRAMS) is dict and \
-        all([key for key in app_apps.PROGRAMS if isinstance(key, str)])
+    assert type(apps.PROGRAMS) is dict and \
+        all([key for key in apps.PROGRAMS if isinstance(key, str)])
 
 
 def test_help():
-    assert "available apps" in app_apps.handler(content="", options={"help": "yes"})
+    assert "available apps" in apps.handler(content="", options={"help": "yes"})

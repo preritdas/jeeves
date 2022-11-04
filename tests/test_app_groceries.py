@@ -1,8 +1,8 @@
 import random
 
-import app_groceries
-from app_groceries import grocery_utils
-from app_groceries import grocery_db
+from apps import app_groceries
+from apps.app_groceries import grocery_utils
+from apps.app_groceries import grocery_db
 
 
 def cleanup(res: str) -> None:
@@ -70,7 +70,7 @@ def test_translation(mocker, default_options):
     For now, just test using the correct translation function, as translation is 
     temporarily disabled due to lxml issues with Python 3.11.
     """
-    mocker.patch("app_groceries.classification.config.Groceries.TRANSLATION", True)  # doesn't work
+    mocker.patch("apps.app_groceries.classification.config.Groceries.TRANSLATION", True)  # doesn't work
     res = app_groceries.handler(
         "apples", default_options
     )

@@ -1,5 +1,5 @@
 """Test Rotten Tomatoes app."""
-import app_rt
+from apps import app_rt
 
 
 def test_handler():

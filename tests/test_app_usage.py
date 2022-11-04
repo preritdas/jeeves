@@ -1,4 +1,4 @@
-import app_usage
+from apps import app_usage
 
 
 def test_handler():

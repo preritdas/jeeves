@@ -4,7 +4,7 @@ Test the invite app. Make sure to pass "preview" to all the handler options
 """
 import nexmo  # mock an invalid client
 
-import app_invite
+from apps import app_invite
 import keys
 
 

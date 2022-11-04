@@ -51,7 +51,7 @@ The server is run using `gunicorn` with several workers. With only one worker, i
 
 3. The requested app is then checked for existence. All applets are registered within the [apps](apps) app.
 
-```{literalinclude} ../../../app_apps/__init__.py
+```{literalinclude} ../../../apps/__init__.py
 ```
 
 
