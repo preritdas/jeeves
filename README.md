@@ -53,8 +53,8 @@ import pytest
 
 from permissions import permissions_db
 from usage import usage_db
-from app_groceries import grocery_db
-from app_billsplit.billsplit_db import db as billsplit_db
+from apps.groceries import grocery_db
+from apps.billsplit.billsplit_db import db as billsplit_db
 
 
 permissions_pre = permissions_db.fetch()
