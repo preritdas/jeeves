@@ -5,7 +5,7 @@ from typing import Callable
 
 # Project
 import errors
-import app_apps
+import apps
 
 
 def assert_valid(inbound: dict) -> bool:
@@ -37,10 +37,10 @@ def requested_app(inbound: dict) -> tuple[Callable | None, str]:
     app_ref_loc = first_line.find("app:") + len("app:")
     app_name = first_line[app_ref_loc:].strip().lower()
 
-    if not app_name in app_apps.PROGRAMS:
+    if not app_name in apps.PROGRAMS:
         return None, app_name
     
-    return app_apps.PROGRAMS.get(app_name), app_name
+    return apps.PROGRAMS.get(app_name), app_name
 
 
 def _parse_options(options: str) -> dict[str, str]:

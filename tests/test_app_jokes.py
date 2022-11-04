@@ -1,10 +1,10 @@
-import app_jokes
+from apps import jokes
 
 
 def test_handler():
-    assert app_jokes.handler("", options={"tags": "nsfw,dark"})
+    assert jokes.handler("", options={"tags": "nsfw,dark"})
 
 
 def test_help():
-    res = app_jokes.handler("", options={"help": "yes"})
+    res = jokes.handler("", options={"help": "yes"})
     assert "random joke" in res and "separated categories" in res

@@ -1,8 +1,8 @@
-import app_usage
+from apps import usage
 
 
 def test_handler():
-    res = app_usage.handler(
+    res = usage.handler(
         content = "",
         options = {}
     )
@@ -11,5 +11,5 @@ def test_handler():
 
 
 def test_help():
-    res = app_usage.handler("", {"help": "yes"})
+    res = usage.handler("", {"help": "yes"})
     assert "usage report" in res
