@@ -69,7 +69,7 @@ def handler(content: str, options: dict) -> str
 
 Because options are (obviously) optional, they should be read with the `dict.get` method, supplying a default value if the option isn't provided. For example, the WordHunt handler is below.
 
-```{literalinclude} ../../../app_wordhunt/__init__.py
+```{literalinclude} ../../../apps/wordhunt/__init__.py
 :pyobject: handler
 ```
 

@@ -7,12 +7,12 @@ import random
 import string
 
 # Project
-from apps import app_wordhunt
+from apps import wordhunt
 
 
 @pytest.fixture
 def random_board():
-    return app_wordhunt.wordhunt.Board.from_letters(
+    return wordhunt.wordhunt.Board.from_letters(
         letters = "".join(random.choices(string.ascii_lowercase, k=16)), 
         width = 4, 
         height = 4
@@ -21,7 +21,7 @@ def random_board():
 
 # @pytest.mark.skip(reason="Inbound SMS Vonage timeout error, app currently disabled.")
 def test_handler():
-    res = app_wordhunt.handler(
+    res = wordhunt.handler(
         content = "nahzuxtskdyxpaus",
         options = {}
     )
@@ -30,7 +30,7 @@ def test_handler():
 
 
 def test_no_content():
-    res = app_wordhunt.handler(
+    res = wordhunt.handler(
         content = "",
         options = {}
     )
@@ -39,7 +39,7 @@ def test_no_content():
 
 
 def test_bad_dimensions():
-    res = app_wordhunt.handler(
+    res = wordhunt.handler(
         content = "a", 
         options = {}
     )
@@ -53,13 +53,13 @@ def test_string_board(random_board):
 
 def test_value_error(random_board):
     with pytest.raises(ValueError):
-        app_wordhunt.wordhunt.Board.from_letters("asd", 4, 4)
+        wordhunt.wordhunt.Board.from_letters("asd", 4, 4)
 
 
 def test_print_results_no_limit(random_board):
-    possibilities = app_wordhunt.wordhunt.all_possibilities(random_board)
-    assert type(app_wordhunt.wordhunt.print_results(possibilities)) is str
+    possibilities = wordhunt.wordhunt.all_possibilities(random_board)
+    assert type(wordhunt.wordhunt.print_results(possibilities)) is str
 
 
 def test_help():
-    assert "Solve a" in app_wordhunt.handler("", {"help": "yes"})
+    assert "Solve a" in wordhunt.handler("", {"help": "yes"})

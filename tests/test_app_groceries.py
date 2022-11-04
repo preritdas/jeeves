@@ -1,8 +1,8 @@
 import random
 
-from apps import app_groceries
-from apps.app_groceries import grocery_utils
-from apps.app_groceries import grocery_db
+from apps import groceries
+from apps.groceries import grocery_utils
+from apps.groceries import grocery_db
 
 
 def cleanup(res: str) -> None:
@@ -18,7 +18,7 @@ def test_handler(default_options):
     ITEMS = ["Apples", "Bananas", "Blueberries", "snacks", "pears", "limes", "lamb"]
     test_items = random.sample(ITEMS, 2)  # get a few random items for testing
 
-    res = app_groceries.handler(
+    res = groceries.handler(
         content = "\n".join(test_items),
         options = {**default_options, "setup": "whole foods"}
     )
@@ -27,7 +27,7 @@ def test_handler(default_options):
     assert all(item in res for item in test_items)
 
     # Test adding items with last feature
-    test_last_res = app_groceries.handler(
+    test_last_res = groceries.handler(
         content = "Chicken",
         options = {**default_options, "add": "last"}
     )
@@ -43,7 +43,7 @@ def test_handler(default_options):
     cleanup(test_last_res)
 
     # Test no list found
-    assert not "List ID" in app_groceries.handler(
+    assert not "List ID" in groceries.handler(
         content = "Apples",
         options = {
             "inbound_phone": "10000000000",
@@ -53,7 +53,7 @@ def test_handler(default_options):
 
 
 def test_no_category(default_options):
-    res = app_groceries.handler(
+    res = groceries.handler(
         "random", default_options
     )
 
@@ -70,8 +70,8 @@ def test_translation(mocker, default_options):
     For now, just test using the correct translation function, as translation is 
     temporarily disabled due to lxml issues with Python 3.11.
     """
-    mocker.patch("apps.app_groceries.classification.config.Groceries.TRANSLATION", True)  # doesn't work
-    res = app_groceries.handler(
+    mocker.patch("apps.groceries.classification.config.Groceries.TRANSLATION", True)  # doesn't work
+    res = groceries.handler(
         "apples", default_options
     )
 
@@ -87,7 +87,7 @@ def test_singularization():
     """
     WEIRD_ITEMS = ["blueberries", "lamb", "chicken"]
 
-    res = app_groceries.handler(
+    res = groceries.handler(
         content = "\n".join(WEIRD_ITEMS),
         options = {"inbound_phone": "12223334455"}
     )
@@ -102,7 +102,7 @@ def test_singularization():
 
 def test_paranthesis():
     """Options, ex. chicken (good kind)"""
-    res = app_groceries.handler(
+    res = groceries.handler(
         content = "chicken (good kind)",
         options = {
             "inbound_phone": "12223334455"
@@ -129,7 +129,7 @@ def test_pluralization():
 
 
 def test_help():
-    res = app_groceries.handler(
+    res = groceries.handler(
         content = "",
         options = {"help": "yes"}
     )
