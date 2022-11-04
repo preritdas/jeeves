@@ -33,7 +33,7 @@ jobs:
       - name: Build docs with Sphinx
         run: |
           mkdir docs/source/_static
-          sphinx-build docs/source docs/build -W
+          sphinx-build docs/source docs/build/html -W
 
       - name: Upload doc build as an artifact
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
