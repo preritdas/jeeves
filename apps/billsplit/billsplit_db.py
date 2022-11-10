@@ -112,10 +112,10 @@ class Session:
     @property
     def key(self) -> str:
         """Unique database key, *not the Phrase*."""
-        if not db.fetch(dict(Phrase=self.phrase)).items:
+        if not (fetch_res := db.fetch(dict(Phrase=self.phrase)).items):
             return ""
 
-        return db.fetch(dict(Phrase=self.phrase)).items[0]["key"]
+        return fetch_res[0]["key"]
 
     @classmethod
     def from_database(cls, phrase: str) -> "Session":
