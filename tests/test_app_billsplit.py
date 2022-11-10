@@ -244,9 +244,10 @@ def test_multiple_phrases_from_database():
     )["key"]
 
     with pytest.raises(Exception):
-        load_dup_session_fail = billsplit.actions.billsplit_db.Session.from_database(session.phrase)
+        billsplit.actions.billsplit_db.Session.from_database(session.phrase)
 
     # Cleanup
+    assert session.key
     billsplit.actions.db.delete(session.key)
     billsplit.actions.db.delete(dup_key)
 
