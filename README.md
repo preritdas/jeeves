@@ -57,21 +57,15 @@ from apps.groceries import grocery_db
 from apps.billsplit.billsplit_db import db as billsplit_db
 
 
-permissions_pre = permissions_db.fetch()
-usage_pre = usage_db.fetch()
-grocery_pre = grocery_db.fetch()
-billsplit_pre = billsplit_db.fetch()
+# Store original content and states
+databases = [permissions_db, usage_db, grocery_db, billsplit_db]
+pre_content = [db.fetch() for db in databases]
 
-
-# RUN TESTS
+# Run tests
 pytest.main()
 
-
 # Compare
-print(permissions_pre == permissions_db.fetch())
-print(usage_pre == usage_db.fetch())
-print(grocery_pre == grocery_db.fetch())
-print(billsplit_pre == billsplit_db.fetch())
+assert all([db.fetch() == pre for db, pre in zip(databases, pre_content)])
 ```
 
 ### Notes
