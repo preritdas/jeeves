@@ -20,7 +20,7 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 ### Versions
 
-[ ] Translation is currently disabled because when installing the `translators` library in Python 3.11, building `lxml` fails. There is no active change to production behavior for now because translation is disabled in [config.ini](config.ini).
+[ ] Translation is currently disabled because when installing the `translators` library in Python 3.11, building `lxml` fails. There is no active change to production behavior for now because translation is disabled in [config](config.py).
 
 ### CI/CD
 
