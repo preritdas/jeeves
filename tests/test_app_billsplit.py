@@ -230,7 +230,7 @@ def test_multiple_phrases_from_database():
     Note that this should never happen as phrase duplication is handled on the
     creation side.
     """
-    session = billsplit.actions.billsplit_db.Session.new("00000000000", 100, 15)
+    session = billsplit.actions.billsplit_db.Session.new("00000000000", 100, 16)
 
     # Deploy a new session to the database with the same phrase
     dup_key = billsplit.actions.db.put(
@@ -250,6 +250,9 @@ def test_multiple_phrases_from_database():
     assert session.key
     billsplit.actions.db.delete(session.key)
     billsplit.actions.db.delete(dup_key)
+
+    for item in billsplit.actions.db.fetch(dict(Creator="00000000000")).items:
+        billsplit.actions.db.delete(item["key"])
 
 
 def test_key_from_non_deployed():
