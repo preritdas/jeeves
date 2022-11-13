@@ -85,6 +85,10 @@ options: dict[str, str] = {
 }
 ```
 
+This same structure is used in tests. The below is a series of inter-dependent fixtures with the same `default_options` format, using a randomly generated phone number that lasts for the duration of the tests (in the permissions database as well).
+
+https://github.com/preritdas/personal-api/blob/9c60f54b6db8c4aa7c80ecd05e328fe5b868b946/tests/conftest.py#L12-L26
+
 Read options with `dict.get` supplying a default option value if the option isn't provided. For example, WordHunt options in the handler...
 
 https://github.com/preritdas/personal-api/blob/a5ff2d2af5b567d0a2dac8b20cddce4a12064f3a/wordhunt/__init__.py#L4-L10
