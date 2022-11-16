@@ -40,7 +40,9 @@
         "asparagus",
         "cabbage",
         "bean sprout",
-        "garlic pod"
+        "garlic pod",
+        "garlic",
+        "ginger"
     ],
     "self care": [
         "shampoo",
@@ -134,7 +136,8 @@
         "vinegar",
         "cake mix",
         "cookie dough",
-        "maple syrup"
+        "maple syrup",
+        "salt"
     ],
     "appliances": [
         "washing pod",
