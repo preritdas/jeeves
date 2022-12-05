@@ -11,9 +11,28 @@ import threading
 
 # Project
 import inbound
+import config
 
 
 app = Flask(__name__)
+
+
+def route_to_handler(inbound_sms_content: dict) -> None:
+    """
+    Routes inbound sms content to the main handler, and reads the config's
+    stated preference of threaded responses to either handle the inbound in a thread
+    (simply start the thread) or to wait for the processing to complete.
+    """
+    if config.General.THREADED_INBOUND:
+        process_inbound = threading.Thread(
+            target = inbound.main_handler,
+            kwargs = {
+                "inbound_sms_content": inbound_sms_content
+            }
+        )
+        process_inbound.start()
+    else:
+        inbound.main_handler(inbound_sms_content=inbound_sms_content)
 
 
 @app.route("/inbound-sms", methods=["POST"])
@@ -24,14 +43,7 @@ def main_handler_wrapper():
     if type(inbound_sms_content) is not dict:
         return "Not JSON format.", 400
 
-    process_inbound = threading.Thread(
-        target = inbound.main_handler,
-        kwargs = {
-            "inbound_sms_content": inbound_sms_content
-        }
-    )
-    
-    process_inbound.start()  # process the message after returning success
+    route_to_handler(inbound_sms_content)
     return "", 204
 
 

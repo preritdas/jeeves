@@ -6,6 +6,7 @@ format.
 
 [General]
 sandbox_mode = false
+threaded_inbound = false
 
 [Weather]
 default_city = London
@@ -28,6 +29,7 @@ config.read(
 
 class General:
     SANDBOX_MODE: bool = True if config["General"]["sandbox_mode"].lower() == "true" else False
+    THREADED_INBOUND: bool = True if config["General"]["threaded_inbound"].lower() == "true" else False
 
 
 class Weather:
