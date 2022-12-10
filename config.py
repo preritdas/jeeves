@@ -44,9 +44,9 @@ def read_bool_option(option: str) -> bool:
     a config class. Meant to read items from a configuration file that only reads
     text string value.
     """
-    if option.lower() in {"true, yes, on"}:
+    if option.lower() in {"true", "yes", "on"}:
         return True
-    elif option.lower() in {"false, no, off"}:
+    elif option.lower() in {"false", "no", "off"}:
         return False
     else:
         raise ConfigurationError(option)
