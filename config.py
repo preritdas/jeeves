@@ -62,7 +62,7 @@ class Weather:
 
 
 class Groceries:
-    THREADED_INBOUND: bool = read_bool_option(config["Groceries"]["translation"])
+    TRANSLATION: bool = read_bool_option(config["Groceries"]["translation"])
     FULL_DT_FORMAT: str = "%Y-%m-%d %H-%M-%S"
 
 
