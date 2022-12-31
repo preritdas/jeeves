@@ -8,7 +8,7 @@ import keys
 openai.api_key = keys.OpenAI.API_KEY
 
 
-def gpt_response(prompt: str, tokens: int = 200):
+def gpt_response(prompt: str, tokens: int = 200) -> str:
     """Get a completion response from GPT."""
     assert isinstance(tokens, int), "`tokens` must be an integer."
 
@@ -20,4 +20,4 @@ def gpt_response(prompt: str, tokens: int = 200):
         temperature = 0.7
     )
 
-    return completions.choices[0].text
+    return str(completions.choices[0].text)
