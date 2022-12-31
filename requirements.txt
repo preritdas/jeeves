@@ -16,5 +16,8 @@ rottentomatoes-python==0.4.0  # movie data retrieval
 # Cocktails
 emoji==2.1.0  # emojis in drink formatting
 
+# GPT
+openai==0.25.0
+
 # Wordhunt
 # cython==0.29.32  # not supported in App Engine as no GCC
