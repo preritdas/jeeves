@@ -13,4 +13,4 @@ APP_OPTIONS = {
 @utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Handler for the GPT applet."""
-    return completions.gpt_response(content, options.get("tokens", 200))
+    return completions.gpt_response(content, int(options.get("tokens", 200)))
