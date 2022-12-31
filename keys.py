@@ -45,3 +45,7 @@ class HumorAPI:
 
 class OpenWeatherMap:
     API_KEY = keys["OpenWeatherMap"]["api_key"]
+
+
+class OpenAI:
+    API_KEY = keys["OpenAI"]["api_key"]
