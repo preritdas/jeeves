@@ -16,6 +16,7 @@ from . import usage
 from . import rt
 from . import cocktails
 from . import billsplit
+from . import gpt
 
 # Project
 import utils
@@ -48,5 +49,6 @@ PROGRAMS: dict[str, Callable] = {
     "usage": usage.handler,
     "rt": rt.handler,
     "cocktails": cocktails.handler,
-    "billsplit": billsplit.handler
+    "billsplit": billsplit.handler,
+    "gpt": gpt.handler
 }
