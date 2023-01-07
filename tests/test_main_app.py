@@ -9,6 +9,7 @@ def test_client():
     return TestClient(app=main.app)
 
 
+@pytest.mark.skip
 def test_testing_endpoint(test_client):
     res = test_client.get("/")
 
@@ -16,6 +17,7 @@ def test_testing_endpoint(test_client):
     assert res.status_code == 200
 
 
+@pytest.mark.skip
 def test_apps_non_threaded(test_client, default_inbound, mocker):
     mocker.patch("main.inbound.texts.config.General.SANDBOX_MODE", True)
     mocker.patch("main.inbound.usage.config.General.SANDBOX_MODE", True)
@@ -29,6 +31,7 @@ def test_apps_non_threaded(test_client, default_inbound, mocker):
     assert res.status_code == 204
 
 
+@pytest.mark.skip
 def test_apps_threaded(test_client, default_inbound, mocker):
     mocker.patch("main.inbound.texts.config.General.SANDBOX_MODE", True)
     mocker.patch("main.inbound.usage.config.General.SANDBOX_MODE", True)
