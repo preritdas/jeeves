@@ -1,5 +1,5 @@
 """
-Create the main Flask application with routes. Use the `inbound` module main handler. 
+Create the main FastAPI application with routes. Use the `inbound` module main handler. 
 Use threading to instantly return a response at the inbound-sms
 endpoint.
 """

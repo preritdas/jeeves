@@ -1,4 +1,4 @@
-"""Testing if texts can be sandboxed with the Flask client."""
+"""Testing if texts can be sandboxed with the FastAPI client."""
 import inbound
 
 
