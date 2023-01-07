@@ -77,6 +77,7 @@ def test_run_app(mocker, user_git_pytest):
         {
             "msisdn": user_git_pytest["Phone"],
             "text": "app: apps",
+            "concat": False
         }
     )
 
@@ -94,7 +95,8 @@ def test_app_error_handling(mocker, user_git_pytest):
             "msisdn": user_git_pytest["Phone"],
             "text": "app: wordhunt\n" \
                 "options: width = notnumber; height = notnumber\n" \
-                "hagsyausidmsnajs"
+                "hagsyausidmsnajs",
+            "concat": False
         }
     )
 
