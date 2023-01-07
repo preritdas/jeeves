@@ -16,7 +16,7 @@ class NexmoInbound(pydantic.BaseModel):
     """
     msisdn: str
     text: str
-    concat: str = None
+    concat: str | bool = False
 
     def __post_init__(self):
         """Apply some data modifications."""
