@@ -20,7 +20,7 @@ class NexmoInbound(pydantic.BaseModel):
 
     def __post_init__(self):
         """Apply some data modifications."""
-        self.concat = True if self.concat else False
+        self.concat = bool(self.concat)
 
 
 def assert_valid(inbound: dict) -> bool:
