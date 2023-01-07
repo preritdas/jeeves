@@ -5,8 +5,8 @@ from apps import gpt
 def test_handler():
     """Test the GPT applet handler."""
     res = gpt.handler(
-        content = "Give me three rhyming words.",
-        options = {"tokens": "15"}
+        content = "Give me three short rhyming words.",
+        options = {"tokens": "20"}
     )
 
     assert res
