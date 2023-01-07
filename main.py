@@ -46,6 +46,6 @@ def main_handler_wrapper(inbound: parsing.NexmoInbound):
     return ""
 
 
-@app.get("/", status_code=204)
+@app.get("/", status_code=200)
 def test():
     return f"All working here."
