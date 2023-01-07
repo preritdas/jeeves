@@ -1,10 +1,10 @@
 """
-Create the main Flask application with routes. Use the `inbound` module main handler. 
+Create the main FastAPI application with routes. Use the `inbound` module main handler. 
 Use threading to instantly return a response at the inbound-sms
 endpoint.
 """
 # External
-from flask import Flask, request
+from fastapi import FastAPI
 
 # Local
 import threading
@@ -12,9 +12,10 @@ import threading
 # Project
 import inbound
 import config
+import parsing
 
 
-app = Flask(__name__)
+app = FastAPI()
 
 
 def route_to_handler(inbound_sms_content: dict) -> None:
@@ -35,18 +36,16 @@ def route_to_handler(inbound_sms_content: dict) -> None:
         inbound.main_handler(inbound_sms_content=inbound_sms_content)
 
 
-@app.route("/inbound-sms", methods=["POST"])
-def main_handler_wrapper():
-    inbound_sms_content = request.get_json()
-    print("\n", inbound_sms_content, sep="")
+@app.post("/inbound-sms", status_code=204)
+def main_handler_wrapper(inbound: parsing.NexmoInbound):
+    """Handle the inbound, routing it to the handler."""
+    print("\n", inbound, sep="")
+    print(inbound.dict())
+    route_to_handler(inbound.dict())
 
-    if type(inbound_sms_content) is not dict:
-        return "Not JSON format.", 400
-
-    route_to_handler(inbound_sms_content)
-    return "", 204
+    return ""
 
 
-@app.route("/")
+@app.get("/", status_code=200)
 def test():
-    return f"All working here.", 200
+    return f"All working here."

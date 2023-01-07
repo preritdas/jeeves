@@ -1,6 +1,10 @@
-flask==2.2.2  # API
+fastapi==0.89.0  # API
 nexmo==2.5.2  # respond with texts
 deta==1.1.0  # permissions
+
+# Server
+gunicorn==20.1.0
+uvicorn==0.20.0
 
 # Groceries
 inflect==6.0.2  # word singularization and pluralization

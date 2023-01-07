@@ -1,6 +1,6 @@
 """
 Process and handle inbound requests. This is where the `main_handler` is defined,
-called by the Flask route and given inbound information.
+called by the FastAPI route and given inbound information.
 """
 import parsing
 import permissions

@@ -17,7 +17,8 @@ def default_inbound() -> dict[str, str]:
 
     return {
         "msisdn": random_inbound,
-        "text": "app: apps"
+        "text": "app: apps",
+        "concat": None
     }
 
 

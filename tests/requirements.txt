@@ -1,7 +1,10 @@
 # Test framework
-pytest==7.1.3
+pytest==7.2.0
 
 # Plugins
 pytest-cov==4.0.0
 coverage-badge==1.1.0
 pytest-mock==3.10.0
+
+# API tools
+httpx==0.23.3  # needed for FastAPI TestClient
