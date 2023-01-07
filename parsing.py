@@ -3,9 +3,24 @@ Parsing inbound messages for content.
 """
 from typing import Callable
 
+import pydantic
+
 # Project
 import errors
 import apps
+
+
+class NexmoInbound(pydantic.BaseModel):
+    """
+    Inbound structure from Nexmo.
+    """
+    msisdn: str
+    text: str
+    concat: str = None
+
+    def __post_init__(self):
+        """Apply some data modifications."""
+        self.concat = True if self.concat else False
 
 
 def assert_valid(inbound: dict) -> bool:
@@ -22,7 +37,7 @@ def assert_valid(inbound: dict) -> bool:
 def is_concat(inbound: dict) -> bool:
     """Determines if an inbound sms is part of a concatenated series of messages."""
     assert isinstance(inbound, dict)
-    return "concat" in inbound
+    return bool(inbound["concat"])
 
 
 def requested_app(inbound: dict) -> tuple[Callable | None, str]:
