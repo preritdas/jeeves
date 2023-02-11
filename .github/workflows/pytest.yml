@@ -11,6 +11,10 @@ on:
 
 jobs:
   test:
+    strategy:
+      matrix:
+        python: ["3.10", "3.11"]
+    
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +24,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python }}
 
       - name: Upgrade pip
         run: pip install -U pip setuptools wheel
