@@ -1,4 +1,4 @@
-fastapi==0.89.0  # API
+fastapi==0.90.0  # API
 nexmo==2.5.2  # respond with texts
 deta==1.1.0  # permissions
 
