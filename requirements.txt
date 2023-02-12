@@ -15,7 +15,7 @@ mypytoolkit>=1.5.60  # utils
 requests==2.28.1  # ping Humor API
 
 # Rotten Tomatoes
-rottentomatoes-python==0.4.0  # movie data retrieval
+rottentomatoes-python==0.5.0  # movie data retrieval
 
 # Cocktails
 emoji==2.1.0  # emojis in drink formatting
