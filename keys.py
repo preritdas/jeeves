@@ -25,6 +25,22 @@ keys.read(
 )
 
 
+def environment_or_internal(env: str, provider: str) -> str:
+    """
+    Checks for a key in the environment, and if it's not there, looks inside a 
+    keys.ini file. Assumes the key in keys.ini is stored as `api_key`. A `KeyError`
+    will be raised if the key cannot be found in either environment or keys.ini.
+
+    This method is necessary as opposed to using `os.environ.get` because if a key is
+    in the environment and not in keys.ini, we don't want to check keys.ini for a default
+    value and raise a `KeyError`.
+    """
+    try:
+        return os.environ[env]
+    except KeyError:  # not in the environment, check keys.ini
+        return keys[provider]["api_key"]  # raise KeyError if not found
+
+
 class Nexmo:
     """Sending text messages."""
     _nexmo_keys = keys["Nexmo"]
@@ -48,4 +64,4 @@ class OpenWeatherMap:
 
 
 class OpenAI:
-    API_KEY = keys["OpenAI"]["api_key"]
+    API_KEY = environment_or_internal("OPENAI_API_KEY", "OpenAI")
