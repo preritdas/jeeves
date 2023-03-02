@@ -8,16 +8,14 @@ import keys
 openai.api_key = keys.OpenAI.API_KEY
 
 
-def gpt_response(prompt: str, tokens: int = 200) -> str:
+def gpt_response(prompt: str) -> str:
     """Get a completion response from GPT."""
-    assert isinstance(tokens, int), "`tokens` must be an integer."
-
-    completions = openai.Completion.create(
-        engine = "text-davinci-003",
-        prompt = prompt,
-        max_tokens = tokens,
-        n = 1,
-        temperature = 0.7
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
     )
 
-    return str(completions.choices[0].text)
+    return response.choices[0]['message']['content']
