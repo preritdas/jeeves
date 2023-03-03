@@ -10,6 +10,7 @@ APP_HELP = "Rotten Tomatoes info on movies. Specify the movie title as message c
 @utils.app_handler(APP_HELP)
 def handler(content: str, options: dict) -> str:
     """Handler for the Rotten Tomatoes app."""
+    return "App is currently down."
     if not content:
         return "You didn't specify a movie."
     
