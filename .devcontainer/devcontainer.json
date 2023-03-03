@@ -14,7 +14,7 @@
 				"ms-python.python"
 			]
 		}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -23,7 +23,7 @@
 	// "forwardPorts": [],
 
 	// Uncomment the next line to run commands after the container is created.
-	// "postCreateCommand": "pip install -U jupyterlab"
+	"postCreateCommand": "pip install --no-cache-dir -r tests/requirements.txt"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
