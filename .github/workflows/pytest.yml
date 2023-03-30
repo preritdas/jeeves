@@ -6,6 +6,9 @@ on:
       - docs/**/*.*
       - README.md
   pull_request:
+    types:  # avoid double runs in open pr
+      - opened
+      - reopened 
   workflow_dispatch:
 
 
