@@ -65,3 +65,7 @@ class OpenWeatherMap:
 
 class OpenAI:
     API_KEY = environment_or_internal("OPENAI_API_KEY", "OpenAI")
+
+
+class GoogleSerper:
+    API_KEY = environment_or_internal("SERPER_API_KEY", "Google Serper")

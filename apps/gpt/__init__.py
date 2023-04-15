@@ -1,7 +1,7 @@
 """GPT applet."""
 import utils
 
-from . import completions
+from . import agency
 
 
 APP_HELP = "Get a GPT response."
@@ -10,10 +10,7 @@ APP_HELP = "Get a GPT response."
 @utils.app_handler(APP_HELP)
 def handler(content: str, options: dict[str, str]) -> str:
     """Handler for the GPT applet."""
-    response: str = completions.gpt_response(content)
+    response: str = agency.run_agent(content)
 
-    # Remove newlines from the start of the response
-    while response.startswith("\n"):
-        response = response[1:]
-
-    return response
+    # Remove spaces and newlines from the start of the response
+    return response.strip()
