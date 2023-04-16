@@ -1,5 +1,5 @@
 fastapi==0.91.0  # API
-nexmo==2.5.2  # respond with texts
+twilio==8.0.0  # respond with texts
 deta==1.1.0  # permissions
 
 # Server
