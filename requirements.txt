@@ -5,6 +5,7 @@ deta==1.1.0  # permissions
 # Server
 gunicorn==20.1.0
 uvicorn==0.20.0
+python-multipart==0.0.6
 
 # Groceries
 inflect==6.0.2  # word singularization and pluralization
