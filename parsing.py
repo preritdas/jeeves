@@ -69,9 +69,9 @@ def _parse_options(options: str) -> dict[str, str]:
     return return_options
 
 
-def app_content_options(inbound: dict) -> tuple[str, dict]:
+def app_content_options(inbound: InboundMessage) -> tuple[str, dict]:
     """Returns app input content."""
-    raw_content: str = inbound["text"]
+    raw_content: str = inbound.body
     lines = raw_content.splitlines()
 
     content = True
