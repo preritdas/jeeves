@@ -10,17 +10,12 @@ import errors
 import apps
 
 
-class NexmoInbound(pydantic.BaseModel):
+class InboundMessage(pydantic.BaseModel):
     """
-    Inbound structure from Nexmo.
+    Inbound structure to be used .
     """
-    msisdn: str
-    text: str
-    concat: str | bool = False
-
-    def __post_init__(self):
-        """Apply some data modifications."""
-        self.concat = bool(self.concat)
+    phone_number: str
+    body: str
 
 
 def assert_valid(inbound: dict) -> bool:
@@ -34,10 +29,10 @@ def assert_valid(inbound: dict) -> bool:
     return True
 
 
-def is_concat(inbound: dict) -> bool:
-    """Determines if an inbound sms is part of a concatenated series of messages."""
-    assert isinstance(inbound, dict)
-    return bool(inbound["concat"])
+# def is_concat(inbound: dict) -> bool:
+#     """Determines if an inbound sms is part of a concatenated series of messages."""
+#     assert isinstance(inbound, dict)
+#     return bool(inbound["concat"])
 
 
 def requested_app(inbound: dict) -> tuple[Callable | None, str]:
