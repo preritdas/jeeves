@@ -2,11 +2,11 @@
 Read keys.ini and parse. Supply keys.ini in the following format.
 
 
-[Nexmo]
-api_key = 
-api_secret = 
+[Twilio]
+account_sid = 
+auth_token = 
 sender = 
-receiver = 
+my_number = 
 
 
 [Deta]
@@ -48,6 +48,7 @@ class Twilio:
     ACCOUNT_SID = _twilio_keys["account_sid"]
     AUTH_TOKEN = _twilio_keys["auth_token"]
     SENDER = _twilio_keys["sender"]
+    MY_NUMBER = _twilio_keys["my_number"]
 
 
 class Deta:
