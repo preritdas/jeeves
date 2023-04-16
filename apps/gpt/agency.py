@@ -14,7 +14,7 @@ toolkit = [
     )
 ]
 
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=keys.OpenAI.API_KEY)
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key=keys.OpenAI.API_KEY, temperature=0)
 agent = initialize_agent(toolkit, llm)
 
 
