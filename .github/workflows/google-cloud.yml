@@ -8,7 +8,7 @@ on:
    types:
      - completed
    branches:
-     - main
+     - master
  workflow_dispatch: 
 
 
