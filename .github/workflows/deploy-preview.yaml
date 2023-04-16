@@ -1,39 +1,27 @@
-name: cloud run deployment
+name: cloud run preview
 
 
-on:
- workflow_run:
-   workflows:
-     - tests
-   types:
-     - completed
-   branches:
-     - main
- workflow_dispatch: 
+on: pull_request
 
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
 
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v3
 
-      - name: Inject keys and config
+      - name: Inject keys
         run: |
           echo -en '${{ secrets.KEYS_INI }}' >> keys.ini
-          echo -en '${{ secrets.CONFIG_INI }}' >> config.ini
+          echo -en '${{ secrets.CONFIG_INI }}' >> config.ini 
 
       - name: Authenticate GCP
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
           
-      - name: Remove tests directory
-        run: rm -r tests
-      
       - name: Build Docker image
         run: |
           docker build -t personal-api .
@@ -41,12 +29,16 @@ jobs:
       - name: Push Docker image to GCP Container Registry
         run: |
           gcloud auth configure-docker
-          docker tag personal-api gcr.io/personal-api/personal-api
-          docker push gcr.io/personal-api/personal-api
-  deploy:
+          docker tag personal-api gcr.io/personal-api/personal-api:pr-preview-${{ github.event.number }}
+          docker push gcr.io/personal-api/personal-api:pr-preview-${{ github.event.number }}
+  preview:
     runs-on: ubuntu-latest
     needs: build
     if: ${{ needs.build.result == 'success' }}
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: Authenticate GCP
@@ -55,12 +47,18 @@ jobs:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
           
       - name: Deploy to Cloud Run
+        id: deploy
         uses: 'google-github-actions/deploy-cloudrun@v1'
         with:
           service: 'personal-api'
-          image: gcr.io/personal-api/personal-api
+          image: gcr.io/personal-api/personal-api:pr-preview-${{ github.event.number }}
+          tag: pr-preview-${{ github.event.number }}
           flags: '--min-instances=0 --memory=4Gi --allow-unauthenticated'
-          no_traffic: false
-          
-      - name: Allocate traffic to latest deployment
-        run: gcloud run services update-traffic --region us-central1 --to-latest personal-api
+          no_traffic: true
+
+      - name: Comment deployment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            A preview of this pull request has been deployed (or updated) at ${{ steps.deploy.outputs.url }}. 
+          reactions: eyes, rocket
