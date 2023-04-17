@@ -16,4 +16,4 @@ def test_raise_on_no_app_specified():
     }
 
     with pytest.raises(errors.InvalidInbound):
-        app = parsing.requested_app(inbound)
+        app = parsing.requested_app(parsing.InboundMessage(**inbound))
