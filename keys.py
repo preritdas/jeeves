@@ -2,11 +2,11 @@
 Read keys.ini and parse. Supply keys.ini in the following format.
 
 
-[Nexmo]
-api_key = 
-api_secret = 
+[Twilio]
+account_sid = 
+auth_token = 
 sender = 
-receiver = 
+my_number = 
 
 
 [Deta]
@@ -41,14 +41,14 @@ def environment_or_internal(env: str, provider: str) -> str:
         return keys[provider]["api_key"]  # raise KeyError if not found
 
 
-class Nexmo:
+class Twilio:
     """Sending text messages."""
-    _nexmo_keys = keys["Nexmo"]
+    _twilio_keys = keys["Twilio"]
 
-    API_KEY = _nexmo_keys["api_key"]
-    API_SECRET = _nexmo_keys["api_secret"]
-    SENDER = _nexmo_keys["sender"]
-    MY_NUMBER = _nexmo_keys["receiver"]
+    ACCOUNT_SID = _twilio_keys["account_sid"]
+    AUTH_TOKEN = _twilio_keys["auth_token"]
+    SENDER = _twilio_keys["sender"]
+    MY_NUMBER = _twilio_keys["my_number"]
 
 
 class Deta:

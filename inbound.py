@@ -8,7 +8,7 @@ import texts
 import usage
 
 
-def main_handler(inbound_sms_content: dict) -> dict[str, tuple | str]:
+def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple | str]:
     """
     Handle all inbound messages. Returns a dictionary in the following format.
 
@@ -19,13 +19,14 @@ def main_handler(inbound_sms_content: dict) -> dict[str, tuple | str]:
     
     Keep this as simple as possible, with plenty of outsourcing.
     """
-    sender: str = inbound_sms_content["msisdn"]
+    sender: str = inbound_sms_content.phone_number
 
-    # No concat assertion
-    if parsing.is_concat(inbound_sms_content):
-        text_response = "Your message was too long. It was split by your carrier."
-        texts.send_message(text_response, sender)
-        return {"response": text_response, "http": ("", 204)}
+    # Removed after Twilio migration. Add back if Twilio has concat issues like Nexmo.
+    # # No concat assertion
+    # if parsing.is_concat(inbound_sms_content):
+    #     text_response = "Your message was too long. It was split by your carrier."
+    #     texts.send_message(text_response, sender)
+    #     return {"response": text_response, "http": ("", 204)}
 
     # Valid assertion
     if not parsing.assert_valid(inbound_sms_content):

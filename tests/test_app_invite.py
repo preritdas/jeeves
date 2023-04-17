@@ -2,7 +2,10 @@
 Test the invite app. Make sure to pass "preview" to all the handler options 
 (except help) to prevent actual text messages from being sent.
 """
-import nexmo  # mock an invalid client
+import pytest
+
+from twilio.rest import Client  # mock an invalid client
+from twilio.base.exceptions import TwilioRestException
 
 from apps import invite
 import keys
@@ -46,9 +49,10 @@ def test_inviting(mocker, default_options):
 
 def test_failed_delivery(mocker, default_options):
     """Mock a bad API key."""
-    mocker.patch("texts.sms", nexmo.Sms(key=keys.Nexmo.API_KEY, secret="invalid"))
-    res = invite.handler("14259023246", default_options)
-    assert "There was an error" in res
+    mocker.patch("texts.twilio_client", Client(keys.Twilio.ACCOUNT_SID, "invalid"))
+
+    with pytest.raises(TwilioRestException):
+        invite.handler("14259023246", default_options)
 
 
 def test_help():

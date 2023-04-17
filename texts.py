@@ -2,19 +2,17 @@
 Sending text messages back.
 """
 # External
-import nexmo
+from twilio.rest import Client as TwilioClient
 
 # Project
 import keys
 import config
 
 
-nexmo_client = nexmo.Client(
-    key = keys.Nexmo.API_KEY,
-    secret = keys.Nexmo.API_SECRET
+twilio_client = TwilioClient(
+    keys.Twilio.ACCOUNT_SID,
+    keys.Twilio.AUTH_TOKEN
 )
-
-sms = nexmo.Sms(nexmo_client)
 
 
 def send_message(content: str, recipient: str) -> bool:
@@ -26,13 +24,13 @@ def send_message(content: str, recipient: str) -> bool:
     if config.General.SANDBOX_MODE:
         return True
 
-    vonage_res = sms.send_message(
-        {
-            "type": "unicode",
-            "from": keys.Nexmo.SENDER,
-            "to": recipient,
-            "text": str(content)
-        }
+    message_sent = twilio_client.messages.create(
+        to = recipient,
+        from_ = keys.Twilio.SENDER,
+        body = content
     )
 
+    return True
+
+    # Create success check for Twilio
     return True if vonage_res["messages"][0]["status"] == "0" else False

@@ -1,10 +1,11 @@
 fastapi==0.91.0  # API
-nexmo==2.5.2  # respond with texts
+twilio==8.0.0  # respond with texts
 deta==1.1.0  # permissions
 
 # Server
 gunicorn==20.1.0
 uvicorn==0.20.0
+python-multipart==0.0.6
 
 # Groceries
 inflect==6.0.2  # word singularization and pluralization

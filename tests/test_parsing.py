@@ -11,9 +11,9 @@ import errors
 def test_raise_on_no_app_specified():
     """Make sure an `errors.InvalidInbound` is raised when no app is specified."""
     inbound = {
-        "msisdn": "00000000000",
-        "text": "noapphere"
+        "phone_number": "00000000000",
+        "body": "noapphere"
     }
 
     with pytest.raises(errors.InvalidInbound):
-        app = parsing.requested_app(inbound)
+        app = parsing.requested_app(parsing.InboundMessage(**inbound))

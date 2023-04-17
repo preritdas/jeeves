@@ -23,7 +23,7 @@ def db_init() -> str:
     db_res: dict = permissions_db.put(
         {
             "Name": "Prerit Das",
-            "Phone": keys.Nexmo.MY_NUMBER,
+            "Phone": keys.Twilio.MY_NUMBER,
             "Permissions": "all"
         }
     )

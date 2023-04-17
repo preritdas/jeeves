@@ -4,7 +4,7 @@ Use threading to instantly return a response at the inbound-sms
 endpoint.
 """
 # External
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 
 # Local
 import threading
@@ -37,11 +37,13 @@ def route_to_handler(inbound_sms_content: dict) -> None:
 
 
 @app.post("/inbound-sms", status_code=204)
-def main_handler_wrapper(inbound: parsing.NexmoInbound):
+def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
     """Handle the inbound, routing it to the handler."""
-    print("\n", inbound, sep="")
-    print(inbound.dict())
-    route_to_handler(inbound.dict())
+    # Validate the data
+    inbound_model = parsing.InboundMessage(phone_number=From, body=Body)
+
+    # Process the request
+    route_to_handler(inbound_model.dict())
 
     return ""
 

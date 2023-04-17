@@ -16,15 +16,14 @@ def default_inbound() -> dict[str, str]:
     )
 
     return {
-        "msisdn": random_inbound,
-        "text": "app: apps",
-        "concat": None
+        "phone_number": random_inbound,
+        "body": "app: apps",
     }
 
 
 @pytest.fixture
 def default_options(default_inbound) -> dict[str, str]:
-    return {"inbound_phone": default_inbound["msisdn"]}
+    return {"inbound_phone": default_inbound["phone_number"]}
 
 
 @pytest.fixture(scope="session")
@@ -62,7 +61,7 @@ def user_git_pytest(default_inbound) -> dict[str, str]:
     user_attrs = {
         "Name": f"{first_name} {last_name}",
         "Permissions": "all",
-        "Phone": default_inbound["msisdn"]
+        "Phone": default_inbound["phone_number"]
     }
 
     key = permissions.permissions_db.put(user_attrs)["key"]

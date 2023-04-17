@@ -2,7 +2,7 @@
 import texts
 
 
-def test_vonage_balance():
+def test_twilio_balance():
     """Make sure the Vonage account has at least $3 loaded."""
-    balance = float(texts.nexmo_client.get_balance()["value"])
-    assert balance > 1
+    balance = float(texts.twilio_client.balance.fetch().balance)
+    assert balance >= 3

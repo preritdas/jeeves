@@ -10,22 +10,17 @@ import errors
 import apps
 
 
-class NexmoInbound(pydantic.BaseModel):
+class InboundMessage(pydantic.BaseModel):
     """
-    Inbound structure from Nexmo.
+    Inbound structure to be used .
     """
-    msisdn: str
-    text: str
-    concat: str | bool = False
-
-    def __post_init__(self):
-        """Apply some data modifications."""
-        self.concat = bool(self.concat)
+    phone_number: str
+    body: str
 
 
-def assert_valid(inbound: dict) -> bool:
+def assert_valid(inbound: InboundMessage) -> bool:
     """Check that an inbound sms conforms to necessary structure."""
-    content: str = inbound["text"]
+    content: str = inbound.body
     first_line = (all_lines := content.splitlines())[0].lower()
 
     if not "app:" in first_line:
@@ -34,16 +29,16 @@ def assert_valid(inbound: dict) -> bool:
     return True
 
 
-def is_concat(inbound: dict) -> bool:
-    """Determines if an inbound sms is part of a concatenated series of messages."""
-    assert isinstance(inbound, dict)
-    return bool(inbound["concat"])
+# def is_concat(inbound: dict) -> bool:
+#     """Determines if an inbound sms is part of a concatenated series of messages."""
+#     assert isinstance(inbound, dict)
+#     return bool(inbound["concat"])
 
 
-def requested_app(inbound: dict) -> tuple[Callable | None, str]:
+def requested_app(inbound: InboundMessage) -> tuple[Callable | None, str]:
     """Returns the handler function of an app and its name, or None
     if the app doesn't exist."""
-    content: str = inbound["text"]
+    content: str = inbound.body
     first_line = (all_lines := content.splitlines())[0].lower()
 
     if not "app:" in first_line:
@@ -74,9 +69,9 @@ def _parse_options(options: str) -> dict[str, str]:
     return return_options
 
 
-def app_content_options(inbound: dict) -> tuple[str, dict]:
+def app_content_options(inbound: InboundMessage) -> tuple[str, dict]:
     """Returns app input content."""
-    raw_content: str = inbound["text"]
+    raw_content: str = inbound.body
     lines = raw_content.splitlines()
 
     content = True
