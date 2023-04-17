@@ -70,7 +70,8 @@ agent = ZeroShotAgent.from_llm_and_tools(
 )
 agent_executor = AgentExecutor.from_agent_and_tools(
     agent=agent,
-    tools=toolkit
+    tools=toolkit,
+    verbose=True
 )
 
 
