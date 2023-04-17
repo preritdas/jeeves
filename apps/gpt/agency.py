@@ -5,6 +5,8 @@ from langchain.utilities import GoogleSerperAPIWrapper
 
 import keys
 
+from . import retrieval
+
 
 # Context to the agent
 PREFIX = r"""You are Jeeves, my gentleman's gentleman. 
@@ -41,12 +43,21 @@ Final Answer: The weather in McLean is 72 degrees, sir.
 === End Example ===
 """
 
+JSON_STRING_INPUT_INSTRUCTIONS = "Input must be a JSON string with the keys \"source\" and \"query\"."
 
 toolkit = [
     Tool(
         name="Google Search",
         func=GoogleSerperAPIWrapper(serper_api_key=keys.GoogleSerper.API_KEY).run,
         description="Useful for when you need to search Google."
+    ),
+    Tool(
+        name="Website Answerer",
+        func=retrieval.WebsiteAnswerer.answer_json_string,
+        description=(
+            "Useful for when you need to answer a question about the content on a website. "
+            f"{JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website."
+        )
     )
 ]
 
@@ -59,7 +70,8 @@ agent = ZeroShotAgent.from_llm_and_tools(
 )
 agent_executor = AgentExecutor.from_agent_and_tools(
     agent=agent,
-    tools=toolkit
+    tools=toolkit,
+    verbose=True
 )
 
 
