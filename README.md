@@ -6,7 +6,7 @@
 
 # Personal API
 
-Documentation: [api.preritdas.com](https://api.preritdas.com). 
+Documentation: [api.preritdas.com](https://api.preritdas.com). (heavily outdated)
 
 
 ## Notes
@@ -15,11 +15,11 @@ Documentation: [api.preritdas.com](https://api.preritdas.com).
 
 ### Versions
 
-- Translation is currently disabled because when installing the `translators` library in Python 3.11, building `lxml` fails. There is no active change to production behavior for now because translation is disabled in [config](config.py).
+- Translation is currently disabled.
 
 ### CI/CD
 
-- Tests are passing on Python 3.11. CI tests are held at Python 3.10 as that's the latest runtime currently supported on App Engine. Once App Engine supports the Python 3.11 runtime, both the runtimes on App Engine and CI here will be bumped.
+- Tests are now on 3.11, same runtime as the image built and deployed to GCR.
 
 ### Tests
 
