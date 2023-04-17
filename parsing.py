@@ -18,9 +18,9 @@ class InboundMessage(pydantic.BaseModel):
     body: str
 
 
-def assert_valid(inbound: dict) -> bool:
+def assert_valid(inbound: InboundMessage) -> bool:
     """Check that an inbound sms conforms to necessary structure."""
-    content: str = inbound["text"]
+    content: str = inbound.body
     first_line = (all_lines := content.splitlines())[0].lower()
 
     if not "app:" in first_line:
@@ -35,10 +35,10 @@ def assert_valid(inbound: dict) -> bool:
 #     return bool(inbound["concat"])
 
 
-def requested_app(inbound: dict) -> tuple[Callable | None, str]:
+def requested_app(inbound: InboundMessage) -> tuple[Callable | None, str]:
     """Returns the handler function of an app and its name, or None
     if the app doesn't exist."""
-    content: str = inbound["text"]
+    content: str = inbound.body
     first_line = (all_lines := content.splitlines())[0].lower()
 
     if not "app:" in first_line:

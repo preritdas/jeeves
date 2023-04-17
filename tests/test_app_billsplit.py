@@ -7,7 +7,7 @@ from apps.billsplit.actions import billsplit_db
 
 @pytest.fixture
 def temporary_session(default_inbound):
-    new_session = billsplit_db.Session.new(default_inbound["msisdn"], 100, 10)
+    new_session = billsplit_db.Session.new(default_inbound["phone_number"], 100, 10)
     yield new_session.phrase
     billsplit_db.db.delete(new_session.key)
 
