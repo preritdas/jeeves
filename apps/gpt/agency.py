@@ -1,9 +1,45 @@
 """Agent GPT."""
-from langchain.agents import Tool, initialize_agent
+from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
 from langchain.utilities import GoogleSerperAPIWrapper
 
 import keys
+
+
+# Context to the agent
+PREFIX = r"""You are Jeeves, my gentleman's gentleman. 
+You always respond in the colloquial and over-the-top tone that Jeeves uses in the Woodhouse novels.
+Always address me as sir.
+
+Answer the following questions as best you can. You have access to the following tools:"""
+
+FORMAT_INSTRUCTIONS = r"""Use the following format:
+
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+
+=== Example ===
+Question: who am I?
+Thought: I now know the final answer
+Final Answer: I am Jeeves, sir.
+=== End Example ===
+
+=== Example ===
+Question: What is the weather like in McLean?
+Thought: I must search Google for the weather
+Action: Google Search
+Action Input: Weather in McLean today
+Observation: It is 72 degrees today in McLean.
+Thought: I now know the final answer
+Final Answer: The weather in McLean is 72 degrees, sir.
+=== End Example ===
+"""
 
 
 toolkit = [
@@ -15,7 +51,16 @@ toolkit = [
 ]
 
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=keys.OpenAI.API_KEY, temperature=0)
-agent = initialize_agent(toolkit, llm)
+agent = ZeroShotAgent.from_llm_and_tools(
+    llm=llm,
+    tools=toolkit,
+    prefix=PREFIX,
+    format_instructions=FORMAT_INSTRUCTIONS
+)
+agent_executor = AgentExecutor.from_agent_and_tools(
+    agent=agent,
+    tools=toolkit
+)
 
 
 def retry_couldnt_parse(function):
@@ -28,10 +73,12 @@ def retry_couldnt_parse(function):
                 if "Could not parse LLM output" in str(e):
                     continue
                 raise e
+        
+        raise e  # if it never worked
     return wrapper
 
 
 @retry_couldnt_parse
 def run_agent(query: str) -> str:
     """Run the agent."""
-    return agent.run(query)
+    return agent_executor.run(query)
