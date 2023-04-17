@@ -5,6 +5,9 @@ from langchain.vectorstores import FAISS
 from langchain.text_splitter import TokenTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 
+from bs4 import BeautifulSoup
+import requests
+
 from abc import ABC, abstractmethod
 
 import keys
@@ -57,3 +60,17 @@ class TextAnswerer(BaseAnswerer):
 
     def convert(self) -> str:
         return self.source
+
+
+class WebsiteAnswerer(BaseAnswerer):
+    """Answerer for websites."""
+
+    def convert(self) -> str:
+        """Convert website to text."""
+        response_content = requests.get(self.source).content
+        soup = BeautifulSoup(response_content, "html.parser")
+
+        for script in soup(["script", "style"]):
+            script.decompose()
+
+        return " ".join(string for string in soup.stripped_strings)
