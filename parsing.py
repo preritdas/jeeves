@@ -36,12 +36,6 @@ def assert_valid(inbound: InboundMessage) -> bool:
     return True
 
 
-# def is_concat(inbound: dict) -> bool:
-#     """Determines if an inbound sms is part of a concatenated series of messages."""
-#     assert isinstance(inbound, dict)
-#     return bool(inbound["concat"])
-
-
 def requested_app(inbound: InboundMessage) -> tuple[Callable | None, str]:
     """Returns the handler function of an app and its name, or None
     if the app doesn't exist."""
