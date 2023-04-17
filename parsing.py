@@ -17,6 +17,13 @@ class InboundMessage(pydantic.BaseModel):
     phone_number: str
     body: str
 
+    @pydantic.validator("phone_number")
+    def remove_plus(cls, v):
+        """Remove the plus from the phone number."""
+        if v[0] == "+":
+            return v[1:]
+        return v
+
 
 def assert_valid(inbound: InboundMessage) -> bool:
     """Check that an inbound sms conforms to necessary structure."""
