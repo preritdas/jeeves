@@ -18,7 +18,7 @@ import parsing
 app = FastAPI()
 
 
-def route_to_handler(inbound_sms_content: dict) -> None:
+def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
     """
     Routes inbound sms content to the main handler, and reads the config's
     stated preference of threaded responses to either handle the inbound in a thread
@@ -43,7 +43,7 @@ def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
     inbound_model = parsing.InboundMessage(phone_number=From, body=Body)
 
     # Process the request
-    route_to_handler(inbound_model.dict())
+    route_to_handler(inbound_model)
 
     return ""
 
