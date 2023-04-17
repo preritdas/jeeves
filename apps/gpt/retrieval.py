@@ -7,6 +7,7 @@ from langchain.chains.question_answering import load_qa_chain
 
 from bs4 import BeautifulSoup
 import requests
+import json
 
 from abc import ABC, abstractmethod
 
@@ -42,8 +43,8 @@ class BaseAnswerer(ABC):
     def answer(self, query: str) -> str:
         """
         First converts the initial source, then queries it. The query must be a string, 
-        and the answer will be a string, to comply with the string-in-string-out nature
-        of an LLM agent.
+        and the answer will be a string. This does not work with the string-in-string-out
+        nature of an LLM agent, so it is not exposed to the user.
         """
         text = self.convert()
         docs = splitter.create_documents([text])
@@ -53,6 +54,18 @@ class BaseAnswerer(ABC):
         similar_docs = _find_similar(10)
 
         return qa_chain.run(input_documents=similar_docs, question=query)
+
+    @classmethod
+    def answer_string(cls, agent_input: str) -> str:
+        """
+        Parses the agent input and returns the answer. This is the function that the
+        agent will call. The agent input must be a string, and the answer will be a string.
+        Parses with JSON. Agent must provide a JSON string with two keys: "source" and "query".
+
+        Eventually, add some JSON parsing to allow for slightly-off inputs.
+        """
+        dic = json.loads(agent_input)
+        return cls(dic["source"]).answer(dic["query"])
 
 
 class TextAnswerer(BaseAnswerer):
