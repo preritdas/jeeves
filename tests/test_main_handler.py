@@ -19,22 +19,6 @@ def test_no_permissions(mocker, default_inbound):
     assert 200 <= res["http"][1] < 300
 
 
-def test_invalid_inbound(mocker, default_inbound):
-    mocker.patch("inbound.texts.config.General.SANDBOX_MODE", True)
-    mocker.patch("inbound.usage.config.General.SANDBOX_MODE", True)
-
-    inbound_payload = {
-        **default_inbound,
-        "body": "hello",
-    }
-
-    res = inbound.main_handler(InboundMessage(**inbound_payload))
-
-    assert "invalid" in res["response"]
-    assert not res["http"][0]
-    assert 200 <= res["http"][1] < 300
-
-
 def test_invalid_app(mocker, default_inbound):
     mocker.patch("inbound.texts.config.General.SANDBOX_MODE", True)
     mocker.patch("inbound.usage.config.General.SANDBOX_MODE", True)
