@@ -20,6 +20,7 @@ def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple
     Keep this as simple as possible, with plenty of outsourcing.
     """
     sender: str = inbound_sms_content.phone_number
+    respond = lambda response: texts.send_message(response, sender)
 
     # Removed after Twilio migration. Add back if Twilio has concat issues like Nexmo.
     # # No concat assertion
@@ -31,6 +32,7 @@ def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple
     # Valid assertion
     if not parsing.assert_valid(inbound_sms_content):
         text_response = "Your message was invalid and unrecognized."
+        respond(text_response)
         return {"response": text_response, "http": ("", 204)}
 
     # App availablity
@@ -38,13 +40,13 @@ def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple
 
     if not requested_app:
         text_response = f"That app does not exist."
-        texts.send_message(text_response, sender)
+        respond(text_response)
         return {"response": text_response, "http": ("", 204)}
 
     # App permissions
     if not permissions.check_permissions(sender, app_name):
         text_response = f"It seems you don't have permission to use app '{app_name}'."
-        texts.send_message(text_response, sender)
+        respond(text_response)
         return {"response": text_response, "http": ("", 204)}
 
     # Run the app
@@ -56,7 +58,7 @@ def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple
     except Exception as e:
         text_response = f"Unfortunately, that failed. '{str(e)}'"
 
-    texts.send_message(text_response, sender)
+    respond(text_response)
     usage.log_use(
         phone_number = sender,
         app_name = app_name,
