@@ -56,7 +56,7 @@ class BaseAnswerer(ABC):
         return qa_chain.run(input_documents=similar_docs, question=query)
 
     @classmethod
-    def answer_string(cls, agent_input: str) -> str:
+    def answer_json_string(cls, agent_input: str) -> str:
         """
         Parses the agent input and returns the answer. This is the function that the
         agent will call. The agent input must be a string, and the answer will be a string.
