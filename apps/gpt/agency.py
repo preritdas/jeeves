@@ -34,4 +34,4 @@ def retry_couldnt_parse(function):
 @retry_couldnt_parse
 def run_agent(query: str) -> str:
     """Run the agent."""
-    agent.run(query)
+    return agent.run(query)
