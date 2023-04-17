@@ -22,12 +22,6 @@ def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple
     sender: str = inbound_sms_content.phone_number
     respond = lambda response: texts.send_message(response, sender)
 
-    # Valid assertion
-    if not parsing.assert_valid(inbound_sms_content):
-        text_response = "Your message was invalid and unrecognized."
-        respond(text_response)
-        return {"response": text_response, "http": ("", 204)}
-
     # App availablity
     requested_app, app_name = parsing.requested_app(inbound_sms_content)
 

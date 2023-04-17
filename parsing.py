@@ -43,7 +43,7 @@ def requested_app(inbound: InboundMessage) -> tuple[Callable | None, str]:
     first_line = (all_lines := content.splitlines())[0].lower()
 
     if not "app:" in first_line:
-        raise errors.InvalidInbound("No app specified.")
+        return apps.PROGRAMS["gpt"], "gpt"
 
     app_ref_loc = first_line.find("app:") + len("app:")
     app_name = first_line[app_ref_loc:].strip().lower()
@@ -72,6 +72,10 @@ def _parse_options(options: str) -> dict[str, str]:
 
 def app_content_options(inbound: InboundMessage) -> tuple[str, dict]:
     """Returns app input content."""
+    # If using default GPT
+    if not assert_valid(inbound):  # ergo, using GPT
+        return inbound.body, {}
+
     raw_content: str = inbound.body
     lines = raw_content.splitlines()
 
