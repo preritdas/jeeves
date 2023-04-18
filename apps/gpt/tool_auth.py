@@ -10,7 +10,9 @@ from . import retrieval
 from . import news
 
 
-JSON_STRING_INPUT_INSTRUCTIONS = "Input must be a JSON string with the keys \"source\" and \"query\"."
+ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS = (
+    "Input must be a JSON string with the keys \"source\" and \"query\"."
+)
 
 no_auth_tools = [
     Tool(
@@ -23,7 +25,7 @@ no_auth_tools = [
         func=retrieval.WebsiteAnswerer.answer_json_string,
         description=(
             "Useful for when you need to answer a question about the content on a website. "
-            f"{JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website."
+            f"{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website."
         )
     ),
     Tool(
