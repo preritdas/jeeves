@@ -44,9 +44,10 @@ Final Answer: The weather in McLean is 72 degrees, sir.
 """
 
 
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
+
 def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
     """Create the agent given authenticated tools."""
-    llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
     agent = ZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
