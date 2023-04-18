@@ -7,6 +7,7 @@ from langchain.agents.agent_toolkits import ZapierToolkit
 from keys import KEYS
 
 from . import retrieval
+from . import news
 
 
 JSON_STRING_INPUT_INSTRUCTIONS = "Input must be a JSON string with the keys \"source\" and \"query\"."
@@ -23,6 +24,15 @@ no_auth_tools = [
         description=(
             "Useful for when you need to answer a question about the content on a website. "
             f"{JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website."
+        )
+    ),
+    Tool(
+        name="Headline News",
+        func=news.manual_headline_news,
+        description=(
+            "Useful for when you need to get the top headlines from a specific category. "
+            "Input must be a string with the category name. Category must be one of "
+            f"{news.MANUAL_AVAILABLE_CATEGORIES}."
         )
     )
 ]
