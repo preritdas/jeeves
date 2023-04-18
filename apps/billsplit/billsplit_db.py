@@ -2,14 +2,13 @@
 import deta
 import requests
 
-import string
 import random
 
-import keys
+from keys import KEYS
 import texts
 
 
-deta_client = deta.Deta(keys.Deta.PROJECT_KEY)
+deta_client = deta.Deta(KEYS["Deta"]["project_key"])
 db = deta_client.Base("billsplit")
 
 

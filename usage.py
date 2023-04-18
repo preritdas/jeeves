@@ -8,11 +8,11 @@ import string
 import random
 
 # Project
-import keys
+from keys import KEYS
 import config
 
 
-deta = deta.Deta(keys.Deta.PROJECT_KEY)
+deta = deta.Deta(KEYS["Deta"]["project_key"])
 usage_db = deta.Base("usage")
 permissions_db = deta.Base("permissions")
 

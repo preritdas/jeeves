@@ -6,6 +6,7 @@ wsl_venv/
 .vscode/
 
 keys.ini
+keys.yaml
 config.ini
 
 __pycache__/

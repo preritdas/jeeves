@@ -6,7 +6,7 @@ import requests
 import datetime as dt
 
 # Project
-import keys
+from keys import KEYS
 
 
 WEATHER_ENDPOINT = "https://api.openweathermap.org/data/2.5/weather"
@@ -45,7 +45,7 @@ def current_weather(
         WEATHER_ENDPOINT, 
         {
             "q": ",".join([ele for ele in [city.lower(), state.lower(), country.lower()] if ele]), 
-            "appid": keys.OpenWeatherMap.API_KEY
+            "appid": KEYS["OpenWeatherMap"]["api_key"]
         }
     )
 

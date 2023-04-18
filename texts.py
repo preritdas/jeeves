@@ -5,13 +5,13 @@ Sending text messages back.
 from twilio.rest import Client as TwilioClient
 
 # Project
-import keys
+from keys import KEYS
 import config
 
 
 twilio_client = TwilioClient(
-    keys.Twilio.ACCOUNT_SID,
-    keys.Twilio.AUTH_TOKEN
+    KEYS["Twilio"]["account_sid"],
+    KEYS["Twilio"]["auth_token"]
 )
 
 
@@ -26,7 +26,7 @@ def send_message(content: str, recipient: str) -> bool:
 
     message_sent = twilio_client.messages.create(
         to = recipient,
-        from_ = keys.Twilio.SENDER,
+        from_ = KEYS["Twilio"]["sender"],
         body = content
     )
 

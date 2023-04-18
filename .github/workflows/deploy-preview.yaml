@@ -14,7 +14,7 @@ jobs:
 
       - name: Inject keys
         run: |
-          echo -en '${{ secrets.KEYS_INI }}' >> keys.ini
+          echo -en '${{ secrets.KEYS_YAML }}' >> keys.yaml
           echo -en '${{ secrets.CONFIG_INI }}' >> config.ini 
 
       - name: Authenticate GCP
