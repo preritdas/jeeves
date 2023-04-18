@@ -14,6 +14,8 @@ Answer the following questions as best you can. You have access to the following
 
 FORMAT_INSTRUCTIONS = r"""If you're sending a message externally 
 (ex. email, Teams, Discord) you must introduce yourself (just your name) before the message content.
+Also, if sending a message externally, include the exact content of the message you sent
+in your final answer.
 
 Use the following format:
 
