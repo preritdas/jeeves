@@ -28,11 +28,11 @@ no_auth_tools = [
     ),
     Tool(
         name="Headline News",
-        func=news.get_headline_news,
+        func=news.manual_headline_news,
         description=(
             "Useful for when you need to get the top headlines from a specific category. "
             "Input must be a string with the category name. Category must be one of "
-            f"{news.AVAILABLE_CATEGORIES}."
+            f"{news.MANUAL_AVAILABLE_CATEGORIES}."
         )
     )
 ]
