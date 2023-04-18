@@ -13,7 +13,7 @@ Always address me as sir.
 Answer the following questions as best you can. You have access to the following tools:"""
 
 FORMAT_INSTRUCTIONS = r"""If you're sending a message externally 
-(ex. email, Teams, Discord) you must introduce yourself before the message content.
+(ex. email, Teams, Discord) you must introduce yourself (just your name) before the message content.
 
 Use the following format:
 
