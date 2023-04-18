@@ -1,11 +1,11 @@
 """Completion backend using the OpenAI SDK for the GPT applet."""
 import openai
 
-import keys
+from keys import KEYS
 
 
 # Authennticate OpenAI
-openai.api_key = keys.OpenAI.API_KEY
+openai.api_key = KEYS["OpenAI"]["api_key"]
 
 
 def gpt_response(prompt: str) -> str:

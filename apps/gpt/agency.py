@@ -1,11 +1,8 @@
 """Agent GPT."""
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
-from langchain.utilities import GoogleSerperAPIWrapper
 
-import keys
-
-from . import retrieval
+from keys import KEYS
 
 
 # Context to the agent
@@ -43,36 +40,21 @@ Final Answer: The weather in McLean is 72 degrees, sir.
 === End Example ===
 """
 
-JSON_STRING_INPUT_INSTRUCTIONS = "Input must be a JSON string with the keys \"source\" and \"query\"."
 
-toolkit = [
-    Tool(
-        name="Google Search",
-        func=GoogleSerperAPIWrapper(serper_api_key=keys.GoogleSerper.API_KEY).run,
-        description="Useful for when you need to search Google."
-    ),
-    Tool(
-        name="Website Answerer",
-        func=retrieval.WebsiteAnswerer.answer_json_string,
-        description=(
-            "Useful for when you need to answer a question about the content on a website. "
-            f"{JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website."
-        )
+def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
+    """Create the agent given authenticated tools."""
+    llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
+    agent = ZeroShotAgent.from_llm_and_tools(
+        llm=llm,
+        tools=toolkit,
+        prefix=PREFIX,
+        format_instructions=FORMAT_INSTRUCTIONS
     )
-]
-
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=keys.OpenAI.API_KEY, temperature=0)
-agent = ZeroShotAgent.from_llm_and_tools(
-    llm=llm,
-    tools=toolkit,
-    prefix=PREFIX,
-    format_instructions=FORMAT_INSTRUCTIONS
-)
-agent_executor = AgentExecutor.from_agent_and_tools(
-    agent=agent,
-    tools=toolkit,
-    verbose=True
-)
+    return AgentExecutor.from_agent_and_tools(
+        agent=agent,
+        tools=toolkit,
+        verbose=True
+    )
 
 
 def retry_couldnt_parse(function):
@@ -91,6 +73,6 @@ def retry_couldnt_parse(function):
 
 
 @retry_couldnt_parse
-def run_agent(query: str) -> str:
+def run_agent(agent_executor: AgentExecutor, query: str) -> str:
     """Run the agent."""
     return agent_executor.run(query)

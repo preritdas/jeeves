@@ -1,7 +1,7 @@
 import requests
 
 import utils
-import keys
+from keys import KEYS
 
 
 APP_HELP = "Get a random joke."
@@ -16,7 +16,7 @@ def random_joke(tags: str):
         endpoint,
         params = {
             "include-tags": tags,
-            "api-key": keys.HumorAPI.API_KEY
+            "api-key": KEYS["HumorAPI"]["api_key"]
         }
     )
 

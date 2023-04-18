@@ -11,11 +11,11 @@ import json
 
 from abc import ABC, abstractmethod
 
-import keys
+from keys import KEYS
 
 
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=keys.OpenAI.API_KEY, temperature=0)
-embeddings = OpenAIEmbeddings(openai_api_key=keys.OpenAI.API_KEY)
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
+embeddings = OpenAIEmbeddings(openai_api_key=KEYS["OpenAI"]["api_key"])
 splitter = TokenTextSplitter(
     encoding_name="cl100k_base", 
     chunk_size=300, 

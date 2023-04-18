@@ -5,10 +5,10 @@ Read permissions stored in a Deta Base.
 import deta
 
 # Project
-import keys
+from keys import KEYS
 
 
-deta_client = deta.Deta(keys.Deta.PROJECT_KEY)
+deta_client = deta.Deta(KEYS["Deta"]["project_key"])
 permissions_db = deta_client.Base("permissions")
 
 
@@ -23,7 +23,7 @@ def db_init() -> str:
     db_res: dict = permissions_db.put(
         {
             "Name": "Prerit Das",
-            "Phone": keys.Twilio.MY_NUMBER,
+            "Phone": KEYS["Twilio"]["my_number"],
             "Permissions": "all"
         }
     )
