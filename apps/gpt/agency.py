@@ -12,7 +12,10 @@ Always address me as sir.
 
 Answer the following questions as best you can. You have access to the following tools:"""
 
-FORMAT_INSTRUCTIONS = r"""Use the following format:
+FORMAT_INSTRUCTIONS = r"""If you're sending a message externally 
+(ex. email, Teams, Discord) you must introduce yourself before the message content.
+
+Use the following format:
 
 Question: the input question you must answer
 Thought: you should always think about what to do
