@@ -11,6 +11,7 @@ import json
 
 from abc import ABC, abstractmethod
 
+import utils
 from keys import KEYS
 
 
@@ -40,7 +41,7 @@ class BaseAnswerer(ABC):
         Ex. text can be passed as a string, website can be passed as a URL, etc.
         """
 
-    def answer(self, query: str) -> str:
+    def answer(self, query: str, n_docs: int = 10) -> str:
         """
         First converts the initial source, then queries it. The query must be a string, 
         and the answer will be a string. This does not work with the string-in-string-out
@@ -51,7 +52,7 @@ class BaseAnswerer(ABC):
         vectorstore = FAISS.from_documents(docs, embeddings)
 
         _find_similar = lambda k: vectorstore.similarity_search(query, k=k)
-        similar_docs = _find_similar(10)
+        similar_docs = _find_similar(n_docs)
 
         return qa_chain.run(input_documents=similar_docs, question=query)
 
@@ -80,8 +81,8 @@ class WebsiteAnswerer(BaseAnswerer):
 
     def convert(self) -> str:
         """Convert website to text."""
-        response_content = requests.get(self.source).content
-        soup = BeautifulSoup(response_content, "html.parser")
+        response = requests.get(self.source, headers=utils.REQUEST_HEADERS)
+        soup = BeautifulSoup(response.content, "html.parser")
 
         for script in soup(["script", "style"]):
             script.decompose()
