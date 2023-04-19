@@ -1,6 +1,7 @@
 """Agent GPT."""
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
+from langchain.callbacks import get_openai_callback
 
 from keys import KEYS
 
@@ -81,4 +82,10 @@ def retry_couldnt_parse(function):
 @retry_couldnt_parse
 def run_agent(agent_executor: AgentExecutor, query: str) -> str:
     """Run the agent."""
-    return agent_executor.run(query)
+    with get_openai_callback() as cb:
+        res = agent_executor.run(query)
+        print(f"Total Tokens: {cb.total_tokens}")
+        print(f"Prompt Tokens: {cb.prompt_tokens}")
+        print(f"Completion Tokens: {cb.completion_tokens}")
+        print(f"Total Cost (USD): ${cb.total_cost}")    
+        return res
