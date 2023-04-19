@@ -66,7 +66,12 @@ class BaseAnswerer(ABC):
         Eventually, add some JSON parsing to allow for slightly-off inputs.
         """
         dic = json.loads(agent_input)
-        return cls(dic["source"]).answer(dic["query"])
+        
+        # Return the answer or an error
+        try:
+            return cls(dic["source"]).answer(dic["query"])
+        except Exception:
+            return "Unfortunately cannot answer questions on that particular website."
 
 
 class TextAnswerer(BaseAnswerer):
