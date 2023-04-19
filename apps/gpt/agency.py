@@ -65,17 +65,20 @@ def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
 
 
 def retry_couldnt_parse(function):
-    """Decorator to retry three times if the agent couldn't parse the output."""
+    """Decorator to retry up to three times if a specific ValueError occurs."""
     def wrapper(*args, **kwargs):
-        for _ in range(3):
+        retries = 0
+        last_exception = None
+        while retries < 3:
             try:
                 return function(*args, **kwargs)
             except ValueError as e:
                 if "Could not parse LLM output" in str(e):
-                    continue
-                raise e
-        
-        raise e  # if it never worked
+                    retries += 1
+                    last_exception = e
+                else:
+                    raise e
+        raise last_exception
     return wrapper
 
 
