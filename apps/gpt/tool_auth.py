@@ -67,7 +67,8 @@ no_auth_tools = [
         description=(
             "Useful for when you need to answer a question about the content on a website. "
             "You can use this to answer questions about links found in Google Search results. "
-            f"{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website."
+            f"{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website. "
+            "Do not make up websites to search - you can use Google Search to find relevant urls."
         )
     ),
     Tool(
