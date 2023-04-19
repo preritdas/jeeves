@@ -56,7 +56,10 @@ no_auth_tools = [
     Tool(
         name="Google Search",
         func=GoogleSerperAPIWrapperURL(serper_api_key=KEYS["GoogleSerper"]["api_key"]).run,
-        description="Useful for when you need to search Google."
+        description=(
+            "Useful for when you need to search Google. Provides links to search results "
+            "that you can use Website Answerer to answer for more information."
+        )
     ),
     Tool(
         name="Website Answerer",
