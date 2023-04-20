@@ -1,5 +1,4 @@
 fastapi==0.91.0  # API
-twilio==8.0.0  # respond with texts
 deta==1.1.0  # permissions
 
 # Server
@@ -27,6 +26,10 @@ langchain==0.0.141
 faiss-cpu==1.7.3
 tiktoken==0.3.3
 bs4==0.0.1
+
+# Inbound
+twilio==8.0.0  # respond with texts
+elevenlabs==0.2.4
 
 # Wordhunt
 # cython==0.29.32  # not supported in App Engine as no GCC
