@@ -42,24 +42,29 @@ async def serve_audio_file(audio_file: str):
     return FileResponse(f"voice_cache/{audio_file}")
 
 
-def process_speech_update_call(call_sid: str, inbound_phone: str, audio_url: str) -> None:
+def _process_speech_update_call(inbound_phone: str, audio_url: str) -> VoiceResponse:
     """
-    Process the speech input from the user. Run it like a text message query.
-    The response is spoken to the user and also sent over text.
+    Generate a Voice Response object given the user's speech input. Send a follow-up
+    text to the user.
     """
     # Transcribe the user's speech
     user_speech = vt.transcribe.transcribe_twilio_recording(audio_url)
+    print(f"User speech: {user_speech}")
 
     response = VoiceResponse()
 
-    inbound_model = parsing.InboundMessage(
-        phone_number=inbound_phone,
-        body=user_speech
-    )
-    text_response = inbound.main_handler(
-        inbound_sms_content=inbound_model, send_response_message=False
-    )
-    response_content = text_response["response"]
+    # Generate raw response content
+    if len(user_speech.split()) < 2:
+        response_content = "Sir, please call me once more with more to say."
+    else:
+        inbound_model = parsing.InboundMessage(
+            phone_number=inbound_phone,
+            body=user_speech
+        )
+        text_response = inbound.main_handler(
+            inbound_sms_content=inbound_model, send_response_message=False
+        )
+        response_content = text_response["response"]
 
     # Define what is actually said to the user
     SUFFIX = "That is all, sir. Have a good day."
@@ -96,6 +101,23 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, audio_url: str
         recipient=inbound_phone
     )
 
+    return response
+
+
+def process_speech_update_call(
+    call_sid: str, inbound_phone: str, audio_url: str) -> None:
+    """
+    Process the speech input from the user. Run it like a text message query.
+    The response is spoken to the user and also sent over text.
+    """
+    try:
+        response = _process_speech_update_call(
+            inbound_phone=inbound_phone, audio_url=audio_url
+        )
+    except Exception as e:
+        response = VoiceResponse()
+        response.say(f"I'm sorry, sir. There was an error. {str(e)}")
+    
     # Update the call. This will hang up the call if it is still active.
     # Catching an error raised if the call is not in-progress, as this is okay.
     # All other errors are raised.
@@ -105,7 +127,7 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, audio_url: str
         if "Call is not in-progress" in str(e):
             return
         raise e
-
+    
 
 @router.api_route("/incoming-call", methods=["GET", "POST"])
 async def incoming_call():
