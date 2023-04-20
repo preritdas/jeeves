@@ -1,3 +1,5 @@
+voice_cache/
+
 venv/
 win_venv/
 wsl_venv/
