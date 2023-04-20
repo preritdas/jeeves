@@ -63,6 +63,7 @@ def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
 # ---- Voice interaction ----
 
 RESPONSE_VOICE = "Polly.Brian-Neural"
+MAXIMUM_WAIT_TIME = 180
 
 
 def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: str) -> None:
@@ -78,16 +79,27 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: s
     )
     text_response = inbound.main_handler(
         inbound_sms_content=inbound_model, send_response_message=False
-    )["response"]
+    )
+    response_content = text_response["response"]
+
+    # Parse the content and abide by 1600 character limit
+    CONCAT_MESSAGE = (
+        "That is all I could say over the phone, sir. I have delivered you "
+        "a text message with the full response."
+    )
+    sendable_content = response_content[:1600-len(CONCAT_MESSAGE)]
     
     # Use the <Say> verb to speak the text back to the user
-    response.say(text_response, voice=RESPONSE_VOICE)
+    response.say(sendable_content, voice=RESPONSE_VOICE)
+
+    # Hang up the call
+    response.hangup()
 
     # Send the user a text with the response
     texts.send_message(
         content=(
             f"Sir, I helped you over the phone. "
-            f"My findings are below for your convenience.\n\n{text_response}"
+            f"My findings are below for your convenience.\n\n{response_content}"
         ),
         recipient=inbound_phone
     )
@@ -124,6 +136,10 @@ async def incoming_call():
 
 @app.api_route("/process-speech", methods=['GET', 'POST'])
 async def process_speech(background_tasks: BackgroundTasks, request: Request):
+    """
+    
+    """
+    response = VoiceResponse()
     form = await request.form()
 
     phone_number = form["From"]
@@ -133,5 +149,10 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
     # Start a background task to process the speech input and generate a response
     background_tasks.add_task(process_speech_update_call, call_sid, phone_number, speech_result)
 
+    # Allow breathing room before ending the call. Updating the call will actually
+    # supercede the pause, after testing. So in essence, this is a maximum processing time.
+    response.say("On it, sir.", voice=RESPONSE_VOICE)
+    response.pause(MAXIMUM_WAIT_TIME)
+
     # Return blank content to Twilio
-    return Response(content=VoiceResponse().to_xml(), media_type='text/xml')
+    return Response(content=response.to_xml(), media_type='text/xml')
