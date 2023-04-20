@@ -1,12 +1,12 @@
 from fastapi.testclient import TestClient
 import pytest
 
-import main
+import api
 
 
 @pytest.fixture(scope="module")
 def test_client():
-    return TestClient(app=main.app)
+    return TestClient(app=api.app)
 
 
 @pytest.mark.skip
