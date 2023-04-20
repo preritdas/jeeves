@@ -11,35 +11,45 @@ import voice_tools as vt
 from keys import KEYS
 
 
+# Create an API router for voice actions
 router = APIRouter()
 
 
-RESPONSE_VOICE = "Polly.Arthur-Neural"
+# Define some constants to be used throughout.
+RESPONSE_VOICE = "Polly.Arthur-Neural"  # currently not used, using ElevenLabs
 MAXIMUM_WAIT_TIME = 180
-SPEECH_HINTS = "Jeeves, Google, Todoist, Gmail, Notion, Teams, Discord, Wessential"
+SPEECH_HINTS = "Jeeves, Google, Todoist, Gmail, Notion, Teams, Discord, Wessential"  # also inactive
 
-def extract_base_url(url):
+
+def extract_base_url(url: str) -> str:
+    """Takes an HTTP URL path and extracts the base url."""
     # Find the index of the first "/" after the "https://" part of the URL
     end_index = url.find("/", len("https://"))
     # Return the substring from the beginning of the URL to the first "/"
     return url[:end_index]
 
+# Get the deployed base url. Currently not needed as using UploadIO.
 BASE_URL = extract_base_url(
     texts.twilio_client.incoming_phone_numbers.get(KEYS["Twilio"]["sender_sid"]).fetch().voice_url
 )
 
+
 def speak(response: VoiceResponse, text: str) -> None:
     """
-    Use the ElevenLabs API to speak the text.
+    Use the ElevenLabs API to speak the text. Takes in a VoiceResponse object, 
+    uses ElevenLabs to speak the text, uses UploadIO to upload the mp3 file and get
+    a public-facing audio URL, then adds a <Play> tag to the repsonse object
+    containing that public URL.
     """
     speech_url = vt.speak.speak_jeeves(text)
     response.play(speech_url)
 
 
-def _process_speech_update_call(inbound_phone: str, audio_url: str) -> VoiceResponse:
+def _process_speech(inbound_phone: str, audio_url: str) -> VoiceResponse:
     """
     Generate a Voice Response object given the user's speech input. Send a follow-up
-    text to the user.
+    text to the user. This method does not catch any errors. It will raise errors 
+    as they arise. 
     """
     # Transcribe the user's speech
     user_speech = vt.transcribe.transcribe_twilio_recording(audio_url)
@@ -86,15 +96,20 @@ def process_speech_update_call(
     call_sid: str, inbound_phone: str, audio_url: str) -> None:
     """
     Process the speech input from the user. Run it like a text message query.
-    The response is spoken to the user and also sent over text.
+    The response is spoken to the user and also sent over text. Runs the private
+    method to process speech, catching any errors. It then updates the active call
+    with the speech, or speaks an error.
+    
+    We speak errors using the built-in <Say> tag in case errors arise from ElevenLabs
+    and/or UploadIO, which are both used to respond in the Jeeves voice.
     """
     try:
-        response = _process_speech_update_call(
+        response = _process_speech(
             inbound_phone=inbound_phone, audio_url=audio_url
         )
     except Exception as e:
         response = VoiceResponse()
-        response.say(f"I'm sorry, sir. There was an error. {str(e)}")
+        response.say(f"I'm sorry, sir. There was an error. {str(e)}", voice=RESPONSE_VOICE)
     
     # Update the call. This will hang up the call if it is still active.
     # Catching an error raised if the call is not in-progress, as this is okay.
@@ -137,7 +152,14 @@ async def incoming_call():
 @router.post("/process-speech")
 async def process_speech(background_tasks: BackgroundTasks, request: Request):
     """
+    This endpoint is triggered after the /inbound-call has handled a call. This endpoint
+    will take the user's recording (hosted by Twilio automatically) and route it to a handler
+    which will run in a BackgroundTasks instance, handled by FastAPI. It then immediately
+    responds with content to avoid a timeout.
     
+    It responds with a <Pause> tag. This will hold the call open. Thankfully, once a call
+    is updated with speech, the pause tag seems to be abandoned, meaning the user gets a response
+    as soon as it is ready. 
     """
     response = VoiceResponse()
     form = await request.form()
