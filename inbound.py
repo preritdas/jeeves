@@ -8,7 +8,10 @@ import texts
 import usage
 
 
-def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple | str]:
+def main_handler(
+    inbound_sms_content: parsing.InboundMessage, 
+    send_response_message: bool = True
+) -> dict[str, tuple | str]:
     """
     Handle all inbound messages. Returns a dictionary in the following format.
 
@@ -20,7 +23,12 @@ def main_handler(inbound_sms_content: parsing.InboundMessage) -> dict[str, tuple
     Keep this as simple as possible, with plenty of outsourcing.
     """
     sender: str = inbound_sms_content.phone_number
-    respond = lambda response: texts.send_message(response, sender)
+
+    # Define the response action based on whether or not we want to send a response
+    if send_response_message:
+        respond = lambda response: texts.send_message(response, sender) 
+    else:
+        respond = lambda: None
 
     # App availablity
     requested_app, app_name = parsing.requested_app(inbound_sms_content)
