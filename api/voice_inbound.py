@@ -7,7 +7,7 @@ from twilio.base.exceptions import TwilioRestException
 import inbound
 import parsing
 import texts
-import transcribe
+from voice_tools import transcribe
 
 
 router = APIRouter()
