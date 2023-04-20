@@ -1,5 +1,6 @@
 # External
 from fastapi import APIRouter, Request, Response, BackgroundTasks
+from fastapi.responses import FileResponse
 from twilio.twiml.voice_response import VoiceResponse
 from twilio.base.exceptions import TwilioRestException
 
@@ -7,7 +8,8 @@ from twilio.base.exceptions import TwilioRestException
 import inbound
 import parsing
 import texts
-from voice_tools import transcribe
+import voice_tools as vt
+from keys import KEYS
 
 
 router = APIRouter()
@@ -17,6 +19,28 @@ RESPONSE_VOICE = "Polly.Arthur-Neural"
 MAXIMUM_WAIT_TIME = 180
 SPEECH_HINTS = "Jeeves, Google, Todoist, Gmail, Notion, Teams, Discord, Wessential"
 
+def extract_base_url(url):
+    # Find the index of the first "/" after the "https://" part of the URL
+    end_index = url.find("/", len("https://"))
+    # Return the substring from the beginning of the URL to the first "/"
+    return url[:end_index]
+
+BASE_URL = extract_base_url(
+    texts.twilio_client.incoming_phone_numbers.get(KEYS["Twilio"]["sender_sid"]).fetch().voice_url
+)
+
+def speak(response: VoiceResponse, text: str) -> None:
+    """
+    Use the ElevenLabs API to speak the text.
+    """
+    path = vt.speak.speak_jeeves(text)
+    response.play(f"{BASE_URL}/voice/audio/{path}")
+
+
+@router.get("/audio/{audio_file}")
+async def serve_audio_file(audio_file: str):
+    return FileResponse(f"voice_cache/{audio_file}")
+
 
 def process_speech_update_call(call_sid: str, inbound_phone: str, audio_url: str) -> None:
     """
@@ -24,7 +48,7 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, audio_url: str
     The response is spoken to the user and also sent over text.
     """
     # Transcribe the user's speech
-    user_speech = transcribe.transcribe_twilio_recording(audio_url)
+    user_speech = vt.transcribe.transcribe_twilio_recording(audio_url)
 
     response = VoiceResponse()
 
@@ -57,7 +81,7 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, audio_url: str
             respond_say = response_content
     
     # Use the <Say> verb to speak the text back to the user
-    response.say(respond_say, voice=RESPONSE_VOICE)
+    speak(response, respond_say)
 
     # Hang up the call
     response.hangup()
@@ -99,9 +123,9 @@ async def incoming_call():
     response = VoiceResponse()
 
     # Greet the user
-    response.say(
+    speak(
+        response, 
         "Good day, sir, I am at your service. How may I assist you?", 
-        voice=RESPONSE_VOICE
     )
 
     # Collect the user's speech input as a recording for transcription
@@ -130,7 +154,7 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
 
     # Allow breathing room before ending the call. Updating the call will actually
     # supercede the pause, after testing. So in essence, this is a maximum processing time.
-    response.say("On it, sir.", voice=RESPONSE_VOICE)
+    speak(response, "On it, sir.")
     response.pause(MAXIMUM_WAIT_TIME)
 
     # Return blank content to Twilio
