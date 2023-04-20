@@ -28,7 +28,7 @@ def main_handler(
     if send_response_message:
         respond = lambda response: texts.send_message(response, sender) 
     else:
-        respond = lambda: None
+        respond = lambda response: None
 
     # App availablity
     requested_app, app_name = parsing.requested_app(inbound_sms_content)
