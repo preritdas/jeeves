@@ -7,6 +7,7 @@ from twilio.base.exceptions import TwilioRestException
 import inbound
 import parsing
 import texts
+import transcribe
 
 
 router = APIRouter()
@@ -17,11 +18,14 @@ MAXIMUM_WAIT_TIME = 180
 SPEECH_HINTS = "Jeeves, Google, Todoist, Gmail, Notion, Teams, Discord, Wessential"
 
 
-def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: str) -> None:
+def process_speech_update_call(call_sid: str, inbound_phone: str, audio_url: str) -> None:
     """
     Process the speech input from the user. Run it like a text message query.
     The response is spoken to the user and also sent over text.
     """
+    # Transcribe the user's speech
+    user_speech = transcribe.transcribe_twilio_recording(audio_url)
+
     response = VoiceResponse()
 
     inbound_model = parsing.InboundMessage(
@@ -94,17 +98,14 @@ async def incoming_call():
     """
     response = VoiceResponse()
 
-    # Use Twilio's <Gather> verb to collect user's speech input
-    gather = response.gather(
-        input='speech',
-        action='/voice/process-speech',  # The endpoint to process the speech input
-        # timeout=5,
-        speech_timeout="auto",  # wait for auto silence, not seconds of silence
-        hints=SPEECH_HINTS,
-        enhanced=True,
-        language='en-US'
+    # Greet the user
+    response.say(
+        "Good day, sir, I am at your service. How may I assist you?", 
+        voice=RESPONSE_VOICE
     )
-    gather.say('Good day, sir, I am at your service. How may I assist you?', voice=RESPONSE_VOICE)
+
+    # Collect the user's speech input as a recording for transcription
+    response.record(action="/voice/process-speech", timeout=3, play_beep=False)
 
     # Redirect the call if the user doesn't provide any input
     response.redirect('/voice/incoming-call/')
@@ -122,10 +123,10 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
 
     phone_number = form["From"]
     call_sid = form["CallSid"]
-    speech_result = form["SpeechResult"]
+    audio_url = form["RecordingUrl"]
 
     # Start a background task to process the speech input and generate a response
-    background_tasks.add_task(process_speech_update_call, call_sid, phone_number, speech_result)
+    background_tasks.add_task(process_speech_update_call, call_sid, phone_number, audio_url)
 
     # Allow breathing room before ending the call. Updating the call will actually
     # supercede the pause, after testing. So in essence, this is a maximum processing time.
