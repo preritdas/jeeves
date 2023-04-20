@@ -1,6 +1,5 @@
 # External
 from fastapi import APIRouter, Request, Response, BackgroundTasks
-from fastapi.responses import FileResponse
 from twilio.twiml.voice_response import VoiceResponse
 from twilio.base.exceptions import TwilioRestException
 
@@ -33,13 +32,8 @@ def speak(response: VoiceResponse, text: str) -> None:
     """
     Use the ElevenLabs API to speak the text.
     """
-    path = vt.speak.speak_jeeves(text)
-    response.play(f"{BASE_URL}/voice/audio/{path}")
-
-
-@router.get("/audio/{audio_file}")
-async def serve_audio_file(audio_file: str):
-    return FileResponse(f"voice_cache/{audio_file}")
+    speech_url = vt.speak.speak_jeeves(text)
+    response.play(speech_url)
 
 
 def _process_speech_update_call(inbound_phone: str, audio_url: str) -> VoiceResponse:
@@ -136,9 +130,6 @@ async def incoming_call():
 
     # Collect the user's speech input as a recording for transcription
     response.record(action="/voice/process-speech", timeout=3, play_beep=False)
-
-    # Redirect the call if the user doesn't provide any input
-    response.redirect('/voice/incoming-call/')
 
     return Response(response.to_xml(), media_type='text/xml')
 
