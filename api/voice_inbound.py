@@ -65,6 +65,7 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: s
         content=(
             f"Sir, I helped you over the phone. "
             f"My findings are below for your convenience.\n\n{response_content}"
+            f"\n\nAdditionally, sir, the following is what you said to me: {user_speech}"
         ),
         recipient=inbound_phone
     )
