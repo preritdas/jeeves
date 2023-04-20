@@ -69,21 +69,6 @@ def _process_speech_update_call(inbound_phone: str, audio_url: str) -> VoiceResp
     # Define what is actually said to the user
     SUFFIX = "That is all, sir. Have a good day."
     respond_say = response_content + " " + SUFFIX
-
-    # Parse the content and abide by 1600 character limit
-    if len(respond_say) > 1600:
-        # If the actual response is also too long
-        if len(response_content) > 1600:
-            CONCAT_MESSAGE = (
-                "That is all I could say over the phone, sir. I have delivered you "
-                f"a text message with the full response. {SUFFIX}"
-            )
-            sendable_content = respond_say[:1600-len(CONCAT_MESSAGE)]
-            respond_say = sendable_content + " " + CONCAT_MESSAGE
-        # If the response isn't too long but the suffix makes it too long
-        # then remove the suffix
-        else:
-            respond_say = response_content
     
     # Use the <Say> verb to speak the text back to the user
     speak(response, respond_say)
