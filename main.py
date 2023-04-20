@@ -62,8 +62,9 @@ def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
 
 # ---- Voice interaction ----
 
-RESPONSE_VOICE = "Polly.Brian-Neural"
+RESPONSE_VOICE = "Polly.Arthur-Neural"
 MAXIMUM_WAIT_TIME = 180
+SPEECH_HINTS = "Jeeves, Google, Todoist, Gmail, Notion, Teams, Discord, Wessential"
 
 
 def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: str) -> None:
@@ -82,15 +83,27 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: s
     )
     response_content = text_response["response"]
 
+    # Define what is actually said to the user
+    SUFFIX = "That is all, sir. Have a good day."
+    respond_say = response_content + " " + SUFFIX
+
     # Parse the content and abide by 1600 character limit
-    CONCAT_MESSAGE = (
-        "That is all I could say over the phone, sir. I have delivered you "
-        "a text message with the full response."
-    )
-    sendable_content = response_content[:1600-len(CONCAT_MESSAGE)]
+    if len(respond_say) > 1600:
+        # If the actual response is also too long
+        if len(response_content) > 1600:
+            CONCAT_MESSAGE = (
+                "That is all I could say over the phone, sir. I have delivered you "
+                f"a text message with the full response. {SUFFIX}"
+            )
+            sendable_content = respond_say[:1600-len(CONCAT_MESSAGE)]
+            respond_say = sendable_content + " " + CONCAT_MESSAGE
+        # If the response isn't too long but the suffix makes it too long
+        # then remove the suffix
+        else:
+            respond_say = response_content
     
     # Use the <Say> verb to speak the text back to the user
-    response.say(sendable_content, voice=RESPONSE_VOICE)
+    response.say(respond_say, voice=RESPONSE_VOICE)
 
     # Hang up the call
     response.hangup()
@@ -123,7 +136,8 @@ async def incoming_call():
         input='speech',
         action='/process-speech',  # The endpoint to process the speech input
         timeout=5,
-        hints='yes, no',  # Optional: provide hints for better speech recognition
+        hints=SPEECH_HINTS,
+        enhanced=True,
         language='en-US'
     )
     gather.say('Good day, sir, at your service. How may I assist you?', voice=RESPONSE_VOICE)
