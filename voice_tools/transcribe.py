@@ -24,6 +24,8 @@ def retry_whisper(function):
         except Exception:
             return function(*args, **kwargs)
 
+    return wrapper
+
 
 @retry_whisper
 def _whisper_transcribe(filepath: str) -> str:
