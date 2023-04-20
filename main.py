@@ -4,7 +4,7 @@ Use threading to instantly return a response at the inbound-sms
 endpoint.
 """
 # External
-from fastapi import FastAPI, Form, Response, BackgroundTasks
+from fastapi import FastAPI, Form, Request, Response, BackgroundTasks
 from twilio.twiml.voice_response import VoiceResponse
 
 # Local
@@ -110,6 +110,7 @@ async def incoming_call():
     gather = response.gather(
         input='speech',
         action='/process-speech',  # The endpoint to process the speech input
+        method='POST',
         timeout=5,
         hints='yes, no',  # Optional: provide hints for better speech recognition
         language='en-US'
@@ -123,12 +124,15 @@ async def incoming_call():
 
 
 @app.api_route("/process-speech/", methods=['GET', 'POST'])
-async def process_speech(background_tasks: BackgroundTasks, SpeechResult: str = Form(...), CallSid: str = Form(...)):
-    # Get the caller's phone number using the CallSid (replace with appropriate Twilio API call)
-    phone_number = "REPLACE_WITH_PHONE_NUMBER"
+async def process_speech(background_tasks: BackgroundTasks, request: Request):
+    form = await request.form()
+
+    phone_number = form["From"]
+    call_sid = form["CallSid"]
+    speech_result = form["SpeechResult"]
 
     # Start a background task to process the speech input and generate a response
-    background_tasks.add_task(process_speech_update_call, CallSid, phone_number, SpeechResult)
+    background_tasks.add_task(process_speech_update_call, call_sid, phone_number, speech_result)
 
     # Return blank content to Twilio
     return Response(content=VoiceResponse().to_xml(), media_type='text/xml')
