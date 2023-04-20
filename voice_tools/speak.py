@@ -12,7 +12,7 @@ if not os.path.exists("voice_cache"):
     os.mkdir("voice_cache")
 
 
-JEEVES_VOICE_ID = "O1lUlMPuT6IOj4I43c6s"
+JEEVES_VOICE_ID = KEYS["ElevenLabs"]["voice_id"]
 
 
 def speak_jeeves(text: str) -> str:
