@@ -49,7 +49,6 @@ def _process_speech_update_call(inbound_phone: str, audio_url: str) -> VoiceResp
     """
     # Transcribe the user's speech
     user_speech = vt.transcribe.transcribe_twilio_recording(audio_url)
-    print(f"User speech: {user_speech}")
 
     response = VoiceResponse()
 
