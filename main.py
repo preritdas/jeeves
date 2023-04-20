@@ -110,7 +110,6 @@ async def incoming_call():
     gather = response.gather(
         input='speech',
         action='/process-speech',  # The endpoint to process the speech input
-        method='POST',
         timeout=5,
         hints='yes, no',  # Optional: provide hints for better speech recognition
         language='en-US'
@@ -123,7 +122,7 @@ async def incoming_call():
     return Response(response.to_xml(), media_type='text/xml')
 
 
-@app.api_route("/process-speech/", methods=['GET', 'POST'])
+@app.api_route("/process-speech", methods=['GET', 'POST'])
 async def process_speech(background_tasks: BackgroundTasks, request: Request):
     form = await request.form()
 
