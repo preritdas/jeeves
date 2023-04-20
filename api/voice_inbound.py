@@ -1,9 +1,7 @@
 # External
 from fastapi import APIRouter, Request, Response, BackgroundTasks
 from twilio.twiml.voice_response import VoiceResponse
-
-# Local
-import threading
+from twilio.base.exceptions import TwilioRestException
 
 # Project
 import inbound
@@ -70,9 +68,15 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: s
         recipient=inbound_phone
     )
 
-    # Update the call
-    texts.twilio_client.calls(call_sid).update(twiml=response.to_xml())
-    return
+    # Update the call. This will hang up the call if it is still active.
+    # Catching an error raised if the call is not in-progress, as this is okay.
+    # All other errors are raised.
+    try:
+        texts.twilio_client.calls(call_sid).update(twiml=response.to_xml())
+    except TwilioRestException as e:
+        if "Call is not in-progress" in str(e):
+            return
+        raise e
 
 
 @router.api_route("/incoming-call", methods=["GET", "POST"])
