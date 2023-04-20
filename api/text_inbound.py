@@ -1,10 +1,6 @@
-"""
-Create the main FastAPI application with routes. Use the `inbound` module main handler. 
-Use threading to instantly return a response at the inbound-sms
-endpoint.
-"""
+"""Handle inbound text messages."""
 # External
-from fastapi import FastAPI, Form
+from fastapi import Form, APIRouter
 
 # Local
 import threading
@@ -15,7 +11,7 @@ import config
 import parsing
 
 
-app = FastAPI()
+router = APIRouter()
 
 
 def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
@@ -36,7 +32,7 @@ def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
         inbound.main_handler(inbound_sms_content=inbound_sms_content)
 
 
-@app.post("/inbound-sms", status_code=204)
+@router.post("/inbound-sms", status_code=204)
 def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
     """Handle the inbound, routing it to the handler."""
     # Validate the data
@@ -46,8 +42,3 @@ def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
     route_to_handler(inbound_model)
 
     return ""
-
-
-@app.get("/", status_code=200)
-def test():
-    return f"All working here."
