@@ -1,10 +1,5 @@
-"""
-Create the main FastAPI application with routes. Use the `inbound` module main handler. 
-Use threading to instantly return a response at the inbound-sms
-endpoint.
-"""
 # External
-from fastapi import FastAPI, Form, Request, Response, BackgroundTasks
+from fastapi import APIRouter, Request, Response, BackgroundTasks
 from twilio.twiml.voice_response import VoiceResponse
 
 # Local
@@ -12,55 +7,12 @@ import threading
 
 # Project
 import inbound
-import config
 import parsing
 import texts
 
 
-app = FastAPI()
+router = APIRouter()
 
-
-def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
-    """
-    Routes inbound sms content to the main handler, and reads the config's
-    stated preference of threaded responses to either handle the inbound in a thread
-    (simply start the thread) or to wait for the processing to complete.
-    """
-    if config.General.THREADED_INBOUND:
-        process_inbound = threading.Thread(
-            target = inbound.main_handler,
-            kwargs = {
-                "inbound_sms_content": inbound_sms_content
-            }
-        )
-        process_inbound.start()
-    else:
-        inbound.main_handler(inbound_sms_content=inbound_sms_content)
-
-
-# --- General ----
-
-@app.get("/", status_code=200)
-def test():
-    return f"All working here."
-
-
-# ---- Text interaction ---- (eventually use APIRouter to separate in different modules)
-
-
-@app.post("/inbound-sms", status_code=204)
-def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
-    """Handle the inbound, routing it to the handler."""
-    # Validate the data
-    inbound_model = parsing.InboundMessage(phone_number=From, body=Body)
-
-    # Process the request
-    route_to_handler(inbound_model)
-
-    return ""
-
-
-# ---- Voice interaction ----
 
 RESPONSE_VOICE = "Polly.Arthur-Neural"
 MAXIMUM_WAIT_TIME = 180
@@ -122,33 +74,40 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: s
     return
 
 
-@app.api_route("/incoming-call", methods=['GET', 'POST'])
+@router.api_route("/incoming-call", methods=["GET", "POST"])
 async def incoming_call():
     """
     Handle incoming calls. This is the endpoint that Twilio will call when a user
     calls the Twilio number. Routes to the process-speech endpoint which will
     collect the user's speech input and process it.
+
+    This endpoint accepts GET and POST requests. Initially, a POST request is sent
+    to initiate the call. Once the call is active, if no input is detected, a GET
+    request is sent to this endpoint. Accepting both GET and POST requests allows
+    the user to have another chance to speak, as if the call has restarted, without
+    having to hang up and call again.
     """
     response = VoiceResponse()
 
     # Use Twilio's <Gather> verb to collect user's speech input
     gather = response.gather(
         input='speech',
-        action='/process-speech',  # The endpoint to process the speech input
-        timeout=5,
+        action='/voice/process-speech',  # The endpoint to process the speech input
+        # timeout=5,
+        speech_timeout="auto",  # wait for auto silence, not seconds of silence
         hints=SPEECH_HINTS,
         enhanced=True,
         language='en-US'
     )
-    gather.say('Good day, sir, at your service. How may I assist you?', voice=RESPONSE_VOICE)
+    gather.say('Good day, sir, I am at your service. How may I assist you?', voice=RESPONSE_VOICE)
 
     # Redirect the call if the user doesn't provide any input
-    response.redirect('/incoming-call/')
+    response.redirect('/voice/incoming-call/')
 
     return Response(response.to_xml(), media_type='text/xml')
 
 
-@app.api_route("/process-speech", methods=['GET', 'POST'])
+@router.post("/process-speech")
 async def process_speech(background_tasks: BackgroundTasks, request: Request):
     """
     

@@ -16,4 +16,4 @@ RUN pip install -U pip && \
 COPY . .
 
 # Run the API
-CMD exec gunicorn -k uvicorn.workers.UvicornWorker main:app
+CMD exec gunicorn -k uvicorn.workers.UvicornWorker api:app
