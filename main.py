@@ -103,7 +103,7 @@ async def process_speech(request: Request):
         texts.send_message(
             content=(
                 f"Sir, I helped you over the phone. "
-                "My findings are below for your convenience.\n\n{text_response}"
+                f"My findings are below for your convenience.\n\n{text_response}"
             ),
             recipient=twilio_request.get('From', '')
         )
