@@ -59,7 +59,7 @@ jobs:
         with:
           service: 'personal-api'
           image: gcr.io/preritdas-api/personal-api
-          flags: '--min-instances=0 --memory=4Gi --allow-unauthenticated --no-cpu-throttling'
+          flags: '--min-instances=0 --memory=2Gi --allow-unauthenticated --no-cpu-throttling'
           no_traffic: false
           
       - name: Allocate traffic to latest deployment
