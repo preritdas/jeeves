@@ -53,7 +53,7 @@ jobs:
           service: 'personal-api'
           image: gcr.io/preritdas-api/personal-api:pr-preview-${{ github.event.number }}
           tag: pr-preview-${{ github.event.number }}
-          flags: '--min-instances=0 --memory=4Gi --allow-unauthenticated'
+          flags: '--min-instances=0 --memory=4Gi --allow-unauthenticated --no-cpu-throttling'
           no_traffic: true
 
       - name: Comment deployment
