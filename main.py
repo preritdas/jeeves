@@ -94,7 +94,9 @@ async def process_speech(request: Request):
             phone_number=inbound_phone_number,
             body=user_speech
         )
-        text_response = inbound.main_handler(inbound_sms_content=inbound_model)["response"]
+        text_response = inbound.main_handler(
+            inbound_sms_content=inbound_model, send_response_message=False
+        )["response"]
         
         # Use the <Say> verb to speak the text back to the user
         response.say(text_response, voice=RESPONSE_VOICE)
