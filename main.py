@@ -64,7 +64,7 @@ async def incoming_call():
     # Use Twilio's <Gather> verb to collect user's speech input
     gather = response.gather(
         input='speech',
-        action='/process-speech/',  # The endpoint to process the speech input
+        action='/process-speech',  # The endpoint to process the speech input
         timeout=5,
         hints='yes, no',  # Optional: provide hints for better speech recognition
         language='en-US'
@@ -77,7 +77,7 @@ async def incoming_call():
     return Response(response.to_xml(), media_type='text/xml')
 
 
-@app.api_route("/process-speech/", methods=['GET', 'POST'])
+@app.api_route("/process-speech", methods=['GET', 'POST'])
 async def process_speech(request: Request):
     """
     Process the speech input from the user. Run it like a text message query.
@@ -107,7 +107,7 @@ async def process_speech(request: Request):
                 f"Sir, I helped you over the phone. "
                 f"My findings are below for your convenience.\n\n{text_response}"
             ),
-            recipient=twilio_request.get('From', '')
+            recipient=inbound_phone_number
         )
 
     else:
