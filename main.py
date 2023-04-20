@@ -4,7 +4,7 @@ Use threading to instantly return a response at the inbound-sms
 endpoint.
 """
 # External
-from fastapi import FastAPI, Form, Request, Response
+from fastapi import FastAPI, Form, Response, BackgroundTasks
 from twilio.twiml.voice_response import VoiceResponse
 
 # Local
@@ -18,8 +18,6 @@ import texts
 
 
 app = FastAPI()
-
-RESPONSE_VOICE = "Polly.Brian-Neural"
 
 
 def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
@@ -40,6 +38,16 @@ def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
         inbound.main_handler(inbound_sms_content=inbound_sms_content)
 
 
+# --- General ----
+
+@app.get("/", status_code=200)
+def test():
+    return f"All working here."
+
+
+# ---- Text interaction ---- (eventually use APIRouter to separate in different modules)
+
+
 @app.post("/inbound-sms", status_code=204)
 def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
     """Handle the inbound, routing it to the handler."""
@@ -50,6 +58,43 @@ def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
     route_to_handler(inbound_model)
 
     return ""
+
+
+# ---- Voice interaction ----
+
+RESPONSE_VOICE = "Polly.Brian-Neural"
+
+
+def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: str) -> None:
+    """
+    Process the speech input from the user. Run it like a text message query.
+    The response is spoken to the user and also sent over text.
+    """
+    response = VoiceResponse()
+
+    inbound_model = parsing.InboundMessage(
+        phone_number=inbound_phone,
+        body=user_speech
+    )
+    text_response = inbound.main_handler(
+        inbound_sms_content=inbound_model, send_response_message=False
+    )["response"]
+    
+    # Use the <Say> verb to speak the text back to the user
+    response.say(text_response, voice=RESPONSE_VOICE)
+
+    # Send the user a text with the response
+    texts.send_message(
+        content=(
+            f"Sir, I helped you over the phone. "
+            f"My findings are below for your convenience.\n\n{text_response}"
+        ),
+        recipient=inbound_phone
+    )
+
+    # Update the call
+    texts.twilio_client.calls(call_sid).update(twiml=response.to_xml())
+    return
 
 
 @app.api_route("/incoming-call", methods=['GET', 'POST'])
@@ -77,49 +122,13 @@ async def incoming_call():
     return Response(response.to_xml(), media_type='text/xml')
 
 
-@app.api_route("/process-speech", methods=['GET', 'POST'])
-async def process_speech(request: Request):
-    """
-    Process the speech input from the user. Run it like a text message query.
-    The response is spoken to the user and also sent over text.
-    """
-    twilio_request = await request.form()
-    inbound_phone_number = twilio_request.get('From', '')
+@app.api_route("/process-speech/", methods=['GET', 'POST'])
+async def process_speech(background_tasks: BackgroundTasks, SpeechResult: str = Form(...), CallSid: str = Form(...)):
+    # Get the caller's phone number using the CallSid (replace with appropriate Twilio API call)
+    phone_number = "REPLACE_WITH_PHONE_NUMBER"
 
-    user_speech = twilio_request.get('SpeechResult', '').strip()
-    response = VoiceResponse()
+    # Start a background task to process the speech input and generate a response
+    background_tasks.add_task(process_speech_update_call, CallSid, phone_number, SpeechResult)
 
-    if user_speech:
-        inbound_model = parsing.InboundMessage(
-            phone_number=inbound_phone_number,
-            body=user_speech
-        )
-        text_response = inbound.main_handler(
-            inbound_sms_content=inbound_model, send_response_message=False
-        )["response"]
-        
-        # Use the <Say> verb to speak the text back to the user
-        response.say(text_response, voice=RESPONSE_VOICE)
-
-        # Send the user a text with the response
-        texts.send_message(
-            content=(
-                f"Sir, I helped you over the phone. "
-                f"My findings are below for your convenience.\n\n{text_response}"
-            ),
-            recipient=inbound_phone_number
-        )
-
-    else:
-        # If no speech input was detected, inform the user
-        response.say("Sorry, I didn't catch that. Please try again.")
-
-    # Redirect user back to incoming-call so they can say something else
-    response.redirect('/incoming-call/')
-
-    return Response(response.to_xml(), media_type='text/xml')
-
-
-@app.get("/", status_code=200)
-def test():
-    return f"All working here."
+    # Return blank content to Twilio
+    return Response(content=VoiceResponse().to_xml(), media_type='text/xml')
