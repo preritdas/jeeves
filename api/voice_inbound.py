@@ -1,5 +1,6 @@
 # External
 from fastapi import APIRouter, Request, Response, BackgroundTasks
+from fastapi.responses import FileResponse
 from twilio.twiml.voice_response import VoiceResponse
 from twilio.base.exceptions import TwilioRestException
 
@@ -7,6 +8,8 @@ from twilio.base.exceptions import TwilioRestException
 import inbound
 import parsing
 import texts
+import voice_tools as vt
+from keys import KEYS
 
 
 router = APIRouter()
@@ -16,44 +19,58 @@ RESPONSE_VOICE = "Polly.Arthur-Neural"
 MAXIMUM_WAIT_TIME = 180
 SPEECH_HINTS = "Jeeves, Google, Todoist, Gmail, Notion, Teams, Discord, Wessential"
 
+def extract_base_url(url):
+    # Find the index of the first "/" after the "https://" part of the URL
+    end_index = url.find("/", len("https://"))
+    # Return the substring from the beginning of the URL to the first "/"
+    return url[:end_index]
 
-def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: str) -> None:
+BASE_URL = extract_base_url(
+    texts.twilio_client.incoming_phone_numbers.get(KEYS["Twilio"]["sender_sid"]).fetch().voice_url
+)
+
+def speak(response: VoiceResponse, text: str) -> None:
     """
-    Process the speech input from the user. Run it like a text message query.
-    The response is spoken to the user and also sent over text.
+    Use the ElevenLabs API to speak the text.
     """
+    path = vt.speak.speak_jeeves(text)
+    response.play(f"{BASE_URL}/voice/audio/{path}")
+
+
+@router.get("/audio/{audio_file}")
+async def serve_audio_file(audio_file: str):
+    return FileResponse(f"voice_cache/{audio_file}")
+
+
+def _process_speech_update_call(inbound_phone: str, audio_url: str) -> VoiceResponse:
+    """
+    Generate a Voice Response object given the user's speech input. Send a follow-up
+    text to the user.
+    """
+    # Transcribe the user's speech
+    user_speech = vt.transcribe.transcribe_twilio_recording(audio_url)
+
     response = VoiceResponse()
 
-    inbound_model = parsing.InboundMessage(
-        phone_number=inbound_phone,
-        body=user_speech
-    )
-    text_response = inbound.main_handler(
-        inbound_sms_content=inbound_model, send_response_message=False
-    )
-    response_content = text_response["response"]
+    # Generate raw response content
+    if len(user_speech.split()) < 2:
+        response_content = "Sir, please call me once more with more to say."
+    else:
+        inbound_model = parsing.InboundMessage(
+            phone_number=inbound_phone,
+            body=user_speech
+        )
+        text_response = inbound.main_handler(
+            inbound_sms_content=inbound_model, send_response_message=False
+        )
+        response_content = text_response["response"]
 
     # Define what is actually said to the user
     SUFFIX = "That is all, sir. Have a good day."
     respond_say = response_content + " " + SUFFIX
-
-    # Parse the content and abide by 1600 character limit
-    if len(respond_say) > 1600:
-        # If the actual response is also too long
-        if len(response_content) > 1600:
-            CONCAT_MESSAGE = (
-                "That is all I could say over the phone, sir. I have delivered you "
-                f"a text message with the full response. {SUFFIX}"
-            )
-            sendable_content = respond_say[:1600-len(CONCAT_MESSAGE)]
-            respond_say = sendable_content + " " + CONCAT_MESSAGE
-        # If the response isn't too long but the suffix makes it too long
-        # then remove the suffix
-        else:
-            respond_say = response_content
     
     # Use the <Say> verb to speak the text back to the user
-    response.say(respond_say, voice=RESPONSE_VOICE)
+    speak(response, respond_say)
 
     # Hang up the call
     response.hangup()
@@ -68,6 +85,23 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: s
         recipient=inbound_phone
     )
 
+    return response
+
+
+def process_speech_update_call(
+    call_sid: str, inbound_phone: str, audio_url: str) -> None:
+    """
+    Process the speech input from the user. Run it like a text message query.
+    The response is spoken to the user and also sent over text.
+    """
+    try:
+        response = _process_speech_update_call(
+            inbound_phone=inbound_phone, audio_url=audio_url
+        )
+    except Exception as e:
+        response = VoiceResponse()
+        response.say(f"I'm sorry, sir. There was an error. {str(e)}")
+    
     # Update the call. This will hang up the call if it is still active.
     # Catching an error raised if the call is not in-progress, as this is okay.
     # All other errors are raised.
@@ -77,7 +111,7 @@ def process_speech_update_call(call_sid: str, inbound_phone: str, user_speech: s
         if "Call is not in-progress" in str(e):
             return
         raise e
-
+    
 
 @router.api_route("/incoming-call", methods=["GET", "POST"])
 async def incoming_call():
@@ -94,17 +128,14 @@ async def incoming_call():
     """
     response = VoiceResponse()
 
-    # Use Twilio's <Gather> verb to collect user's speech input
-    gather = response.gather(
-        input='speech',
-        action='/voice/process-speech',  # The endpoint to process the speech input
-        # timeout=5,
-        speech_timeout="auto",  # wait for auto silence, not seconds of silence
-        hints=SPEECH_HINTS,
-        enhanced=True,
-        language='en-US'
+    # Greet the user
+    speak(
+        response, 
+        "Good day, sir, I am at your service. How may I assist you?", 
     )
-    gather.say('Good day, sir, I am at your service. How may I assist you?', voice=RESPONSE_VOICE)
+
+    # Collect the user's speech input as a recording for transcription
+    response.record(action="/voice/process-speech", timeout=3, play_beep=False)
 
     # Redirect the call if the user doesn't provide any input
     response.redirect('/voice/incoming-call/')
@@ -122,14 +153,14 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
 
     phone_number = form["From"]
     call_sid = form["CallSid"]
-    speech_result = form["SpeechResult"]
+    audio_url = form["RecordingUrl"]
 
     # Start a background task to process the speech input and generate a response
-    background_tasks.add_task(process_speech_update_call, call_sid, phone_number, speech_result)
+    background_tasks.add_task(process_speech_update_call, call_sid, phone_number, audio_url)
 
     # Allow breathing room before ending the call. Updating the call will actually
     # supercede the pause, after testing. So in essence, this is a maximum processing time.
-    response.say("On it, sir.", voice=RESPONSE_VOICE)
+    speak(response, "On it, sir.")
     response.pause(MAXIMUM_WAIT_TIME)
 
     # Return blank content to Twilio
