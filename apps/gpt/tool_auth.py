@@ -72,6 +72,16 @@ no_auth_tools = [
         )
     ),
     Tool(
+        name="YouTube Answerer",
+        func=retrieval.YouTubeAnswerer.answer_json_string,
+        description=(
+            "Useful for when you need to answer a question about the contents of a  YouTube video. "
+            f"{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the YouTube video. "
+            "Do not make up YouTube videos - you can use Google Search to find relevant videos, or "
+            "accept them directly from the user."
+        )
+    ),
+    Tool(
         name="Headline News",
         func=news.manual_headline_news,
         description=(

@@ -5,10 +5,12 @@ from langchain.vectorstores import FAISS
 from langchain.text_splitter import TokenTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 
+import requests
+import deta
+
 from bs4 import BeautifulSoup
 import requests
 import json
-
 from abc import ABC, abstractmethod
 
 import utils
@@ -23,6 +25,19 @@ splitter = TokenTextSplitter(
     chunk_overlap=50
 )
 qa_chain = load_qa_chain(llm)
+
+
+# Deta Base for caching conversions
+deta_client = deta.Deta(KEYS["Deta"]["project_key"])
+conversions_db = deta_client.Base("conversions_cache")
+
+
+class ConversionError(Exception):
+    """Raised when a conversion fails."""
+    def __init__(self, answerer_name: str, source: str, error: str) -> None:
+        super().__init__(
+            f"Could not convert {answerer_name} source {source}. Error {error}."
+        )
 
 
 class BaseAnswerer(ABC):
@@ -93,3 +108,48 @@ class WebsiteAnswerer(BaseAnswerer):
             script.decompose()
 
         return " ".join(string for string in soup.stripped_strings)
+
+
+class YouTubeAnswerer(BaseAnswerer):
+    """Answerer for YouTube videos."""
+
+    def convert(self) -> str:
+        """Convert YouTube video to text."""
+        # First parse the video ID
+        if "youtube" in self.source:
+            video_id = self.source.split("?v=")[1]
+        elif "youtu.be" in self.source:
+            video_id = self.source.split("/")[-1]
+        else:  # Assume it's just the video ID
+            video_id = self.source
+
+        # Check if the video has already been converted
+        cached = conversions_db.fetch(
+            query={"answerer": "YouTubeAnswerer", "video_id": video_id}
+        )
+        if cached.items:
+            return cached.items[0]["transcription"]
+
+        # Then get the transcript
+        response = requests.post(
+            f'{KEYS["Transcription"]["api_url"]}/youtube',
+            json={"video_id": video_id}
+        )
+
+        if not response.ok:
+            raise ConversionError(
+                "YouTube", 
+                video_id, 
+                f"YouTube transcription failed: {response.content.decode()}"
+            )
+
+        # Cache the transcription
+        conversions_db.put(
+            {
+                "answerer": "YouTubeAnswerer",
+                "video_id": video_id,
+                "transcription": response.json()["transcription"]
+            }
+        )
+
+        return response.json()["transcription"]
