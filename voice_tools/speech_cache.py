@@ -5,7 +5,7 @@ from keys import KEYS
 
 
 deta_client = deta.Deta(KEYS["Deta"]["project_key"])
-speech_db = deta_client.Base("permissions")
+speech_db = deta_client.Base("voice_cache")
 
 
 def cache_speech(text: str, url: str) -> None:
