@@ -4,7 +4,9 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.text_splitter import TokenTextSplitter
 from langchain.chains.question_answering import load_qa_chain
+
 import requests
+import deta
 
 from bs4 import BeautifulSoup
 import requests
@@ -23,6 +25,11 @@ splitter = TokenTextSplitter(
     chunk_overlap=50
 )
 qa_chain = load_qa_chain(llm)
+
+
+# Deta Base for caching conversions
+deta_client = deta.Deta(KEYS["Deta"]["project_key"])
+conversions_db = deta_client.Base("conversions_cache")
 
 
 class ConversionError(Exception):
@@ -116,6 +123,13 @@ class YouTubeAnswerer(BaseAnswerer):
         else:  # Assume it's just the video ID
             video_id = self.source
 
+        # Check if the video has already been converted
+        cached = conversions_db.fetch(
+            query={"answerer": "YouTubeAnswerer", "video_id": video_id}
+        )
+        if cached.items:
+            return cached.items[0]["transcription"]
+
         # Then get the transcript
         response = requests.post(
             KEYS["Transcription"]["api_url"],
@@ -128,5 +142,14 @@ class YouTubeAnswerer(BaseAnswerer):
                 video_id, 
                 f"YouTube transcription failed: {response.content.decode()}"
             )
+
+        # Cache the transcription
+        conversions_db.put(
+            {
+                "answerer": "YouTubeAnswerer",
+                "video_id": video_id,
+                "transcription": response.json()["transcription"]
+            }
+        )
 
         return response.json()["transcription"]
