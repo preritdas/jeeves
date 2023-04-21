@@ -3,6 +3,9 @@ from fastapi import APIRouter, Request, Response, BackgroundTasks
 from twilio.twiml.voice_response import VoiceResponse
 from twilio.base.exceptions import TwilioRestException
 
+# Standard library
+import re
+
 # Project
 import inbound
 import parsing
@@ -71,7 +74,7 @@ def _process_speech(inbound_phone: str, audio_url: str) -> VoiceResponse:
 
     # Define what is actually said to the user
     SUFFIX = "That is all, sir. Have a good day."
-    respond_say = response_content + " " + SUFFIX
+    respond_say = re.sub(r'\bhttps?:\S+', 'Link here', response_content) + f" {SUFFIX}"
     
     # Use the <Say> verb to speak the text back to the user
     speak(response, respond_say)
