@@ -132,7 +132,7 @@ class YouTubeAnswerer(BaseAnswerer):
 
         # Then get the transcript
         response = requests.post(
-            KEYS["Transcription"]["api_url"],
+            f'{KEYS["Transcription"]["api_url"]}/youtube',
             json={"video_id": video_id}
         )
 
