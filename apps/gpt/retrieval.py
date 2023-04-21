@@ -24,7 +24,6 @@ splitter = TokenTextSplitter(
     chunk_size=300, 
     chunk_overlap=50
 )
-qa_chain = load_qa_chain(llm)
 
 
 # Deta Base for caching conversions
@@ -68,6 +67,13 @@ class BaseAnswerer(ABC):
 
         _find_similar = lambda k: vectorstore.similarity_search(query, k=k)
         similar_docs = _find_similar(n_docs)
+
+        # Adjust the instructions based on the source
+        PREFIX = f"You are a {type(self).__name__}. "
+        qa_chain = load_qa_chain(llm)
+        qa_chain.llm_chain.prompt.messages[0].prompt.template = (
+            PREFIX + qa_chain.llm_chain.prompt.messages[0].prompt.template
+        )
 
         return qa_chain.run(input_documents=similar_docs, question=query)
 
