@@ -5,9 +5,8 @@ wsl_venv/
 # Private IDE config files
 .vscode/
 
-keys.ini
+# Private key files
 keys.yaml
-config.ini
 
 __pycache__/
 
