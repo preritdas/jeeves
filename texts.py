@@ -6,7 +6,7 @@ from twilio.rest import Client as TwilioClient
 
 # Project
 from keys import KEYS
-import config
+from config import CONFIG
 
 
 twilio_client = TwilioClient(
@@ -21,7 +21,7 @@ def send_message(content: str, recipient: str) -> bool:
     """
     assert isinstance(recipient, str)
 
-    if config.General.SANDBOX_MODE:
+    if CONFIG["General"]["sandbox_mode"]:
         return True
 
     message_sent = twilio_client.messages.create(

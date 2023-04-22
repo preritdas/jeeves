@@ -2,7 +2,7 @@
 import datetime as dt
 
 import utils
-import config
+from config import CONFIG
 
 from . import classification
 from permissions import deta_client
@@ -30,7 +30,7 @@ def latest_grocery_list(phone: str) -> dict:
         db_res, 
         key = lambda item: dt.datetime.strptime(
             item["time"], 
-            config.Groceries.FULL_DT_FORMAT
+            CONFIG["Groceries"]["full_dt_format"]
         )
     )
 
@@ -60,7 +60,7 @@ def handler(content: str, options: dict) -> str:
         {
             "list": content,
             "phone": options["inbound_phone"],
-            "time": dt.datetime.now().strftime(config.Groceries.FULL_DT_FORMAT)
+            "time": dt.datetime.now().strftime(CONFIG["Groceries"]["full_dt_format"])
         }
     )
     
