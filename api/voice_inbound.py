@@ -172,7 +172,12 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
     audio_url = form["RecordingUrl"]
 
     # Start a background task to process the speech input and generate a response
-    background_tasks.add_task(process_speech_update_call, call_sid, phone_number, audio_url)
+    background_tasks.add_task(
+        process_speech_update_call, 
+        call_sid, 
+        phone_number, 
+        f"{audio_url}.mp3"  # appending .mp3 to Twilio url is valid
+    )
 
     # Allow breathing room before ending the call. Updating the call will actually
     # supercede the pause, after testing. So in essence, this is a maximum processing time.
