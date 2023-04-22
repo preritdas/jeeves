@@ -70,7 +70,7 @@ def test_translation(mocker, default_options):
     For now, just test using the correct translation function, as translation is 
     temporarily disabled due to lxml issues with Python 3.11.
     """
-    mocker.patch("apps.groceries.classification.config.Groceries.TRANSLATION", True)  # doesn't work
+    mocker.patch("apps.groceries.classification.CONFIG['Groceries']['translation']", True)  # doesn't work
     res = groceries.handler(
         "apples", default_options
     )

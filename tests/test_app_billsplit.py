@@ -25,7 +25,7 @@ def test_stringify_session_obj(temporary_session):
 def test_full_flow(mocker, default_options):
     """Test the full logic flow of a session playing out."""
     # Ensure no texts are actually sent in the process
-    mocker.patch("apps.billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
+    mocker.patch("apps.billsplit.billsplit_db.texts.CONFIG['General']['sandbox_mode']", True)
 
     # Test creation
     default_options["action"] = "start"
@@ -82,7 +82,7 @@ def test_full_flow(mocker, default_options):
 
 def test_close_no_phrase(mocker, default_options):
     # Ensure no texts are actually sent in the process
-    mocker.patch("apps.billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
+    mocker.patch("apps.billsplit.billsplit_db.texts.CONFIG['General']['sandbox_mode']", True)
 
     # Create a session
     res = billsplit.handler(
@@ -152,7 +152,7 @@ def test_start_session_person_active(temporary_session, default_options):
 
 
 def test_closing(mocker, temporary_session, default_options):
-    mocker.patch("apps.billsplit.billsplit_db.texts.config.General.SANDBOX_MODE", True)
+    mocker.patch("apps.billsplit.billsplit_db.texts.CONFIG['General']['sandbox_mode']", True)
 
     default_options["action"] = "close"
 

@@ -42,7 +42,7 @@ def test_invalid_phone():
 
 
 def test_inviting(mocker, default_options):
-    mocker.patch("config.General.SANDBOX_MODE", True)
+    mocker.patch("invite.texts.CONFIG['General']['sandbox_mode']", True)
     res = invite.handler("14259023246", default_options)
     assert "Successfully invited" in res
 

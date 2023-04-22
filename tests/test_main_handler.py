@@ -4,8 +4,8 @@ from parsing import InboundMessage
 
 
 def test_no_permissions(mocker, default_inbound):
-    mocker.patch("inbound.texts.config.General.SANDBOX_MODE", True)
-    mocker.patch("inbound.usage.config.General.SANDBOX_MODE", True)
+    mocker.patch("inbound.texts.CONFIG['General']['sandbox_mode']", True)
+    mocker.patch("inbound.usage.CONFIG['General']['sandbox_mode']", True)
 
     inbound_payload = {
         **default_inbound,
@@ -20,8 +20,8 @@ def test_no_permissions(mocker, default_inbound):
 
 
 def test_invalid_app(mocker, default_inbound):
-    mocker.patch("inbound.texts.config.General.SANDBOX_MODE", True)
-    mocker.patch("inbound.usage.config.General.SANDBOX_MODE", True)
+    mocker.patch("inbound.texts.CONFIG['General']['sandbox_mode']", True)
+    mocker.patch("inbound.usage.CONFIG['General']['sandbox_mode']", True)
 
     inbound_payload = {
         **default_inbound,
@@ -36,8 +36,8 @@ def test_invalid_app(mocker, default_inbound):
 
 
 def test_run_app(mocker, user_git_pytest):
-    mocker.patch("inbound.texts.config.General.SANDBOX_MODE", True)
-    mocker.patch("inbound.usage.config.General.SANDBOX_MODE", True)
+    mocker.patch("inbound.texts.CONFIG['General']['sandbox_mode']", True)
+    mocker.patch("inbound.usage.CONFIG['General']['sandbox_mode']", True)
 
     inbound_payload = {
         "phone_number": user_git_pytest["Phone"],
@@ -52,8 +52,8 @@ def test_run_app(mocker, user_git_pytest):
 
 
 def test_app_error_handling(mocker, user_git_pytest):
-    mocker.patch("inbound.texts.config.General.SANDBOX_MODE", True)
-    mocker.patch("inbound.usage.config.General.SANDBOX_MODE", True)
+    mocker.patch("inbound.texts.CONFIG['General']['sandbox_mode']", True)
+    mocker.patch("inbound.usage.CONFIG['General']['sandbox_mode']", True)
 
     inbound_payload = {
         "phone_number": user_git_pytest["Phone"],
