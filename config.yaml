@@ -1,0 +1,12 @@
+General:
+  sandbox_mode: false
+  threaded_inbound: false
+
+Weather:
+  default_city: McLean
+
+Groceries:
+  translation: false
+
+Cocktails:
+  result_limit: 3
