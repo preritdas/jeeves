@@ -2,6 +2,7 @@
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
+from langchain.schema import OutputParserException
 
 from keys import KEYS
 
@@ -72,7 +73,7 @@ def retry_couldnt_parse(function):
         while retries < 3:
             try:
                 return function(*args, **kwargs)
-            except ValueError as e:
+            except OutputParserException as e:
                 if "Could not parse LLM output" in str(e):
                     retries += 1
                     last_exception = e
