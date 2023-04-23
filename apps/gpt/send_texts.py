@@ -16,6 +16,10 @@ class TextMessageTool(BaseTool):
         "country code, ex. \"12223334455\"."
     )
 
+    def __init__(self, inbound_phone: str) -> None:
+        """Initialize."""
+        self.inbound_phone = str(inbound_phone)
+
     def _run(self, query: str) -> str:
         """Send a text message."""
         input_parsed = json.loads(query)
@@ -31,9 +35,19 @@ class TextMessageTool(BaseTool):
         recipient = str(input_parsed["recipient"])
 
         try:
-            return texts.send_message(content=content, recipient=recipient)
+            send_res = texts.send_message(content=content, recipient=recipient)
         except Exception as e:
             return f"Error: {str(e)}"
+        else:
+            texts.send_message(
+                content=(
+                    "Sir, I'm informing you that I have sent the following message to ",
+                    f"{recipient}:\n\n{content}."
+                ),
+                recipient=self.inbound_phone,
+            )
+
+        return send_res
 
     def _arun(self, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, str]:
         raise NotImplementedError(f"{type(self).__name__} does not support async.")
