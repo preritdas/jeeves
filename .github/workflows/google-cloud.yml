@@ -21,10 +21,9 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v3
 
-      - name: Inject keys and config
+      - name: Inject keys
         run: |
           echo -en '${{ secrets.KEYS_YAML }}' >> keys.yaml
-          echo -en '${{ secrets.CONFIG_INI }}' >> config.ini
 
       - name: Authenticate GCP
         uses: 'google-github-actions/auth@v1'

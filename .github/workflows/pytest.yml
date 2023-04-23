@@ -34,10 +34,9 @@ jobs:
       - name: Install test dependencies
         run: pip install -r tests/requirements.txt
 
-      - name: Inject keys and config
+      - name: Inject keys
         run: |
           echo -en '${{ secrets.KEYS_YAML }}' >> keys.yaml
-          echo -en '${{ secrets.CONFIG_INI }}' >> config.ini
 
       - name: Run tests with pytest
         run: pytest --cov
