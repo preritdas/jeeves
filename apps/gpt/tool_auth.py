@@ -4,13 +4,11 @@ from langchain.utilities import GoogleSerperAPIWrapper
 from langchain.utilities.zapier import ZapierNLAWrapper
 from langchain.agents.agent_toolkits import ZapierToolkit
 
-import json
-
 from keys import KEYS
-import texts
 
 from . import retrieval
 from . import news
+from . import send_texts
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
@@ -93,15 +91,7 @@ no_auth_tools = [
             f"{news.MANUAL_AVAILABLE_CATEGORIES}."
         )
     ),
-    Tool(
-        name="Send Text Message",
-        func=lambda inp: texts.send_message(**json.loads(inp)),
-        description=(
-            "Useful for when you need to send a text message. Input must be a JSON string with "
-            "the keys \"content\" and \"recipient\" (10-digit phone number preceded by "
-            "country code, ex. \"12223334455\"."
-        )
-    )
+    send_texts.TextMessageTool(),
 ]
 
 
