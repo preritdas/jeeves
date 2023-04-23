@@ -24,7 +24,9 @@ def create_text_message_tool(inbound_phone: str) -> BaseTool:
         description=(
             "Useful for when you need to send a text message. Input must be a JSON string with "
             "the keys \"content\" and \"recipient\" (10-digit phone number preceded by "
-            "country code, ex. \"12223334455\"."
+            "country code, ex. \"12223334455\". Do not make up phone numbers - either "
+            "use a phone number explicitly provided by the user, or use a phone number from a "
+            "tool that provides it for you. Otherwise, do not use this tool."
         )
 
         def _run(self, query: str) -> str:
@@ -48,7 +50,7 @@ def create_text_message_tool(inbound_phone: str) -> BaseTool:
             else:
                 texts.send_message(
                     content=(
-                        "Sir, I'm informing you that I have sent the following message to ",
+                        "Sir, I'm informing you that I have sent the following message to "
                         f"{recipient}:\n\n{content}."
                     ),
                     recipient=inbound_phone,
