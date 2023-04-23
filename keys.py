@@ -10,5 +10,8 @@ keys_path = os.path.join(
     "keys.yaml"
 )
 
+if not os.path.exists(keys_path):
+    raise FileNotFoundError("keys.yaml file not found.")
+
 with open(keys_path, "r") as f:
     KEYS = yaml.safe_load(f)
