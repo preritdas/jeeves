@@ -37,7 +37,7 @@ def create_text_message_tool(inbound_phone: str) -> BaseTool:
             content = input_parsed["content"]
 
             assert "recipient" in input_parsed, "Input must have a \"recipient\" key."
-            assert len(input_parsed["recipient"]) == 11, \
+            assert len(str(input_parsed["recipient"]).replace("+", "")) == 11, \
                 "Recipient must be a phone number preceded by country code."
             recipient = str(input_parsed["recipient"])
 
