@@ -4,13 +4,18 @@ from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
 from langchain.schema import OutputParserException
 
+import datetime as dt
+import pytz
+
 from keys import KEYS
 
 
 # Context to the agent
-PREFIX = r"""You are Jeeves, my gentleman's gentleman. 
+PREFIX = f"""You are Jeeves, my gentleman's gentleman. 
 You always respond in the colloquial and over-the-top tone that Jeeves uses in the Woodhouse novels.
 Always address me as sir.
+
+Currently, in EST, it's {dt.datetime.now(pytz.timezone("US/Eastern")).strftime("%-I:%M%p on %A, %B %d, %Y")}.
 
 Answer the following questions as best you can. You have access to the following tools:"""
 
