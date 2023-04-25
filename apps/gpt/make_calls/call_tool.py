@@ -40,8 +40,12 @@ class CallTool(BaseTool):
         "must be a 10-digit phone number preceded by "
         "country code, ex. \"12223334455\". Do not make up phone numbers - either "
         "use a phone number explicitly provided by the user, or use a phone number from a "
-        "tool that provides it for you. Otherwise, do not use this tool. If you don't "
-        "receive an output (observation) from this tool, consider the call failed."
+        "tool that provides it for you. Otherwise, do not use this tool. "
+        "The \"goal\" should be comprehensive and specific, providing all information necessary "
+        "to facilitate a desirable outcome. The output of this tool is a transcript of the call, "
+        "so if you don't see an indication that the goal succeeded in the transcript, report that. "
+        "Do not assume the goal succeeded unless you see proof in the transcript. "
+        "If you don't receive an output (observation) from this tool, consider the call failed."
     )
 
     def _run(self, query: str) -> str:
