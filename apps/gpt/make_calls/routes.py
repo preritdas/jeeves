@@ -10,8 +10,21 @@ from keys import KEYS
 
 
 router = APIRouter()
-convo_base = deta.Deta(KEYS["Deta"]["project_key"]).Base("conversations")
+deta_client = deta.Deta(KEYS["Deta"]["project_key"])
+convo_base = deta_client.Base("conversations")
+greetings_base = deta_client.Base("greetings")
 
+
+def encode_greeting(greeting: str) -> str:
+    """Stores and returns ID."""
+    res = greetings_base.put({"greeting": greeting})
+    return res["key"]
+
+
+def decode_greeting(greeting_id: str) -> str:
+    """Uses ID to find greeting."""
+    res = greetings_base.get(greeting_id)["greeting"]
+    return res
 
 
 def encode_convo(convo: str) -> str:
@@ -27,24 +40,23 @@ def decode_convo(convo_id: str) -> str:
 
 
 @router.post("/handler")
-async def handler(request: Request, goal: str, convo_id: str = None):
+async def handler(request: Request, goal: str, greeting_id: str = None, convo_id: str = None):
     twiml = VoiceResponse()
     send_to_respond: dict[str, str] = {"goal": goal}
-
-    if convo_id:
-        send_to_respond["convo_id"] = convo_id
-
   
     # If no previous conversation is present, start the conversation
-    if not convo_id:
+    if not convo_id and greeting_id:
         intro_message: str = prompts.generate_intro_message(goal)
 
         twiml.say(
-            intro_message,
+            decode_greeting(greeting_id),
             voice="Polly.Joanna-Neural"
         )
         convo = f"AI: {intro_message}"
         send_to_respond["convo_id"] = encode_convo(convo)
+
+    if convo_id:
+        send_to_respond["convo_id"] = convo_id
 
     # Listen to user response and pass input to /respond
     twiml.gather(
