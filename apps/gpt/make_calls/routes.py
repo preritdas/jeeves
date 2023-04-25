@@ -30,9 +30,9 @@ async def handler(request: Request, call_id: str):
     # If no previous conversation is present, start the conversation
     convo = db.decode_convo(call_id)
     if not convo:
-        intro_message: str = db.decode_greeting(call_id)
-        speak(twiml, intro_message)
-        convo = f"Jeeves: {intro_message}"
+        twiml.pause(2)
+        twiml.play(db.decode_greeting_url(call_id))
+        convo = f"Jeeves: {db.decode_greeting(call_id)}"
         db.encode_convo(call_id, convo)
 
     # Listen to user response and pass input to /respond
