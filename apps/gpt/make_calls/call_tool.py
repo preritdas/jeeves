@@ -12,6 +12,26 @@ from . import database as db
 from . import prompts
 
 
+def make_call(recipient: str, goal: str) -> str:
+    """Makes the call and returns a transcript."""
+    call_params: dict[str, str] = {
+        "call_id": db.create_call(goal, prompts.generate_intro_message(goal))
+    }
+
+    outbound_call = twilio_client.calls.create(
+        recipient,
+        KEYS["Twilio"]["sender"],
+        url=f"{BASE_URL}/voice/outbound/handler?{urlencode(call_params)}"
+    )
+
+    # Wait for call to complete
+    while outbound_call.update().status != "completed":
+        time.sleep(1)
+
+    # Return a transcript
+    return db.decode_convo(call_params["call_id"])
+
+
 class CallTool(BaseTool):
     name: str = "Make a Call"
     description: str = (
@@ -37,25 +57,10 @@ class CallTool(BaseTool):
         if not "goal" in input_parsed:
             return "Input must have a \"goal\" key."
 
-        recipient = str(input_parsed["recipient_phone"])
-        goal = str(input_parsed["goal"])
-
-        call_params: dict[str, str] = {
-            "call_id": db.create_call(goal, prompts.generate_intro_message(goal))
-        }
-
-        outbound_call = twilio_client.calls.create(
-            recipient,
-            KEYS["Twilio"]["sender"],
-            url=f"{BASE_URL}/voice/outbound/handler?{urlencode(call_params)}"
+        return make_call(
+            recipient=str(input_parsed["recipient_phone"]),
+            goal=str(input_parsed["goal"])
         )
-
-        # Wait for call to complete
-        while outbound_call.update().status != "completed":
-            time.sleep(1)
-
-        # Return a transcript
-        return db.decode_convo(call_params["call_id"])
 
     def _arun(self, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, str]:
         raise NotImplementedError()
