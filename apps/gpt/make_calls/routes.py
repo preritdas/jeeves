@@ -6,9 +6,21 @@ from urllib.parse import urlencode
 
 from . import prompts
 from . import database as db
+import voice_tools as vt
 
 
 router = APIRouter()
+
+
+def speak(response: VoiceResponse, text: str) -> None:
+    """
+    Use the ElevenLabs API to speak the text. Takes in a VoiceResponse object, 
+    uses ElevenLabs to speak the text, uses UploadIO to upload the mp3 file and get
+    a public-facing audio URL, then adds a <Play> tag to the repsonse object
+    containing that public URL.
+    """
+    speech_url = vt.speak.speak_jeeves(text)
+    response.play(speech_url)
 
 
 @router.post("/handler")
@@ -19,21 +31,18 @@ async def handler(request: Request, call_id: str):
     convo = db.decode_convo(call_id)
     if not convo:
         intro_message: str = db.decode_greeting(call_id)
-        twiml.say(
-            intro_message,
-            voice="Polly.Joanna-Neural"
-        )
+        speak(twiml, intro_message)
         convo = f"Jeeves: {intro_message}"
         db.encode_convo(call_id, convo)
 
     # Listen to user response and pass input to /respond
     send_to_respond = {"call_id": call_id}
-    twiml.gather(
-        enhanced=True,
-        speech_timeout="auto",
-        speech_model="phone_call",
-        input="speech",
+
+    # Record the recipient talking
+    twiml.record(
         action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
+        timeout=3,
+        play_beep=False
     )
 
     return Response(twiml.to_xml(), media_type='text/xml')
@@ -45,19 +54,19 @@ async def respond(request: Request, call_id: str):
 
     # Grab previous conversations and the user's voice input from the request
     event = await request.form()
-    voice_input = event["SpeechResult"]
+    recording_url = event['RecordingUrl']
 
     # Format input for GPT-3 and voice the response
     convo = db.decode_convo(call_id)
     goal = db.decode_goal(call_id)
 
+    # Transcribe the input
+    voice_input = vt.transcribe.transcribe_twilio_recording(recording_url)
+
     convo += f"\nRecipient: {voice_input}\nJeeves: "
     ai_response = prompts.generate_response(goal, convo)
     convo += ai_response
-    twiml.say(
-        ai_response,
-        voice="Polly.Joanna-Neural"
-    )
+    speak(twiml, ai_response)
 
     # If we need to hangup
     if "HANGUP" in ai_response:
