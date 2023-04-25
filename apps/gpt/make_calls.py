@@ -6,12 +6,15 @@ from langchain.chains import LLMChain
 from twilio.twiml.voice_response import VoiceResponse
 import deta
 
+from urllib.parse import urlencode
+
+from texts import twilio_client
 from keys import KEYS
 
 
 router = APIRouter()
 convo_base = deta.Deta(KEYS["Deta"]["project_key"]).Base("conversations")
-llm = ChatOpenAI(openai_api_key=KEYS["OpenAI"]["api_key"], model_name="gpt-4", verbose=True)
+llm = ChatOpenAI(openai_api_key=KEYS["OpenAI"]["api_key"], model_name="gpt-4")
 
 
 PREFIX_MESSAGE = (
@@ -38,8 +41,7 @@ prompt_template = PromptTemplate(
 
 conversation_chain = LLMChain(
     prompt=prompt_template,
-    llm=llm,
-    verbose=True
+    llm=llm
 )
 
 
@@ -60,13 +62,12 @@ def decode_convo(convo_id: str) -> str:
 
 
 @router.post("/handler")
-async def handler(request: Request, convo_id: str = None):
+async def handler(request: Request, goal: str, convo_id: str = None):
     twiml = VoiceResponse()
+    send_to_respond: dict[str, str] = {"goal": goal}
 
     if convo_id:
-        suffix = f"?convo_id={convo_id}"
-    else:
-        suffix = ""
+        send_to_respond["convo_id"] = convo_id
   
     # # If no previous conversation is present, start the conversation
     # if not convo:
@@ -82,15 +83,16 @@ async def handler(request: Request, convo_id: str = None):
         speech_timeout="auto",
         speech_model="phone_call",
         input="speech",
-        action=f"/voice/outbound/respond{suffix}",
+        action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
     )
 
     return Response(twiml.to_xml(), media_type='text/xml')
 
 
 @router.post("/respond")
-async def respond(request: Request, convo_id: str = None):
+async def respond(request: Request, goal: str, convo_id: str = None):
     twiml = VoiceResponse()
+    send_to_handler: dict[str, str] = {"goal": goal}
 
     # Grab previous conversations and the user's voice input from the request
     event = await request.form()
@@ -110,9 +112,10 @@ async def respond(request: Request, convo_id: str = None):
         voice="Polly.Joanna-Neural"
     )
 
-    # Pass new convo back to /listen
+    # Pass new convo back to /handler
+    send_to_handler["convo_id"] = encode_convo(convo)
     twiml.redirect(
-        f"/voice/outbound/handler?convo_id={encode_convo(convo)}",
+        f"/voice/outbound/handler?{urlencode(send_to_handler)}",
         method="POST"
     )
 
