@@ -12,25 +12,22 @@ router = APIRouter()
 
 
 @router.post("/handler")
-async def handler(request: Request, goal: str, greeting_id: str = None, convo_id: str = None):
+async def handler(request: Request, call_id: str):
     twiml = VoiceResponse()
-    send_to_respond: dict[str, str] = {"goal": goal}
   
     # If no previous conversation is present, start the conversation
-    if not convo_id and greeting_id:
-        intro_message: str = prompts.generate_intro_message(goal)
-
+    convo = db.decode_convo(call_id)
+    if not convo:
+        intro_message: str = db.decode_greeting(call_id)
         twiml.say(
-            db.decode_greeting(greeting_id),
+            intro_message,
             voice="Polly.Joanna-Neural"
         )
         convo = f"AI: {intro_message}"
-        send_to_respond["convo_id"] = db.encode_convo(convo)
-
-    if convo_id:
-        send_to_respond["convo_id"] = convo_id
+        db.encode_convo(call_id, convo)
 
     # Listen to user response and pass input to /respond
+    send_to_respond = {"call_id": call_id}
     twiml.gather(
         enhanced=True,
         speech_timeout="auto",
@@ -43,19 +40,16 @@ async def handler(request: Request, goal: str, greeting_id: str = None, convo_id
 
 
 @router.post("/respond")
-async def respond(request: Request, goal: str, convo_id: str = None):
+async def respond(request: Request, call_id: str):
     twiml = VoiceResponse()
-    send_to_handler: dict[str, str] = {"goal": goal}
 
     # Grab previous conversations and the user's voice input from the request
     event = await request.form()
     voice_input = event["SpeechResult"]
 
     # Format input for GPT-3 and voice the response
-    if convo_id:
-        convo = db.decode_convo(convo_id)
-    else:
-        convo = ""
+    convo = db.decode_convo(call_id)
+    goal = db.decode_goal(call_id)
 
     convo += f"\nRecipient: {voice_input}\nAI: "
     ai_response = prompts.generate_response(goal, convo)
@@ -70,7 +64,8 @@ async def respond(request: Request, goal: str, convo_id: str = None):
         return Response(VoiceResponse().hangup().to_xml(), media_type='text/xml')
 
     # Pass new convo back to /handler
-    send_to_handler["convo_id"] = db.encode_convo(convo)
+    db.encode_convo(call_id, convo)
+    send_to_handler = {"call_id": call_id}
     twiml.redirect(
         f"/voice/outbound/handler?{urlencode(send_to_handler)}",
         method="POST"
