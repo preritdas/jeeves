@@ -26,20 +26,14 @@ def retry_whisper(function):
 @retry_whisper
 def _whisper_transcribe_url(url: str) -> str:
     """Transcribes with Whisper. Doesn't touch the file."""
-    headers = {
-        "Authorization": f"Bearer {KEYS['OpenAI']['api_key']}",
-    }
-    data = {
-        "model": "whisper-1",
-    }
-
     # Stream the remote file content
     remote_file = requests.get(url, stream=True)
     remote_file.raise_for_status()
 
-    files = {
-        "file": ("audio.mp3", remote_file.raw, "multipart/form-data"),
-    }
+    # OpenAI information
+    headers = {"Authorization": f"Bearer {KEYS['OpenAI']['api_key']}"}
+    data = {"model": "whisper-1"}
+    files = {"file": ("audio.mp3", remote_file.raw, "multipart/form-data")}
 
     response = requests.post(WHISPER_ENDPOINT, headers=headers, data=data, files=files)
     response.raise_for_status()
