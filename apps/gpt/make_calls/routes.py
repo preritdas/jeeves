@@ -23,7 +23,7 @@ async def handler(request: Request, call_id: str):
             intro_message,
             voice="Polly.Joanna-Neural"
         )
-        convo = f"AI: {intro_message}"
+        convo = f"Jeeves: {intro_message}"
         db.encode_convo(call_id, convo)
 
     # Listen to user response and pass input to /respond
@@ -51,7 +51,7 @@ async def respond(request: Request, call_id: str):
     convo = db.decode_convo(call_id)
     goal = db.decode_goal(call_id)
 
-    convo += f"\nRecipient: {voice_input}\nAI: "
+    convo += f"\nRecipient: {voice_input}\nJeeves: "
     ai_response = prompts.generate_response(goal, convo)
     convo += ai_response
     twiml.say(

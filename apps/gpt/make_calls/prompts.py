@@ -10,7 +10,7 @@ llm = ChatOpenAI(openai_api_key=KEYS["OpenAI"]["api_key"], model_name="gpt-4")
 
 
 PREFIX_MESSAGE = (
-    "You are a conversational AI. You receive a conversation "
+    "You are Jeeves, a conversational AI. You receive a conversation "
     "between you and a recipient (whom you called) and complete it with your "
     "response, and ONLY YOUR OWN RESPONSE. DO NOT make up recipient responses. "
     "\n\nYour job is to facilitate a GOAL. Once you determine the GOAL "
