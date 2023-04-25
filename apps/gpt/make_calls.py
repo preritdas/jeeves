@@ -1,11 +1,13 @@
 """Make outbound calls with an outcome or goal in mind."""
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request, Response, Form, Query
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
 from twilio.twiml.voice_response import VoiceResponse
 import deta
+
+from urllib.parse import urlencode
 
 from texts import twilio_client
 from keys import KEYS
@@ -44,26 +46,29 @@ conversation_chain = LLMChain(
     verbose=True
 )
 
-
-def generate_response(convo: str) -> str:
-    return conversation_chain.run(goal="Have a pleasant conversation.", conversation=convo)
+respond = lambda goal, conversation: conversation_chain.run(goal=goal, conversation=conversation)
 
 
-def encode_convo(convo: str) -> str:
+def encode_convo(goal: str, convo: str) -> str:
     """Stores and returns ID."""
-    res = convo_base.put({"convo": convo})
+    res = convo_base.put({"convo": convo, "goal": goal})
     return res["key"]
 
 
-def decode_convo(convo_id: str) -> str:
-    """Uses ID to find convo."""
-    res = convo_base.get(convo_id)["convo"]
-    return res
+def decode_convo(convo_id: str) -> tuple[str, str]:
+    """Uses ID to find convo. Returns tuple of goal, convo."""
+    res = convo_base.get(convo_id)
+    return res["goal"], res["convo"]
 
 
 @router.post("/handler")
-async def handler(request: Request, convo_id: str = None):
+async def handler(convo_id: str = None):
     twiml = VoiceResponse()
+
+    goal = "Have a pleasant conversation."
+
+    if goal and not convo_id:  # first call
+        convo_id = encode_convo(goal, "")
 
     if convo_id:
         suffix = f"?convo_id={convo_id}"
@@ -79,6 +84,7 @@ async def handler(request: Request, convo_id: str = None):
     #     convo = "AI: Hey, what's up?"
 
     # Listen to user response and pass input to /respond
+
     twiml.gather(
         enhanced=True,
         speech_timeout="auto",
@@ -91,21 +97,17 @@ async def handler(request: Request, convo_id: str = None):
 
 
 @router.post("/respond")
-async def respond(request: Request, convo_id: str = None):
+async def respond(SpeechResult: str = Form(...), convo_id: str = None):
     twiml = VoiceResponse()
-
-    # Grab previous conversations and the user's voice input from the request
-    event = await request.form()
-    voice_input = event["SpeechResult"]
 
     # Format input for GPT-3 and voice the response
     if convo_id:
-        convo = decode_convo(convo_id)
+        goal, convo = decode_convo(convo_id)
     else:
         convo = ""
 
-    convo += f"\nRecipient: {voice_input}\nAI: "
-    ai_response = generate_response(convo)
+    convo += f"\nRecipient: {SpeechResult}\nAI: "
+    ai_response = await respond(goal, convo)
     convo += ai_response
     twiml.say(
         ai_response,
