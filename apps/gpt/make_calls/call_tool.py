@@ -38,22 +38,22 @@ class CallTool(BaseTool):
         recipient = str(input_parsed["recipient_phone"])
         goal = str(input_parsed["goal"])
 
-        params = {
-            "goal": goal,
-            "greeting_id": db.encode_greeting(prompts.generate_intro_message(goal))
+        call_params: dict[str, str] = {
+            "call_id": db.create_call(goal, prompts.generate_intro_message(goal))
         }
 
         outbound_call = twilio_client.calls.create(
             recipient,
             KEYS["Twilio"]["sender"],
-            url=f"{BASE_URL}/voice/outbound/handler?{urlencode(params)}"
+            url=f"{BASE_URL}/voice/outbound/handler?{urlencode(call_params)}"
         )
 
         # Wait for call to complete
         while outbound_call.update().status != "completed":
             pass
 
-        return "Call completed."
+        # Return a transcript
+        return db.decode_convo(call_params["call_id"])
 
     def _arun(self, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, str]:
         raise NotImplementedError()
