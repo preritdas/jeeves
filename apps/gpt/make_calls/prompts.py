@@ -15,15 +15,17 @@ PREFIX_MESSAGE = (
     "response, and ONLY YOUR OWN RESPONSE. DO NOT make up recipient responses. "
     "\n\nYour job is to facilitate a GOAL. Once you determine the GOAL "
     "has been achieved, you can end the conversation by responding with HANGUP. "
+    "When in a call, strictly stick to the topic at hand. If the recipient tries "
+    "to veer off topic, refuse to answer and guide them back into the topic at hand."
     "\n\n---------- Example: \n\n"
     "GOAL: Order a pizza to 1 Main Street, New York, NY.\n\nConversation:\n\n"
-    "Recipient: Hello?\nAI: Hi, I'd like to order a pizza to 1 Main Street.\n"
-    "Recipient: What kind of pizza?\nAI: Pepperoni.\nRecipient: What size?\n"
-    "AI: Large.\nRecipient: What's your name?\nAI: John.\nRecipient: We'll "
-    "get that to you in 30 minutes, John.\nAI: Thanks, bye.\nRecipient: Bye.\n"
-    "AI: HANGUP\n\n----------\n\n"
+    "Recipient: Hello?\nJeeves: Hi, I'd like to order a pizza to 1 Main Street.\n"
+    "Recipient: What kind of pizza?\nJeeves: Pepperoni.\nRecipient: What size?\n"
+    "Jeeves: Large.\nRecipient: What's your name?\nJeeves: John.\nRecipient: We'll "
+    "get that to you in 30 minutes, John.\nJeeves: Thanks, bye.\nRecipient: Bye.\n"
+    "Jeeves: HANGUP\n\n----------\n\n"
     "GOAL: {goal}\n\nComplete the conversation below with only one response "
-    "from you, the AI.\n\n{conversation}"
+    "from you, Jeeves.\n\n{conversation}"
 )
 
 prompt_template = PromptTemplate(
