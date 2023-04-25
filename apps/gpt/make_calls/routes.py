@@ -33,14 +33,17 @@ async def handler(request: Request, goal: str, convo_id: str = None):
 
     if convo_id:
         send_to_respond["convo_id"] = convo_id
+
+    intro_message: str = prompts.generate_intro_message(goal),
   
-    # # If no previous conversation is present, start the conversation
-    # if not convo:
-    #     twiml.say(
-    #         "Hey!",
-    #         voice="Polly.Joanna-Neural"
-    #     )
-    #     convo = "AI: Hey, what's up?"
+    # If no previous conversation is present, start the conversation
+    if not convo:
+        twiml.say(
+            intro_message,
+            voice="Polly.Joanna-Neural"
+        )
+        convo = f"AI: {intro_message}"
+        send_to_respond["convo_id"] = encode_convo(convo)
 
     # Listen to user response and pass input to /respond
     twiml.gather(
