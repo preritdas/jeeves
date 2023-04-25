@@ -14,6 +14,10 @@ from . import database as db
 router = APIRouter()
 
 
+# Maximum seconds to respond to each input from user
+MAX_RESPONSE_TIME: int = 45
+
+
 def speak(response: VoiceResponse, text: str) -> None:
     """
     Use the ElevenLabs API to speak the text. Takes in a VoiceResponse object, 
@@ -109,6 +113,6 @@ async def respond(request: Request, call_id: str, background_tasks: BackgroundTa
     )
 
     twiml.say("One moment, please.")
-    twiml.pause(45)
+    twiml.pause(MAX_RESPONSE_TIME)
 
     return Response(twiml.to_xml(), media_type='text/xml')
