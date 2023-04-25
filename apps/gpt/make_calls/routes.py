@@ -50,8 +50,7 @@ async def handler(request: Request, call_id: str):
         input="speech",
         speechTimeout="auto",
         hints="Jeeves",
-        speech_model="default",
-        enhanced=True
+        speech_model="experimental_conversations"
     )
 
     return Response(twiml.to_xml(), media_type='text/xml')
