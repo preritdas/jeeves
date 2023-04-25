@@ -3,7 +3,6 @@ from fastapi import APIRouter, Request, Response
 from twilio.twiml.voice_response import VoiceResponse
 
 from urllib.parse import urlencode
-from keys import KEYS
 
 from . import prompts
 from . import database as db
