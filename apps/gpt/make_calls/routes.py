@@ -34,10 +34,11 @@ async def handler(request: Request, goal: str, convo_id: str = None):
     if convo_id:
         send_to_respond["convo_id"] = convo_id
 
-    intro_message: str = prompts.generate_intro_message(goal),
   
     # If no previous conversation is present, start the conversation
-    if not convo:
+    if not convo_id:
+        intro_message: str = prompts.generate_intro_message(goal)
+
         twiml.say(
             intro_message,
             voice="Polly.Joanna-Neural"
@@ -79,6 +80,10 @@ async def respond(request: Request, goal: str, convo_id: str = None):
         ai_response,
         voice="Polly.Joanna-Neural"
     )
+
+    # If we need to hangup
+    if "HANGUP" in ai_response:
+        return Response(VoiceResponse().hangup().to_xml(), media_type='text/xml')
 
     # Pass new convo back to /handler
     send_to_handler["convo_id"] = encode_convo(convo)
