@@ -35,18 +35,20 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
     """
     response = VoiceResponse()
 
+    # Setup the conversation
     convo = db.decode_convo(call_id)
     convo += f"\nRecipient: {user_speech}"
+    convo += f"\nJeeves: "
 
-    goal = db.decode_goal(call_id)
-    ai_response = prompts.generate_response(goal, convo)
+    # Generate response and append to conversation
+    ai_response = prompts.generate_response(db.decode_goal(call_id), convo)
+    convo += ai_response
 
-    convo += f"\nJeeves: {ai_response}"
-
-    # If we need to hangup
+    # If Jeeves says its time to hang up
     if "HANGUP" in ai_response:
+        speak(response, "Thanks for speaking with me. Goodbye.")
         response.hangup()
-    else:
+    else:  # continue the conversation
         speak(response, ai_response)
 
         # Send the response to the handler for more user input
@@ -112,7 +114,7 @@ async def respond(request: Request, call_id: str, background_tasks: BackgroundTa
         user_speech=voice_input
     )
 
-    twiml.say("One moment, please.")
+    speak(twiml, "One moment, please.")
     twiml.pause(MAX_RESPONSE_TIME)
 
     return Response(twiml.to_xml(), media_type='text/xml')
