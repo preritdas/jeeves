@@ -9,25 +9,31 @@ convo_base = deta_client.Base("conversations")
 greetings_base = deta_client.Base("greetings")
 
 
-def encode_greeting(greeting: str) -> str:
-    """Stores and returns ID."""
-    res = greetings_base.put({"greeting": greeting})
-    return res["key"]
+def create_call(goal: str, greeting: str) -> str:
+    """Creates a call and returns a call ID."""
+    key = convo_base.put({"convo": ""})["key"]
+    greetings_base.put({"goal": goal, "greeting": greeting}, key=key)
+    return key
 
 
-def decode_greeting(greeting_id: str) -> str:
+def decode_greeting(call_id: str) -> str:
     """Uses ID to find greeting."""
-    res = greetings_base.get(greeting_id)["greeting"]
+    res = greetings_base.get(call_id)["greeting"]
     return res
 
 
-def encode_convo(convo: str) -> str:
+def decode_goal(call_id: str) -> str:
+    """Uses ID to find goal."""
+    res = greetings_base.get(call_id)["goal"]
+    return res
+
+
+def encode_convo(call_id: str, convo: str) -> None:
     """Stores and returns ID."""
-    res = convo_base.put({"convo": convo})
-    return res["key"]
+    convo_base.update({"convo": convo}, key=call_id)
 
 
-def decode_convo(convo_id: str) -> str:
+def decode_convo(call_id: str) -> str:
     """Uses ID to find convo."""
-    res = convo_base.get(convo_id)["convo"]
+    res = convo_base.get(call_id)["convo"]
     return res
