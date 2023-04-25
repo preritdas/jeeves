@@ -20,7 +20,8 @@ class CallTool(BaseTool):
         "must be a 10-digit phone number preceded by "
         "country code, ex. \"12223334455\". Do not make up phone numbers - either "
         "use a phone number explicitly provided by the user, or use a phone number from a "
-        "tool that provides it for you. Otherwise, do not use this tool."
+        "tool that provides it for you. Otherwise, do not use this tool. If you don't "
+        "receive an output (observation) from this tool, consider the call failed."
     )
 
     def _run(self, query: str) -> str:
