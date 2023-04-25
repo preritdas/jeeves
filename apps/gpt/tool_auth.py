@@ -9,6 +9,7 @@ from keys import KEYS
 from . import retrieval
 from . import news
 from . import send_texts
+from . import make_calls
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
@@ -90,7 +91,8 @@ no_auth_tools = [
             "Input must be a string with the category name. Category must be one of "
             f"{news.MANUAL_AVAILABLE_CATEGORIES}."
         )
-    )
+    ),
+    make_calls.CallTool()
 ]
 
 

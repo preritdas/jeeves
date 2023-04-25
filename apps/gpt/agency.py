@@ -50,6 +50,8 @@ Observation: It is 72 degrees today in McLean.
 Thought: I now know the final answer
 Final Answer: The weather in McLean is 72 degrees, sir.
 === End Example ===
+
+ALWAYS respond in the above format, even if it seems inappropriate. There are no exceptions.
 """
 
 

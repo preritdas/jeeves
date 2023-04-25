@@ -1,17 +1,13 @@
 """
 Transcribe a Twilio recording using OpenAI's Whisper API.
 """
-import openai
 import requests
-
-import uuid
-import os
 
 from keys import KEYS
 
 
 # Authenticate OpenAI
-openai.api_key = KEYS["OpenAI"]["api_key"]
+WHISPER_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions"
 
 
 def retry_whisper(function):
@@ -28,26 +24,32 @@ def retry_whisper(function):
 
 
 @retry_whisper
-def _whisper_transcribe(filepath: str) -> str:
+def _whisper_transcribe_url(url: str) -> str:
     """Transcribes with Whisper. Doesn't touch the file."""
-    with open(filepath, "rb") as f:
-        res = openai.Audio.transcribe("whisper-1", f)
+    # Stream the remote file content
+    remote_file = requests.get(url, stream=True)
+    remote_file.raise_for_status()
 
-    return res["text"]
+    # OpenAI information
+    headers = {"Authorization": f"Bearer {KEYS['OpenAI']['api_key']}"}
+    data = {"model": "whisper-1"}
+    files = {"file": ("audio.mp3", remote_file.raw, "multipart/form-data")}
+
+    response = requests.post(WHISPER_ENDPOINT, headers=headers, data=data, files=files)
+    response.raise_for_status()
+
+    return response.json()["text"]
 
 
 def transcribe_twilio_recording(recording_url: str) -> str:
     """
     Transcribe a Twilio recording using OpenAI's Whisper API.
+
+    Args:
+        recording_url (str): The URL of the Twilio recording. This should be the raw
+            url from Twilio, without appending .mp3.
     """
-    filepath = f"{uuid.uuid1()}.mp3"
+    if not recording_url.endswith(".mp3"):
+        recording_url += ".mp3"
 
-    with open(filepath, "wb") as f:
-        f.write(requests.get(f"{recording_url}.mp3").content)
-
-    transcription = _whisper_transcribe(filepath)
-
-    # Remove the temporary file
-    os.remove(filepath)
-
-    return transcription
+    return _whisper_transcribe_url(recording_url)
