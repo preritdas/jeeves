@@ -1,42 +1,15 @@
 """Make outbound calls with an outcome or goal in mind."""
 from fastapi import APIRouter, Request, Response
 from twilio.twiml.voice_response import VoiceResponse
-import deta
 
 from urllib.parse import urlencode
+from keys import KEYS
 
 from . import prompts
-from keys import KEYS
+from . import database as db
 
 
 router = APIRouter()
-deta_client = deta.Deta(KEYS["Deta"]["project_key"])
-convo_base = deta_client.Base("conversations")
-greetings_base = deta_client.Base("greetings")
-
-
-def encode_greeting(greeting: str) -> str:
-    """Stores and returns ID."""
-    res = greetings_base.put({"greeting": greeting})
-    return res["key"]
-
-
-def decode_greeting(greeting_id: str) -> str:
-    """Uses ID to find greeting."""
-    res = greetings_base.get(greeting_id)["greeting"]
-    return res
-
-
-def encode_convo(convo: str) -> str:
-    """Stores and returns ID."""
-    res = convo_base.put({"convo": convo})
-    return res["key"]
-
-
-def decode_convo(convo_id: str) -> str:
-    """Uses ID to find convo."""
-    res = convo_base.get(convo_id)["convo"]
-    return res
 
 
 @router.post("/handler")
@@ -49,11 +22,11 @@ async def handler(request: Request, goal: str, greeting_id: str = None, convo_id
         intro_message: str = prompts.generate_intro_message(goal)
 
         twiml.say(
-            decode_greeting(greeting_id),
+            db.decode_greeting(greeting_id),
             voice="Polly.Joanna-Neural"
         )
         convo = f"AI: {intro_message}"
-        send_to_respond["convo_id"] = encode_convo(convo)
+        send_to_respond["convo_id"] = db.encode_convo(convo)
 
     if convo_id:
         send_to_respond["convo_id"] = convo_id
@@ -81,7 +54,7 @@ async def respond(request: Request, goal: str, convo_id: str = None):
 
     # Format input for GPT-3 and voice the response
     if convo_id:
-        convo = decode_convo(convo_id)
+        convo = db.decode_convo(convo_id)
     else:
         convo = ""
 
@@ -98,7 +71,7 @@ async def respond(request: Request, goal: str, convo_id: str = None):
         return Response(VoiceResponse().hangup().to_xml(), media_type='text/xml')
 
     # Pass new convo back to /handler
-    send_to_handler["convo_id"] = encode_convo(convo)
+    send_to_handler["convo_id"] = db.encode_convo(convo)
     twiml.redirect(
         f"/voice/outbound/handler?{urlencode(send_to_handler)}",
         method="POST"
