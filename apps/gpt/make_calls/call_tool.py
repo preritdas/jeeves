@@ -2,6 +2,7 @@
 from langchain.agents.tools import BaseTool
 
 import json
+import time
 from urllib.parse import urlencode
 from typing import Any, Coroutine
 
@@ -50,7 +51,7 @@ class CallTool(BaseTool):
 
         # Wait for call to complete
         while outbound_call.update().status != "completed":
-            pass
+            time.sleep(1)
 
         # Return a transcript
         return db.decode_convo(call_params["call_id"])
