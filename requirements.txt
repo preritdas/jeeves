@@ -30,6 +30,7 @@ bs4==0.0.1
 # Inbound
 twilio==8.0.0  # respond with texts
 elevenlabs==0.2.4
+pydub==0.25.1
 
 # Wordhunt
 # cython==0.29.32  # not supported in App Engine as no GCC

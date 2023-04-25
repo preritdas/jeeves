@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy just requirements to build dependencies 
 COPY requirements.txt .
 
+# Apt dependencies
+RUN apt update && apt install -y ffmpeg
+
 # Install the dependencies
 RUN pip install -U pip && \
   pip install -U wheel && \
