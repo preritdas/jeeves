@@ -39,10 +39,19 @@ async def handler(request: Request, call_id: str):
     send_to_respond = {"call_id": call_id}
 
     # Record the recipient talking
-    twiml.record(
+    # twiml.record(
+    #     action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
+    #     timeout=3,
+    #     play_beep=False
+    # )
+
+    twiml.gather(
         action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
-        timeout=3,
-        play_beep=False
+        input="speech",
+        speechTimeout="auto",
+        hints="Jeeves",
+        speech_model="default",
+        enhanced=True
     )
 
     return Response(twiml.to_xml(), media_type='text/xml')
@@ -54,14 +63,15 @@ async def respond(request: Request, call_id: str):
 
     # Grab previous conversations and the user's voice input from the request
     event = await request.form()
-    recording_url = event['RecordingUrl']
+    # recording_url = event['RecordingUrl']
 
     # Format input for GPT-3 and voice the response
     convo = db.decode_convo(call_id)
     goal = db.decode_goal(call_id)
 
     # Transcribe the input
-    voice_input = vt.transcribe.transcribe_twilio_recording(recording_url)
+    # voice_input = vt.transcribe.transcribe_twilio_recording(recording_url)
+    voice_input = event['SpeechResult']
 
     convo += f"\nRecipient: {voice_input}\nJeeves: "
     ai_response = prompts.generate_response(goal, convo)
