@@ -40,3 +40,26 @@ conversation_chain = LLMChain(
 def generate_response(goal: str, convo: str) -> str:
     """Generate a response given the conversation history and the goal."""
     return conversation_chain.run(goal=goal, conversation=convo)
+
+
+def generate_intro_message(goal: str) -> str:
+    """Generate the intro message."""
+    prompt = PromptTemplate(
+        input_variables=["goal"],
+        template=(
+            "You are Jeeves, a personal AI that calls people over the phone. "
+            "Given a goal, create a sentence greeting somebody and informing "
+            "them of your goal with them. \n\n-------- Example: \n\n"
+            "Goal: Order a pizza to 1 Main Street, New York, NY.\n"
+            "Your greeting: Hi, I'm Jeeves, a personal AI. I'm calling to "
+            "order a pizza, please.\n\n--------\n\nGoal: {goal}\n"
+            "Greeting: "
+        )
+    )
+
+    intro_message_chain = LLMChain(
+        prompt=prompt,
+        llm=llm
+    )
+
+    return intro_message_chain.run(goal=goal)
