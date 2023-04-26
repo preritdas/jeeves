@@ -1,6 +1,7 @@
 """Make outbound calls with an outcome or goal in mind."""
 from fastapi import APIRouter, Request, Response, BackgroundTasks
 from twilio.twiml.voice_response import VoiceResponse
+from twilio.base.exceptions import TwilioRestException
 
 from urllib.parse import urlencode
 
@@ -61,8 +62,15 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
     # Update the conversation record
     db.encode_convo(call_id, convo)
 
-    # Update the call
-    twilio_client.calls(call_sid).update(twiml=response.to_xml()) 
+    # Update the call, ignore if the recipient hung up
+    try:
+        twilio_client.calls(call_sid).update(twiml=response.to_xml()) 
+    except TwilioRestException as e:
+        if "Call is not in-progress" in str(e):
+            return
+         
+        raise
+    
     return
 
 
