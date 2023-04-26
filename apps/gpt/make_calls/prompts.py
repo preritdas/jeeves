@@ -66,10 +66,13 @@ def generate_intro_message(goal: str) -> str:
 
     message: str = intro_message_chain.run(goal=goal)
 
-    # Add some instructions
-    INSTRUCTIONS = (
-        "I'm an experimental AI, so please bare with me. We'll take turns speaking, "
-        "let's not interrupt eachother."
-    )
+    # Temporarily removed because it was throwing off businesses a bit.
+    # # Add some instructions
+    # INSTRUCTIONS = (
+    #     "I'm an experimental AI, so please bare with me. We'll take turns speaking, "
+    #     "let's not interrupt eachother."
+    # )
 
-    return message + " " + INSTRUCTIONS
+    # return message + " " + INSTRUCTIONS
+
+    return message
