@@ -44,8 +44,10 @@ class CallTool(BaseTool):
         "The \"goal\" should be comprehensive and specific, providing all information necessary "
         "to facilitate a desirable outcome. The output of this tool is a transcript of the call, "
         "so if you don't see an indication that the goal succeeded in the transcript, report that. "
-        "Do not assume the goal succeeded unless you see proof in the transcript. "
-        "If you don't receive an output (observation) from this tool, consider the call failed."
+        "Do not assume the goal succeeded unless you see proof in the transcript. For example, "
+        "if your task was to inform John that I'm busy tomorrow, and you don't see the recipient (John)"
+        "acknowledging this in the returned transcript, consider the message delivery a failure. "
+        "Further, if you don't receive any output from this tool, consider the entire call failed."
     )
 
     def _run(self, query: str) -> str:
