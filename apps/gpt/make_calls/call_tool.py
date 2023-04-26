@@ -29,7 +29,8 @@ def make_call(recipient: str, goal: str) -> str:
         time.sleep(1)
 
     # Return a transcript
-    return db.decode_convo(call_params["call_id"])
+    transcript = db.decode_convo(call_params["call_id"])
+    return f"|| BEGIN TRANSCRIPT || {transcript} || END TRANSCRIPT ||"
 
 
 class CallTool(BaseTool):
