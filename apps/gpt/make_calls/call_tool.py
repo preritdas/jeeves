@@ -21,7 +21,8 @@ def make_call(recipient: str, goal: str) -> str:
     outbound_call = twilio_client.calls.create(
         recipient,
         KEYS["Twilio"]["sender"],
-        url=f"{BASE_URL}/voice/outbound/handler?{urlencode(call_params)}"
+        url=f"{BASE_URL}/voice/outbound/handler?{urlencode(call_params)}",
+        record=True
     )
 
     # Wait for call to complete
