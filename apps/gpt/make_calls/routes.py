@@ -91,7 +91,7 @@ async def handler(request: Request, call_id: str):
     twiml.gather(
         action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
         input="speech",
-        speechTimeout="auto",
+        speechTimeout=3,
         hints="Jeeves",
         speech_model="experimental_conversations"
     )
