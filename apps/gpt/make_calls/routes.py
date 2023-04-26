@@ -46,7 +46,7 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
     convo += ai_response
 
     # If Jeeves says its time to hang up
-    if "HANGUP" in ai_response:
+    if "HANGUP" in ai_response or convo.count("Jeeves:") > 20:
         speak(response, "Thanks for speaking with me. Goodbye.")
         response.hangup()
     else:  # continue the conversation
