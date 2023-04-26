@@ -51,7 +51,7 @@ Thought: I now know the final answer
 Final Answer: The weather in McLean is 72 degrees, sir.
 === End Example ===
 
-ALWAYS respond in the above format, even if it seems inappropriate. There are no exceptions.
+ALWAYS respond in the question, thought, etc. format, even if it seems inappropriate. There are no exceptions.
 """
 
 
