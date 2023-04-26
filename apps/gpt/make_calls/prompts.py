@@ -53,7 +53,7 @@ def generate_intro_message(goal: str) -> str:
             "Given a goal, create a sentence greeting somebody and informing "
             "them of your goal with them. \n\n-------- Example: \n\n"
             "Goal: Order a pizza to 1 Main Street, New York, NY.\n"
-            "Your greeting: Hi, I'm Jeeves, a personal AI. I'm calling to "
+            "Your greeting: Hi, I'm Jeeves. I'm calling to "
             "order a pizza, please.\n\n--------\n\nGoal: {goal}\n"
             "Greeting: "
         )
