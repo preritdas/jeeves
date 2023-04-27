@@ -17,8 +17,9 @@ import utils
 from keys import KEYS
 
 
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
 embeddings = OpenAIEmbeddings(openai_api_key=KEYS["OpenAI"]["api_key"])
+N_DOCS = 5  # 10 for gpt-4, 5 for 3.5
 splitter = TokenTextSplitter(
     encoding_name="cl100k_base", 
     chunk_size=300, 
@@ -55,7 +56,7 @@ class BaseAnswerer(ABC):
         Ex. text can be passed as a string, website can be passed as a URL, etc.
         """
 
-    def answer(self, query: str, n_docs: int = 10) -> str:
+    def answer(self, query: str, n_docs: int = N_DOCS) -> str:
         """
         First converts the initial source, then queries it. The query must be a string, 
         and the answer will be a string. This does not work with the string-in-string-out

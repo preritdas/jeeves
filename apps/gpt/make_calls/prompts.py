@@ -6,7 +6,11 @@ from langchain.chains import LLMChain
 from keys import KEYS
 
 
-llm = ChatOpenAI(openai_api_key=KEYS["OpenAI"]["api_key"], model_name="gpt-4", temperature=0)
+llm = ChatOpenAI(
+    openai_api_key=KEYS["OpenAI"]["api_key"], 
+    model_name="gpt-3.5-turbo", 
+    temperature=0
+)
 
 
 PREFIX_MESSAGE = (
