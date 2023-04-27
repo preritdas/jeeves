@@ -5,6 +5,7 @@ import utils
 import config
 
 from . import classification
+from . import grocery_utils
 from permissions import deta_client
 
 
@@ -39,6 +40,11 @@ def latest_grocery_list(phone: str) -> dict:
 def handler(content: str, options: dict) -> str:
     # Options
     setup = options.get("setup")
+    
+    # Check for a valid setup
+    if not setup.title() in grocery_utils.SETUPS:
+        available_setups = list(grocery_utils.SETUPS.keys())
+        return f"Invalid setup. Available setups: {', '.join(available_setups)}"
 
     if (list_id := options.get("add")):
         # Get the user's last list
