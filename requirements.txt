@@ -1,35 +1,35 @@
-fastapi==0.91.0  # API
+fastapi==0.95.1  # API
 deta==1.1.0  # permissions
 
 # Server
 gunicorn==20.1.0
-uvicorn==0.20.0
+uvicorn==0.21.1
 python-multipart==0.0.6
 
 # Groceries
-inflect==6.0.2  # word singularization and pluralization
+inflect==6.0.4  # word singularization and pluralization
 # translators==5.4.2  # optional item translation, broken in 3.11 (lxml) as of 10-29-22
 mypytoolkit>=1.5.60  # utils
 
 # Jokes
-requests==2.28.1  # ping Humor API
+requests==2.29.0  # ping Humor API
 
 # Rotten Tomatoes
-rottentomatoes-python==0.5.13  # movie data retrieval
+rottentomatoes-python==0.5.15  # movie data retrieval
 
 # Cocktails
-emoji==2.1.0  # emojis in drink formatting
+emoji==2.2.0  # emojis in drink formatting
 
 # GPT
 openai==0.27.4
-langchain==0.0.147
-faiss-cpu==1.7.3
+langchain==0.0.150
+faiss-cpu==1.7.4
 tiktoken==0.3.3
-bs4==0.0.1
+beautifulsoup4==4.12.2
 
 # Inbound
-twilio==8.0.0  # respond with texts
-elevenlabs==0.2.4
+twilio==8.1.0  # respond with texts
+elevenlabs==0.2.7
 
 # Wordhunt
 # cython==0.29.32  # not supported in App Engine as no GCC
