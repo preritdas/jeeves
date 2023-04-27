@@ -11,7 +11,7 @@ from permissions import deta_client
 
 APP_HELP = "Organize your grocery list into categories."
 APP_OPTIONS = {
-    "setup": f"Custom store setup. Available: {', '.join(grocery_utils.SETUPS.keys()}",
+    "setup": f"Custom store setup. Available: {', '.join(grocery_utils.SETUPS.keys())}",
     "add": "ID of a previous list to add to it. "
         "ex. 'last' for your latest list, or the raw ID."
 }
