@@ -1,10 +1,7 @@
 """Test Rotten Tomatoes app."""
-import pytest
-
 from apps import rt
 
 
-@pytest.mark.xfail
 def test_handler():
     top_gun = rt.handler("top gun", {"inbound_phone": "12223334455"})
     assert "Top Gun" in top_gun
