@@ -2,14 +2,20 @@
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
+from langchain.schema import OutputParserException
+
+import datetime as dt
+import pytz
 
 from keys import KEYS
 
 
 # Context to the agent
-PREFIX = r"""You are Jeeves, my gentleman's gentleman. 
+PREFIX = f"""You are Jeeves, my gentleman's gentleman. 
 You always respond in the colloquial and over-the-top tone that Jeeves uses in the Woodhouse novels.
 Always address me as sir.
+
+Currently, in EST, it's {dt.datetime.now(pytz.timezone("US/Eastern")).strftime("%-I:%M%p on %A, %B %d, %Y")}.
 
 Answer the following questions as best you can. You have access to the following tools:"""
 
@@ -44,10 +50,12 @@ Observation: It is 72 degrees today in McLean.
 Thought: I now know the final answer
 Final Answer: The weather in McLean is 72 degrees, sir.
 === End Example ===
+
+ALWAYS respond in the question, thought, etc. format, even if it seems inappropriate. There are no exceptions.
 """
 
 
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
 
 def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
     """Create the agent given authenticated tools."""
@@ -72,7 +80,7 @@ def retry_couldnt_parse(function):
         while retries < 3:
             try:
                 return function(*args, **kwargs)
-            except ValueError as e:
+            except OutputParserException as e:
                 if "Could not parse LLM output" in str(e):
                     retries += 1
                     last_exception = e

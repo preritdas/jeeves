@@ -1,13 +1,14 @@
 venv/
 win_venv/
 wsl_venv/
-__pycache__/
 
 # Private IDE config files
 .vscode/
 
-# Private
+# Private key files
 keys.yaml
+
+__pycache__/
 
 # Firebase
 firebase-debug.log

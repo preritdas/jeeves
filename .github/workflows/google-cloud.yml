@@ -21,10 +21,9 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v3
 
-      - name: Inject keys and config
+      - name: Inject keys
         run: |
           echo -en '${{ secrets.KEYS_YAML }}' >> keys.yaml
-          echo -en '${{ secrets.CONFIG_INI }}' >> config.ini
 
       - name: Authenticate GCP
         uses: 'google-github-actions/auth@v1'
@@ -59,7 +58,7 @@ jobs:
         with:
           service: 'jeeves'
           image: gcr.io/preritdas-api/jeeves
-          flags: '--min-instances=0 --memory=2Gi --allow-unauthenticated --no-cpu-throttling'
+          flags: '--min-instances=0 --memory=2Gi --allow-unauthenticated --no-cpu-throttling --cpu-boost'
           no_traffic: false
           
       - name: Allocate traffic to latest deployment

@@ -11,7 +11,6 @@ import inbound
 import parsing
 import texts
 import voice_tools as vt
-from keys import KEYS
 
 
 # Create an API router for voice actions
@@ -22,19 +21,6 @@ router = APIRouter()
 RESPONSE_VOICE = "Polly.Arthur-Neural"  # currently not used, using ElevenLabs
 MAXIMUM_WAIT_TIME = 180
 SPEECH_HINTS = "Jeeves, Google, Todoist, Gmail, Notion, Teams, Discord, Wessential"  # also inactive
-
-
-def extract_base_url(url: str) -> str:
-    """Takes an HTTP URL path and extracts the base url."""
-    # Find the index of the first "/" after the "https://" part of the URL
-    end_index = url.find("/", len("https://"))
-    # Return the substring from the beginning of the URL to the first "/"
-    return url[:end_index]
-
-# Get the deployed base url. Currently not needed as using UploadIO.
-BASE_URL = extract_base_url(
-    texts.twilio_client.incoming_phone_numbers.get(KEYS["Twilio"]["sender_sid"]).fetch().voice_url
-)
 
 
 def speak(response: VoiceResponse, text: str) -> None:

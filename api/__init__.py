@@ -8,6 +8,7 @@ from fastapi import FastAPI
 
 # Routers
 from . import text_inbound, voice_inbound
+from apps.gpt import make_calls
 
 
 app = FastAPI()
@@ -21,3 +22,4 @@ def test():
 # Include the routers
 app.include_router(text_inbound.router, prefix="/texts", tags=["Text Inbound"])
 app.include_router(voice_inbound.router, prefix="/voice", tags=["Voice Inbound"])
+app.include_router(make_calls.router, prefix="/voice/outbound", tags=["Voice Outbound Calls"])

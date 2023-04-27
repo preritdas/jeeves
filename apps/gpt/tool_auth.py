@@ -8,6 +8,8 @@ from keys import KEYS
 
 from . import retrieval
 from . import news
+from . import send_texts
+from . import make_calls
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
@@ -89,7 +91,8 @@ no_auth_tools = [
             "Input must be a string with the category name. Category must be one of "
             f"{news.MANUAL_AVAILABLE_CATEGORIES}."
         )
-    )
+    ),
+    make_calls.CallTool()
 ]
 
 
@@ -103,5 +106,9 @@ def build_tools(inbound_phone: str) -> list[Tool]:
         zapier_wrapper = ZapierNLAWrapper(zapier_nla_api_key=zapier_key)
         zapier_toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier_wrapper)
         added_tools.extend(zapier_toolkit.get_tools())
+
+    # Text messages
+    TextToolClass = send_texts.create_text_message_tool(inbound_phone)
+    added_tools.append(TextToolClass())
 
     return no_auth_tools + added_tools
