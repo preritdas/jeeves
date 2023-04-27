@@ -11,7 +11,7 @@ from permissions import deta_client
 
 APP_HELP = "Organize your grocery list into categories."
 APP_OPTIONS = {
-    "setup": "custom store setups, ex. whole foods",
+    "setup": f"Custom store setup. Available: {', '.join(grocery_utils.SETUPS.keys()}",
     "add": "ID of a previous list to add to it. "
         "ex. 'last' for your latest list, or the raw ID."
 }
@@ -42,7 +42,7 @@ def handler(content: str, options: dict) -> str:
     setup = options.get("setup")
     
     # Check for a valid setup
-    if not setup.title() in grocery_utils.SETUPS:
+    if setup and not setup.title() in grocery_utils.SETUPS:
         available_setups = list(grocery_utils.SETUPS.keys())
         return f"Invalid setup. Available setups: {', '.join(available_setups)}"
 
