@@ -21,7 +21,7 @@ def create_text_message_tool(inbound_phone: str) -> BaseTool:
     class TextMessageTool(BaseTool):
         """Wrapper around texts to work best as an agent."""
         name: str = "Send Text Message"
-        description=(
+        description = (
             "Useful for when you need to send a text message. Input must be a JSON string with "
             "the keys \"content\" and \"recipient\" (10-digit phone number preceded by "
             "country code, ex. \"12223334455\". Do not make up phone numbers - either "
