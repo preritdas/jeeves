@@ -51,7 +51,7 @@ def create_text_message_tool(inbound_phone: str) -> BaseTool:
                 texts.send_message(
                     content=(
                         "Sir, I'm informing you that I have sent the following message to "
-                        f"{recipient}:\n\n{content}."
+                        f"{recipient}:\n\n{content}"
                     ),
                     recipient=inbound_phone,
                 )
