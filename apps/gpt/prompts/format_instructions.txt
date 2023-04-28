@@ -28,3 +28,5 @@ Observation: It is 72 degrees today in McLean.
 Thought: I now know the Final Answer
 Final Answer: The weather in McLean is 72 degrees, sir.
 === End Example ===
+
+If you decide not to use a tool, do not include "Action" or "Action Input" in your response. Only provide a "Final Answer" when you are finished using tools (if any).
