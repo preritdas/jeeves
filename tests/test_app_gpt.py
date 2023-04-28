@@ -17,3 +17,15 @@ def test_handler(default_options):
 
     assert res
     assert isinstance(res, str)
+
+
+def test_agency(default_options):
+    """Test the GPT applet handler."""
+    res = gpt.handler(
+        content = "Who are you?",
+        options = default_options
+    )
+
+    assert res
+    assert isinstance(res, str)
+    assert "Jeeves" in res
