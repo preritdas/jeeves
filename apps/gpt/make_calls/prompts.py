@@ -8,7 +8,7 @@ from keys import KEYS
 
 llm = ChatOpenAI(
     openai_api_key=KEYS["OpenAI"]["api_key"], 
-    model_name="gpt-3.5-turbo", 
+    model_name="gpt-4", 
     temperature=0
 )
 

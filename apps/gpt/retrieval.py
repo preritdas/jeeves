@@ -17,7 +17,7 @@ import utils
 from keys import KEYS
 
 
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
 embeddings = OpenAIEmbeddings(openai_api_key=KEYS["OpenAI"]["api_key"])
 N_DOCS = 5  # 10 for gpt-4, 5 for 3.5
 splitter = TokenTextSplitter(
