@@ -1,0 +1,4 @@
+Begin!
+
+Input: {input}
+Thought:{agent_scratchpad}
