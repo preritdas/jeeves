@@ -42,10 +42,12 @@ jobs:
         run: pytest --cov
 
       - name: Generate coverage badge for tests
+        if: github.ref == 'refs/heads/master'
         run: coverage-badge -o tests/badge.svg -f
 
       - name: Commit coverage badge back to repo
         continue-on-error: true
+        if: github.ref == 'refs/heads/master'
         run: |
           coverage-badge -o tests/badge.svg -f
           git config --global user.name "github-actions[bot]"
