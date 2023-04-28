@@ -25,13 +25,15 @@ def make_call(recipient: str, goal: str) -> str:
         record=True
     )
 
+    CALL_END_STATUSES = {"completed", "canceled", "failed", "busy", "no-answer"}
+
     # Wait for call to complete
-    while outbound_call.update().status != "completed":
+    while (status := outbound_call.update().status) not in CALL_END_STATUSES:
         time.sleep(1)
 
     # Return a transcript
     transcript = db.decode_convo(call_params["call_id"])
-    return f"|| BEGIN TRANSCRIPT || {transcript} || END TRANSCRIPT ||"
+    return f"Call status: {status} || BEGIN TRANSCRIPT || {transcript} || END TRANSCRIPT ||"
 
 
 class CallTool(BaseTool):
