@@ -15,8 +15,9 @@ OPTIONS = {
 @utils.app_handler(APP_HELP, OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Handler for the GPT applet."""
-    if options.get("agency").lower() in {"no", "false", "off"}:
-        return completions.gpt_response(content)
+    if (agency_option := options.get("agency")):
+        if agency_option.lower() in {"no", "false", "off"}:
+            return completions.gpt_response(content)
 
     toolkit = tool_auth.build_tools(options["inbound_phone"])
     agent_executor = agency.create_agent_executor(toolkit)
