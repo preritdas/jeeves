@@ -89,12 +89,20 @@ PROMPT_INPUTS: dict[str, dict[str, Callable]] = {
 
 def _build_prompt(name: str) -> Prompt:
     """Build the prompt with the given name."""
+    if name not in PROMPT_INPUTS:
+        raise ValueError(f"Prompt name {name} not found.")
+
+    if not os.path.exists(prompt_path(name)):
+        raise FileNotFoundError(f"Prompt file {name}.txt not found.")
+
     with open(prompt_path(name), "r", encoding="utf-8") as f:
         template = f.read()
 
+    input_dict: dict[str, Callable] = PROMPT_INPUTS[name]
+
     return Prompt(
         template=template,
-        input_variables={var: var() for var in PROMPT_INPUTS[name]}
+        input_variables={var: input_dict[var]() for var in input_dict}
     )
 
 
