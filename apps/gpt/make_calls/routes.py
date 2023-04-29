@@ -79,7 +79,7 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
 
 
 @router.post("/handler")
-async def handler(request: Request, call_id: str):
+async def handler(call_id: str):
     twiml = VoiceResponse()
     current_call = db.Call.from_call_id(call_id)
   
@@ -96,7 +96,7 @@ async def handler(request: Request, call_id: str):
     twiml.gather(
         action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
         input="speech",
-        speechTimeout=3,
+        speechTimeout=2,
         hints="Jeeves",
         speech_model="experimental_conversations"
     )
