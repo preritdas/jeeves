@@ -39,7 +39,10 @@ class Call:
 
     def download(self) -> None:
         """Sync changes from the database to an existing Call object."""
-        call = convo_base.get(self.key)
+        try:
+            call = convo_base.get(self.key)
+        except Exception:  # try one more time
+            call = convo_base.get(self.key)
 
         # Update attributes
         self.key = call["key"]
@@ -60,12 +63,21 @@ class Call:
             "greeting": greeting,
             "greeting_url": vt.speak.speak_jeeves(greeting)
         }
-        key = convo_base.put(data=attrs)["key"]
+
+        try:
+            key = convo_base.put(data=attrs)["key"]
+        except Exception:  # try one more time
+            key = convo_base.put(data=attrs)["key"]
+
         return cls(key=key, **attrs)
 
 
     @classmethod
     def from_call_id(cls, call_id: str) -> "Call":
         """Initialize a call object using just a call id."""
-        call = convo_base.get(call_id)
+        try:
+            call = convo_base.get(call_id)
+        except Exception:
+            call = convo_base.get(call_id)
+
         return cls(**call)
