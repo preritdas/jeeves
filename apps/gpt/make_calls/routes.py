@@ -37,20 +37,20 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
     response = VoiceResponse()
 
     # Setup the conversation
-    convo = db.decode_convo(call_id)
-    convo += f"\nRecipient: {user_speech}"
-    convo += f"\nJeeves: "
+    current_call = db.Call.from_call_id(call_id)
+    current_call.convo += f"\nRecipient: {user_speech}"
+    current_call.convo += f"\nJeeves: "
 
     # Generate response and append to conversation
     ai_response = prompts.generate_response(
-        goal=db.decode_goal(call_id), 
-        recipient_desc=db.decode_recipient_desc(call_id),
-        convo=convo
+        goal=current_call.goal,
+        recipient_desc=current_call.recipient_desc,
+        convo=current_call.convo
     )
-    convo += ai_response
+    current_call.convo += ai_response
 
     # If Jeeves says its time to hang up
-    if "HANGUP" in ai_response or convo.count("Jeeves:") > 20:
+    if "HANGUP" in ai_response or current_call.convo.count("Jeeves:") > 20:
         speak(response, "Thanks for speaking with me. Goodbye.")
         response.hangup()
     else:  # continue the conversation
@@ -64,7 +64,7 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
         )
 
     # Update the conversation record
-    db.encode_convo(call_id, convo)
+    current_call.update()
 
     # Update the call, ignore if the recipient hung up
     try:
@@ -81,14 +81,14 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
 @router.post("/handler")
 async def handler(request: Request, call_id: str):
     twiml = VoiceResponse()
+    current_call = db.Call.from_call_id(call_id)
   
     # If no previous conversation is present, start the conversation
-    convo = db.decode_convo(call_id)
-    if not convo:
+    if not current_call.convo:
         twiml.pause(2)
-        twiml.play(db.decode_greeting_url(call_id))
-        convo = f"Jeeves: {db.decode_greeting(call_id)}"
-        db.encode_convo(call_id, convo)
+        twiml.play(current_call.greeting_url)
+        current_call.convo = f"Jeeves: {current_call.greeting}"
+        current_call.update()
 
     # Listen to user response and pass input to /respond
     send_to_respond = {"call_id": call_id}
