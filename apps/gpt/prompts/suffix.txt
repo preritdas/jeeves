@@ -1,4 +1,4 @@
-Begin! Remember, you do not always have to use a tool. But, you can use any tool/tool combination any number of times. Your final answer must always be presented after the "Final Answer" label.
+Begin! 
 
 Input: {input}
-Thought:{agent_scratchpad}
+{agent_scratchpad}
