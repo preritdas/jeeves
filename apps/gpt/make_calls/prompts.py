@@ -8,7 +8,7 @@ from keys import KEYS
 
 llm = ChatOpenAI(
     openai_api_key=KEYS["OpenAI"]["api_key"], 
-    model_name="gpt-4", 
+    model_name="gpt-3.5-turbo", 
     temperature=0
 )
 
@@ -69,14 +69,4 @@ def generate_intro_message(goal: str) -> str:
     )
 
     message: str = intro_message_chain.run(goal=goal)
-
-    # Temporarily removed because it was throwing off businesses a bit.
-    # # Add some instructions
-    # INSTRUCTIONS = (
-    #     "I'm an experimental AI, so please bare with me. We'll take turns speaking, "
-    #     "let's not interrupt eachother."
-    # )
-
-    # return message + " " + INSTRUCTIONS
-
     return message
