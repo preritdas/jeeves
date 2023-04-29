@@ -26,7 +26,7 @@ Jeeves: HANGUP
 
 ---- End Example ----
 
-Current time: {current_datetime}
+Current time (EST): {current_datetime}
 
 You are speaking with {recipient_desc}
 GOAL: {goal}
