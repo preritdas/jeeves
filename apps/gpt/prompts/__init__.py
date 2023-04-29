@@ -2,7 +2,13 @@
 Build and serve the agent prompts.
 
 This is in a module because the prompts are long, comprehensive, and may contain
-variable information, such as the current date and time.
+variable information, such as the current date and time. This module will read the
+prompts and format in the variables. 
+
+Note that these variables are 'indicated' in the prompt files just as agent variables
+are, with curly braces. Nonetheless, those variables that need to be formatted in 
+according to this module are done so here, before the strings, with remaining variables
+(for the agent) are sent to the agent.
 """
 from pydantic import BaseModel
 
