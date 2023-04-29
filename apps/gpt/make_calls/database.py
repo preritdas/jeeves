@@ -27,7 +27,7 @@ class Call:
         self.greeting = greeting
         self.greeting_url = greeting_url
 
-    def update(self) -> None:
+    def upload(self) -> None:
         """Update the call record in Deta."""
         updates = self.__dict__.copy()
         del updates["key"]
@@ -36,6 +36,19 @@ class Call:
             key=self.key,
             updates=updates
         )
+
+    def download(self) -> None:
+        """Sync changes from the database to an existing Call object."""
+        call = convo_base.get(self.key)
+
+        # Update attributes
+        self.key = call["key"]
+        self.convo = call["convo"]
+        self.goal = call["goal"]
+        self.recipient_desc = call["recipient_desc"]
+        self.greeting = call["greeting"]
+        self.greeting_url = call["greeting_url"]
+
 
     @classmethod
     def create(cls, goal: str, greeting: str, recipient_desc: str) -> "Call":

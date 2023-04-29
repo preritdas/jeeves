@@ -64,7 +64,7 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
         )
 
     # Update the conversation record
-    current_call.update()
+    current_call.upload()
 
     # Update the call, ignore if the recipient hung up
     try:
@@ -88,7 +88,7 @@ async def handler(request: Request, call_id: str):
         twiml.pause(2)
         twiml.play(current_call.greeting_url)
         current_call.convo = f"Jeeves: {current_call.greeting}"
-        current_call.update()
+        current_call.upload()
 
     # Listen to user response and pass input to /respond
     send_to_respond = {"call_id": call_id}
