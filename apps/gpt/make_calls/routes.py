@@ -42,7 +42,11 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
     convo += f"\nJeeves: "
 
     # Generate response and append to conversation
-    ai_response = prompts.generate_response(db.decode_goal(call_id), convo)
+    ai_response = prompts.generate_response(
+        goal=db.decode_goal(call_id), 
+        recipient_desc=db.decode_recipient_desc(call_id),
+        convo=convo
+    )
     convo += ai_response
 
     # If Jeeves says its time to hang up
