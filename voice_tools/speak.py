@@ -46,4 +46,3 @@ def speak_jeeves(text: str) -> str:
     speech_cache.cache_speech(text, public_url)
 
     return public_url
-    
