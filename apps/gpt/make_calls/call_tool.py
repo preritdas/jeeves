@@ -14,14 +14,13 @@ from . import prompts
 
 def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
     """Makes the call and returns a transcript."""
-    call_params: dict[str, str] = {
-        "call_id": db.create_call(
-            goal=goal,
-            greeting=prompts.generate_intro_message(goal, recipient_desc),
-            recipient_desc=recipient_desc
-        )
-    }
+    created_call = db.Call.create(
+        goal=goal,
+        greeting=prompts.generate_intro_message(goal, recipient_desc),
+        recipient_desc=recipient_desc
+    )
 
+    call_params: dict[str, str] = {"call_id": created_call.key}
     outbound_call = twilio_client.calls.create(
         recipient,
         KEYS["Twilio"]["sender"],
