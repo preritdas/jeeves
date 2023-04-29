@@ -12,10 +12,14 @@ from . import database as db
 from . import prompts
 
 
-def make_call(recipient: str, goal: str) -> str:
+def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
     """Makes the call and returns a transcript."""
     call_params: dict[str, str] = {
-        "call_id": db.create_call(goal, prompts.generate_intro_message(goal))
+        "call_id": db.create_call(
+            goal=goal,
+            greeting=prompts.generate_intro_message(goal, recipient_desc),
+            recipient_desc=recipient_desc
+        )
     }
 
     outbound_call = twilio_client.calls.create(
@@ -40,11 +44,12 @@ class CallTool(BaseTool):
     name: str = "Make a Call"
     description: str = (
         "Make a call to a recipient and complete a goal. Input must be a JSON string "
-        "with the keys \"recipient_phone\" and \"goal\". The recipient phone number "
+        "with the keys \"recipient_phone\", \"recipient_desc\", and \"goal\". The recipient phone number "
         "must be a 10-digit phone number preceded by "
         "country code, ex. \"12223334455\". Do not make up phone numbers - either "
         "use a phone number explicitly provided by the user, or use a phone number from a "
         "tool that provides it for you. Otherwise, do not use this tool. "
+        "\"recipient_desc\" is a short description of who you are calling."
         "The \"goal\" should be comprehensive and specific, providing all information necessary "
         "to facilitate a desirable outcome. For example, if you are asked to make a dinner "
         "reservation, you will need a date, time, and name. If you don't have all that you need, "
@@ -66,13 +71,17 @@ class CallTool(BaseTool):
 
         if not "recipient_phone" in input_parsed:
             return "Input must have a \"recipient_phone\" key."
+
+        if not "recipient_desc" in input_parsed:
+            return "Input must have a \"recipient_desc\" key."
         
         if not "goal" in input_parsed:
             return "Input must have a \"goal\" key."
 
         return make_call(
             recipient=str(input_parsed["recipient_phone"]),
-            goal=str(input_parsed["goal"])
+            goal=str(input_parsed["goal"]),
+            recipient_desc=str(input_parsed["recipient_desc"])
         )
 
     def _arun(self, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, str]:
