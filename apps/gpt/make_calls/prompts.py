@@ -28,12 +28,13 @@ PREFIX_MESSAGE = (
     "Jeeves: Large.\nRecipient: What's your name?\nJeeves: John.\nRecipient: We'll "
     "get that to you in 30 minutes, John.\nJeeves: Thanks, bye.\nRecipient: Bye.\n"
     "Jeeves: HANGUP\n\n----------\n\n"
+    "You are speaking with {recipient_desc}\n"
     "GOAL: {goal}\n\nComplete the conversation below with only one response "
     "from you, Jeeves.\n\n{conversation}"
 )
 
 prompt_template = PromptTemplate(
-    input_variables=["goal", "conversation"],
+    input_variables=["goal", "recipient_desc", "conversation"],
     template=PREFIX_MESSAGE,
 )
 
@@ -43,23 +44,27 @@ conversation_chain = LLMChain(
 )
 
 
-def generate_response(goal: str, convo: str) -> str:
+def generate_response(goal: str, recipient_desc: str, convo: str) -> str:
     """Generate a response given the conversation history and the goal."""
-    return conversation_chain.run(goal=goal, conversation=convo)
+    return conversation_chain.run(
+        goal=goal, 
+        recipient_desc=recipient_desc, 
+        conversation=convo
+    )
 
 
-def generate_intro_message(goal: str) -> str:
+def generate_intro_message(goal: str, recipient_desc: str) -> str:
     """Generate the intro message."""
     prompt = PromptTemplate(
-        input_variables=["goal"],
+        input_variables=["goal", "recipient_desc"],
         template=(
             "You are Jeeves, a personal AI that calls people over the phone. "
             "Given a goal, create a sentence greeting somebody and informing "
             "them of your goal with them. \n\n-------- Example: \n\n"
             "Goal: Order a pizza to 1 Main Street, New York, NY.\n"
             "Your greeting: Hi, I'm Jeeves. I'm calling to "
-            "order a pizza, please.\n\n--------\n\nGoal: {goal}\n"
-            "Greeting: "
+            "order a pizza, please.\n\n--------\n\nYou are speaking with {recipient_desc}\n"
+            "Goal: {goal}\nGreeting: "
         )
     )
 
@@ -68,5 +73,5 @@ def generate_intro_message(goal: str) -> str:
         llm=llm
     )
 
-    message: str = intro_message_chain.run(goal=goal)
+    message: str = intro_message_chain.run(goal=goal, recipient_desc=recipient_desc)
     return message
