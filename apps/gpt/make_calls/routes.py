@@ -89,13 +89,6 @@ async def handler(request: Request, call_id: str):
     # Listen to user response and pass input to /respond
     send_to_respond = {"call_id": call_id}
 
-    # Record the recipient talking
-    # twiml.record(
-    #     action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
-    #     timeout=3,
-    #     play_beep=False
-    # )
-
     twiml.gather(
         action=f"/voice/outbound/respond?{urlencode(send_to_respond)}",
         input="speech",
