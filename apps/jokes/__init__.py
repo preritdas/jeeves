@@ -1,4 +1,7 @@
+"""Use HumorAPI to find jokes."""
 import requests
+
+from functools import wraps
 
 import utils
 from keys import KEYS
@@ -10,6 +13,20 @@ APP_OPTIONS = {
 }
 
 
+def retry_joke(function)
+    """Decorator to retry joke getter."""
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except Exception:
+            # Try one more time or raise
+            return function(*args, **kwargs)
+            
+    return wrapper
+
+
+@retry_joke
 def random_joke(tags: str):
     endpoint = "https://api.humorapi.com/jokes/random"
     response = requests.get(
