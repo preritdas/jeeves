@@ -40,6 +40,7 @@ def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
 
 
 class CallTool(BaseTool):
+    """Agent tool for creating calls to facilitate goals."""
     name: str = "Make a Call"
     description: str = (
         "Make a call to a recipient and complete a goal. Input must be a JSON string "

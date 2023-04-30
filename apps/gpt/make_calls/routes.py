@@ -8,8 +8,8 @@ from urllib.parse import urlencode
 import voice_tools as vt
 from texts import twilio_client, BASE_URL
 
-from . import prompts
-from . import database as db
+from apps.gpt import prompts
+from apps.gpt import database as db
 
 
 router = APIRouter()
