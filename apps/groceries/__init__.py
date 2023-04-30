@@ -1,7 +1,7 @@
 """Groceries app."""
 import datetime as dt
 
-import utils
+from utils import app_handler
 import config
 
 from apps.groceries import classification
@@ -36,7 +36,7 @@ def latest_grocery_list(phone: str) -> dict:
     )
 
 
-@utils.app_handler(APP_HELP, APP_OPTIONS)
+@app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     # Options
     setup = options.get("setup")
