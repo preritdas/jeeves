@@ -1,5 +1,5 @@
 """Backend for generating solutions to a WordHunt board."""
-from .dictionary import load_dict
+from apps.wordhunt.dictionary import load_dict
 
 
 # Load the dictionary
