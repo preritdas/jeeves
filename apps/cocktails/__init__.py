@@ -2,8 +2,8 @@
 import utils
 import config
 
-from . import data
-from . import errors  # unit tests
+from apps.cocktails import data
+from apps.cocktails import errors  # unit tests
 
 
 APP_HELP = (

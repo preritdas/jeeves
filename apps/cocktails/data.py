@@ -7,7 +7,7 @@ import emoji
 from dataclasses import dataclass
 
 # App-level
-from . import errors
+from apps.cocktails import errors
 
 
 ENDPOINT = "https://www.thecocktaildb.com/api/json/v1/1/"
