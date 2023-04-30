@@ -4,6 +4,9 @@ Sending text messages back.
 # External
 from twilio.rest import Client as TwilioClient
 
+# Standard
+import time
+
 # Project
 from keys import KEYS
 import config
@@ -28,6 +31,10 @@ BASE_URL = extract_base_url(
     twilio_client.incoming_phone_numbers.get(KEYS.Twilio.sender_sid).fetch().voice_url
 )
 
+TWILIO_NON_SUCCESS_STATUS: set[str] = {
+    "queued", "failed", "undelivered", "receiving", "accepted", "scheduled", "partially_delivered", "canceled"
+}
+
 
 def send_message(content: str, recipient: str) -> bool:
     """
@@ -44,7 +51,11 @@ def send_message(content: str, recipient: str) -> bool:
         body = content
     )
 
-    return True
+    # Try twice for one second total for success
+    for _ in range(2):
+        if (last_status := message_sent.fetch().status) not in TWILIO_NON_SUCCESS_STATUS:
+            return "Message sent successfully."
 
-    # Create success check for Twilio
-    return True if vonage_res["messages"][0]["status"] == "0" else False
+        time.sleep(0.5)
+
+    return f"Message failed to send. Status: {last_status}"
