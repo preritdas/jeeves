@@ -3,6 +3,8 @@ Transcribe a Twilio recording using OpenAI's Whisper API.
 """
 import requests
 
+from functools import wraps
+
 from keys import KEYS
 
 
@@ -14,6 +16,7 @@ def retry_whisper(function):
     """
     Decorator that retries Whisper once if it fails.
     """
+    @wraps(function)
     def wrapper(*args, **kwargs):
         try:
             return function(*args, **kwargs)
