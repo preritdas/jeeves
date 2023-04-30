@@ -27,6 +27,9 @@ faiss-cpu==1.7.4
 tiktoken==0.3.3
 beautifulsoup4==4.12.2
 
+# Tools
+wolframalpha==5.0.0 
+
 # Inbound
 twilio==8.1.0  # respond with texts
 elevenlabs==0.2.7
