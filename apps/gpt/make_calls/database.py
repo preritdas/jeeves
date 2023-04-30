@@ -86,3 +86,7 @@ class Call:
             call = convo_base.get(call_id)
 
         return cls(**call)
+
+    def delete(self) -> None:
+        """Delete the call record from the database."""
+        convo_base.delete(self.key)
