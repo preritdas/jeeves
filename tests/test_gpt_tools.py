@@ -2,6 +2,7 @@
 from apps.gpt.retrieval import WebsiteAnswerer, YouTubeAnswerer
 from apps.gpt.news import manual_headline_news
 from apps.gpt.tool_auth import no_auth_tools
+from apps.gpt.send_texts import create_text_message_tool
 
 
 def test_website_answerer():
@@ -49,3 +50,17 @@ def test_wolfram_alpha():
 
     assert res
     assert "27" in res
+
+
+def test_text_tool(mocker, default_options):
+    mocker.patch("config.General.SANDBOX_MODE", True)
+
+    TextToolClass = create_text_message_tool(default_options["inbound_phone"])
+    tool = TextToolClass()
+
+    res = tool.run(
+        """{"recipient": "12223334455", "content": "Hello world!"}"""
+    )
+
+    assert res
+    assert "True" in res
