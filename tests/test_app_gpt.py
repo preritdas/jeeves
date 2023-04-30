@@ -89,8 +89,8 @@ def test_serper_wrapper():
 
 
 def test_building_tools(default_options):
-    """Test building the tools."""
-    # Make sure Zapier is in there
+    """Test building the tools. Zapier and text requires auth."""
+    # Make sure Zapier is in there, use first provided phone 
     if KEYS.ZapierNLA:
         tools = build_tools(
             list(KEYS.ZapierNLA.keys())[0]
