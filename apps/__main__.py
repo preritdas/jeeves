@@ -2,7 +2,7 @@
 import sys
 import json
 
-from . import PROGRAMS
+from apps import PROGRAMS
 
 
 if len(sys.argv) < 2:
