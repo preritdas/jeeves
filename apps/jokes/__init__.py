@@ -13,7 +13,7 @@ APP_OPTIONS = {
 }
 
 
-def retry_joke(function)
+def retry_joke(function):
     """Decorator to retry joke getter."""
     @wraps(function)
     def wrapper(*args, **kwargs):
