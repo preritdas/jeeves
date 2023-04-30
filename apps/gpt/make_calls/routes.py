@@ -30,7 +30,7 @@ def speak(response: VoiceResponse, text: str) -> None:
     response.play(speech_url)
 
 
-def process_user_speech(call_id: str, call_sid: str, user_speech: str) -> VoiceResponse:
+def process_user_speech(call_id: str, user_speech: str) -> VoiceResponse:
     """Generate a VoiceResponse based on the user's speech."""
     response = VoiceResponse()
 
