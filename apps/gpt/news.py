@@ -59,7 +59,7 @@ def get_headline_news(category: str) -> str:
 
 ## ---- Manual ----
 
-def manual_headline_news(category: str) -> str:
+def _manual_headline_news(category: str) -> str:
     """Manually get headline news by using a WebsiteAnswerer."""
     category = category.strip().lower()
 
@@ -78,3 +78,11 @@ def manual_headline_news(category: str) -> str:
         ),
         n_docs=20
     )
+
+
+def manual_headline_news(category: str) -> str:
+    """Manually get headline news, catch errors and return a string."""
+    try:
+        return _manual_headline_news(category)
+    except Exception as e:
+        return f"Error getting headline news: {e}"

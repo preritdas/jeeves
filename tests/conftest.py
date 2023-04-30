@@ -8,12 +8,17 @@ import random
 import usage  # fixture for temporary logs for report
 import permissions  # fixtures for temporary users
 
+from apps.gpt.make_calls.database import Call
+
 
 @pytest.fixture(scope="session")
 def default_inbound() -> dict[str, str]:
     random_inbound = "".join(
         [str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) for _ in range(10)]
     )
+
+    # Add US country code
+    random_inbound = "1" + random_inbound
 
     return {
         "phone_number": random_inbound,
@@ -132,3 +137,31 @@ def temp_usage_logs():
     # Remove the temporary logs
     for key in keys:
         usage.usage_db.delete(key)
+
+
+@pytest.fixture
+def who_are_you_twilio_recording() -> str:
+    """Twilio audio recording asking 'who are you?'"""
+    return (
+        "https://api.twilio.com/2010-04-01/Accounts/ACe84ee0dbced3a3132211427153ae959a"
+        "/Recordings/REed31c6f0df039c1d98b23288ae87fc73"
+    )
+
+
+@pytest.fixture(scope="session")
+def outbound_call_key() -> str:
+    """Call ID for outbound call."""
+    call = Call.create(
+        recipient_desc="Epic Restaurant",
+        goal="Make a reservation for 2 people at 7pm on Friday"
+    )
+
+    # Add the greeting to the conversation as if it was spoken
+    # the handler does this automatically
+    call.convo += f"Jeeves: {call.greeting}"
+    call.upload()
+
+    yield call.key
+
+    # Remove the temporary call
+    call.delete()

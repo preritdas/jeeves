@@ -14,14 +14,12 @@ from texts import twilio_client, BASE_URL
 
 # Make calls
 from apps.gpt.make_calls import database as db
-from apps.gpt.make_calls import prompts
 
 
 def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
     """Makes the call and returns a transcript."""
     created_call = db.Call.create(
         goal=goal,
-        greeting=prompts.generate_intro_message(goal, recipient_desc),
         recipient_desc=recipient_desc
     )
 

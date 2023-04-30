@@ -40,5 +40,4 @@ def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
 
     # Process the request
     route_to_handler(inbound_model)
-
     return ""

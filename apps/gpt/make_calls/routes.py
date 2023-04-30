@@ -30,10 +30,8 @@ def speak(response: VoiceResponse, text: str) -> None:
     response.play(speech_url)
 
 
-def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> None:
-    """
-    Generate a response and update the call with that response.
-    """
+def process_user_speech(call_id: str, user_speech: str) -> VoiceResponse:
+    """Generate a VoiceResponse based on the user's speech."""
     response = VoiceResponse()
 
     # Setup the conversation
@@ -65,6 +63,15 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
 
     # Update the conversation record
     current_call.upload()
+
+    return response
+
+
+def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> None:
+    """
+    Generate a response and update the call with that response.
+    """
+    response = process_user_speech(call_id, call_sid, user_speech)
 
     # Update the call, ignore if the recipient hung up
     try:

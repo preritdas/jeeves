@@ -159,5 +159,5 @@ class Keys(BaseModel):
     Transcription: TranscriptionModel
 
     # Optional keys (Optional features and inactive applets/features)
-    ZapierNLA: dict[str, str] | None
-    NewsAPI: NewsAPIModel | None
+    ZapierNLA: dict[str, str] = {}
+    NewsAPI: NewsAPIModel  = {}

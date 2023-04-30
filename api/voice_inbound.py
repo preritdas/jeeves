@@ -30,6 +30,8 @@ def speak(response: VoiceResponse, text: str) -> None:
     uses ElevenLabs to speak the text, uses UploadIO to upload the mp3 file and get
     a public-facing audio URL, then adds a <Play> tag to the repsonse object
     containing that public URL.
+
+    Returns nothing because the VoiceResponse object is modified in-place.
     """
     speech_url = vt.speak.speak_jeeves(text)
     response.play(speech_url)

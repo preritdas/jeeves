@@ -7,7 +7,7 @@ from typing import Any, Coroutine
 import texts
 
 
-def create_text_message_tool(inbound_phone: str) -> BaseTool:
+def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
     """
     Create a tool to send text messages.
 

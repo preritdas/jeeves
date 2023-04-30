@@ -4,6 +4,8 @@ import deta
 from keys import KEYS
 import voice_tools as vt
 
+from apps.gpt.make_calls.prompts import generate_intro_message
+
 
 deta_client = deta.Deta(KEYS.Deta.project_key)
 convo_base = deta_client.Base("conversations")
@@ -54,8 +56,11 @@ class Call:
         self.__dict__.update(call)
 
     @classmethod
-    def create(cls, goal: str, greeting: str, recipient_desc: str) -> "Call":
+    def create(cls, goal: str, recipient_desc: str) -> "Call":
         """Create a call."""
+        # Create the greeting
+        greeting = generate_intro_message(goal, recipient_desc)
+
         attrs = {
             "convo": "",
             "goal": goal,
@@ -81,3 +86,7 @@ class Call:
             call = convo_base.get(call_id)
 
         return cls(**call)
+
+    def delete(self) -> None:
+        """Delete the call record from the database."""
+        convo_base.delete(self.key)
