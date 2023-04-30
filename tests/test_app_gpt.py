@@ -5,6 +5,7 @@ from apps.gpt import handler
 from api.voice_inbound import _process_speech
 from apps.gpt.make_calls.routes import process_user_speech
 from apps.gpt.make_calls.database import Call
+from apps.gpt.tool_auth import no_auth_tools
 
 
 def test_handler(default_options):
@@ -64,3 +65,24 @@ def test_processing_speech_outbound(outbound_call_key):
     assert "Play" in xml
     assert "uploadio" in xml
     
+
+def test_serper_wrapper():
+    """Test the serper wrapper."""
+    serper_tool = no_auth_tools[0]
+    
+    # Make sure we got the right one
+    assert serper_tool.name == "Google Search"
+
+    # Test basic
+    res: str = serper_tool.run("united states year of independence")
+
+    assert res
+    assert isinstance(res, str)
+    assert "1776" in res
+
+    # Test returning links
+    link_res: str = serper_tool.run("best car vacuums")
+
+    assert link_res
+    assert isinstance(link_res, str)
+    assert "https" in link_res
