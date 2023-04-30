@@ -15,3 +15,10 @@ if not os.path.exists(keys_path):
 
 with open(keys_path, "r") as f:
     KEYS = yaml.safe_load(f)
+
+
+# ---- Parsing ----
+
+MANIFEST = {
+    
+}
