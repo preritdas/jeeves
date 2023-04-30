@@ -8,7 +8,7 @@ import deta
 from keys import KEYS
 
 
-deta_client = deta.Deta(KEYS["Deta"]["project_key"])
+deta_client = deta.Deta(KEYS.Deta.project_key)
 permissions_db = deta_client.Base("permissions")
 
 
@@ -23,7 +23,7 @@ def db_init() -> str:
     db_res: dict = permissions_db.put(
         {
             "Name": "Prerit Das",
-            "Phone": KEYS["Twilio"]["my_number"],
+            "Phone": KEYS.Twilio.my_number,
             "Permissions": "all"
         }
     )

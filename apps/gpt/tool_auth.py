@@ -58,7 +58,7 @@ ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS = (
 no_auth_tools = [
     Tool(
         name="Google Search",
-        func=GoogleSerperAPIWrapperURL(serper_api_key=KEYS["GoogleSerper"]["api_key"]).run,
+        func=GoogleSerperAPIWrapperURL(serper_api_key=KEYS.GoogleSerper.api_key).run,
         description=(
             "Useful for when you need to search Google. Provides links to search results "
             "that you can use Website Answerer to answer for more information."
@@ -95,7 +95,7 @@ no_auth_tools = [
     ),
     Tool(
         name="Wolfram Alpha",
-        func=WolframAlphaAPIWrapper(wolfram_alpha_appid=KEYS["WolframAlpha"]["app_id"]).run,
+        func=WolframAlphaAPIWrapper(wolfram_alpha_appid=KEYS.WolframAlpha.app_id).run,
         description=(
             "Useful for when you need to do math or anything quantitative/computational. "
             "Input should ideally be math expressions, ex. \"8^3\", but can also be "
@@ -111,8 +111,8 @@ def build_tools(inbound_phone: str) -> list[Tool]:
     added_tools = []
 
     # Zapier
-    if inbound_phone in KEYS["ZapierNLA"]:
-        zapier_key = KEYS["ZapierNLA"][inbound_phone]
+    if inbound_phone in KEYS.ZapierNLA:
+        zapier_key = KEYS.ZapierNLA[inbound_phone]
         zapier_wrapper = ZapierNLAWrapper(zapier_nla_api_key=zapier_key)
         zapier_toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier_wrapper)
         added_tools.extend(zapier_toolkit.get_tools())

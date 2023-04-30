@@ -45,7 +45,7 @@ def current_weather(
         WEATHER_ENDPOINT, 
         {
             "q": ",".join([ele for ele in [city.lower(), state.lower(), country.lower()] if ele]), 
-            "appid": KEYS["OpenWeatherMap"]["api_key"]
+            "appid": KEYS.OpenWeatherMap.api_key
         }
     )
 

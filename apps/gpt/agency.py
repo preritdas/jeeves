@@ -10,7 +10,7 @@ from . import prompts
 
 # ---- Build the agent ----
 
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
 
 def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
     """Create the agent given authenticated tools."""

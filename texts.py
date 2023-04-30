@@ -10,8 +10,8 @@ import config
 
 
 twilio_client = TwilioClient(
-    KEYS["Twilio"]["account_sid"],
-    KEYS["Twilio"]["auth_token"]
+    KEYS.Twilio.account_sid,
+    KEYS.Twilio.auth_token
 )
 
 
@@ -25,7 +25,7 @@ def extract_base_url(url: str) -> str:
 
 # Get the deployed base url. Currently not needed as using UploadIO.
 BASE_URL = extract_base_url(
-    twilio_client.incoming_phone_numbers.get(KEYS["Twilio"]["sender_sid"]).fetch().voice_url
+    twilio_client.incoming_phone_numbers.get(KEYS.Twilio.sender_sid).fetch().voice_url
 )
 
 
@@ -40,7 +40,7 @@ def send_message(content: str, recipient: str) -> bool:
 
     message_sent = twilio_client.messages.create(
         to = recipient,
-        from_ = KEYS["Twilio"]["sender"],
+        from_ = KEYS.Twilio.sender,
         body = content
     )
 

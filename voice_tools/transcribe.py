@@ -31,7 +31,7 @@ def _whisper_transcribe_url(url: str) -> str:
     remote_file.raise_for_status()
 
     # OpenAI information
-    headers = {"Authorization": f"Bearer {KEYS['OpenAI']['api_key']}"}
+    headers = {"Authorization": f"Bearer {KEYS.OpenAI.api_key}"}
     data = {"model": "whisper-1"}
     files = {"file": ("audio.mp3", remote_file.raw, "multipart/form-data")}
 

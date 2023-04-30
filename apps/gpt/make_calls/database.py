@@ -5,7 +5,7 @@ from keys import KEYS
 import voice_tools as vt
 
 
-deta_client = deta.Deta(KEYS["Deta"]["project_key"])
+deta_client = deta.Deta(KEYS.Deta.project_key)
 convo_base = deta_client.Base("conversations")
 
 
