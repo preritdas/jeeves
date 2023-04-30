@@ -1,15 +1,20 @@
 """The calling tool used by agent."""
+# External
 from langchain.agents.tools import BaseTool
 
+# Standard lib
 import json
 import time
 from urllib.parse import urlencode
 from typing import Any, Coroutine
 
+# Project
 from keys import KEYS
 from texts import twilio_client, BASE_URL
-from . import database as db
-from . import prompts
+
+# Make calls
+from apps.gpt.make_calls import database as db
+from apps.gpt.make_calls import prompts
 
 
 def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
