@@ -3,6 +3,7 @@ from apps.gpt.retrieval import WebsiteAnswerer, YouTubeAnswerer
 from apps.gpt.news import manual_headline_news
 from apps.gpt.tool_auth import no_auth_tools
 from apps.gpt.send_texts import create_text_message_tool
+from apps.gpt.movies import MoviesTool
 
 
 def test_website_answerer():
@@ -65,3 +66,10 @@ def test_text_tool(mocker, default_options):
     assert res
     assert isinstance(res, str)
     assert "fail" not in res.lower()
+
+
+def test_movie_tool():
+    """Currently the movie tool is not given to the agent."""
+    tool = MoviesTool()
+
+    assert "Tom Cruise" in tool.run("top gun")
