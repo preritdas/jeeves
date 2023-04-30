@@ -1,6 +1,7 @@
 """Load tools depending on authorization."""
 from langchain.agents import Tool
 from langchain.utilities import GoogleSerperAPIWrapper
+from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from langchain.utilities.zapier import ZapierNLAWrapper
 from langchain.agents.agent_toolkits import ZapierToolkit
 
@@ -92,7 +93,16 @@ no_auth_tools = [
             f"{news.MANUAL_AVAILABLE_CATEGORIES}."
         )
     ),
-    make_calls.CallTool()
+    Tool(
+        name="Wolfram Alpha",
+        func=WolframAlphaAPIWrapper(wolfram_alpha_appid=KEYS["WolframAlpha"]["app_id"]).run,
+        description=(
+            "Useful for when you need to do math or anything quantitative/computational. "
+            "Input should ideally be math expressions, ex. \"8^3\", but can also be "
+            "natural language if a math expression is not possible."
+        )
+    ),
+    make_calls.CallTool(),
 ]
 
 
