@@ -1,0 +1,10 @@
+# Remove everything not needed for deployment
+
+.devcontainer
+.github
+docs
+tests
+.firebaserc
+.gitignore
+firebase.json
+README.md
