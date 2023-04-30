@@ -7,7 +7,7 @@ endpoint.
 from fastapi import FastAPI
 
 # Routers
-from . import text_inbound, voice_inbound
+from api import text_inbound, voice_inbound
 from apps.gpt import make_calls
 
 
