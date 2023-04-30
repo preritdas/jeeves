@@ -1,9 +1,9 @@
 """GPT applet."""
 import utils
 
-from . import agency
-from . import tool_auth
-from . import completions
+from apps.gpt import agency
+from apps.gpt import tool_auth
+from apps.gpt import completions
 
 
 APP_HELP = "Speak with Jeeves."

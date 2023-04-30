@@ -4,7 +4,7 @@ ordered list.
 """
 # Project
 import config
-from . import grocery_utils
+from apps.groceries import utils
 
 
 # Optional translation
@@ -57,7 +57,7 @@ def _check_item_format(item):
     if "(" in item:  # paranthesis specifications
         check_item = item[:item.find("(")].strip()
 
-    return grocery_utils.singularize(check_item).lower()
+    return utils.singularize(check_item).lower()
 
 
 def _classify(item: str, setup: str) -> tuple[str, str]:
@@ -67,8 +67,8 @@ def _classify(item: str, setup: str) -> tuple[str, str]:
     """
     check_item = _check_item_format(item)
 
-    for category in grocery_utils.MAPPING(setup):
-        if check_item in grocery_utils.MAPPING(setup)[category]: 
+    for category in utils.MAPPING(setup):
+        if check_item in utils.MAPPING(setup)[category]: 
             return category, item
 
     return "", item  # always return a translation to english
@@ -80,7 +80,7 @@ def _order_classification(classification: dict, setup: str) -> dict[str, list[tu
         if category == "none": continue
         classification[category] = sorted(
             classification[category], 
-            key = lambda item: grocery_utils.MAPPING(setup)[category].index(
+            key = lambda item: utils.MAPPING(setup)[category].index(
                 _check_item_format(item[1])
             )
         )
@@ -94,7 +94,7 @@ def _order_classification(classification: dict, setup: str) -> dict[str, list[tu
 
     key_order = sorted(
         classification_keys, 
-        key = lambda category: list(grocery_utils.MAPPING(setup).keys()).index(category)
+        key = lambda category: list(utils.MAPPING(setup).keys()).index(category)
     )
 
     if none_present: 

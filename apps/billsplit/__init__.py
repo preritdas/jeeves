@@ -1,7 +1,7 @@
 """Split the bill and vote on tip."""
 import utils
 
-from . import actions
+from apps.billsplit import actions
 
 
 APP_HELP = (

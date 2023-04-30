@@ -1,17 +1,17 @@
 """Groceries app."""
 import datetime as dt
 
-import utils
+from utils import app_handler
 import config
 
-from . import classification
-from . import grocery_utils
+from apps.groceries import classification
+from apps.groceries.utils import SETUPS
 from permissions import deta_client
 
 
 APP_HELP = "Organize your grocery list into categories."
 APP_OPTIONS = {
-    "setup": f"Custom store setup. Available: {', '.join(grocery_utils.SETUPS.keys())}",
+    "setup": f"Custom store setup. Available: {', '.join(SETUPS.keys())}",
     "add": "ID of a previous list to add to it. "
         "ex. 'last' for your latest list, or the raw ID."
 }
@@ -36,14 +36,14 @@ def latest_grocery_list(phone: str) -> dict:
     )
 
 
-@utils.app_handler(APP_HELP, APP_OPTIONS)
+@app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     # Options
     setup = options.get("setup")
     
     # Check for a valid setup
-    if setup and not setup.title() in grocery_utils.SETUPS:
-        available_setups = list(grocery_utils.SETUPS.keys())
+    if setup and not setup.title() in SETUPS:
+        available_setups = list(SETUPS.keys())
         return f"Invalid setup. Available setups: {', '.join(available_setups)}"
 
     if (list_id := options.get("add")):

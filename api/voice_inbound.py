@@ -1,3 +1,4 @@
+"""Handle incoming calls."""
 # External
 from fastapi import APIRouter, Request, Response, BackgroundTasks
 from twilio.twiml.voice_response import VoiceResponse

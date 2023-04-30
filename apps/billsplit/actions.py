@@ -1,6 +1,6 @@
 """User operations in the billsplit app."""
-from . import billsplit_db
-from .billsplit_db import db
+from apps.billsplit import billsplit_db
+from apps.billsplit.billsplit_db import db
 
 
 def _person_active(phone: str) -> bool:

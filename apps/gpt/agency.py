@@ -5,7 +5,7 @@ from langchain.callbacks import get_openai_callback
 from langchain.schema import OutputParserException
 
 from keys import KEYS
-from . import prompts
+from apps.gpt import prompts
 
 
 # ---- Build the agent ----

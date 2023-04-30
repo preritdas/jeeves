@@ -2,7 +2,7 @@
 import utils
 
 # import pyximport; pyximport.install(language_level=3)
-from . import pure_wordhunt as wordhunt
+from apps.wordhunt import pure_wordhunt as wordhunt
 
 
 APP_HELP = "Solve a WordHunt board. Content is the board - top to bottom, left to right."

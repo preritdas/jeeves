@@ -7,10 +7,10 @@ from langchain.agents.agent_toolkits import ZapierToolkit
 
 from keys import KEYS
 
-from . import retrieval
-from . import news
-from . import send_texts
-from . import make_calls
+from apps.gpt import retrieval
+from apps.gpt import news
+from apps.gpt import send_texts
+from apps.gpt import make_calls
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):

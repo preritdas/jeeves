@@ -5,18 +5,18 @@ Contains all individual apps as submodules, importable with `from apps import bi
 from typing import Callable
 
 # Apps
-from . import groceries
-from . import wordhunt
-from . import echo
-from . import permissions
-from . import jokes
-from . import weather
-from . import invite
-from . import usage
-from . import rt
-from . import cocktails
-from . import billsplit
-from . import gpt
+from apps import groceries
+from apps import wordhunt
+from apps import echo
+from apps import permissions
+from apps import jokes
+from apps import weather
+from apps import invite
+from apps import usage
+from apps import rt
+from apps import cocktails
+from apps import billsplit
+from apps import gpt
 
 # Project
 import utils

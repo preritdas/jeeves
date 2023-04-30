@@ -1,7 +1,7 @@
 import random
 
 from apps import groceries
-from apps.groceries import grocery_utils
+from apps.groceries import utils
 from apps.groceries import grocery_db
 
 
@@ -119,13 +119,13 @@ def test_paranthesis():
 
 def test_pluralization():
     # Test normal pluralization
-    assert grocery_utils.pluralize("tank") == "tanks"
+    assert utils.pluralize("tank") == "tanks"
 
     # Test manual substitution pluralization
-    assert grocery_utils.pluralize("pork") == "pork"
+    assert utils.pluralize("pork") == "pork"
 
     # Test already plural
-    assert grocery_utils.pluralize("beans") == "beans"
+    assert utils.pluralize("beans") == "beans"
 
 
 def test_help():

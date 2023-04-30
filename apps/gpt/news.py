@@ -3,7 +3,7 @@ import requests
 from pydantic import BaseModel, Field
 
 from keys import KEYS
-from . import retrieval
+from apps.gpt import retrieval
 
 
 NEWS_ENDPOINT = "https://newsapi.org/v2"
