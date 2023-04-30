@@ -54,8 +54,8 @@ def send_message(content: str, recipient: str) -> bool:
     # Try twice for one second total for success
     for _ in range(2):
         if (last_status := message_sent.fetch().status) not in TWILIO_NON_SUCCESS_STATUS:
-            return "Message sent successfully."
+            return True
 
         time.sleep(0.5)
 
-    return f"Message failed to send. Status: {last_status}"
+    return False
