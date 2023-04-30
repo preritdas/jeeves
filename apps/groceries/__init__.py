@@ -4,8 +4,8 @@ import datetime as dt
 import utils
 import config
 
-from . import classification
-from . import grocery_utils
+from apps.groceries import classification
+from apps.groceries import grocery_utils
 from permissions import deta_client
 
 

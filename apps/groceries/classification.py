@@ -4,7 +4,7 @@ ordered list.
 """
 # Project
 import config
-from . import grocery_utils
+from apps.groceries import grocery_utils
 
 
 # Optional translation
