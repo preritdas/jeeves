@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - docs/source/**/**.*
+      - .github/workflows/docs.yml
     branches: [master]
   pull_request:
     paths:
