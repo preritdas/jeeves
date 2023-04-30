@@ -1,5 +1,6 @@
 """Load tools depending on authorization."""
 from langchain.agents import Tool
+from langchain.tools import BaseTool
 from langchain.utilities import GoogleSerperAPIWrapper
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from langchain.utilities.zapier import ZapierNLAWrapper
@@ -55,7 +56,7 @@ ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS = (
     "Input must be a JSON string with the keys \"source\" and \"query\"."
 )
 
-no_auth_tools = [
+no_auth_tools: list[BaseTool] = [
     Tool(
         name="Google Search",
         func=GoogleSerperAPIWrapperURL(serper_api_key=KEYS.GoogleSerper.api_key).run,
