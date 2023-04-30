@@ -1,8 +1,8 @@
 """Applet to create and update user permissions."""
 import utils
 
-from . import query
-from . import operations
+from apps.permissions import query
+from apps.permissions import operations
 
 
 APP_HELP = (
