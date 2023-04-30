@@ -112,7 +112,7 @@ def build_tools(inbound_phone: str) -> list[Tool]:
     added_tools = []
 
     # Zapier
-    if inbound_phone in KEYS.ZapierNLA:
+    if KEYS.ZapierNLA and inbound_phone in KEYS.ZapierNLA:
         zapier_key = KEYS.ZapierNLA[inbound_phone]
         zapier_wrapper = ZapierNLAWrapper(zapier_nla_api_key=zapier_key)
         zapier_toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier_wrapper)
