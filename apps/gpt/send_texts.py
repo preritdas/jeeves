@@ -56,7 +56,10 @@ def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
                     recipient=inbound_phone,
                 )
 
-            return str(send_res)
+            if send_res:
+                return "Message delivered successfully."
+            else:
+                return "Message failed to deliver."
 
         def _arun(self, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, str]:
             raise NotImplementedError(f"{type(self).__name__} does not support async.")
