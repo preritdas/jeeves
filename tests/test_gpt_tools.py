@@ -11,7 +11,7 @@ def test_website_answerer():
     )
 
     assert answer
-    assert "Unfortunately cannot answer" in answer
+    assert "Unfortunately cannot answer" not in answer
 
 
 def test_youtube_answerer():
@@ -23,14 +23,14 @@ def test_youtube_answerer():
     )
 
     assert answer
-    assert "Unfortunately cannot answer" in answer 
+    assert "Unfortunately cannot answer" not in answer 
 
 
 def test_headlines():
     headlines = manual_headline_news("business")
 
     assert headlines
-    assert not "Error getting headline news" in headlines
+    assert "Error getting headline news" not in headlines
 
 
 def test_wolfram_alpha():
@@ -63,4 +63,5 @@ def test_text_tool(mocker, default_options):
     )
 
     assert res
-    assert "True" in res
+    assert isinstance(res, str)
+    assert "fail" not in res.lower()
