@@ -1,6 +1,4 @@
 "Test the GPT app."
-import pytest
-
 from apps.gpt import handler
 from api.voice_inbound import _process_speech
 from apps.gpt.make_calls.routes import process_user_speech
@@ -36,12 +34,13 @@ def test_agency(default_options):
     assert "Jeeves" in res
 
 
-@pytest.mark.xfail(reason="Out of ElevenLabs credits.")
-def test_processing_speech(who_are_you_twilio_recording, default_options):
+def test_processing_speech(mocker, who_are_you_twilio_recording, default_options):
     """
     Test the background process that updates the call with a response when calling 
     Jeeves (inbound).
     """
+    mocker.patch("config.General.SANDBOX_MODE", True)
+
     response = _process_speech(
         inbound_phone=default_options["inbound_phone"],
         audio_url=who_are_you_twilio_recording
@@ -50,10 +49,9 @@ def test_processing_speech(who_are_you_twilio_recording, default_options):
     assert response
     assert (xml := response.to_xml())
     assert "Play" in xml
-    assert "uploadio" in xml
+    assert "upcdn" in xml
 
 
-@pytest.mark.xfail(reason="Out of ElevenLabs credits.")
 def test_processing_speech_outbound(outbound_call_key):
     """Test generating the next voice response when outbound calling."""
     call = Call.from_call_id(call_id=outbound_call_key)

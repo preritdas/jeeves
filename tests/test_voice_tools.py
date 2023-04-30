@@ -1,13 +1,10 @@
 """Test voice tools."""
-import pytest
-
 import string
 import random
 
 import voice_tools as vt
 
 
-@pytest.mark.xfail(reason="Out of ElevenLabs credits.")
 def test_speak():
     """Test ElevenLabs Jeeves speaking, both generation and caching."""
     random_words = ' '.join(
