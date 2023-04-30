@@ -17,6 +17,9 @@ def default_inbound() -> dict[str, str]:
         [str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) for _ in range(10)]
     )
 
+    # Add US country code
+    random_inbound = "1" + random_inbound
+
     return {
         "phone_number": random_inbound,
         "body": "app: apps",
