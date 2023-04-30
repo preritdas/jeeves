@@ -56,7 +56,7 @@ def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
                     recipient=inbound_phone,
                 )
 
-            return send_res
+            return str(send_res)
 
         def _arun(self, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, str]:
             raise NotImplementedError(f"{type(self).__name__} does not support async.")
