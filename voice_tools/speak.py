@@ -6,7 +6,7 @@ import os
 import uuid
 
 from keys import KEYS
-from . import speech_cache
+from voice_tools import speech_cache
 
 
 JEEVES_VOICE_ID = KEYS.ElevenLabs.voice_id

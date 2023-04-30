@@ -1,2 +1,2 @@
-from . import transcribe
-from . import speak
+from voice_tools import transcribe
+from voice_tools import speak
