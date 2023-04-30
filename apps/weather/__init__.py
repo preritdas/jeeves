@@ -2,8 +2,8 @@
 import utils
 import config
 
-from . import data
-from .data import kelvin_to_farenheit as farenheit
+from apps.weather import data
+from apps.weather.data import kelvin_to_farenheit as farenheit
 
 
 APP_HELP = "Get weather data."
