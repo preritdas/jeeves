@@ -5,7 +5,9 @@ from apps.gpt import handler
 from api.voice_inbound import _process_speech
 from apps.gpt.make_calls.routes import process_user_speech
 from apps.gpt.make_calls.database import Call
-from apps.gpt.tool_auth import no_auth_tools
+from apps.gpt.tool_auth import no_auth_tools, build_tools
+
+from keys import KEYS
 
 
 def test_handler(default_options):
@@ -86,3 +88,26 @@ def test_serper_wrapper():
     assert link_res
     assert isinstance(link_res, str)
     assert "https" in link_res
+
+
+def test_building_tools(default_options):
+    """Test building the tools."""
+    # Make sure Zapier is in there
+    if KEYS.ZapierNLA:
+        tools = build_tools(
+            list(KEYS.ZapierNLA.keys())[0]
+        )
+        tool_names = [tool.name for tool in tools]
+        tool_descriptions = [tool.description for tool in tools]
+
+        assert any("Zapier" in description for description in tool_descriptions)
+    else:
+        tools = build_tools(
+            default_options["inbound_phone"]
+        )
+        tool_names = [tool.name for tool in tools]
+        tool_descriptions = [tool.description for tool in tools]
+
+    # General
+    assert tools
+    assert any("Text Message" in name for name in tool_names)
