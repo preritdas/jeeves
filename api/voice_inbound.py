@@ -163,7 +163,7 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
         process_speech_update_call, 
         call_sid, 
         phone_number, 
-        f"{audio_url}.mp3"  # appending .mp3 to Twilio url is valid
+        audio_url
     )
 
     # Allow breathing room before ending the call. Updating the call will actually
