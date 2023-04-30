@@ -65,7 +65,7 @@ def test_processing_speech_outbound(outbound_call_key):
     assert voice_response
     assert (xml := voice_response.to_xml())
     assert "Play" in xml
-    assert "uploadio" in xml
+    assert "upcdn" in xml
     
 
 def test_serper_wrapper():
