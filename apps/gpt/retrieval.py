@@ -17,8 +17,8 @@ import utils
 from keys import KEYS
 
 
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS["OpenAI"]["api_key"], temperature=0)
-embeddings = OpenAIEmbeddings(openai_api_key=KEYS["OpenAI"]["api_key"])
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
+embeddings = OpenAIEmbeddings(openai_api_key=KEYS.OpenAI.api_key)
 N_DOCS = 5  # 10 for gpt-4, 5 for 3.5
 splitter = TokenTextSplitter(
     encoding_name="cl100k_base", 
@@ -28,7 +28,7 @@ splitter = TokenTextSplitter(
 
 
 # Deta Base for caching conversions
-deta_client = deta.Deta(KEYS["Deta"]["project_key"])
+deta_client = deta.Deta(KEYS.Deta.project_key)
 conversions_db = deta_client.Base("conversions_cache")
 
 
@@ -139,7 +139,7 @@ class YouTubeAnswerer(BaseAnswerer):
 
         # Then get the transcript
         response = requests.post(
-            f'{KEYS["Transcription"]["api_url"]}/youtube',
+            f'{KEYS.Transcription.api_url}/youtube',
             json={"video_id": video_id}
         )
 

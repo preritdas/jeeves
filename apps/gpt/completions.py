@@ -5,7 +5,7 @@ from keys import KEYS
 
 
 # Authennticate OpenAI
-openai.api_key = KEYS["OpenAI"]["api_key"]
+openai.api_key = KEYS.OpenAI.api_key
 
 
 def gpt_response(prompt: str) -> str:

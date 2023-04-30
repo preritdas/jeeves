@@ -12,7 +12,7 @@ from keys import KEYS
 import config
 
 
-deta = deta.Deta(KEYS["Deta"]["project_key"])
+deta = deta.Deta(KEYS.Deta.project_key)
 usage_db = deta.Base("usage")
 permissions_db = deta.Base("permissions")
 

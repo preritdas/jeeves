@@ -11,7 +11,7 @@ from keys import KEYS
 
 
 llm = ChatOpenAI(
-    openai_api_key=KEYS["OpenAI"]["api_key"], 
+    openai_api_key=KEYS.OpenAI.api_key, 
     model_name="gpt-3.5-turbo", 
     temperature=0
 )

@@ -9,14 +9,14 @@ from keys import KEYS
 from . import speech_cache
 
 
-JEEVES_VOICE_ID = KEYS["ElevenLabs"]["voice_id"]
+JEEVES_VOICE_ID = KEYS.ElevenLabs.voice_id
 
 
 def _upload_result(filepath: str) -> str:
     """Upload the result to the server and return the URL."""
-    url = f"https://api.upload.io/v2/accounts/{KEYS['UploadIO']['account']}/uploads/binary"
+    url = f"https://api.upload.io/v2/accounts/{KEYS.UploadIO.account}/uploads/binary"
     headers = {
-        "Authorization": f"Bearer {KEYS['UploadIO']['api_key']}",
+        "Authorization": f"Bearer {KEYS.UploadIO.api_key}",
         "Content-Type": "audio/mpeg"
     }
 
@@ -33,7 +33,7 @@ def speak_jeeves(text: str) -> str:
     if (cached_url := speech_cache.get_speech(text)):
         return cached_url
 
-    byte_code = elevenlabs.generate(text, KEYS["ElevenLabs"]["api_key"], JEEVES_VOICE_ID)
+    byte_code = elevenlabs.generate(text, KEYS.ElevenLabs.api_key, JEEVES_VOICE_ID)
     filepath = f"{uuid.uuid1()}.mp3"
 
     with open(filepath, "wb") as f:

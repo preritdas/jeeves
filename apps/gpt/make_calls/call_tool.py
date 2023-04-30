@@ -23,7 +23,7 @@ def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
     call_params: dict[str, str] = {"call_id": created_call.key}
     outbound_call = twilio_client.calls.create(
         recipient,
-        KEYS["Twilio"]["sender"],
+        KEYS.Twilio.sender,
         url=f"{BASE_URL}/voice/outbound/handler?{urlencode(call_params)}",
         record=True
     )

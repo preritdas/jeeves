@@ -8,7 +8,7 @@ from keys import KEYS
 import texts
 
 
-deta_client = deta.Deta(KEYS["Deta"]["project_key"])
+deta_client = deta.Deta(KEYS.Deta.project_key)
 db = deta_client.Base("billsplit")
 
 

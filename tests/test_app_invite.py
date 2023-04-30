@@ -49,7 +49,7 @@ def test_inviting(mocker, default_options):
 
 def test_failed_delivery(mocker, default_options):
     """Mock a bad API key."""
-    mocker.patch("texts.twilio_client", Client(KEYS["Twilio"]["account_sid"], "invalid"))
+    mocker.patch("texts.twilio_client", Client(KEYS.Twilio.account_sid, "invalid"))
 
     with pytest.raises(TwilioRestException):
         invite.handler("14259023246", default_options)

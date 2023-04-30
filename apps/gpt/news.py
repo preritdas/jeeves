@@ -36,7 +36,7 @@ def _headline_news(category: str) -> Articles:
     """Query directly and return URLs, titles, and contents."""
     res = requests.get(
         f"{NEWS_ENDPOINT}/top-headlines",
-        params={"apiKey": KEYS["NewsAPI"]["api_key"], "country": "us", "category": category},
+        params={"apiKey": KEYS.NewsAPI.api_key, "country": "us", "category": category},
     )
 
     articles = res.json()["articles"]
