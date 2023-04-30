@@ -132,3 +132,12 @@ def temp_usage_logs():
     # Remove the temporary logs
     for key in keys:
         usage.usage_db.delete(key)
+
+
+@pytest.fixture
+def who_are_you_twilio_recording():
+    """Twilio audio recording asking 'who are you?'"""
+    return (
+        "https://api.twilio.com/2010-04-01/Accounts/ACe84ee0dbced3a3132211427153ae959a"
+        "/Recordings/REed31c6f0df039c1d98b23288ae87fc73"
+    )
