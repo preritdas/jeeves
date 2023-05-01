@@ -1,6 +1,6 @@
 """Create a logging callback handler for the agent."""
 from langchain.callbacks.base import BaseCallbackHandler
-from langchain.callbacks import CallbackManager, StdOutCallbackHandler
+from langchain.callbacks import StdOutCallbackHandler
 
 import logging
 from logging import Logger
@@ -156,7 +156,7 @@ handler = SysLogHandler(address=(KEYS.Papertrail.host, KEYS.Papertrail.port))
 logger.addHandler(handler)
 
 
-def create_callback_manager(uid: str) -> CallbackManager:
+def create_callback_handlers(uid: str) -> list[BaseCallbackHandler]:
     """
     Create a Callback Manager with all the handlers based on the uid. The uid is used
     to separate entries in the logs, so a unique CallbackManager should be used for each agent run.
@@ -169,5 +169,4 @@ def create_callback_manager(uid: str) -> CallbackManager:
     if config.GPT.CONSOLE_AGENT:
         callback_handlers.append(StdOutCallbackHandler())
 
-    # Create callback manager with all handlers
-    return CallbackManager(callback_handlers)
+    return callback_handlers
