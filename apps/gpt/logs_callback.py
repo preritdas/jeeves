@@ -18,9 +18,10 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
     Callback Handler that logs instead of printing. 
     Specific for agents, as it uses agent terminology in the logs.
     """
-    def __init__(self, logger: Logger) -> None:
+    def __init__(self, logger: Logger, uid: str) -> None:
         """Initialize callback handler."""
         self.logger = logger
+        self.uid = uid
 
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
@@ -47,12 +48,12 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Print out that we are entering a chain."""
         class_name = serialized["name"]
-        self.logger.info(f"AgentStart: Entering new {class_name} chain...")
-        self.logger.info(f"UserInput: {inputs['input']}")
+        self.logger.info(f"{self.uid}: AgentStart: Entering new {class_name} chain...")
+        self.logger.info(f"{self.uid}: UserInput: {inputs['input']}")
 
     def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> None:
         """Print out that we finished a chain."""
-        self.logger.info("AgentFinish: Finished chain.")
+        self.logger.info(f"{self.uid}: AgentFinish: Finished chain.")
 
     def on_chain_error(
         self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
@@ -72,7 +73,7 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
         self, action: AgentAction, color: Optional[str] = None, **kwargs: Any
     ) -> Any:
         """Run on agent action."""
-        self.logger.info(f"AgentAction: {action.tool}: {action.tool_input}")
+        self.logger.info(f"{self.uid}: AgentAction: {action.tool}: {action.tool_input}")
 
     def on_tool_end(
         self,
@@ -99,13 +100,13 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> None:
         """Run when agent ends."""
-        self.logger.info(text)
+        self.logger.info(f"{self.uid}: {text}")
 
     def on_agent_finish(
         self, finish: AgentFinish, color: Optional[str] = None, **kwargs: Any
     ) -> None:
         """Run on agent end."""
-        self.logger.info(f"FinalAnswer: {finish.return_values['output']}")
+        self.logger.info(f"{self.uid}: FinalAnswer: {finish.return_values['output']}")
 
 
 # ---- Logging ----
@@ -115,13 +116,19 @@ logger.setLevel(logging.INFO)
 handler = SysLogHandler(address=(KEYS.Papertrail.host, KEYS.Papertrail.port))
 logger.addHandler(handler)
 
-# Log to console and to Papertrail
-logging_callback = AgentLoggingCallbackHandler(logger=logger)
-callback_handlers = [logging_callback]
 
-# Log to console as well if configured
-if config.GPT.CONSOLE_AGENT:
-    callback_handlers.append(StdOutCallbackHandler())
+def create_callback_manager(uid: str) -> CallbackManager:
+    """
+    Create a Callback Manager with all the handlers based on the uid. The uid is used
+    to separate entries in the logs, so a unique CallbackManager should be used for each agent run.
+    """
+    # Log to console and to Papertrail
+    logging_callback = AgentLoggingCallbackHandler(logger=logger, uid=str(uid))
+    callback_handlers = [logging_callback]
 
-# Create callback manager with all handlers
-callback_manager = CallbackManager(callback_handlers)
+    # Log to console as well if configured
+    if config.GPT.CONSOLE_AGENT:
+        callback_handlers.append(StdOutCallbackHandler())
+
+    # Create callback manager with all handlers
+    return CallbackManager(callback_handlers)
