@@ -1,7 +1,7 @@
 """Agent GPT."""
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
-from langchain.callbacks import get_openai_callback, CallbackManager, StdOutCallbackHandler
+from langchain.callbacks import get_openai_callback, CallbackManager
 from langchain.schema import OutputParserException
 
 from keys import KEYS
@@ -25,7 +25,7 @@ class InternalThoughtZeroShotAgent(ZeroShotAgent):
 
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
 
-def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
+def create_agent_executor(toolkit: list[Tool], callback_manager: CallbackManager) -> AgentExecutor:
     """Create the agent given authenticated tools."""
     agent_prompts: prompts.AgentPrompts = prompts.build_prompts()
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
@@ -39,7 +39,7 @@ def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
         agent=agent,
         tools=toolkit,
         verbose=True,
-        callback_manager=logs_callback.callback_manager
+        callback_manager=callback_manager
     )
 
 
@@ -64,12 +64,12 @@ def retry_couldnt_parse(function):
 
 
 @retry_couldnt_parse
-def run_agent(agent_executor: AgentExecutor, query: str) -> str:
+def run_agent(agent_executor: AgentExecutor, query: str, uid: str) -> str:
     """Run the agent."""
     with get_openai_callback() as cb:
         res = agent_executor.run(query)
         logs_callback.logger.info(
-            f"UsageInfo: "
+            f"{uid}: UsageInfo: "
             f"Total Tokens: {cb.total_tokens}, "
             f"Prompt Tokens: {cb.prompt_tokens}, "
             f"Completion Tokens: {cb.completion_tokens}, "

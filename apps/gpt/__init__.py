@@ -1,9 +1,12 @@
 """GPT applet."""
 import utils
 
+import uuid
+
 from apps.gpt import agency
 from apps.gpt import tool_auth
 from apps.gpt import completions
+from apps.gpt import logs_callback
 
 
 APP_HELP = "Speak with Jeeves."
@@ -19,9 +22,11 @@ def handler(content: str, options: dict[str, str]) -> str:
         if agency_option.lower() in {"no", "false", "off"}:
             return completions.gpt_response(content)
 
-    toolkit = tool_auth.build_tools(options["inbound_phone"])
-    agent_executor = agency.create_agent_executor(toolkit)
-    response: str = agency.run_agent(agent_executor, content)
+    uid = str(uuid.uuid4())
+    callback_manager = logs_callback.create_callback_manager(uid)
+    toolkit = tool_auth.build_tools(options["inbound_phone"], callback_manager)
+    agent_executor = agency.create_agent_executor(toolkit, callback_manager)
+    response: str = agency.run_agent(agent_executor, content, uid)
 
     # Remove spaces and newlines from the start of the response
     return response.strip()
