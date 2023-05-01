@@ -1,11 +1,12 @@
 """Agent GPT."""
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
-from langchain.callbacks import get_openai_callback
+from langchain.callbacks import get_openai_callback, CallbackManager, StdOutCallbackHandler
 from langchain.schema import OutputParserException
 
 import logging  # log agent runs
 from logging.handlers import SysLogHandler
+from apps.gpt.logging_callback import LoggingCallbackHandler
 
 from keys import KEYS
 from apps.gpt import prompts
@@ -17,6 +18,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = SysLogHandler(address=(KEYS.Papertrail.host, KEYS.Papertrail.port))
 logger.addHandler(handler)
+
+# Log to console and to Papertrail
+logging_callback = LoggingCallbackHandler(logger=logger)
+callback_manager = CallbackManager([logging_callback, StdOutCallbackHandler()])
 
 
 # ---- Build the agent ----
@@ -49,7 +54,8 @@ def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
     return AgentExecutor.from_agent_and_tools(
         agent=agent,
         tools=toolkit,
-        verbose=True
+        verbose=True,
+        callback_manager=callback_manager
     )
 
 
