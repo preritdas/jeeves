@@ -23,9 +23,9 @@ def handler(content: str, options: dict[str, str]) -> str:
             return completions.gpt_response(content)
 
     uid = str(uuid.uuid4())
-    callback_manager = logs_callback.create_callback_manager(uid)
-    toolkit = tool_auth.build_tools(options["inbound_phone"], callback_manager)
-    agent_executor = agency.create_agent_executor(toolkit, callback_manager)
+    callback_handlers = logs_callback.create_callback_handlers(uid)
+    toolkit = tool_auth.build_tools(options["inbound_phone"], callback_handlers)
+    agent_executor = agency.create_agent_executor(toolkit, callback_handlers)
     response: str = agency.run_agent(agent_executor, content, uid)
 
     # Remove spaces and newlines from the start of the response

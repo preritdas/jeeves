@@ -1,7 +1,8 @@
 """Agent GPT."""
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
-from langchain.callbacks import get_openai_callback, CallbackManager
+from langchain.callbacks import get_openai_callback
+from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import OutputParserException
 
 from keys import KEYS
@@ -25,7 +26,7 @@ class InternalThoughtZeroShotAgent(ZeroShotAgent):
 
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
 
-def create_agent_executor(toolkit: list[Tool], callback_manager: CallbackManager) -> AgentExecutor:
+def create_agent_executor(toolkit: list[Tool], callback_handlers: list[BaseCallbackHandler]) -> AgentExecutor:
     """Create the agent given authenticated tools."""
     agent_prompts: prompts.AgentPrompts = prompts.build_prompts()
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
@@ -35,11 +36,11 @@ def create_agent_executor(toolkit: list[Tool], callback_manager: CallbackManager
         format_instructions=agent_prompts.format_instructions,
         suffix=agent_prompts.suffix
     )
-    return AgentExecutor.from_agent_and_tools(
+    return AgentExecutor(
         agent=agent,
         tools=toolkit,
         verbose=True,
-        callback_manager=callback_manager
+        callbacks=callback_handlers
     )
 
 
