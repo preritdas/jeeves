@@ -71,7 +71,7 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
     """
     Generate a response and update the call with that response.
     """
-    response = process_user_speech(call_id, call_sid, user_speech)
+    response = process_user_speech(call_id=call_id, user_speech=user_speech)
 
     # Update the call, ignore if the recipient hung up
     try:
