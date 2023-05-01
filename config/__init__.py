@@ -21,4 +21,4 @@ with open(config_path, "r", encoding="utf-8") as f:
     RAW_CONFIG = yaml.safe_load(f)
 
 # Validate the keys and expose KEYS
-CONFIG = models.Keys(**RAW_CONFIG)
+CONFIG = models.Config(**RAW_CONFIG)
