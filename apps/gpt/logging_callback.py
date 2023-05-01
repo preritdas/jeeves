@@ -7,9 +7,11 @@ from typing import Dict, Any, List, Optional, Union
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 
 
-class LoggingCallbackHandler(BaseCallbackHandler):
-    """Callback Handler that prints to std out."""
-
+class AgentLoggingCallbackHandler(BaseCallbackHandler):
+    """
+    Callback Handler that logs instead of printing. 
+    Specific for agents, as it uses agent terminology in the logs.
+    """
     def __init__(self, logger: Logger) -> None:
         """Initialize callback handler."""
         self.logger = logger
@@ -39,11 +41,11 @@ class LoggingCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Print out that we are entering a chain."""
         class_name = serialized["name"]
-        self.logger.info(f"\n\n\033[1m> Entering new {class_name} chain...\033[0m")
+        self.logger.info(f"AgentStart: Entering new {class_name} chain...")
 
     def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> None:
         """Print out that we finished a chain."""
-        self.logger.info("\n\033[1m> Finished chain.\033[0m")
+        self.logger.info("AgentFinish: Finished chain.")
 
     def on_chain_error(
         self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
@@ -103,4 +105,4 @@ class LoggingCallbackHandler(BaseCallbackHandler):
         self, finish: AgentFinish, color: Optional[str] = None, **kwargs: Any
     ) -> None:
         """Run on agent end."""
-        self.logger.info(finish.log)
+        self.logger.info(f"FinalAnswer: {finish.return_values['output']}")

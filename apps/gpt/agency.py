@@ -6,7 +6,7 @@ from langchain.schema import OutputParserException
 
 import logging  # log agent runs
 from logging.handlers import SysLogHandler
-from apps.gpt.logging_callback import LoggingCallbackHandler
+from apps.gpt.logging_callback import AgentLoggingCallbackHandler
 
 from keys import KEYS
 from apps.gpt import prompts
@@ -20,7 +20,7 @@ handler = SysLogHandler(address=(KEYS.Papertrail.host, KEYS.Papertrail.port))
 logger.addHandler(handler)
 
 # Log to console and to Papertrail
-logging_callback = LoggingCallbackHandler(logger=logger)
+logging_callback = AgentLoggingCallbackHandler(logger=logger)
 callback_manager = CallbackManager([logging_callback, StdOutCallbackHandler()])
 
 
@@ -85,6 +85,7 @@ def run_agent(agent_executor: AgentExecutor, query: str) -> str:
     with get_openai_callback() as cb:
         res = agent_executor.run(query)
         logger.info(
+            f"UsageInfo: "
             f"Total Tokens: {cb.total_tokens}, "
             f"Prompt Tokens: {cb.prompt_tokens}, "
             f"Completion Tokens: {cb.completion_tokens}, "
