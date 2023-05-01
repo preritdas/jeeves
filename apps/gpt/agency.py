@@ -4,24 +4,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback, CallbackManager, StdOutCallbackHandler
 from langchain.schema import OutputParserException
 
-import logging  # log agent runs
-from logging.handlers import SysLogHandler
-from apps.gpt.logging_callback import AgentLoggingCallbackHandler
-
 from keys import KEYS
-from apps.gpt import prompts
-
-
-# ---- Logging ----
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-handler = SysLogHandler(address=(KEYS.Papertrail.host, KEYS.Papertrail.port))
-logger.addHandler(handler)
-
-# Log to console and to Papertrail
-logging_callback = AgentLoggingCallbackHandler(logger=logger)
-callback_manager = CallbackManager([logging_callback, StdOutCallbackHandler()])
+from apps.gpt import logs_callback, prompts
 
 
 # ---- Build the agent ----
@@ -55,7 +39,7 @@ def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
         agent=agent,
         tools=toolkit,
         verbose=True,
-        callback_manager=callback_manager
+        callback_manager=logs_callback.callback_manager
     )
 
 
@@ -84,7 +68,7 @@ def run_agent(agent_executor: AgentExecutor, query: str) -> str:
     """Run the agent."""
     with get_openai_callback() as cb:
         res = agent_executor.run(query)
-        logger.info(
+        logs_callback.logger.info(
             f"UsageInfo: "
             f"Total Tokens: {cb.total_tokens}, "
             f"Prompt Tokens: {cb.prompt_tokens}, "
