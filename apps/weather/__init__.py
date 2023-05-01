@@ -1,6 +1,6 @@
 """Weather data."""
 import utils
-import config
+from config import CONFIG
 
 from apps.weather import data
 from apps.weather.data import kelvin_to_farenheit as farenheit
@@ -8,7 +8,7 @@ from apps.weather.data import kelvin_to_farenheit as farenheit
 
 APP_HELP = "Get weather data."
 APP_OPTIONS = {
-    "city": f"OPTIONAL, default is {config.Weather.DEFAULT_CITY}",
+    "city": f"OPTIONAL, default is {CONFIG.Weather.default_city}",
     "state": "OPTIONAL, U.S. state, city is usually sufficient",
     "country": "OPTIONAL, ISO code, city is usually sufficient"
 }
@@ -17,7 +17,7 @@ APP_OPTIONS = {
 @utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
     """Weather data."""
-    city = options.get("city", config.Weather.DEFAULT_CITY)
+    city = options.get("city", CONFIG.Weather.default_city)
     state = options.get("state", "")
     country = options.get("country", "")
 

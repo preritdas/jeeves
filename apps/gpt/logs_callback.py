@@ -11,7 +11,7 @@ from typing import Dict, Any, List, Optional, Union
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 
 from keys import KEYS
-import config
+from config import CONFIG
 
 
 def extract_log_items(log: str, fields: list[str]) -> list[str]:
@@ -166,7 +166,7 @@ def create_callback_handlers(uid: str) -> list[BaseCallbackHandler]:
     callback_handlers = [logging_callback]
 
     # Log to console as well if configured
-    if config.GPT.CONSOLE_AGENT:
+    if CONFIG.GPT.console_agent:
         callback_handlers.append(StdOutCallbackHandler())
 
     return callback_handlers

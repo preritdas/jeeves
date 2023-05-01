@@ -9,7 +9,7 @@ import random
 
 # Project
 from keys import KEYS
-import config
+from config import CONFIG
 
 
 deta = deta.Deta(KEYS.Deta.project_key)
@@ -57,7 +57,7 @@ def log_use(
     }
 
     # If in sandbox, return a fake key and don't post to database
-    if config.General.SANDBOX_MODE:
+    if CONFIG.General.sandbox_mode:
         return "".join([random.choice(string.ascii_lowercase) for _ in range(12)])
 
     res: dict = usage_db.put(payload)

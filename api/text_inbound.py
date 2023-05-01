@@ -7,7 +7,7 @@ import threading
 
 # Project
 import inbound
-import config
+from config import CONFIG
 import parsing
 
 
@@ -20,7 +20,7 @@ def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
     stated preference of threaded responses to either handle the inbound in a thread
     (simply start the thread) or to wait for the processing to complete.
     """
-    if config.General.THREADED_INBOUND:
+    if CONFIG.General.threaded_inbound:
         process_inbound = threading.Thread(
             target = inbound.main_handler,
             kwargs = {

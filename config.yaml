@@ -7,7 +7,8 @@ Weather:
   default_city: McLean
 
 Groceries:
-translation: false
+  translation: false
+  full_dt_format: "%Y-%m-%d %H-%M-%S"
 
 Cocktails:
   result_limit: 3

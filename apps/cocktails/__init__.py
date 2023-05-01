@@ -1,6 +1,6 @@
 """Get cocktail drink recommendations with ingredients and instructions."""
 import utils
-import config
+from config import CONFIG
 
 from apps.cocktails import data
 from apps.cocktails import errors  # unit tests
@@ -23,7 +23,7 @@ def handler(content: str, options: dict) -> str:
         if not drinks:
             return f"I didn't find any drinks with the query '{content}'."
 
-        return data.concat_drinks(drinks, limit=config.Cocktails.RESULT_LIMIT)
+        return data.concat_drinks(drinks, limit=CONFIG.Cocktails.result_limit)
 
     drink = data.random_cocktail()
     return str(drink)

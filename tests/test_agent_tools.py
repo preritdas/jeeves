@@ -54,7 +54,7 @@ def test_wolfram_alpha():
 
 
 def test_text_tool(mocker, default_options):
-    mocker.patch("config.General.SANDBOX_MODE", True)
+    mocker.patch("CONFIG.General.sandbox_mode", True)
 
     TextToolClass = create_text_message_tool(default_options["inbound_phone"])
     tool = TextToolClass()

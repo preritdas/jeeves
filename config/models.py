@@ -43,8 +43,10 @@ class GroceriesConfig(BaseModel):
 
     Attributes:
         translation (bool): Whether to translate the grocery list to English.
+        full_dt_format (str): The format to use for full datetimes.
     """
     translation: bool
+    full_dt_format: str
 
 
 class CocktailsConfig(BaseModel):
