@@ -1,0 +1,16 @@
+General:
+  sandbox_mode: false
+  threaded_inbound: false
+  dev_phone: 12223334455
+
+Weather:
+  default_city: McLean
+
+Groceries:
+translation: false
+
+Cocktails:
+  result_limit: 3
+
+GPT:
+  console_agent: false
