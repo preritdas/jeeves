@@ -84,7 +84,7 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
         **kwargs: Any,
     ) -> None:
         """If not the final action, print out observation."""
-        self.logger.info(f"{observation_prefix}{output}")
+        self.logger.info(f"{self.uid}: {observation_prefix}{output}")
 
     def on_tool_error(
         self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
