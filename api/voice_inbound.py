@@ -8,10 +8,10 @@ from twilio.base.exceptions import TwilioRestException
 import re
 
 # Project
-import inbound
 import parsing
 import texts
 import voice_tools as vt
+from apps.gpt import generate_agent_response
 from apps.gpt.logs_callback import logger
 
 
@@ -38,7 +38,7 @@ def speak(response: VoiceResponse, text: str) -> None:
     response.play(speech_url)
 
 
-def _process_speech(inbound_phone: str, audio_url: str) -> VoiceResponse:
+def _process_speech(inbound_phone: str, audio_url: str, call_sid: str) -> VoiceResponse:
     """
     Generate a Voice Response object given the user's speech input. Send a follow-up
     text to the user. This method does not catch any errors. It will raise errors 
@@ -53,14 +53,11 @@ def _process_speech(inbound_phone: str, audio_url: str) -> VoiceResponse:
     if len(user_speech.split()) < 2:
         response_content = "Sir, please call me once more with more to say."
     else:
-        inbound_model = parsing.InboundMessage(
-            phone_number=inbound_phone,
-            body=user_speech
+        response_content = generate_agent_response(
+            content=user_speech, 
+            inbound_phone=inbound_phone,
+            uid=f"inboundcall-{call_sid}"
         )
-        text_response = inbound.main_handler(
-            inbound_sms_content=inbound_model, send_response_message=False
-        )
-        response_content = text_response["response"]
 
     # Define what is actually said to the user
     SUFFIX = "That is all, sir. Have a good day."
@@ -98,9 +95,9 @@ def process_speech_update_call(
     """
     try:
         response = _process_speech(
-            inbound_phone=inbound_phone, audio_url=audio_url
+            inbound_phone=inbound_phone, audio_url=audio_url, call_sid=call_sid
         )
-        logger.info(f"{call_sid}: INFO: Successfully processed speech.")
+        logger.info(f"inboundcall-{call_sid}: INFO: Successfully processed speech.")
     except Exception as e:
         response = VoiceResponse()
         logger.error(f"{call_sid}: ERROR: Failed to process speech. {str(e)}")
@@ -111,10 +108,10 @@ def process_speech_update_call(
     # All other errors are raised.
     try:
         texts.twilio_client.calls(call_sid).update(twiml=response.to_xml())
-        logger.info(f"{call_sid}: INFO: Successfully updated call.")
+        logger.info(f"inboundcall-{call_sid}: INFO: Successfully updated call.")
     except TwilioRestException as e:
         if "Call is not in-progress" in str(e):
-            logger.info(f"{call_sid}: INFO: Call no-longer in-progress.")
+            logger.info(f"inboundcall-{call_sid}: INFO: Call no-longer in-progress.")
             return
         raise e
     
@@ -181,7 +178,7 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
     speak(response, "On it, sir.")
     response.pause(MAXIMUM_WAIT_TIME)
 
-    logger.info(f"{call_sid}: INFO: Pause sent, updater task started.")
+    logger.info(f"inboundcall-{call_sid}: INFO: Pause sent, updater task started.")
 
     # Return blank content to Twilio
     return Response(content=response.to_xml(), media_type='text/xml')
