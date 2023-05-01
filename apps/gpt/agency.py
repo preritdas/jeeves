@@ -4,8 +4,19 @@ from langchain.chat_models import ChatOpenAI
 from langchain.callbacks import get_openai_callback
 from langchain.schema import OutputParserException
 
+import logging  # log agent runs
+from logging.handlers import SysLogHandler
+
 from keys import KEYS
 from apps.gpt import prompts
+
+
+# ---- Logging ----
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = SysLogHandler(address=(KEYS.Papertrail.host, KEYS.Papertrail.port))
+logger.addHandler(handler)
 
 
 # ---- Build the agent ----
@@ -67,8 +78,10 @@ def run_agent(agent_executor: AgentExecutor, query: str) -> str:
     """Run the agent."""
     with get_openai_callback() as cb:
         res = agent_executor.run(query)
-        print(f"Total Tokens: {cb.total_tokens}")
-        print(f"Prompt Tokens: {cb.prompt_tokens}")
-        print(f"Completion Tokens: {cb.completion_tokens}")
-        print(f"Total Cost (USD): ${cb.total_cost}")    
+        logger.info(
+            f"Total Tokens: {cb.total_tokens}, "
+            f"Prompt Tokens: {cb.prompt_tokens}, "
+            f"Completion Tokens: {cb.completion_tokens}, "
+            f"Total Cost (USD): ${cb.total_cost}."
+        )
         return res
