@@ -5,12 +5,43 @@ from langchain.callbacks import CallbackManager, StdOutCallbackHandler
 import logging
 from logging import Logger
 from logging.handlers import SysLogHandler
+import re
 
 from typing import Dict, Any, List, Optional, Union
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 
 from keys import KEYS
 import config
+
+
+def extract_log_items(log: str, fields: list[str]) -> list[str]:
+    """
+    Takes a log and extracts the fields specified in the fields list.
+    Removes spaces from all field names.
+    
+    Args:
+        log (str): The log to extract from.
+        fields (list[str]): The fields to extract. Don't include the colon.
+    
+    Returns:
+        list[str]: The extracted fields as full strings.
+
+    Example: if the log is "This: something That: something else" then 
+    extract_log_items(log, ["This", "That"]) will return 
+    ["This: something", "That: something else"]
+    """
+    # Regular expression to match "Thought:", "Action:", and "Action Input:"
+    fields = [f + ':' for f in fields]
+    pattern = f"({'|'.join(fields)})"
+
+    # Split the string using the pattern and filter out empty strings
+    split_string = [s.strip() for s in re.split(pattern, log) if s.strip()]
+
+    # Combine the matched expressions with their corresponding text, including a space after the colon
+    return [
+        split_string[i].replace(" ", "") + ' ' + split_string[i+1] 
+            for i in range(0, len(split_string), 2)
+    ]
 
 
 class AgentLoggingCallbackHandler(BaseCallbackHandler):
@@ -73,7 +104,11 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
         self, action: AgentAction, color: Optional[str] = None, **kwargs: Any
     ) -> Any:
         """Run on agent action."""
-        self.logger.info(f"{self.uid}: AgentAction: {action.tool}: {action.tool_input}")
+        log_items = extract_log_items(action.log, ["Thought", "Action", "Action Input"])
+
+        # Log the result
+        for result in log_items:
+            self.logger.info(f"{self.uid}: {result}")
 
     def on_tool_end(
         self,
@@ -106,7 +141,11 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
         self, finish: AgentFinish, color: Optional[str] = None, **kwargs: Any
     ) -> None:
         """Run on agent end."""
-        self.logger.info(f"{self.uid}: FinalAnswer: {finish.return_values['output']}")
+        log_items = extract_log_items(finish.log, ["Thought", "Final Answer"])
+
+        # Log the result
+        for result in log_items:
+            self.logger.info(f"{self.uid}: {result}")
 
 
 # ---- Logging ----
