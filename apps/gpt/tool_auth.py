@@ -12,6 +12,7 @@ from apps.gpt import retrieval
 from apps.gpt import news
 from apps.gpt import send_texts
 from apps.gpt import make_calls
+from apps.gpt import logs_callback
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
@@ -122,4 +123,11 @@ def build_tools(inbound_phone: str) -> list[Tool]:
     TextToolClass = send_texts.create_text_message_tool(inbound_phone)
     added_tools.append(TextToolClass())
 
-    return no_auth_tools + added_tools
+    # Add all tools together
+    tools = no_auth_tools + added_tools
+
+    # Add callback manager to all tools
+    for tool in tools:
+        tool.callback_manager = logs_callback.callback_manager
+
+    return tools
