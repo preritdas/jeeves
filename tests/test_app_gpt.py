@@ -22,8 +22,10 @@ def test_handler(default_options):
     assert isinstance(res, str)
 
 
-def test_agency(default_options):
+def test_agency(mocker, default_options, callback_uid):
     """Test the GPT applet handler."""
+    mocker.patch("apps.gpt.__init__.uuid.uuid4", return_value=callback_uid)
+
     res = handler(
         content="Who are you?",
         options=default_options
@@ -88,13 +90,13 @@ def test_serper_wrapper():
     assert "https" in link_res
 
 
-def test_building_tools(default_options, callback_manager):
+def test_building_tools(default_options, callback_handlers):
     """Test building the tools. Zapier and text requires auth."""
     # Make sure Zapier is in there, use first provided phone 
     if KEYS.ZapierNLA:
         tools = build_tools(
             inbound_phone=list(KEYS.ZapierNLA.keys())[0],
-            callback_manager=callback_manager
+            callback_handlers=callback_handlers
         )
         tool_names = [tool.name for tool in tools]
         tool_descriptions = [tool.description for tool in tools]
@@ -103,7 +105,7 @@ def test_building_tools(default_options, callback_manager):
     else:
         tools = build_tools(
             inbound_phone=default_options["inbound_phone"],
-            callback_manager=callback_manager
+            callback_handlers=callback_handlers
         )
         tool_names = [tool.name for tool in tools]
         tool_descriptions = [tool.description for tool in tools]
