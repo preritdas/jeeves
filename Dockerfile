@@ -16,4 +16,4 @@ RUN pip install -U pip && \
 COPY . .
 
 # Run the API
-CMD exec gunicorn -k uvicorn.workers.UvicornWorker --timeout 0 api:app
+CMD exec gunicorn -k uvicorn.workers.UvicornWorker --workers 3 --timeout 0 api:app
