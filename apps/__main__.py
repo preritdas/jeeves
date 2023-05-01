@@ -3,6 +3,7 @@ import sys
 import json
 
 from apps import PROGRAMS
+import config
 
 
 if len(sys.argv) < 2:
@@ -21,7 +22,7 @@ if len(sys.argv) > 3:
 else:
     OPTIONS = {}
 
-OPTIONS["inbound_phone"] = "00000000000"
+OPTIONS["inbound_phone"] = config.General.DEV_PHONE
 
 
 if not APP_NAME in PROGRAMS:

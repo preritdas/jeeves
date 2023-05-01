@@ -88,12 +88,13 @@ def test_serper_wrapper():
     assert "https" in link_res
 
 
-def test_building_tools(default_options):
+def test_building_tools(default_options, callback_manager):
     """Test building the tools. Zapier and text requires auth."""
     # Make sure Zapier is in there, use first provided phone 
     if KEYS.ZapierNLA:
         tools = build_tools(
-            list(KEYS.ZapierNLA.keys())[0]
+            inbound_phone=list(KEYS.ZapierNLA.keys())[0],
+            callback_manager=callback_manager
         )
         tool_names = [tool.name for tool in tools]
         tool_descriptions = [tool.description for tool in tools]
@@ -101,7 +102,8 @@ def test_building_tools(default_options):
         assert any("Zapier" in description for description in tool_descriptions)
     else:
         tools = build_tools(
-            default_options["inbound_phone"]
+            inbound_phone=default_options["inbound_phone"],
+            callback_manager=callback_manager
         )
         tool_names = [tool.name for tool in tools]
         tool_descriptions = [tool.description for tool in tools]

@@ -128,6 +128,18 @@ class TranscriptionModel(BaseModel):
     api_url: str
 
 
+class PapertrailModel(BaseModel):
+    """
+    A Pydantic model for Papertrail logging in the cloud.
+
+    Attributes:
+        host (str): The Papertrail host.
+        port (int): The Papertrail port.
+    """
+    host: str
+    port: int
+
+
 class Keys(BaseModel):
     """
     A Pydantic model for validating all API keys configurations.
@@ -145,6 +157,7 @@ class Keys(BaseModel):
         ElevenLabs (ElevenLabsModel): The ElevenLabs configuration model.
         UploadIO (UploadIOModel): The UploadIO configuration model.
         Transcription (TranscriptionModel): The Transcription configuration model.
+        Papertrail (PapertrailModel): The Papertrail logging configuration model.
     """
     # Required keys (tests and active applets)
     Twilio: TwilioModel
@@ -157,6 +170,7 @@ class Keys(BaseModel):
     ElevenLabs: ElevenLabsModel
     UploadIO: UploadIOModel
     Transcription: TranscriptionModel
+    Papertrail: PapertrailModel
 
     # Optional keys (Optional features and inactive applets/features)
     ZapierNLA: dict[str, str] | None

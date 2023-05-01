@@ -9,6 +9,7 @@ import usage  # fixture for temporary logs for report
 import permissions  # fixtures for temporary users
 
 from apps.gpt.make_calls.database import Call
+from apps.gpt.logs_callback import create_callback_manager
 
 
 @pytest.fixture(scope="session")
@@ -165,3 +166,10 @@ def outbound_call_key() -> str:
 
     # Remove the temporary call
     call.delete()
+
+
+@pytest.fixture(scope="session")
+def callback_manager():
+    """Callback manager with testing uid."""
+    uid = f"tests-{dt.datetime.utcnow().utcnow()}"
+    return create_callback_manager(uid=uid)

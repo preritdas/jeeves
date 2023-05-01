@@ -1,11 +1,11 @@
 """Agent GPT."""
 from langchain.agents import Tool, ZeroShotAgent, AgentExecutor
 from langchain.chat_models import ChatOpenAI
-from langchain.callbacks import get_openai_callback
+from langchain.callbacks import get_openai_callback, CallbackManager
 from langchain.schema import OutputParserException
 
 from keys import KEYS
-from apps.gpt import prompts
+from apps.gpt import logs_callback, prompts
 
 
 # ---- Build the agent ----
@@ -25,7 +25,7 @@ class InternalThoughtZeroShotAgent(ZeroShotAgent):
 
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
 
-def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
+def create_agent_executor(toolkit: list[Tool], callback_manager: CallbackManager) -> AgentExecutor:
     """Create the agent given authenticated tools."""
     agent_prompts: prompts.AgentPrompts = prompts.build_prompts()
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
@@ -38,7 +38,8 @@ def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
     return AgentExecutor.from_agent_and_tools(
         agent=agent,
         tools=toolkit,
-        verbose=True
+        verbose=True,
+        callback_manager=callback_manager
     )
 
 
@@ -63,12 +64,15 @@ def retry_couldnt_parse(function):
 
 
 @retry_couldnt_parse
-def run_agent(agent_executor: AgentExecutor, query: str) -> str:
+def run_agent(agent_executor: AgentExecutor, query: str, uid: str) -> str:
     """Run the agent."""
     with get_openai_callback() as cb:
         res = agent_executor.run(query)
-        print(f"Total Tokens: {cb.total_tokens}")
-        print(f"Prompt Tokens: {cb.prompt_tokens}")
-        print(f"Completion Tokens: {cb.completion_tokens}")
-        print(f"Total Cost (USD): ${cb.total_cost}")    
+        logs_callback.logger.info(
+            f"{uid}: UsageInfo: "
+            f"Total Tokens: {cb.total_tokens}, "
+            f"Prompt Tokens: {cb.prompt_tokens}, "
+            f"Completion Tokens: {cb.completion_tokens}, "
+            f"Total Cost (USD): ${cb.total_cost}."
+        )
         return res
