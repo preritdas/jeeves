@@ -5,54 +5,30 @@ on:
     paths-ignore:
       - docs/**/*.*
       - README.md
+      - .github/workflows/docs.yml
+      - .github/workflows/firebase-docs-pr.yml
+      - .github/workflows/google-cloud.yml
+      - firebase.json
+      - .firebaserc
+      - .devcontainer/**/*.*
   pull_request:
     types:  # avoid double runs in open pr
       - opened
-      - reopened 
+      - reopened
   workflow_dispatch:
-
-
+  
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-
-      - name: Upgrade pip
-        run: pip install -U pip setuptools wheel
-
-      - name: Install project dependencies
-        run: pip install -r requirements.txt
-
-      - name: Install test dependencies
-        run: pip install -r tests/requirements.txt
-
+        
       - name: Inject keys
-        run: |
-          echo -en '${{ secrets.KEYS_YAML }}' >> keys.yaml
+        run: echo -en '${{ secrets.KEYS_YAML }}' >> keys.yaml
 
-      - name: Run tests with pytest
-        run: pytest --cov
-
-      - name: Generate coverage badge for tests
-        if: github.ref == 'refs/heads/master'
-        run: coverage-badge -o tests/badge.svg -f
-
-      - name: Commit coverage badge back to repo
-        continue-on-error: true
-        if: github.ref == 'refs/heads/master'
-        run: |
-          coverage-badge -o tests/badge.svg -f
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull
-          git add tests/badge.svg
-          git commit --author="Prerit Das <preritdas@gmail.com>" -m "Update coverage badge post unit tests."
-          git push
+      - name: Build Docker container
+        run: docker build -t jeeves .
+        
+      - name: Run tests inside container
+        run: docker run jeeves sh -c "pip install --no-cache-dir -r tests/requirements.txt && pytest"
