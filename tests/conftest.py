@@ -171,4 +171,5 @@ def outbound_call_key() -> str:
 @pytest.fixture(scope="session")
 def callback_manager():
     """Callback manager with testing uid."""
-    return create_callback_manager(uid="tests")
+    uid = f"tests-{dt.datetime.utcnow().utcnow()}"
+    return create_callback_manager(uid=uid)
