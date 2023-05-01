@@ -10,12 +10,25 @@ from apps.gpt import prompts
 
 # ---- Build the agent ----
 
+class InternalThoughtZeroShotAgent(ZeroShotAgent):
+    """
+    A normal ZeroShotAgent but doesn't inject "Thought:" before the LLM. AFter testing
+    and heavy prompt engineering, I've found a better sucess rate with having the LLM 
+    create its own "Thought" label. This is because it knows that each Thought must
+    also have either an Action/Action Input or a Final Answer.
+    """
+    @property
+    def llm_prefix(self) -> str:
+        """Prefix to append the llm call with."""
+        return ""
+
+
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
 
 def create_agent_executor(toolkit: list[Tool]) -> AgentExecutor:
     """Create the agent given authenticated tools."""
     agent_prompts: prompts.AgentPrompts = prompts.build_prompts()
-    agent = ZeroShotAgent.from_llm_and_tools(
+    agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
         prefix=agent_prompts.prefix,
