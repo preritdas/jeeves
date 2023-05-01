@@ -20,7 +20,7 @@ class GeneralConfig(BaseModel):
         if v.startswith("+"):
             return v[1:]
 
-        if len(v) == 11:
+        if len(v) != 11:
             raise ValueError(
                 "Please provide your phone number in E.164 format, "
                 "with or without the leading +."
