@@ -55,6 +55,7 @@ def read_bool_option(option: str) -> bool:
 class General:
     SANDBOX_MODE: bool = read_bool_option(config["General"]["sandbox_mode"])
     THREADED_INBOUND: bool = read_bool_option(config["General"]["threaded_inbound"])
+    DEV_PHONE: str = config["General"]["dev_phone"]
 
 
 class Weather:
@@ -68,3 +69,7 @@ class Groceries:
 
 class Cocktails:
     RESULT_LIMIT: int = int(config["Cocktails"]["result_limit"])
+
+
+class GPT:
+    CONSOLE_AGENT: bool = read_bool_option(config["GPT"]["console_agent"])
