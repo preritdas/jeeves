@@ -5,7 +5,7 @@ from langchain.utilities import GoogleSerperAPIWrapper
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from langchain.utilities.zapier import ZapierNLAWrapper
 from langchain.agents.agent_toolkits import ZapierToolkit
-from langchain.callbacks.base import CallbackManager
+from langchain.callbacks.base import BaseCallbackHandler
 
 from keys import KEYS
 
@@ -108,7 +108,10 @@ no_auth_tools: list[BaseTool] = [
 ]
 
 
-def build_tools(inbound_phone: str, callback_manager: CallbackManager) -> list[Tool]:
+def build_tools(
+    inbound_phone: str, 
+    callback_handlers: list[BaseCallbackHandler]
+) -> list[Tool]:
     """Build all authenticated tools given a phone number."""
     added_tools = []
 
@@ -128,6 +131,6 @@ def build_tools(inbound_phone: str, callback_manager: CallbackManager) -> list[T
 
     # Add callback manager to all tools
     for tool in tools:
-        tool.callback_manager = callback_manager
+        tool.callbacks = callback_handlers
 
     return tools
