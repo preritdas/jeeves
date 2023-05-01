@@ -12,6 +12,7 @@ import inbound
 import parsing
 import texts
 import voice_tools as vt
+from apps.gpt.logs_callback import logger
 
 
 # Create an API router for voice actions
@@ -99,8 +100,10 @@ def process_speech_update_call(
         response = _process_speech(
             inbound_phone=inbound_phone, audio_url=audio_url
         )
+        logger.info(f"{call_sid} INFO: Successfully processed speech.")
     except Exception as e:
         response = VoiceResponse()
+        logger.error(f"{call_sid} ERROR: Failed to process speech. {str(e)}")
         response.say(f"I'm sorry, sir. There was an error. {str(e)}", voice=RESPONSE_VOICE)
     
     # Update the call. This will hang up the call if it is still active.
@@ -108,14 +111,16 @@ def process_speech_update_call(
     # All other errors are raised.
     try:
         texts.twilio_client.calls(call_sid).update(twiml=response.to_xml())
+        logger.info(f"{call_sid} INFO: Successfully updated call.")
     except TwilioRestException as e:
         if "Call is not in-progress" in str(e):
+            logger.info(f"{call_sid} INFO: Call no-longer in-progress.")
             return
         raise e
     
 
 @router.api_route("/incoming-call", methods=["GET", "POST"])
-async def incoming_call():
+async def incoming_call(request: Request):
     """
     Handle incoming calls. This is the endpoint that Twilio will call when a user
     calls the Twilio number. Routes to the process-speech endpoint which will
@@ -128,6 +133,9 @@ async def incoming_call():
     having to hang up and call again.
     """
     response = VoiceResponse()
+    form = await request.form()
+
+    logger.info(f"{form['CallSid']} INFO: Handler picked up incoming call.")
 
     # Greet the user
     speak(
@@ -172,6 +180,8 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
     # supercede the pause, after testing. So in essence, this is a maximum processing time.
     speak(response, "On it, sir.")
     response.pause(MAXIMUM_WAIT_TIME)
+
+    logger.info(f"{call_sid} INFO: Pause sent, updater task started.")
 
     # Return blank content to Twilio
     return Response(content=response.to_xml(), media_type='text/xml')
