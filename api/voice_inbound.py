@@ -100,10 +100,10 @@ def process_speech_update_call(
         response = _process_speech(
             inbound_phone=inbound_phone, audio_url=audio_url
         )
-        logger.info(f"{call_sid} INFO: Successfully processed speech.")
+        logger.info(f"{call_sid}: INFO: Successfully processed speech.")
     except Exception as e:
         response = VoiceResponse()
-        logger.error(f"{call_sid} ERROR: Failed to process speech. {str(e)}")
+        logger.error(f"{call_sid}: ERROR: Failed to process speech. {str(e)}")
         response.say(f"I'm sorry, sir. There was an error. {str(e)}", voice=RESPONSE_VOICE)
     
     # Update the call. This will hang up the call if it is still active.
@@ -111,10 +111,10 @@ def process_speech_update_call(
     # All other errors are raised.
     try:
         texts.twilio_client.calls(call_sid).update(twiml=response.to_xml())
-        logger.info(f"{call_sid} INFO: Successfully updated call.")
+        logger.info(f"{call_sid}: INFO: Successfully updated call.")
     except TwilioRestException as e:
         if "Call is not in-progress" in str(e):
-            logger.info(f"{call_sid} INFO: Call no-longer in-progress.")
+            logger.info(f"{call_sid}: INFO: Call no-longer in-progress.")
             return
         raise e
     
@@ -181,7 +181,7 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
     speak(response, "On it, sir.")
     response.pause(MAXIMUM_WAIT_TIME)
 
-    logger.info(f"{call_sid} INFO: Pause sent, updater task started.")
+    logger.info(f"{call_sid}: INFO: Pause sent, updater task started.")
 
     # Return blank content to Twilio
     return Response(content=response.to_xml(), media_type='text/xml')
