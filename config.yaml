@@ -1,7 +1,7 @@
 General:
   sandbox_mode: false
   threaded_inbound: false
-  dev_phone: 12223334455
+  dev_phone: "12223334455"
 
 Weather:
   default_city: McLean
