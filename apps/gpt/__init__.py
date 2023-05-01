@@ -15,6 +15,19 @@ OPTIONS = {
 }
 
 
+def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> str:
+    """Build tools, create executor, and run the agent. UID is optional."""
+    # UID
+    if not uid:
+        uid = str(uuid.uuid4())
+
+    callback_handlers = logs_callback.create_callback_handlers(uid)
+    toolkit = tool_auth.build_tools(inbound_phone, callback_handlers)
+    agent_executor = agency.create_agent_executor(toolkit, callback_handlers)
+    response: str = agency.run_agent(agent_executor, content, uid)
+    return response.strip()
+
+
 @utils.app_handler(APP_HELP, OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Handler for the GPT applet."""
@@ -22,11 +35,4 @@ def handler(content: str, options: dict[str, str]) -> str:
         if agency_option.lower() in {"no", "false", "off"}:
             return completions.gpt_response(content)
 
-    uid = str(uuid.uuid4())
-    callback_handlers = logs_callback.create_callback_handlers(uid)
-    toolkit = tool_auth.build_tools(options["inbound_phone"], callback_handlers)
-    agent_executor = agency.create_agent_executor(toolkit, callback_handlers)
-    response: str = agency.run_agent(agent_executor, content, uid)
-
-    # Remove spaces and newlines from the start of the response
-    return response.strip()
+    return generate_agent_response(content, options["inbound_phone"])
