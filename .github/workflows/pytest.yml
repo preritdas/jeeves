@@ -26,6 +26,9 @@ jobs:
         
       - name: Inject keys
         run: echo -en '${{ secrets.KEYS_YAML }}' >> keys.yaml
+        
+      - name: Remove .dockerignore  # tests folder needed
+        run: rm .dockerignore
 
       - name: Build Docker container
         run: docker build -t jeeves .
