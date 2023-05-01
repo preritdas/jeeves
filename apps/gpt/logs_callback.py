@@ -1,6 +1,6 @@
 """Create a logging callback handler for the agent."""
 from langchain.callbacks.base import BaseCallbackHandler
-from langchain.callbacks import CallbackManager
+from langchain.callbacks import CallbackManager, StdOutCallbackHandler
 
 import logging
 from logging import Logger
@@ -10,6 +10,7 @@ from typing import Dict, Any, List, Optional, Union
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 
 from keys import KEYS
+import config
 
 
 class AgentLoggingCallbackHandler(BaseCallbackHandler):
@@ -116,4 +117,11 @@ logger.addHandler(handler)
 
 # Log to console and to Papertrail
 logging_callback = AgentLoggingCallbackHandler(logger=logger)
-callback_manager = CallbackManager([logging_callback])
+callback_handlers = [logging_callback]
+
+# Log to console as well if configured
+if config.GPT.CONSOLE_AGENT:
+    callback_handlers.append(StdOutCallbackHandler())
+
+# Create callback manager with all handlers
+callback_manager = CallbackManager(callback_handlers)
