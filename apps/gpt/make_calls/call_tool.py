@@ -14,6 +14,7 @@ from texts import twilio_client, BASE_URL
 
 # Make calls
 from apps.gpt.make_calls import database as db
+from apps.gpt.logs_callback import logger
 
 
 def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
@@ -30,6 +31,7 @@ def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
         url=f"{BASE_URL}/voice/outbound/handler?{urlencode(call_params)}",
         record=True
     )
+    logger.info(f"{created_call.key}: INFO: Call created to {recipient}")
 
     CALL_END_STATUSES = {"completed", "canceled", "failed", "busy", "no-answer"}
 
@@ -38,6 +40,7 @@ def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
         time.sleep(1)
 
     # Return a transcript
+    logger.info(f"{created_call.key}: INFO: Call ended with status {status}")
     created_call.download()
     return f"Call status: {status} || BEGIN TRANSCRIPT || {created_call.convo} || END TRANSCRIPT ||"
 

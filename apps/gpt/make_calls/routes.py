@@ -8,6 +8,7 @@ from urllib.parse import urlencode
 import voice_tools as vt
 from texts import twilio_client, BASE_URL
 
+from apps.gpt.logs_callback import logger
 from apps.gpt.make_calls import prompts
 from apps.gpt.make_calls import database as db
 
@@ -46,6 +47,7 @@ def process_user_speech(call_id: str, user_speech: str) -> VoiceResponse:
         convo=current_call.convo
     )
     current_call.convo += ai_response
+    logger.info(f"{call_id}: Jeeves: {ai_response}")
 
     # If Jeeves says its time to hang up
     if "HANGUP" in ai_response or current_call.convo.count("Jeeves:") > 20:
@@ -75,9 +77,11 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
 
     # Update the call, ignore if the recipient hung up
     try:
-        twilio_client.calls(call_sid).update(twiml=response.to_xml()) 
+        twilio_client.calls(call_sid).update(twiml=response.to_xml())
+        logger.info(f"{call_id}: INFO: Call updated with response.")
     except TwilioRestException as e:
         if "Call is not in-progress" in str(e):
+            logger.info(f"{call_id}: INFO: Call was ended.")
             return
          
         raise
@@ -89,13 +93,16 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
 async def handler(call_id: str):
     twiml = VoiceResponse()
     current_call = db.Call.from_call_id(call_id)
+
   
     # If no previous conversation is present, start the conversation
     if not current_call.convo:
+        logger.info(f"{call_id}: INFO: Handler picked up call.")
         twiml.pause(2)
         twiml.play(current_call.greeting_url)
         current_call.convo = f"Jeeves: {current_call.greeting}"
         current_call.upload()
+        logger.info(f"{call_id}: {current_call.convo}")
 
     # Listen to user response and pass input to /respond
     send_to_respond = {"call_id": call_id}
@@ -128,5 +135,8 @@ async def respond(request: Request, call_id: str, background_tasks: BackgroundTa
 
     speak(twiml, "One moment, please.")
     twiml.pause(MAX_RESPONSE_TIME)
+
+    logger.info(f"{call_id}: Recipient: {voice_input}")
+    logger.info(f"{call_id}: INFO: Pause sent, updater started.")
 
     return Response(twiml.to_xml(), media_type='text/xml')

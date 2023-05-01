@@ -36,7 +36,7 @@ def test_agency(mocker, default_options, callback_uid):
     assert "Jeeves" in res
 
 
-def test_processing_speech(mocker, who_are_you_twilio_recording, default_options):
+def test_processing_speech(mocker, who_are_you_twilio_recording, default_options, callback_uid):
     """
     Test the background process that updates the call with a response when calling 
     Jeeves (inbound).
@@ -45,7 +45,8 @@ def test_processing_speech(mocker, who_are_you_twilio_recording, default_options
 
     response = _process_speech(
         inbound_phone=default_options["inbound_phone"],
-        audio_url=who_are_you_twilio_recording
+        audio_url=who_are_you_twilio_recording,
+        call_sid=callback_uid
     )
 
     assert response
