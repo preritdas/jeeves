@@ -115,6 +115,10 @@ def build_tools(
     """Build all authenticated tools given a phone number."""
     added_tools = []
 
+    # Standardize phone number when checking auth
+    if inbound_phone.startswith("+"):
+        inbound_phone = inbound_phone[1:]
+
     # Zapier
     if KEYS.ZapierNLA and inbound_phone in KEYS.ZapierNLA:
         zapier_key = KEYS.ZapierNLA[inbound_phone]
