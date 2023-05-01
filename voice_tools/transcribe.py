@@ -4,6 +4,7 @@ Transcribe a Twilio recording using OpenAI's Whisper API.
 import requests
 
 from functools import wraps
+import time
 
 from keys import KEYS
 
@@ -12,21 +13,23 @@ from keys import KEYS
 WHISPER_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions"
 
 
-def retry_whisper(function):
+def retry_transcribe(function):
     """
-    Decorator that retries Whisper once if it fails.
+    Decorator that retries Whisper once if it fails. If there's an error, 
+    it waits a second and tries again. If it fails again, it raises the error.
     """
     @wraps(function)
     def wrapper(*args, **kwargs):
         try:
             return function(*args, **kwargs)
         except Exception:
+            time.sleep(1)
             return function(*args, **kwargs)
 
     return wrapper
 
 
-@retry_whisper
+@retry_transcribe
 def _whisper_transcribe_url(url: str) -> str:
     """Transcribes with Whisper. Doesn't touch the file."""
     # Stream the remote file content
