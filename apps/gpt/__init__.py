@@ -2,11 +2,15 @@
 import utils
 
 import uuid
+import datetime as dt
 
 from apps.gpt import agency
 from apps.gpt import tool_auth
 from apps.gpt import completions
 from apps.gpt import logs_callback
+
+from apps.gpt.chat_history import ChatHistory
+from apps.gpt.chat_history.models import Message
 
 
 APP_HELP = "Speak with Jeeves."
@@ -21,10 +25,24 @@ def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> 
     if not uid:
         uid = str(uuid.uuid4())
 
+    # Build chat history
+    chat_history = ChatHistory.from_inbound_phone(inbound_phone)
+
     callback_handlers = logs_callback.create_callback_handlers(uid)
     toolkit = tool_auth.build_tools(inbound_phone, callback_handlers)
-    agent_executor = agency.create_agent_executor(toolkit, callback_handlers)
+    agent_executor = agency.create_agent_executor(toolkit, chat_history, callback_handlers)
     response: str = agency.run_agent(agent_executor, content, uid)
+
+    # Save message to chats database
+    chat_history.add_message(
+        Message(
+            datetime=dt.datetime.now(),
+            inbound_phone=inbound_phone,
+            user_input=content,
+            agent_response=response
+        )
+    )
+
     return response.strip()
 
 
