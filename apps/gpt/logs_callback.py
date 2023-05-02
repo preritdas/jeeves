@@ -43,12 +43,8 @@ def extract_log_items(log: str, fields: list[str]) -> list[str]:
             for i in range(0, len(split_string), 2)
     ]
 
-    # Order the logs according to fields
-    ordered_logs: list[str] = [log for field in fields for log in logs if field in log]
-    assert len(ordered_logs) == len(fields), \
-        f"Expected {len(fields)} logs, got {len(ordered_logs)} after sorting."
-
-    return ordered_logs
+    # Sort the logs in the order of the fields
+    return sorted(logs, key=lambda x: fields.index(x.split(':')[0]))
 
 
 class AgentLoggingCallbackHandler(BaseCallbackHandler):
