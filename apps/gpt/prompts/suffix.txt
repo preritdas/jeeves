@@ -2,6 +2,8 @@ For reference, here is our recent message history.
 
 {chat_history}
 
+Ignore elements from the chat history above, or the entire chat history, if not relevant to the "Input" below.
+
 Begin! 
 
 Input: {input}
