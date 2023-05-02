@@ -49,6 +49,14 @@ class ChatHistory:
         """
         Retrieve chat history from the database.
         """
+        # Validate the inbound phone number
+        if inbound_phone.startswith("+"):
+            inbound_phone = inbound_phone[1:]
+        
+        assert inbound_phone.isnumeric(), "Inbound phone number must be numeric."
+        assert len(inbound_phone) == 11, \
+            "Inbound phone number must be 11 digits, E.164 format."
+
         user_messages = chats_base.fetch({"inbound_phone": inbound_phone}).items
 
         # Parse the messages into a list of Message objects
