@@ -18,8 +18,6 @@ import os
 import datetime as dt
 import pytz
 
-from apps.gpt.chat_history.models import Message
-
 
 # ---- Model for prompting ---- 
 
@@ -126,10 +124,10 @@ def _build_prompt(name: str, **kwargs) -> Prompt:
     )
 
 
-def build_prompts(messages: list[Message]) -> AgentPrompts:
+def build_prompts(chat_history: str) -> AgentPrompts:
     """Build the prompts inserting any variables necessary."""
     return AgentPrompts(
         prefix=_build_prompt("prefix").build_prompt(),
         format_instructions=_build_prompt("format_instructions").build_prompt(),
-        suffix=_build_prompt("suffix").build_prompt()
+        suffix=_build_prompt("suffix").build_prompt(chat_history=chat_history)
     )
