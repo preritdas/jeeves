@@ -10,9 +10,11 @@ class Message(BaseModel):
     
     Attributes:
         datetime: The datetime of the message. 
+        inbound_phone: The inbound phone number.
         user_input: The user input.
         agent_response: The agent response.
     """
     datetime: dt.datetime
+    inbound_phone: str
     user_input: str
     agent_response: str
