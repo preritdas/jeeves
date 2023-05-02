@@ -5,6 +5,7 @@ import datetime as dt
 
 from keys import KEYS
 from apps.gpt.chat_history.models import Message
+from apps.gpt.chat_history.filter import BaseFilterer
 
 
 # Initialize the chats Deta Base
@@ -23,16 +24,15 @@ class ChatHistory:
         """Initialize the chat history."""
         self.messages = messages
 
-    def filter_messages(self, start: dt.datetime, end: dt.datetime) -> list[Message]:
+    def filter_messages(self, filterer: BaseFilterer) -> list[Message]:
         """Filter messages by datetime."""
-        return [
-            message for message in self.messages 
-                if start <= message.datetime <= end
-        ]
+        return filterer.filter_messages(self.messages)
 
     @classmethod
     def from_inbound_phone(cls, inbound_phone: str) -> "ChatHistory":
-        """Retrieve chat history from the database."""
+        """
+        Retrieve chat history from the database.
+        """
         user_messages = chats_base.fetch({"inbound_phone": inbound_phone}).items
 
         # Parse the messages into a list of Message objects
@@ -47,3 +47,11 @@ class ChatHistory:
         ]
 
         return cls(messages=messages)
+
+    def add_message(self, message: Message) -> str:
+        """
+        Add a message to the database. 
+        
+        Returns a dictionary of the full database entry.
+        """
+        return chats_base.put(message.to_dict())
