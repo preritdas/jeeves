@@ -4,6 +4,7 @@ from api.voice_inbound import _process_speech
 from apps.gpt.make_calls.routes import process_user_speech
 from apps.gpt.make_calls.database import Call
 from apps.gpt.tool_auth import no_auth_tools, build_tools
+from apps.gpt.logs_callback import extract_log_items
 
 from keys import KEYS
 
@@ -123,3 +124,19 @@ def test_building_tools(default_options, callback_handlers):
     # General
     assert tools
     assert any("Text Message" in name for name in tool_names)
+
+
+def test_log_formatting():
+    log = "Thought: Using a thing\nAction: Tool Name\nAction Input: this is an input"
+    fields = ["Thought", "Action", "Action Input"]
+    log_items = extract_log_items(log, fields)
+
+    assert log_items
+    assert isinstance(log_items, list)
+    assert all(isinstance(item, str) for item in log_items)
+    assert len(log_items) == len(fields)
+
+    # Check that the log items are in the right order
+    assert "Thought" in log_items[0]
+    assert "Action" in log_items[1] and "Action Input" not in log_items[1]
+    assert "ActionInput" in log_items[2]
