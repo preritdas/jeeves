@@ -29,6 +29,10 @@ def extract_log_items(log: str, fields: list[str]) -> list[str]:
     Example: if the log is "This: something That: something else" then 
     extract_log_items(log, ["This", "That"]) will return 
     ["This: something", "That: something else"]
+
+    Spaces are removed from the field names, so "Action Input" becomes "ActionInput"
+    in the logs. This is to make the logs more readable. So when sorting and checking
+    for the fields, we remove the spaces from the field names (check_fields).
     """
     # Regular expression to match "Thought:", "Action:", and "Action Input:"
     fields = [f + ':' for f in fields]
