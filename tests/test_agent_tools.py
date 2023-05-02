@@ -60,7 +60,7 @@ def test_text_tool(mocker, default_options):
     tool = TextToolClass()
 
     res = tool.run(
-        """{"recipient": "12223334455", "content": "Hello world!"}"""
+        """{"recipient_phone": "12223334455", "content": "Hello world!"}"""
     )
 
     assert res
