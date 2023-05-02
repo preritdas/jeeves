@@ -26,6 +26,8 @@ class GeneralConfig(BaseModel):
                 "with or without the leading +."
             )
 
+        return v
+
 
 class WeatherConfig(BaseModel):
     """
