@@ -26,6 +26,9 @@ def test_agency(mocker, default_options, callback_uid):
     """Test the GPT applet handler."""
     mocker.patch("apps.gpt.__init__.uuid.uuid4", return_value=callback_uid)
 
+    # Don't add chat logs
+    mocker.patch("apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None)
+
     res = handler(
         content="Who are you?",
         options=default_options
@@ -43,6 +46,9 @@ def test_processing_speech(mocker, who_are_you_twilio_recording, default_options
     """
     mocker.patch("api.voice_inbound.texts.CONFIG.General.sandbox_mode", True)
 
+    # Don't add chat logs
+    mocker.patch("apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None)
+
     response = _process_speech(
         inbound_phone=default_options["inbound_phone"],
         audio_url=who_are_you_twilio_recording,
@@ -55,8 +61,11 @@ def test_processing_speech(mocker, who_are_you_twilio_recording, default_options
     assert "upcdn" in xml
 
 
-def test_processing_speech_outbound(outbound_call_key):
+def test_processing_speech_outbound(outbound_call_key, mocker):
     """Test generating the next voice response when outbound calling."""
+    # Don't add chat logs
+    mocker.patch("apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None)
+
     call = Call.from_call_id(call_id=outbound_call_key)
     voice_response = process_user_speech(
         call_id=call.key,
