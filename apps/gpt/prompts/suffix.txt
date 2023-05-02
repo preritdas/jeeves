@@ -1,3 +1,7 @@
+For reference, here is our recent message history.
+
+{chat_history}
+
 Begin! 
 
 Input: {input}
