@@ -44,7 +44,8 @@ def extract_log_items(log: str, fields: list[str]) -> list[str]:
     ]
 
     # Sort the logs in the order of the fields
-    return sorted(logs, key=lambda x: fields.index(x.split(':')[0]))
+    check_fields: list[str] = [f.replace(" ", "") for f in fields]
+    return sorted(logs, key=lambda x: check_fields.index(x.split(':')[0]+':'))
 
 
 class AgentLoggingCallbackHandler(BaseCallbackHandler):
@@ -145,7 +146,7 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run on agent end."""
         log_items = extract_log_items(finish.log, ["Thought", "Final Answer"])
-
+        
         # Log the result
         for result in log_items:
             self.logger.info(f"{self.uid}: {result}")
