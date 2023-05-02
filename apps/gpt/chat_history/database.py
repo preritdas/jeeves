@@ -53,7 +53,6 @@ class ChatHistory:
     def add_message(self, message: Message) -> str:
         """
         Add a message to the database. 
-        
         Returns a dictionary of the full database entry.
         """
         return chats_base.put(message.to_dict())
