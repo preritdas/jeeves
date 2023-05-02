@@ -41,7 +41,7 @@ def test_processing_speech(mocker, who_are_you_twilio_recording, default_options
     Test the background process that updates the call with a response when calling 
     Jeeves (inbound).
     """
-    mocker.patch("config.General.SANDBOX_MODE", True)
+    mocker.patch("api.voice_inbound.texts.CONFIG.General.sandbox_mode", True)
 
     response = _process_speech(
         inbound_phone=default_options["inbound_phone"],

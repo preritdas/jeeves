@@ -19,10 +19,10 @@ def test_testing_endpoint(test_client):
 
 @pytest.mark.skip
 def test_apps_non_threaded(test_client, default_inbound, mocker):
-    mocker.patch("main.inbound.texts.config.General.SANDBOX_MODE", True)
-    mocker.patch("main.inbound.usage.config.General.SANDBOX_MODE", True)
+    mocker.patch("main.inbound.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("main.inbound.usage.CONFIG.General.sandbox_mode", True)
 
-    mocker.patch("main.config.General.THREADED_INBOUND", False)
+    mocker.patch("main.CONFIG.General.threaded_inbound", False)
 
     json = {**default_inbound}
     del json["concat"]
@@ -33,10 +33,10 @@ def test_apps_non_threaded(test_client, default_inbound, mocker):
 
 @pytest.mark.skip
 def test_apps_threaded(test_client, default_inbound, mocker):
-    mocker.patch("main.inbound.texts.config.General.SANDBOX_MODE", True)
-    mocker.patch("main.inbound.usage.config.General.SANDBOX_MODE", True)
+    mocker.patch("main.inbound.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("main.inbound.usage.CONFIG.General.sandbox_mode", True)
 
-    mocker.patch("main.config.General.THREADED_INBOUND", True)
+    mocker.patch("main.CONFIG.General.threaded_inbound", True)
 
     json = {**default_inbound}
     del json["concat"]

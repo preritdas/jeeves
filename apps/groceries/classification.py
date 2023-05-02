@@ -3,12 +3,12 @@ Responsible for turning a list of groceries with quantity into a classified
 ordered list.
 """
 # Project
-import config
+from config import CONFIG
 from apps.groceries import utils
 
 
 # Optional translation
-if config.Groceries.TRANSLATION:
+if CONFIG.Groceries.translation:
     # DISABLE TRANSLATORS FOR NOW DUE TO LXML ISSUES IN PY 3.11
     # import translators
     # translate = lambda phrase: translators.google(phrase)

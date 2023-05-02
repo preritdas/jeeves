@@ -4,7 +4,7 @@ Weather summary and data highlights.
 
 | Option | Description |
 | --- | --- |
-| city | Optional. The default is set in `config.ini`. |
+| city | Optional. The default is set in `config.yaml`. |
 | state | Optional. A U.S. state, if the `city` is in the U.S. The city is usually sufficient. |
 | country | Optional, a country ISO code. As with `state`, the `city` is usually sufficient. |  
 

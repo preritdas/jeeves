@@ -8,7 +8,6 @@ from twilio.base.exceptions import TwilioRestException
 import re
 
 # Project
-import parsing
 import texts
 import voice_tools as vt
 from apps.gpt import generate_agent_response

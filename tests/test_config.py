@@ -1,9 +1,8 @@
 """Test config."""
 import pytest
 
-import config
 
-
-def test_invalid_bool():
-    with pytest.raises(config.ConfigurationError):
-        config.read_bool_option("asdfaskdlf")
+def test_config_models():
+    """Test that the config models are valid.""" 
+    # This will raise an exception if the models are invalid.
+    from config import CONFIG
