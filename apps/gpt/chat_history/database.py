@@ -25,7 +25,9 @@ class ChatHistory:
         self.messages = messages
 
     def filter_messages(self, filterer: BaseFilterer) -> list[Message]:
-        """Filter messages by datetime."""
+        """
+        Filter messages by datetime. Returns a list of Messages.
+        """
         return filterer.filter_messages(self.messages)
 
     @classmethod
