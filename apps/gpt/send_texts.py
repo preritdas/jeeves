@@ -23,10 +23,10 @@ def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
         name: str = "Send Text Message"
         description = (
             "Useful for when you need to send a text message. Input must be a JSON string with "
-            "the keys \"content\" and \"recipient\" (10-digit phone number preceded by "
+            "the keys \"content\" and \"recipient_phone\" (10-digit phone number preceded by "
             "country code, ex. \"12223334455\". Do not make up phone numbers - either "
             "use a phone number explicitly provided by the user, or use a phone number from a "
-            "tool that provides it for you. Otherwise, do not use this tool."
+            "tool that provides it for you (ex. contacts, if available). Otherwise, do not use this tool."
         )
 
         def _run(self, query: str) -> str:
@@ -38,10 +38,10 @@ def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
             assert isinstance(input_parsed["content"], str), "Content must be a string."
             content = input_parsed["content"]
 
-            assert "recipient" in input_parsed, "Input must have a \"recipient\" key."
-            assert len(str(input_parsed["recipient"]).replace("+", "")) == 11, \
+            assert "recipient_phone" in input_parsed, "Input must have a \"recipient_phone\" key."
+            assert len(str(input_parsed["recipient_phone"]).replace("+", "")) == 11, \
                 "Recipient must be a phone number preceded by country code."
-            recipient = str(input_parsed["recipient"])
+            recipient = str(input_parsed["recipient_phone"])
 
             try:
                 send_res = texts.send_message(content=content, recipient=recipient)
