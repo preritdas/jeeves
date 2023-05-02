@@ -59,5 +59,9 @@ class RecencyFilterer(BaseFilterer):
         # Sort the messages by datetime, most recent first
         messages = sorted(messages, key=lambda message: message.datetime, reverse=True)
 
+        # If there are fewer messages than n_messages, return all messages
+        if len(messages) < self.n_messages:
+            return messages
+
         # Return the first n_messages
         return messages[:self.n_messages]
