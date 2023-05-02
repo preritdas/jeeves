@@ -35,14 +35,17 @@ class ChatHistory:
         Format messages into a string. Returns a string. Providing a Filterer 
         is optional, but will filter the messages first before formatting.
         """
-        formatted: str = ""
         messages = self.messages
 
         if filterer is not None:
             messages = self.filter_messages(filterer)
 
-        for message in messages:
-            formatted += f"Me: {message.user_input}\nJeeves: {message.agent_response}\n"
+        message_strings: list[str] = [
+            f"Me: {message.user_input}\nJeeves: {message.agent_response}"
+            for message in messages
+        ]
+
+        return "\n".join(message_strings)
 
     @classmethod
     def from_inbound_phone(cls, inbound_phone: str) -> "ChatHistory":
