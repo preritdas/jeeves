@@ -18,3 +18,12 @@ class Message(BaseModel):
     inbound_phone: str
     user_input: str
     agent_response: str
+
+    def to_dict(self) -> dict:
+        """Return the message as a dictionary."""
+        return {
+            "datetime": self.datetime.isoformat(),
+            "inbound_phone": self.inbound_phone,
+            "user_input": self.user_input,
+            "agent_response": self.agent_response
+        }
