@@ -7,6 +7,7 @@ from langchain.schema import OutputParserException
 
 from keys import KEYS
 from apps.gpt import logs_callback, prompts
+from apps.gpt.chat_history import ChatHistory, RecencyFilterer
 
 
 # ---- Build the agent ----
@@ -26,9 +27,17 @@ class InternalThoughtZeroShotAgent(ZeroShotAgent):
 
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
 
-def create_agent_executor(toolkit: list[Tool], callback_handlers: list[BaseCallbackHandler]) -> AgentExecutor:
+def create_agent_executor(
+    toolkit: list[Tool], 
+    chat_history: ChatHistory,
+    callback_handlers: list[BaseCallbackHandler]
+) -> AgentExecutor:
     """Create the agent given authenticated tools."""
-    agent_prompts: prompts.AgentPrompts = prompts.build_prompts()
+    agent_prompts: prompts.AgentPrompts = prompts.build_prompts(
+        chat_history=chat_history.format_messages(
+            filterer=RecencyFilterer(n_messages=5)
+        )
+    )
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,

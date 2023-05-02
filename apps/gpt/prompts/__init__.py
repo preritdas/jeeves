@@ -14,7 +14,6 @@ from pydantic import BaseModel
 
 from typing import Callable
 import string
-
 import os
 import datetime as dt
 import pytz
@@ -66,12 +65,16 @@ class Prompt:
         self.template = template
         self.input_variables = input_variables
 
-    def build_prompt(self) -> str:
+    def build_prompt(self, **kwargs) -> str:
         """Build the prompt using self.input_variables."""
         if self.input_variables is None:
             return self.template
 
-        return PartialFormatter().format(self.template, **self.input_variables)
+        # Update the input variables with the given kwargs
+        input_variables = self.input_variables.copy()
+        input_variables.update(kwargs)
+
+        return PartialFormatter().format(self.template, **input_variables)
 
 
 # ---- Build the prompts ----
@@ -84,6 +87,9 @@ current_datetime = lambda: dt.datetime.now(pytz.timezone("US/Eastern")).strftime
     "%-I:%M%p on %A, %B %d, %Y"
 )
 
+# The reason these are stored in this Callable fashion is so the values are only
+# evaluated when the prompt is built. This is because the values may change over time,
+# ex. the date and time.
 PROMPT_INPUTS: dict[str, dict[str, Callable]] = {
     "prefix": {
         "current_datetime": current_datetime
@@ -93,8 +99,8 @@ PROMPT_INPUTS: dict[str, dict[str, Callable]] = {
 }
 
 
-def _build_prompt(name: str) -> Prompt:
-    """Build the prompt with the given name."""
+def _build_prompt(name: str, **kwargs) -> Prompt:
+    """Build the prompt with the given name. Pass in any inputs as kwargs."""
     if name not in PROMPT_INPUTS:
         raise ValueError(f"Prompt name {name} not found.")
 
@@ -104,18 +110,24 @@ def _build_prompt(name: str) -> Prompt:
     with open(prompt_path(name), "r", encoding="utf-8") as f:
         template = f.read()
 
-    input_dict: dict[str, Callable] = PROMPT_INPUTS[name]
+    # Input dictionary will evaluate the functions in PROMPT_INPUTS[name]
+    input_dict: dict[str, str] = {
+        var: PROMPT_INPUTS[name][var]() for var in PROMPT_INPUTS[name]
+    }
+
+    # Add any kwargs to the input dictionary
+    input_dict.update(kwargs)
 
     return Prompt(
         template=template,
-        input_variables={var: input_dict[var]() for var in input_dict}
+        input_variables=input_dict
     )
 
 
-def build_prompts() -> AgentPrompts:
+def build_prompts(chat_history: str) -> AgentPrompts:
     """Build the prompts inserting any variables necessary."""
     return AgentPrompts(
         prefix=_build_prompt("prefix").build_prompt(),
         format_instructions=_build_prompt("format_instructions").build_prompt(),
-        suffix=_build_prompt("suffix").build_prompt()
+        suffix=_build_prompt("suffix").build_prompt(chat_history=chat_history)
     )
