@@ -38,10 +38,17 @@ def extract_log_items(log: str, fields: list[str]) -> list[str]:
     split_string = [s.strip() for s in re.split(pattern, log) if s.strip()]
 
     # Combine the matched expressions with their corresponding text, including a space after the colon
-    return [
+    logs: list[str] = [
         split_string[i].replace(" ", "") + ' ' + split_string[i+1] 
             for i in range(0, len(split_string), 2)
     ]
+
+    # Order the logs according to fields
+    ordered_logs: list[str] = [log for field in fields for log in logs if field in log]
+    assert len(ordered_logs) == len(fields), \
+        f"Expected {len(fields)} logs, got {len(ordered_logs)} after sorting."
+
+    return ordered_logs
 
 
 class AgentLoggingCallbackHandler(BaseCallbackHandler):
