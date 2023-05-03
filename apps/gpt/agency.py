@@ -14,7 +14,7 @@ from apps.gpt.chat_history import ChatHistory, RecencyFilterer
 
 class InternalThoughtZeroShotAgent(ZeroShotAgent):
     """
-    A normal ZeroShotAgent but doesn't inject "Thought:" before the LLM. AFter testing
+    A normal ZeroShotAgent but doesn't inject "Thought:" before the LLM. After testing
     and heavy prompt engineering, I've found a better sucess rate with having the LLM 
     create its own "Thought" label. This is because it knows that each Thought must
     also have either an Action/Action Input or a Final Answer.
