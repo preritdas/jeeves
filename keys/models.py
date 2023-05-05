@@ -149,7 +149,7 @@ class TelegramModel(BaseModel):
         id_phone_mapping (dict[str, str]): A dictionary mapping ID to phone number.
     """
     bot_token: str
-    id_phone_mapping: dict[str, str]
+    id_phone_mapping: dict[int, str]
 
 
 class Keys(BaseModel):
