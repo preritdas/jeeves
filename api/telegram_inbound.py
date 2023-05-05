@@ -1,3 +1,4 @@
+"""Routes to handle inbound messages (text and voice) from Telegram."""
 from fastapi import APIRouter, Request
 import requests
 
@@ -49,6 +50,14 @@ async def send_voice_response(user_id: int, message: str):
 
 @router.post("/inbound-telegram")
 async def handle_inbound_telegram(request: Request) -> str:
+    """
+    Handle inbound messages from Telegram.
+
+    This is the main handler for inbound Telegram messages. It will receive a request 
+    from Telegram, parse the request, and send the message to the appropriate user. 
+    If the user is not recognized, it will return a message to the user. If the input 
+    type is not recognized, it will return a fail message to the user.
+    """
     req = await request.json()
     inbound_id = int(req["message"]["from"]["id"])
 
