@@ -61,10 +61,16 @@ def speak_jeeves(
     byte_code = _speak_jeeves(text)
 
     # Convert if necessary
-    if output_mime != "audio/mpeg":
+    if output_format != "mp3":
         segment = AudioSegment.from_mp3(io.BytesIO(byte_code))
         result_stream = io.BytesIO()
-        segment.export(result_stream, format=output_format, codec="libopus")
+
+        exporter_kwargs = {"format": output_format}
+        if output_format.lower() in CODECS:
+            exporter_kwargs["codec"] = CODECS[output_format.lower()]
+
+        segment.export(result_stream, **exporter_kwargs)
+
         result_stream.seek(0)
         byte_code = result_stream.getvalue()
 
