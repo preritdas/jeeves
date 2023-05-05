@@ -78,6 +78,6 @@ def speak_jeeves(
     public_url = _upload_result(byte_code, output_format, output_mime)
 
     # Cache the speech
-    speech_cache.cache_speech(text, output_format)
+    speech_cache.cache_speech(text, output_format, public_url)
 
     return public_url
