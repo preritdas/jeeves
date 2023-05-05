@@ -5,6 +5,7 @@ from keys import KEYS
 
 from apps.gpt import generate_agent_response
 from voice_tools.transcribe import transcribe_telegram_file_id
+from voice_tools.speak import speak_jeeves
 
 
 router = APIRouter()
@@ -20,6 +21,25 @@ async def send_message(user_id: int, message: str):
         data={
             "chat_id": user_id,
             "text": message
+        }
+    )
+
+    res.raise_for_status()
+    return True if res.status_code == 200 else False
+
+
+async def send_voice_response(user_id: int, message: str):
+    """
+    Send a voice response to a Telegram user.
+    """
+    voice_url = speak_jeeves(message)
+
+    url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendAudio"
+    res = requests.post(
+        url, 
+        data={
+            "chat_id": user_id,
+            "audio": voice_url
         }
     )
 
@@ -54,4 +74,9 @@ async def handle_inbound_telegram(request: Request) -> str:
     # Otherwise, send the message to the recognized user
     response = generate_agent_response(inbound_body, recognized_user)
     await send_message(inbound_id, response)
+
+    # If the response is a voice message, send one back
+    if "voice" in req["message"]:
+        await send_voice_response(inbound_id, response)
+
     return ""
