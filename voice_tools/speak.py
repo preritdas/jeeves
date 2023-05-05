@@ -12,6 +12,10 @@ from voice_tools import speech_cache
 
 JEEVES_VOICE_ID = KEYS.ElevenLabs.voice_id
 
+CODECS = {
+    "ogg": "libopus"
+}
+
 
 def _upload_result(bytecode: bytes, filetype: str, mime: str) -> str:
     """Upload the result to the server and return the URL."""
@@ -46,12 +50,11 @@ def speak_jeeves(
 ) -> str:
     """
     Speak the text using the Jeeves voice. Returns a public URL path.
-    Caching only happens for MP3 files. If changing the output format
-    or mime type, be sure to change *both* arguments so they match. 
-    Otherwise, weird things may happen.
+    If changing the output format or mime type, be sure to change *both* 
+    arguments so they match. Otherwise, weird things may happen.
     """
     # Check if the speech is cached
-    if output_mime == "audio/mpeg" and (cached_url := speech_cache.get_speech(text)):
+    if (cached_url := speech_cache.get_speech(text, output_format)):
         return cached_url
 
     # Generate MP3 bytecode
@@ -68,8 +71,7 @@ def speak_jeeves(
     # Upload for public link with UploadIO
     public_url = _upload_result(byte_code, output_format, output_mime)
 
-    # Cache the speech but only for MP3
-    if output_mime == "audio/mpeg":
-        speech_cache.cache_speech(text, public_url)
+    # Cache the speech
+    speech_cache.cache_speech(text, output_format)
 
     return public_url
