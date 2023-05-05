@@ -32,14 +32,14 @@ async def send_voice_response(user_id: int, message: str):
     """
     Send a voice response to a Telegram user.
     """
-    voice_url = speak_jeeves(message)
+    voice_url = speak_jeeves(message, output_format="OGG", output_mime="audio/ogg")
 
-    url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendAudio"
+    url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendVoice"
     res = requests.post(
         url, 
         data={
             "chat_id": user_id,
-            "audio": voice_url
+            "voice": voice_url
         }
     )
 
