@@ -7,7 +7,7 @@ endpoint.
 from fastapi import FastAPI
 
 # Routers
-from api import text_inbound, voice_inbound
+from api import text_inbound, voice_inbound, telegram_inbound
 from apps.gpt import make_calls
 
 
@@ -21,5 +21,6 @@ def test():
 
 # Include the routers
 app.include_router(text_inbound.router, prefix="/texts", tags=["Text Inbound"])
+app.include_router(telegram_inbound.router, prefix="/telegram", tags=["Telegram Inbound"])
 app.include_router(voice_inbound.router, prefix="/voice", tags=["Voice Inbound"])
 app.include_router(make_calls.router, prefix="/voice/outbound", tags=["Voice Outbound Calls"])
