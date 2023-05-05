@@ -104,6 +104,7 @@ async def handle_inbound_telegram(request: Request) -> str:
         process_kwargs["voice_id"] = req["message"]["voice"]["file_id"]
     else:
         send_message(inbound_id, "I'm sorry, sir, but I don't understand that yet.")
+        return ""
 
     # Process the inbound message in a thread
     process_thread = Thread(
