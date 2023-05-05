@@ -33,6 +33,7 @@ beautifulsoup4==4.12.2  # web scraping tool
 # Inbound
 twilio==8.1.0  # respond with texts, voice calls
 elevenlabs==0.2.7  # jeeves voice, tts
+pydub==0.25.1  # audio conversion
 
 # Wordhunt
 # cython==0.29.32  # run pure python version for now

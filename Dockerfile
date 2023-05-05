@@ -4,6 +4,9 @@ FROM python:3.11.2-bullseye
 # Set the working directory in the container
 WORKDIR /app
 
+# Apt requirements
+RUN apt update && apt install -y ffmpeg
+
 # Copy just requirements to build dependencies 
 COPY requirements.txt .
 
