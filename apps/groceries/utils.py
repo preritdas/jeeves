@@ -6,9 +6,14 @@ import mypytoolkit as kit
 import json
 import os
 
-import inflect; inflect_engine = inflect.engine()
+import inflect
 
-# ---- CONSTANTS ---- 
+
+# Create inflect engine for pluralization and singularization
+inflect_engine = inflect.engine()
+
+
+# ---- CONSTANTS ----
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
 

@@ -17,7 +17,7 @@ WHISPER_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions"
 
 def retry_transcribe(function):
     """
-    Decorator that retries Whisper once if it fails. If there's an error, 
+    Decorator that retries Whisper once if it fails. If there's an error,
     it waits a second and tries again. If it fails again, it raises the error.
     """
     @wraps(function)
@@ -36,7 +36,7 @@ def _whisper_transcribe_url(url: str = "", bytecode: bytes = b"") -> str:
     """Transcribes with Whisper. Doesn't touch the file."""
     if not url and not bytecode:
         raise ValueError("Must provide either a URL or bytecode.")
-    
+
     if url and bytecode:
         raise ValueError("Must provide either a URL or bytecode, not both.")
 
@@ -87,7 +87,9 @@ def transcribe_telegram_file_id(file_id: str) -> str:
     # Convert to mp3
     result_stream = io.BytesIO()
 
-    file_path = f"https://api.telegram.org/file/bot{KEYS.Telegram.bot_token}/{file_path}"
+    file_path = (
+        f"https://api.telegram.org/file/bot{KEYS.Telegram.bot_token}/{file_path}"
+    )
     input_stream = io.BytesIO(requests.get(file_path).content)
     segment = AudioSegment.from_file(input_stream, format="ogg")
 

@@ -18,16 +18,16 @@ def extract_log_items(log: str, fields: list[str]) -> list[str]:
     """
     Takes a log and extracts the fields specified in the fields list.
     Removes spaces from all field names.
-    
+
     Args:
         log (str): The log to extract from.
         fields (list[str]): The fields to extract. Don't include the colon.
-    
+
     Returns:
         list[str]: The extracted fields as full strings.
 
-    Example: if the log is "This: something That: something else" then 
-    extract_log_items(log, ["This", "That"]) will return 
+    Example: if the log is "This: something That: something else" then
+    extract_log_items(log, ["This", "That"]) will return
     ["This: something", "That: something else"]
 
     Spaces are removed from the field names, so "Action Input" becomes "ActionInput"
@@ -35,7 +35,7 @@ def extract_log_items(log: str, fields: list[str]) -> list[str]:
     for the fields, we remove the spaces from the field names (check_fields).
     """
     # Regular expression to match "Thought:", "Action:", and "Action Input:"
-    fields = [f + ':' for f in fields]
+    fields = [f + ":" for f in fields]
     pattern = f"({'|'.join(fields)})"
 
     # Split the string using the pattern and filter out empty strings
@@ -43,18 +43,18 @@ def extract_log_items(log: str, fields: list[str]) -> list[str]:
 
     # Combine the matched expressions with their corresponding text, including a space after the colon
     logs: list[str] = [
-        split_string[i].replace(" ", "") + ' ' + split_string[i+1] 
-            for i in range(0, len(split_string), 2)
+        split_string[i].replace(" ", "") + " " + split_string[i + 1]
+        for i in range(0, len(split_string), 2)
     ]
 
     # Sort the logs in the order of the fields
     check_fields: list[str] = [f.replace(" ", "") for f in fields]
-    return sorted(logs, key=lambda x: check_fields.index(x.split(':')[0]+':'))
+    return sorted(logs, key=lambda x: check_fields.index(x.split(":")[0] + ":"))
 
 
 class AgentLoggingCallbackHandler(BaseCallbackHandler):
     """
-    Callback Handler that logs instead of printing. 
+    Callback Handler that logs instead of printing.
     Specific for agents, as it uses agent terminology in the logs.
     """
     def __init__(self, logger: Logger, uid: str) -> None:
@@ -150,7 +150,7 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
     ) -> None:
         """Run on agent end."""
         log_items = extract_log_items(finish.log, ["Thought", "Final Answer"])
-        
+
         # Log the result
         for result in log_items:
             self.logger.info(f"{self.uid}: {result}")

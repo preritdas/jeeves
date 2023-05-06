@@ -19,7 +19,7 @@ import datetime as dt
 import pytz
 
 
-# ---- Model for prompting ---- 
+# ---- Model for prompting ----
 
 class AgentPrompts(BaseModel):
     """The various prompt components for the agent."""
@@ -56,7 +56,7 @@ class PartialFormatter(string.Formatter):
         try:
             return super(PartialFormatter, self).get_value(key, args, kwargs)
         except KeyError:
-            return '{' + str(key) + '}'
+            return "{" + str(key) + "}"
 
 
 class Prompt:
@@ -91,9 +91,7 @@ current_datetime = lambda: dt.datetime.now(pytz.timezone("US/Eastern")).strftime
 # evaluated when the prompt is built. This is because the values may change over time,
 # ex. the date and time.
 PROMPT_INPUTS: dict[str, dict[str, Callable]] = {
-    "prefix": {
-        "current_datetime": current_datetime
-    },
+    "prefix": {"current_datetime": current_datetime},
     "format_instructions": {},
     "suffix": {}
 }
@@ -118,10 +116,7 @@ def _build_prompt(name: str, **kwargs) -> Prompt:
     # Add any kwargs to the input dictionary
     input_dict.update(kwargs)
 
-    return Prompt(
-        template=template,
-        input_variables=input_dict
-    )
+    return Prompt(template=template, input_variables=input_dict)
 
 
 def build_prompts(chat_history: str) -> AgentPrompts:

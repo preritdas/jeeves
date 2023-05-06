@@ -23,13 +23,7 @@ def send_message(user_id: int, message: str):
         return True
 
     url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendMessage"
-    res = requests.post(
-        url, 
-        data={
-            "chat_id": user_id,
-            "text": message
-        }
-    )
+    res = requests.post(url, data={"chat_id": user_id, "text": message})
 
     res.raise_for_status()
     return True if res.status_code == 200 else False
@@ -45,25 +39,21 @@ def send_voice_response(user_id: int, message: str):
     voice_url = speak_jeeves(message, output_format="OGG", output_mime="audio/ogg")
 
     url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendVoice"
-    res = requests.post(
-        url, 
-        data={
-            "chat_id": user_id,
-            "voice": voice_url
-        }
-    )
+    res = requests.post(url, data={"chat_id": user_id, "voice": voice_url})
 
     res.raise_for_status()
     return True if res.status_code == 200 else False
 
 
-def process_telegram_inbound(inbound_id: int, text: str = "", voice_id: str = "") -> None:
+def process_telegram_inbound(
+    inbound_id: int, text: str = "", voice_id: str = ""
+) -> None:
     """
-    Process an inbound message from Telegram. 
+    Process an inbound message from Telegram.
 
-    This is the main handler for inbound Telegram messages. It will receive a request 
-    from Telegram, parse the request, and send the message to the appropriate user. 
-    If the user is not recognized, it will return a message to the user. If the input 
+    This is the main handler for inbound Telegram messages. It will receive a request
+    from Telegram, parse the request, and send the message to the appropriate user.
+    If the user is not recognized, it will return a message to the user. If the input
     type is not recognized, it will return a fail message to the user.
     """
     # Check for proper usage
@@ -71,27 +61,26 @@ def process_telegram_inbound(inbound_id: int, text: str = "", voice_id: str = ""
         raise ValueError("You can only provide text or voice, not both.")
     elif not text and not voice_id:
         raise ValueError("You must provide either text or voice.")
-    
+
     # Try to get the phone number from the inbound ID
     recognized_user: str = KEYS.Telegram.id_phone_mapping.get(inbound_id, "")
 
     # If the user is not recognized, return a message
     if not recognized_user:
         send_message(
-            inbound_id, 
-            "My apologies, sir, but it appears I don't recognize you."
+            inbound_id, "My apologies, sir, but it appears I don't recognize you."
         )
         return
-    
+
     # Otherwise, send the message to the recognized user
     text = text or transcribe_telegram_file_id(voice_id)
-    
+
     # Generate and catch errors
-    try: 
+    try:
         response = generate_agent_response(text, recognized_user)
     except Exception as e:
         response = f"Unfortunately, that failed. {e}"
-    
+
     # Text reply regardless of input type
     send_message(inbound_id, response)
 
@@ -122,10 +111,7 @@ async def handle_inbound_telegram(request: Request) -> str:
         return ""
 
     # Process the inbound message in a thread
-    process_thread = Thread(
-        target=process_telegram_inbound,
-        kwargs=process_kwargs
-    )
-
+    process_thread = Thread(target=process_telegram_inbound, kwargs=process_kwargs)
     process_thread.start()
+
     return ""

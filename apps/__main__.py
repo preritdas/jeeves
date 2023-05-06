@@ -31,10 +31,7 @@ if not APP_NAME in PROGRAMS:
 
 
 # Get response
-response = PROGRAMS[APP_NAME](
-    content = CONTENT,
-    options = OPTIONS
-)
+response = PROGRAMS[APP_NAME](content=CONTENT, options=OPTIONS)
 
 
 print(response)

@@ -23,8 +23,8 @@ def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
         name: str = "Send Text Message"
         description = (
             "Useful for when you need to send a text message. Input must be a JSON string with "
-            "the keys \"content\" and \"recipient_phone\" (10-digit phone number preceded by "
-            "country code, ex. \"12223334455\". Do not make up phone numbers - either "
+            'the keys "content" and "recipient_phone" (10-digit phone number preceded by '
+            'country code, ex. "12223334455". Do not make up phone numbers - either '
             "use a phone number explicitly provided by the user, or use a phone number from a "
             "tool that provides it for you (ex. contacts, if available). Otherwise, do not use this tool."
         )
@@ -34,13 +34,16 @@ def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
             input_parsed = json.loads(query)
 
             # Validate
-            assert "content" in input_parsed, "Input must have a \"content\" key."
+            assert "content" in input_parsed, 'Input must have a "content" key.'
             assert isinstance(input_parsed["content"], str), "Content must be a string."
             content = input_parsed["content"]
 
-            assert "recipient_phone" in input_parsed, "Input must have a \"recipient_phone\" key."
-            assert len(str(input_parsed["recipient_phone"]).replace("+", "")) == 11, \
-                "Recipient must be a phone number preceded by country code."
+            assert (
+                "recipient_phone" in input_parsed
+            ), 'Input must have a "recipient_phone" key.'
+            assert (
+                len(str(input_parsed["recipient_phone"]).replace("+", "")) == 11
+            ), "Recipient must be a phone number preceded by country code."
             recipient = str(input_parsed["recipient_phone"])
 
             try:

@@ -15,7 +15,7 @@ from apps.gpt.chat_history import ChatHistory, RecencyFilterer
 class InternalThoughtZeroShotAgent(ZeroShotAgent):
     """
     A normal ZeroShotAgent but doesn't inject "Thought:" before the LLM. After testing
-    and heavy prompt engineering, I've found a better sucess rate with having the LLM 
+    and heavy prompt engineering, I've found a better sucess rate with having the LLM
     create its own "Thought" label. This is because it knows that each Thought must
     also have either an Action/Action Input or a Final Answer.
     """
@@ -28,9 +28,9 @@ class InternalThoughtZeroShotAgent(ZeroShotAgent):
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
 
 def create_agent_executor(
-    toolkit: list[Tool], 
+    toolkit: list[Tool],
     chat_history: ChatHistory,
-    callback_handlers: list[BaseCallbackHandler]
+    callback_handlers: list[BaseCallbackHandler],
 ) -> AgentExecutor:
     """Create the agent given authenticated tools."""
     agent_prompts: prompts.AgentPrompts = prompts.build_prompts(
@@ -46,10 +46,7 @@ def create_agent_executor(
         suffix=agent_prompts.suffix
     )
     return AgentExecutor(
-        agent=agent,
-        tools=toolkit,
-        verbose=True,
-        callbacks=callback_handlers
+        agent=agent, tools=toolkit, verbose=True, callbacks=callback_handlers
     )
 
 
@@ -70,6 +67,7 @@ def retry_couldnt_parse(function):
                 else:
                     raise e
         raise last_exception
+
     return wrapper
 
 

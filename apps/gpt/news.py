@@ -14,7 +14,7 @@ API_AVAILABLE_CATEGORIES = [
     "health",
     "science",
     "sports",
-    "technology",
+    "technology"
 ]
 MANUAL_AVAILABLE_CATEGORIES = [
     "general",
@@ -29,7 +29,9 @@ MANUAL_AVAILABLE_CATEGORIES = [
 class Articles(BaseModel):
     """Articles model."""
 
-    articles: list[tuple[str, str, str | None]] = Field(..., title="Articles by URL, title, and content.")
+    articles: list[tuple[str, str, str | None]] = Field(
+        ..., title="Articles by URL, title, and content."
+    )
 
 
 def _headline_news(category: str) -> Articles:
@@ -41,23 +43,29 @@ def _headline_news(category: str) -> Articles:
 
     articles = res.json()["articles"]
     return Articles(
-        articles=[(article["url"], article["title"], article["content"]) for article in articles[:7]]
+        articles=[
+            (article["url"], article["title"], article["content"])
+            for article in articles[:7]
+        ]
     )
 
 
 def get_headline_news(category: str) -> str:
     """Get the headline news."""
     category = category.strip().lower()
-    
+
     if category not in API_AVAILABLE_CATEGORIES:
         return f"Invalid category. Category must be one of {API_AVAILABLE_CATEGORIES}."
 
     articles = _headline_news(category).articles
-    article_strs = [f"{article[1]} - {article[2]} ({article[0]})\n" for article in articles] 
+    article_strs = [
+        f"{article[1]} - {article[2]} ({article[0]})\n" for article in articles
+    ]
     return "\n".join(article_strs)
 
 
 ## ---- Manual ----
+
 
 def _manual_headline_news(category: str) -> str:
     """Manually get headline news by using a WebsiteAnswerer."""
@@ -70,7 +78,7 @@ def _manual_headline_news(category: str) -> str:
 
     suffix = "" if category == "general" else "news/" + category
     answerer = retrieval.WebsiteAnswerer(f"https://wsj.com/{suffix}")
-    
+
     return answerer.answer(
         query=(
             f"The context is snippets from the WSJ {category} page. "

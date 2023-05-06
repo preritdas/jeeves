@@ -8,11 +8,7 @@ def create_permissions(name: str, phone: str, value: str) -> str:
     of the created item.
     """
     return permissions_db.put(
-        {
-            "Name": name.title(),
-            "Phone": phone,
-            "Permissions": value.lower()
-        }
+        {"Name": name.title(), "Phone": phone, "Permissions": value.lower()}
     )
 
 
@@ -23,12 +19,7 @@ def read_permissions(key: str) -> str:
 
 def update_permissions(key: str, value: str) -> str:
     """Updates permissions by key. Returns the same key."""
-    permissions_db.update(
-        updates = {
-            "Permissions": value.lower()
-        },
-        key = key
-    )
+    permissions_db.update(updates={"Permissions": value.lower()}, key=key)
 
     return key
 

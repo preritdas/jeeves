@@ -10,20 +10,15 @@ def test_log_use():
     TEST_APP_RANDOM = "".join(random.sample(string.ascii_letters, 10))
 
     key = usage.log_use(
-        phone_number = "12223334455",
-        app_name = TEST_APP_RANDOM,
-        content = "Apples",
-        options = {"setup": "whole foods"},
-        time = dt.datetime.now()
+        phone_number="12223334455",
+        app_name=TEST_APP_RANDOM,
+        content="Apples",
+        options={"setup": "whole foods"},
+        time=dt.datetime.now()
     )
-    
+
     # Try to find this item
-    db_res = usage.usage_db.fetch(
-        {
-            "Phone": "12223334455",
-            "App": TEST_APP_RANDOM
-        }
-    )
+    db_res = usage.usage_db.fetch({"Phone": "12223334455", "App": TEST_APP_RANDOM})
 
     assert len(db_res.items) == 1
 

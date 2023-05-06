@@ -14,10 +14,7 @@ def test_handler():
 
 def test_no_action():
     """Test behavior when no action is specified."""
-    res = permissions.handler(
-        content = "",
-        options = {"inbound_phone": "12223334455"}
-    )
+    res = permissions.handler(content="", options={"inbound_phone": "12223334455"})
 
     assert "You must provide an action" in res
 
@@ -25,11 +22,7 @@ def test_no_action():
 def test_missing_content():
     """Test behavior when content is missing and the action isn't viewing."""
     res = permissions.handler(
-        content = "",
-        options = {
-            "inbound_phone": "12223334455",
-            "action": "update"
-        }
+        content="", options={"inbound_phone": "12223334455", "action": "update"}
     )
 
     assert "as content when" in res
@@ -39,16 +32,11 @@ def test_missing_content():
 
 def test_creating_deleting(default_options):
     """These are tested together so that the created user can be deleted."""
-    random_name = "".join(
-        random.sample(
-            population = string.ascii_letters,
-            k = 8
-        )
-    )
+    random_name = "".join(random.sample(population=string.ascii_letters, k=8))
 
     res = permissions.handler(
-        content = "groceries",
-        options = {
+        content="groceries",
+        options={
             "inbound_phone": default_options["inbound_phone"],
             "action": "create",
             "name": random_name,
@@ -60,8 +48,8 @@ def test_creating_deleting(default_options):
 
     # Delete this user
     res = permissions.handler(
-        content = "",
-        options = {
+        content="",
+        options={
             "inbound_phone": default_options["inbound_phone"],
             "action": "delete",
             "name": random_name
@@ -73,8 +61,8 @@ def test_creating_deleting(default_options):
 
 def test_create_permissions_exist(user_git_pytest):
     res = permissions.handler(
-        content = "something",
-        options = {
+        content="something",
+        options={
             "action": "create",
             "name": user_git_pytest["Name"],
             "phone": user_git_pytest["Phone"]
@@ -85,12 +73,7 @@ def test_create_permissions_exist(user_git_pytest):
 
 
 def test_no_data_create():
-    res = permissions.handler(
-        content = "something",
-        options = {
-            "action": "create"
-        }
-    )
+    res = permissions.handler(content="something", options={"action": "create"})
 
     assert "both a name and phone number" in res
 
@@ -99,11 +82,7 @@ def test_no_data_create():
 
 def test_view(user_git_pytest):
     res = permissions.handler(
-        content = "",
-        options = {
-            "action": "view",
-            "name": user_git_pytest["Name"].lower()
-        }
+        content="", options={"action": "view", "name": user_git_pytest["Name"].lower()}
     )
 
     assert "are below" in res
@@ -112,11 +91,7 @@ def test_view(user_git_pytest):
 
 def test_view_none_found():
     res = permissions.handler(
-        content = "",
-        options = {
-            "action": "view",
-            "name": "i dont exist"
-        }
+        content="", options={"action": "view", "name": "i dont exist"}
     )
 
     assert "I didn't find an" in res
@@ -126,11 +101,8 @@ def test_view_none_found():
 
 def test_update(user_git_pytest):
     res = permissions.handler(
-        content = "all",
-        options = {
-            "action": "update",
-            "name": user_git_pytest["Name"].lower()
-        }
+        content="all",
+        options={"action": "update", "name": user_git_pytest["Name"].lower()},
     )
 
     assert "Successfully updated" in res
@@ -139,11 +111,7 @@ def test_update(user_git_pytest):
 
 def test_update_none_found():
     res = permissions.handler(
-        content = "something",
-        options = {
-            "action": "update",
-            "name": "i dont exist"
-        }
+        content="something", options={"action": "update", "name": "i dont exist"}
     )
 
     assert "I didn't find an" in res
@@ -153,11 +121,7 @@ def test_update_none_found():
 
 def test_delete_none_found():
     res = permissions.handler(
-        content = "something",
-        options = {
-            "action": "delete",
-            "name": "i dont exist"
-        }
+        content="something", options={"action": "delete", "name": "i dont exist"}
     )
 
     assert "I didn't find an" in res

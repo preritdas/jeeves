@@ -21,9 +21,7 @@ llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, tempera
 embeddings = OpenAIEmbeddings(openai_api_key=KEYS.OpenAI.api_key)
 N_DOCS = 5  # 10 for gpt-4, 5 for 3.5
 splitter = TokenTextSplitter(
-    encoding_name="cl100k_base", 
-    chunk_size=300, 
-    chunk_overlap=50
+    encoding_name="cl100k_base", chunk_size=300, chunk_overlap=50
 )
 
 
@@ -51,14 +49,14 @@ class BaseAnswerer(ABC):
         """
         Converts `self.source` into a string. If the input is text already, return input.
         If it's a website, scrape the website and return the text. Etc. The input should
-        be providable in string form so a GPT agent can use it. 
+        be providable in string form so a GPT agent can use it.
 
         Ex. text can be passed as a string, website can be passed as a URL, etc.
         """
 
     def answer(self, query: str, n_docs: int = N_DOCS) -> str:
         """
-        First converts the initial source, then queries it. The query must be a string, 
+        First converts the initial source, then queries it. The query must be a string,
         and the answer will be a string. This does not work with the string-in-string-out
         nature of an LLM agent, so it is not exposed to the user.
         """
@@ -91,7 +89,7 @@ class BaseAnswerer(ABC):
         Eventually, add some JSON parsing to allow for slightly-off inputs.
         """
         dic = json.loads(agent_input)
-        
+
         # Return the answer or an error
         try:
             return cls(dic["source"]).answer(dic["query"])
@@ -142,14 +140,13 @@ class YouTubeAnswerer(BaseAnswerer):
 
         # Then get the transcript
         response = requests.post(
-            f'{KEYS.Transcription.api_url}/youtube',
-            json={"video_id": video_id}
+            f"{KEYS.Transcription.api_url}/youtube", json={"video_id": video_id}
         )
 
         if not response.ok:
             raise ConversionError(
-                "YouTube", 
-                video_id, 
+                "YouTube",
+                video_id,
                 f"YouTube transcription failed: {response.content.decode()}"
             )
 

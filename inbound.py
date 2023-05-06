@@ -9,8 +9,7 @@ import usage
 
 
 def main_handler(
-    inbound_sms_content: parsing.InboundMessage, 
-    send_response_message: bool = True
+    inbound_sms_content: parsing.InboundMessage, send_response_message: bool = True
 ) -> dict[str, tuple | str]:
     """
     Handle all inbound messages. Returns a dictionary in the following format.
@@ -19,14 +18,14 @@ def main_handler(
         "response": "That app does not exist."  # what's texted to the user
         "http": ("", 204)  # what's returned (not actually) by HTTP
     }
-    
+
     Keep this as simple as possible, with plenty of outsourcing.
     """
     sender: str = inbound_sms_content.phone_number
 
     # Define the response action based on whether or not we want to send a response
     if send_response_message:
-        respond = lambda response: texts.send_message(response, sender) 
+        respond = lambda response: texts.send_message(response, sender)
     else:
         respond = lambda response: None
 
@@ -55,10 +54,7 @@ def main_handler(
 
     respond(text_response)
     usage.log_use(
-        phone_number = sender,
-        app_name = app_name,
-        content = content,
-        options = options
-    ) 
+        phone_number=sender, app_name=app_name, content=content, options=options
+    )
 
     return {"response": text_response, "http": ("", 204)}

@@ -1,7 +1,7 @@
 """
 Contains all individual apps as submodules, importable with `from apps import billsplit`.
 """
-# Local 
+# Local
 from typing import Callable
 
 # Apps
@@ -23,16 +23,15 @@ import utils
 import permissions as perms
 
 
-@utils.app_handler(app_help = "See a list of available apps.")
+@utils.app_handler(app_help="See a list of available apps.")
 def handler(content: str, options: dict):
     """Handler for apps. Filters by permissions."""
     accessible_apps: list[str] = [
-        f"- {app}" for app in PROGRAMS.keys() if perms.check_permissions(
-            phone = options["inbound_phone"],
-            app_name = app
-        )
+        f"- {app}"
+        for app in PROGRAMS.keys()
+        if perms.check_permissions(phone=options["inbound_phone"], app_name=app)
     ]
-        
+
     available_apps = "\n".join(accessible_apps)
     return f"The following apps are available to you - filtered by your permissions.\n\n{available_apps}"
 

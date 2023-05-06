@@ -11,9 +11,7 @@ from keys import KEYS
 
 
 llm = ChatOpenAI(
-    openai_api_key=KEYS.OpenAI.api_key, 
-    model_name="gpt-3.5-turbo", 
-    temperature=0
+    openai_api_key=KEYS.OpenAI.api_key, model_name="gpt-3.5-turbo", temperature=0
 )
 
 
@@ -44,12 +42,12 @@ conversation_chain = LLMChain(prompt=prompt_template, llm=llm)
 
 def generate_response(goal: str, recipient_desc: str, convo: str) -> str:
     """
-    Generate a response given the conversation history and the goal. Format the 
+    Generate a response given the conversation history and the goal. Format the
     current date and time into the prompt.
     """
     return conversation_chain.run(
-        goal=goal, 
-        recipient_desc=recipient_desc, 
+        goal=goal,
+        recipient_desc=recipient_desc,
         conversation=convo,
         current_datetime=get_current_datetime()
     )
@@ -58,14 +56,10 @@ def generate_response(goal: str, recipient_desc: str, convo: str) -> str:
 def generate_intro_message(goal: str, recipient_desc: str) -> str:
     """Generate the intro message."""
     prompt = PromptTemplate(
-        input_variables=["goal", "recipient_desc"],
-        template=GREETING_MESSAGE
+        input_variables=["goal", "recipient_desc"], template=GREETING_MESSAGE
     )
 
-    intro_message_chain = LLMChain(
-        prompt=prompt,
-        llm=llm
-    )
+    intro_message_chain = LLMChain(prompt=prompt, llm=llm)
 
     message: str = intro_message_chain.run(goal=goal, recipient_desc=recipient_desc)
     return message

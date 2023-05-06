@@ -41,7 +41,6 @@ class Board:
             counter += width
 
         return cls(board)
-        
 
     def query(self, x: int, y: int):
         """

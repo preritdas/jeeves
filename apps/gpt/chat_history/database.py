@@ -15,7 +15,7 @@ chats_base = deta.Deta(KEYS.Deta.project_key).Base("chats")
 class ChatHistory:
     """
     A chat history object to interact with the database.
-    
+
     `dt.datetime` is stored in the database in string format, isoformat.
     Serialize datetimes using `dt.datetime.isoformat()` into the database,
     and deserialize using `dt.datetime.fromisoformat()`.
@@ -32,7 +32,7 @@ class ChatHistory:
 
     def format_messages(self, filterer: BaseFilterer | None = None) -> str:
         """
-        Format messages into a string. Returns a string. Providing a Filterer 
+        Format messages into a string. Returns a string. Providing a Filterer
         is optional, but will filter the messages first before formatting.
         """
         messages = self.messages
@@ -55,10 +55,11 @@ class ChatHistory:
         # Validate the inbound phone number
         if inbound_phone.startswith("+"):
             inbound_phone = inbound_phone[1:]
-        
+
         assert inbound_phone.isnumeric(), "Inbound phone number must be numeric."
-        assert len(inbound_phone) == 11, \
-            "Inbound phone number must be 11 digits, E.164 format."
+        assert (
+            len(inbound_phone) == 11
+        ), "Inbound phone number must be 11 digits, E.164 format."
 
         user_messages = chats_base.fetch({"inbound_phone": inbound_phone}).items
 
@@ -77,7 +78,7 @@ class ChatHistory:
 
     def add_message(self, message: Message) -> str:
         """
-        Add a message to the database. 
+        Add a message to the database.
         Returns a dictionary of the full database entry.
         """
         return chats_base.put(message.to_dict())

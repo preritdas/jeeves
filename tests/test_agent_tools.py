@@ -24,7 +24,7 @@ def test_youtube_answerer():
     )
 
     assert answer
-    assert "Unfortunately cannot answer" not in answer 
+    assert "Unfortunately cannot answer" not in answer
 
 
 def test_headlines():
@@ -36,16 +36,14 @@ def test_headlines():
 
 def test_wolfram_alpha():
     # Find the Wolfram tool
-    query_res = [
-        tool for tool in no_auth_tools if "Wolfram" in tool.name
-    ]
+    query_res = [tool for tool in no_auth_tools if "Wolfram" in tool.name]
 
     if not query_res:
         raise ValueError("Wolfram Alpha tool not found.")
 
     if len(query_res) > 1:
         raise ValueError("Multiple Wolfram Alpha tools found.")
-    
+
     wolfram_tool = query_res[0]
     res = wolfram_tool.run("3^3")
 
@@ -59,9 +57,7 @@ def test_text_tool(mocker, default_options):
     TextToolClass = create_text_message_tool(default_options["inbound_phone"])
     tool = TextToolClass()
 
-    res = tool.run(
-        """{"recipient_phone": "12223334455", "content": "Hello world!"}"""
-    )
+    res = tool.run("""{"recipient_phone": "12223334455", "content": "Hello world!"}""")
 
     assert res
     assert isinstance(res, str)

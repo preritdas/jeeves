@@ -12,10 +12,7 @@ from keys import KEYS
 from config import CONFIG
 
 
-twilio_client = TwilioClient(
-    KEYS.Twilio.account_sid,
-    KEYS.Twilio.auth_token
-)
+twilio_client = TwilioClient(KEYS.Twilio.account_sid, KEYS.Twilio.auth_token)
 
 
 def extract_base_url(url: str) -> str:
@@ -32,7 +29,14 @@ BASE_URL = extract_base_url(
 )
 
 TWILIO_NON_SUCCESS_STATUS: set[str] = {
-    "queued", "failed", "undelivered", "receiving", "accepted", "scheduled", "partially_delivered", "canceled"
+    "queued",
+    "failed",
+    "undelivered",
+    "receiving",
+    "accepted",
+    "scheduled",
+    "partially_delivered",
+    "canceled"
 }
 
 
@@ -46,14 +50,14 @@ def send_message(content: str, recipient: str) -> bool:
         return True
 
     message_sent = twilio_client.messages.create(
-        to = recipient,
-        from_ = KEYS.Twilio.sender,
-        body = content
+        to=recipient, from_=KEYS.Twilio.sender, body=content
     )
 
     # Try twice for one second total for success
     for _ in range(2):
-        if (last_status := message_sent.fetch().status) not in TWILIO_NON_SUCCESS_STATUS:
+        if (
+            last_status := message_sent.fetch().status
+        ) not in TWILIO_NON_SUCCESS_STATUS:
             return True
 
         time.sleep(0.5)

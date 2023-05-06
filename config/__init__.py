@@ -1,4 +1,3 @@
-
 """
 Read config.yaml.
 """

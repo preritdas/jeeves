@@ -57,9 +57,11 @@ def test_app_error_handling(mocker, user_git_pytest):
 
     inbound_payload = {
         "phone_number": user_git_pytest["Phone"],
-        "body": "app: wordhunt\n" \
-            "options: width = notnumber; height = notnumber\n" \
+        "body": (
+            "app: wordhunt\n"
+            "options: width = notnumber; height = notnumber\n"
             "hagsyausidmsnajs"
+        )
     }
 
     res = inbound.main_handler(InboundMessage(**inbound_payload))

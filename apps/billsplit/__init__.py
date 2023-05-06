@@ -13,9 +13,11 @@ APP_HELP = (
 )
 APP_OPTIONS = {
     "phrase": "Unique phrase provided by creator.",
-    "action": "'start' to initiate the split, " \
-        "'status' to check on the status, 'close' to make everyone pay.",
-    "total": "If creating, the total value of the bill, without tip."
+    "action": (
+        "'start' to initiate the split, "
+        "'status' to check on the status, 'close' to make everyone pay."
+    ),
+    "total": "If creating, the total value of the bill, without tip.",
 }
 
 
@@ -30,7 +32,7 @@ def handler(content: str, options: dict[str, str]) -> str:
             total = float(options["total"])
         except ValueError:
             return "Invalid total."
-        
+
         if not content:
             return "You must supply a suggested tip as content."
 

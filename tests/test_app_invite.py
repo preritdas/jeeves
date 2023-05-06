@@ -12,31 +12,20 @@ from keys import KEYS
 
 
 def test_handler():
-    res = invite.handler(
-        content = "12223334455",
-        options = {
-            "preview": "yes"
-        }
-    )
+    res = invite.handler(content="12223334455", options={"preview": "yes"})
 
     assert "Preview of message" in res
     assert "app name statement" in res
 
 
 def test_no_recipient():
-    res = invite.handler(
-        content = "",
-        options = {"preview": "yes"}
-    )
+    res = invite.handler(content="", options={"preview": "yes"})
 
     assert not "Successfully" in res
 
 
 def test_invalid_phone():
-    res = invite.handler(
-        content = "97asdc6d99",
-        options = {"preview": "yes"}
-    )
+    res = invite.handler(content="97asdc6d99", options={"preview": "yes"})
 
     assert "invalid" in res.lower()
 
@@ -56,11 +45,6 @@ def test_failed_delivery(mocker, default_options):
 
 
 def test_help():
-    res = invite.handler(
-        content = "",
-        options = {
-            "help": "yes"
-        }
-    )
+    res = invite.handler(content="", options={"help": "yes"})
 
     assert "doesn't text" in res
