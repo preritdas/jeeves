@@ -5,6 +5,8 @@ import requests
 from threading import Thread
 
 from keys import KEYS
+from config import CONFIG
+
 from apps.gpt import generate_agent_response
 from voice_tools.transcribe import transcribe_telegram_file_id
 from voice_tools.speak import speak_jeeves
@@ -17,6 +19,9 @@ def send_message(user_id: int, message: str):
     """
     Send a message to a Telegram user.
     """
+    if CONFIG.General.sandbox_mode:
+        return True
+
     url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendMessage"
     res = requests.post(
         url, 
@@ -34,6 +39,9 @@ def send_voice_response(user_id: int, message: str):
     """
     Send a voice response to a Telegram user.
     """
+    if CONFIG.General.sandbox_mode:
+        return True
+
     voice_url = speak_jeeves(message, output_format="OGG", output_mime="audio/ogg")
 
     url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendVoice"
