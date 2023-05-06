@@ -31,8 +31,11 @@ def validate_phone_number(phone_number: str) -> str:
         phone_number = str(phone_number)
     except ValueError:
         raise ValueError(f"Couldn't interpret {phone_number} as a string.")
+        
+    if not phone_number:
+        raise ValueError("Phone number was given as an empty string.")
 
-    # Remove the plus
+    # Remove the plus if given, ex. Twilio does
     if phone_number[0] == "+":
         phone_number = phone_number[1:]
 
