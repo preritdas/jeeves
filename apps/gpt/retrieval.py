@@ -70,7 +70,10 @@ class BaseAnswerer(ABC):
         similar_docs = _find_similar(n_docs)
 
         # Adjust the instructions based on the source
-        PREFIX = f"You are a {type(self).__name__}. "
+        PREFIX = (
+            f"You are a {type(self).__name__}. Your context is snippets from the "
+            f"transcription of your source as a {type(self).__name__}. "
+        )
         qa_chain = load_qa_chain(llm)
         qa_chain.llm_chain.prompt.messages[0].prompt.template = (
             PREFIX + qa_chain.llm_chain.prompt.messages[0].prompt.template
