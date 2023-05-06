@@ -4,6 +4,13 @@ then uses the tool to retrieve items to get more information.
 """
 from deta import Deta
 
+from langchain.schema import Document
+from langchain.chat_models import ChatOpenAI
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.text_splitter import TokenTextSplitter
+from langchain.vectorstores import FAISS
+from langchain.chains.question_answering import load_qa_chain
+
 import datetime as dt
 
 from keys import KEYS
@@ -11,7 +18,16 @@ from parsing import validate_phone_number
 from apps.gpt.user_memory.models import Entry
 
 
+# Memory database
 memory_db = Deta(KEYS.Deta.project_key).Base("user_memory")
+
+
+# Question answering stuff
+llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
+embeddings = OpenAIEmbeddings(openai_api_key=KEYS.OpenAI.api_key)
+splitter = TokenTextSplitter(
+    encoding_name="cl100k_base", chunk_size=300, chunk_overlap=50
+)
 
 
 class UserMemory:
@@ -37,5 +53,26 @@ class UserMemory:
         return
 
     def answer_question(self, question: str) -> str:
-        """Answer a question from the user's memory."""
-        raise NotImplementedError
+        """
+        First converts the initial source, then queries it. The query must be a string,
+        and the answer will be a string. This does not work with the string-in-string-out
+        nature of an LLM agent, so it is not exposed to the user.
+        """
+        docs = [Document(page_content=entry.content) for entry in self.entries]
+        vectorstore = FAISS.from_documents(docs, embeddings)
+
+        _find_similar = lambda k: vectorstore.similarity_search(question, k=k)
+        similar_docs = _find_similar(15)
+
+        # Adjust the instructions based on the source
+        PREFIX = (
+            "You are a User Memory Answerer. Your context is notes from "
+            "someone's memory. Use the user's memory, nothing else, to "
+            "answer the question."
+        )
+        qa_chain = load_qa_chain(llm)
+        qa_chain.llm_chain.prompt.messages[0].prompt.template = (
+            PREFIX + qa_chain.llm_chain.prompt.messages[0].prompt.template
+        )
+
+        return qa_chain.run(input_documents=similar_docs, question=question)
