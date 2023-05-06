@@ -81,7 +81,7 @@ class UserMemory:
         PREFIX = (
             "You are a User Memory Answerer. Your context is notes from "
             "someone's memory. Use the user's memory, nothing else, to "
-            "answer the question."
+            "answer the question. "
         )
         qa_chain = load_qa_chain(llm)
         qa_chain.llm_chain.prompt.messages[0].prompt.template = (
