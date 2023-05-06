@@ -14,7 +14,7 @@ from langchain.chains.question_answering import load_qa_chain
 import datetime as dt
 
 from keys import KEYS
-from parsing import validate_phone_number
+from utils import validate_phone_number
 from apps.gpt.user_memory.models import Entry
 
 

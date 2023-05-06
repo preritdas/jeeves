@@ -7,7 +7,7 @@ from threading import Thread
 from keys import KEYS
 from config import CONFIG
 
-from parsing import validate_phone_number
+from utils import validate_phone_number
 from apps.gpt import generate_agent_response
 from voice_tools.transcribe import transcribe_telegram_file_id
 from voice_tools.speak import speak_jeeves
