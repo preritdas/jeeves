@@ -1,7 +1,8 @@
-"""Create tools accessible to Jeeves."""
+"""Create storer and answerer tools accessible in tool auth."""
 from langchain.tools import Tool
 
 from apps.gpt.user_memory.database import UserMemory
+from apps.gpt.user_memory.prompts import STORER_PROMPT, ANSWERER_PROMPT
 
 
 def create_user_memory_tools(user_phone: str) -> list[Tool]:
@@ -20,32 +21,11 @@ def create_user_memory_tools(user_phone: str) -> list[Tool]:
         Tool(
             name="Store in User Longterm Memory",
             func=user_memory.add_entry,
-            description=(
-                "Store a piece of information in longterm memory. Do this even when "
-                "not specifically instructed by me. Store anything I say that "
-                "could be asked about later, for example, favorite colors, car model, "
-                "parking location on a certain date, family relationships, etc. "
-                "Store facts, opinions, preferences, etc. Store more than you think "
-                "necessary - it is better to store too much than too little. "
-                'If I tell you to "remember" something then you should definitely '
-                "be storing it. "
-                "Tool input is a string with the content you're storing, in "
-                "first-person from my perspective, not yours. Ex. 'My favorite color "
-                "is blue.' or 'I parked in the parking lot on May 5 2023.' "
-                "This tool pairs with the 'Question User Memory' tool, which you can "
-                "use to query the user memory."
-            )
+            description=STORER_PROMPT
         ),
         Tool(
             name="Question User Memory",
             func=user_memory.answer_question,
-            description=(
-                "This tool is used to query the memory from the 'Store in User "
-                "Longterm Memory' tool. Ask natural language questions to this tool "
-                "and it will return the answer, if found in the longterm memory. "
-                "Ex. 'What is my favorite color?' or 'Where did I park on May 5 2023?' "
-                "Input is a string with the question, in first-person from my "
-                "perspective, not yours."
-            )
+            description=ANSWERER_PROMPT
         )
     ]
