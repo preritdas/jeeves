@@ -16,6 +16,13 @@ class Entry(BaseModel):
         if isinstance(v, str):
             return dt.datetime.fromisoformat(v)
 
+    def to_string(self) -> str:
+        """Return the entry as a string."""
+        return (
+            f"Date: {self.datetime.isoformat()}\n"
+            f"Content: {self.content}"
+        )
+
     def to_dict(self) -> dict:
         """Return the entry as a dictionary."""
         return {
