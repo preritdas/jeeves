@@ -1,6 +1,7 @@
 """The calling tool used by agent."""
 # External
 from langchain.agents.tools import BaseTool
+import requests
 
 # Standard lib
 import json
@@ -17,6 +18,11 @@ from apps.gpt.make_calls import database as db
 from apps.gpt.logs_callback import logger
 
 
+class CallToolError(Exception):
+    """Base error for the calling tool."""
+    pass
+
+
 def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
     """Makes the call and returns a transcript."""
     created_call = db.Call.create(
@@ -25,6 +31,11 @@ def make_call(recipient: str, goal: str, recipient_desc: str) -> str:
     )
 
     call_params: dict[str, str] = {"call_id": created_call.key}
+
+    # Before creating the call, test the base url
+    if not requests.get(BASE_URL).ok:
+        raise CallToolError(f"Base URL {BASE_URL} is not responding.")
+
     outbound_call = twilio_client.calls.create(
         recipient,
         KEYS.Twilio.sender,
@@ -84,11 +95,14 @@ class CallTool(BaseTool):
         if not "goal" in input_parsed:
             return "Input must have a \"goal\" key."
 
-        return make_call(
-            recipient=str(input_parsed["recipient_phone"]),
-            goal=str(input_parsed["goal"]),
-            recipient_desc=str(input_parsed["recipient_desc"])
-        )
+        try:
+            return make_call(
+                recipient=str(input_parsed["recipient_phone"]),
+                goal=str(input_parsed["goal"]),
+                recipient_desc=str(input_parsed["recipient_desc"])
+            )
+        except Exception as e:
+            return f"Error making call: {str(e)}"
 
     def _arun(self, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, str]:
         raise NotImplementedError()
