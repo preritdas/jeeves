@@ -17,7 +17,12 @@ def test_validate_already_good():
 
 def test_validate_bad_number():
     with pytest.raises(ValueError):
-        validate_phone_number("123")    
+        validate_phone_number("123")
+
+
+def test_validate_bad_empty_string():
+    with pytest.raises(ValueError):
+        validate_phone_number("")
 
 
 def test_validate_bad_type():
