@@ -88,7 +88,7 @@ def process_telegram_inbound(inbound_id: int, text: str = "", voice_id: str = ""
     send_message(inbound_id, response)
 
     # If the response is a voice message, send one back
-    if voice_id:
+    if voice_id and CONFIG.Telegram.voice_note_responses:
         send_voice_response(inbound_id, response)
 
     return

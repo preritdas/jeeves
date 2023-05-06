@@ -1,17 +1,20 @@
 General:
-  sandbox_mode: false
-  threaded_inbound: false
-  dev_phone: "12223334455"
+  sandbox_mode: false  # run in sandbox mode (no outbound SMS or Telegram)
+  threaded_inbound: false  # run inbound message processing in a separate thread
+  dev_phone: "12223334455"  # phone number for auth when running locally
 
 Weather:
-  default_city: McLean
+  default_city: McLean  # default city for weather lookup
 
 Groceries:
-  translation: false
-  full_dt_format: "%Y-%m-%d %H-%M-%S"
+  translation: false  # support classification of foreign items
+  full_dt_format: "%Y-%m-%d %H-%M-%S"  # no need to change this
 
 Cocktails:
-  result_limit: 3
+  result_limit: 3  # number of results to return
 
 GPT:
-  console_agent: false
+  console_agent: false  # print verbosely to console
+
+Telegram:
+  voice_note_responses: false  # when spoken to, include a voice note response

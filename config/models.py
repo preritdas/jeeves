@@ -71,6 +71,16 @@ class GPTConfig(BaseModel):
     console_agent: bool
 
 
+class TelegrmConfig(BaseModel):
+    """
+    Telegram configuration, affects the Telegram API.
+
+    Attributes:
+        voice_note_responses (bool): Send voice note responses when spoken to.
+    """
+    voice_note_responses: bool
+
+
 class Config(BaseModel):
     """
     Base Model collecting and validating all individual configurations.
@@ -87,3 +97,4 @@ class Config(BaseModel):
     Groceries: GroceriesConfig
     Cocktails: CocktailsConfig
     GPT: GPTConfig
+    Telegram: TelegrmConfig
