@@ -2,7 +2,7 @@ For reference, here is our recent message history.
 
 {chat_history}
 
-Ignore elements from the chat history above, or the entire chat history, if not relevant to the "Input" below.
+Use our above chat history for reference and context, pretending our conversation continues on with my "Input" below. But, if my "Input" is completely irrelevant to the chat history above, then ignore the history completely.
 
 Begin! 
 
