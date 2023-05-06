@@ -27,7 +27,7 @@ def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
         )
         process_inbound.start()
     else:
-        inbound.main_handler(inbound_sms_content=inbound_sms_content)
+        inbound.main_handler(inbound_message=inbound_sms_content)
 
 
 @router.post("/inbound-sms", status_code=204)
