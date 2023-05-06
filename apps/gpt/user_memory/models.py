@@ -15,6 +15,10 @@ class Entry(BaseModel):
         """Parse datetime."""
         if isinstance(v, str):
             return dt.datetime.fromisoformat(v)
+        elif isinstance(v, dt.datetime):
+            return v
+        else:
+            raise ValueError("datetime must be a string or a datetime object.")
 
     def to_string(self) -> str:
         """Return the entry as a string."""
