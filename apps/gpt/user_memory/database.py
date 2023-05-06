@@ -58,6 +58,7 @@ class UserMemory:
             content=content
         )
 
+        self.entries.append(entry)
         memory_db.put(entry.to_dict())
         return True
 
