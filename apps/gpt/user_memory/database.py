@@ -58,6 +58,9 @@ class UserMemory:
         and the answer will be a string. This does not work with the string-in-string-out
         nature of an LLM agent, so it is not exposed to the user.
         """
+        if not self.entries:
+            return "Currently, there are no entries in user longterm memory."
+
         docs = [Document(page_content=entry.to_string()) for entry in self.entries]
         vectorstore = FAISS.from_documents(docs, embeddings)
 
