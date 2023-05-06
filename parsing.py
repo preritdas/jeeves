@@ -25,6 +25,29 @@ def _parse_options(options: str) -> dict[str, str]:
     return return_options
 
 
+def validate_phone_number(phone_number: str) -> str:
+    """Standardize and validate input phone number. Raise ValueError if invalid."""
+    try:
+        phone_number = str(phone_number)
+    except ValueError:
+        raise ValueError(f"Couldn't interpret {phone_number} as a string.")
+
+    # Remove the plus
+    if phone_number[0] == "+":
+        phone_number = phone_number[1:]
+
+    if not phone_number.isnumeric():
+        raise ValueError(f"Resulting phone number {phone_number} is not numeric.")
+
+    if len(phone_number) != 11:
+        raise ValueError(
+            f"Phone number {phone_number} isn't 11 digits. Does it have a country code?"
+        )
+        
+    # Otherwise, if all looks good
+    return phone_number
+
+
 class InboundMessage(pydantic.BaseModel):
     """
     Inbound structure to be used .
@@ -35,9 +58,7 @@ class InboundMessage(pydantic.BaseModel):
     @pydantic.validator("phone_number")
     def remove_plus(cls, v):
         """Remove the plus from the phone number."""
-        if v[0] == "+":
-            return v[1:]
-        return v
+        return validate_phone_number(v)
 
     @property
     def valid(self) -> bool:

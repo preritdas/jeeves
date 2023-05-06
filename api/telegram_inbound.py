@@ -7,6 +7,7 @@ from threading import Thread
 from keys import KEYS
 from config import CONFIG
 
+from parsing import validate_phone_number
 from apps.gpt import generate_agent_response
 from voice_tools.transcribe import transcribe_telegram_file_id
 from voice_tools.speak import speak_jeeves
@@ -64,6 +65,10 @@ def process_telegram_inbound(
 
     # Try to get the phone number from the inbound ID
     recognized_user: str = KEYS.Telegram.id_phone_mapping.get(inbound_id, "")
+
+    # If user is recognized, use inbound model to validate the phone number
+    if recognized_user:
+        recognized_user = validate_phone_number(recognized_user)
 
     # If the user is not recognized, return a message
     if not recognized_user:

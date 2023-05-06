@@ -10,6 +10,7 @@ import permissions  # fixtures for temporary users
 
 from apps.gpt.make_calls.database import Call
 from apps.gpt.logs_callback import create_callback_handlers
+from apps.gpt.user_memory.database import UserMemory
 
 
 @pytest.fixture(scope="session")
@@ -178,3 +179,16 @@ def callback_uid() -> str:
 def callback_handlers(callback_uid):
     """Callback manager with testing uid."""
     return create_callback_handlers(uid=callback_uid)
+
+
+@pytest.fixture(scope="session")
+def temporary_user_memory(default_inbound) -> str:
+    """Temporary user memory for testing. Yields the phone number."""
+    user_memory = UserMemory.from_user_phone(default_inbound["phone_number"])
+    user_memory.add_entry("My favorite color is blue.")
+    user_memory.add_entry("I parked my car on level 2.")
+
+    yield default_inbound["phone_number"]
+
+    # Remove the temporary user memory
+    user_memory.purge()

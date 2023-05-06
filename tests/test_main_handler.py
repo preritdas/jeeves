@@ -6,10 +6,11 @@ from parsing import InboundMessage
 def test_no_permissions(mocker, default_inbound):
     mocker.patch("inbound.texts.CONFIG.General.sandbox_mode", True)
     mocker.patch("inbound.usage.CONFIG.General.sandbox_mode", True)
+    mocker.patch("inbound.permissions.check_permissions", return_value=False)
 
     inbound_payload = {
         **default_inbound,
-        "phone_number": "192837261629"  # 11 digits as this would never be in the database
+        "phone_number": "19283728192" 
     }
 
     res = inbound.main_handler(InboundMessage(**inbound_payload))

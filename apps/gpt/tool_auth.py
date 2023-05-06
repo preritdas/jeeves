@@ -13,6 +13,7 @@ from apps.gpt import retrieval
 from apps.gpt import news
 from apps.gpt import send_texts
 from apps.gpt import make_calls
+from apps.gpt.user_memory import create_user_memory_tools
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
@@ -129,8 +130,15 @@ def build_tools(
     TextToolClass = send_texts.create_text_message_tool(inbound_phone)
     added_tools.append(TextToolClass())
 
+    # User longterm memory
+    added_tools.extend(create_user_memory_tools(inbound_phone))
+
     # Add all tools together
     tools = no_auth_tools + added_tools
+
+    # Check for proper tool types
+    if not all(isinstance(tool, BaseTool) for tool in tools):
+        raise TypeError("All tools must be of type BaseTool (or subclass thereof).")
 
     # Add callback manager to all tools
     for tool in tools:
