@@ -36,12 +36,12 @@ class UserMemory:
         self.user_phone = validate_phone_number(user_phone)
 
     @classmethod
-    def from_user_phone(cls, user_phone: str) -> None:
+    def from_user_phone(cls, user_phone: str) -> "UserMemory":
         """Get all entries from a user."""
         entries = memory_db.fetch({"user_phone": validate_phone_number(user_phone)}).items
         return cls(user_phone=user_phone, entries=[Entry(**entry) for entry in entries])
 
-    def add_entry(self, content: str) -> None:
+    def add_entry(self, content: str) -> bool:
         """Add an entry to the user's memory."""
         entry = Entry(
             datetime=dt.datetime.now(),
@@ -50,7 +50,7 @@ class UserMemory:
         )
 
         memory_db.put(entry.to_dict())
-        return
+        return True
 
     def answer_question(self, question: str) -> str:
         """
