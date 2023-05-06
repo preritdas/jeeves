@@ -27,6 +27,8 @@ def create_user_memory_tools(user_phone: str) -> list[Tool]:
                 "parking location on a certain date, family relationships, etc. "
                 "Store facts, opinions, preferences, etc. Store more than you think "
                 "necessary - it is better to store too much than too little. "
+                'If I tell you to "remember" something then you should definitely '
+                "be storing it. "
                 "Tool input is a string with the content you're storing, in "
                 "first-person from my perspective, not yours. Ex. 'My favorite color "
                 "is blue.' or 'I parked in the parking lot on May 5 2023.' "
