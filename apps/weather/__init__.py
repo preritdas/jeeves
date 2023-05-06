@@ -26,7 +26,9 @@ def handler(content: str, options: dict) -> str:
     if not type(weather) is dict:
         return f"There was an error. {weather}"
 
-    return f"It's currently {farenheit(weather['main']['temp'])} degrees outside. " \
-        f"Today's high will be {farenheit(weather['main']['temp_max'])} degrees; " \
-        f"the low will be {farenheit(weather['main']['temp_min'])} degrees. " \
+    return (
+        f"It's currently {farenheit(weather['main']['temp'])} degrees outside. "
+        f"Today's high will be {farenheit(weather['main']['temp_max'])} degrees; "
+        f"the low will be {farenheit(weather['main']['temp_min'])} degrees. "
         f"The sun will set at {data.sunset_format(weather['sys']['sunset'])}."
+    )

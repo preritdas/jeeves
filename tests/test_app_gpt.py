@@ -14,10 +14,7 @@ def test_handler(default_options):
     # Use vanilla GPT
     default_options["agency"] = "no"
 
-    res = handler(
-        content="Give me three short rhyming words.",
-        options=default_options
-    )
+    res = handler(content="Give me three short rhyming words.", options=default_options)
 
     assert res
     assert isinstance(res, str)
@@ -28,27 +25,30 @@ def test_agency(mocker, default_options, callback_uid):
     mocker.patch("apps.gpt.__init__.uuid.uuid4", return_value=callback_uid)
 
     # Don't add chat logs
-    mocker.patch("apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None)
-
-    res = handler(
-        content="Who are you?",
-        options=default_options
+    mocker.patch(
+        "apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None
     )
+
+    res = handler(content="Who are you?", options=default_options)
 
     assert res
     assert isinstance(res, str)
     assert "Jeeves" in res
 
 
-def test_processing_speech(mocker, who_are_you_twilio_recording, default_options, callback_uid):
+def test_processing_speech(
+    mocker, who_are_you_twilio_recording, default_options, callback_uid
+):
     """
-    Test the background process that updates the call with a response when calling 
+    Test the background process that updates the call with a response when calling
     Jeeves (inbound).
     """
     mocker.patch("api.voice_inbound.texts.CONFIG.General.sandbox_mode", True)
 
     # Don't add chat logs
-    mocker.patch("apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None)
+    mocker.patch(
+        "apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None
+    )
 
     response = _process_speech(
         inbound_phone=default_options["inbound_phone"],
@@ -65,24 +65,25 @@ def test_processing_speech(mocker, who_are_you_twilio_recording, default_options
 def test_processing_speech_outbound(outbound_call_key, mocker):
     """Test generating the next voice response when outbound calling."""
     # Don't add chat logs
-    mocker.patch("apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None)
+    mocker.patch(
+        "apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None
+    )
 
     call = Call.from_call_id(call_id=outbound_call_key)
     voice_response = process_user_speech(
-        call_id=call.key,
-        user_speech="Hi there, how can I help you today?"
+        call_id=call.key, user_speech="Hi there, how can I help you today?"
     )
 
     assert voice_response
     assert (xml := voice_response.to_xml())
     assert "Play" in xml
     assert "upcdn" in xml
-    
+
 
 def test_serper_wrapper():
     """Test the serper wrapper."""
     serper_tool = no_auth_tools[0]
-    
+
     # Make sure we got the right one
     assert serper_tool.name == "Google Search"
 
@@ -103,7 +104,7 @@ def test_serper_wrapper():
 
 def test_building_tools(default_options, callback_handlers):
     """Test building the tools. Zapier and text requires auth."""
-    # Make sure Zapier is in there, use first provided phone 
+    # Make sure Zapier is in there, use first provided phone
     if KEYS.ZapierNLA:
         tools = build_tools(
             inbound_phone=list(KEYS.ZapierNLA.keys())[0],

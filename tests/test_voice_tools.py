@@ -7,10 +7,9 @@ import voice_tools as vt
 
 def test_speak():
     """Test ElevenLabs Jeeves speaking, both generation and caching."""
-    random_words = ' '.join(
-        ''.join(
-            random.choice(string.ascii_lowercase) for _ in range(5)
-        ) for _ in range(3)
+    random_words = " ".join(
+        "".join(random.choice(string.ascii_lowercase) for _ in range(5))
+        for _ in range(3)
     )
 
     # Test speaking with generation

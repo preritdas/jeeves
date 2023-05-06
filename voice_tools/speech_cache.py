@@ -23,11 +23,7 @@ def cache_speech(text: str, filetype: str, url: str) -> None:
 def get_speech(text: str, filetype: str) -> str:
     """Get the speech URL from the cache."""
     items = speech_db.fetch(
-        query={
-            "Text": text,
-            "Filetype": filetype,
-            "Voice": KEYS.ElevenLabs.voice_id
-        }
+        query={"Text": text, "Filetype": filetype, "Voice": KEYS.ElevenLabs.voice_id}
     ).items
 
     if not items:

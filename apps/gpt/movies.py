@@ -11,7 +11,7 @@ from typing import Any, Coroutine
 
 class MoviesTool(BaseTool):
     """Get info on movies."""
-    name: str = 'Movie Info'
+    name: str = "Movie Info"
     description: str = (
         "Useful for when you want information on movies. "
         "Input should be a string of the movie's name."

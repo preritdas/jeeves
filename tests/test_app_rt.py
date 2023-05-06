@@ -14,4 +14,4 @@ def test_handler():
 
 
 def test_help():
-    assert "Rotten Tomatoes" in rt.handler("", options = {"help": "yes"})
+    assert "Rotten Tomatoes" in rt.handler("", options={"help": "yes"})

@@ -7,9 +7,9 @@ import datetime as dt
 class Message(BaseModel):
     """
     A Message is both the user input and the agent response.
-    
+
     Attributes:
-        datetime: The datetime of the message. 
+        datetime: The datetime of the message.
         inbound_phone: The inbound phone number.
         user_input: The user input.
         agent_response: The agent response.

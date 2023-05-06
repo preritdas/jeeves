@@ -37,40 +37,43 @@ def test_full_flow(mocker, default_options):
     session_phrase = res[-11:]  # three three-letter words + two spaces
 
     # Test participation
-    res = billsplit.handler("15", {"inbound_phone": "11234567890", "phrase": session_phrase})
+    res = billsplit.handler(
+        "15", {"inbound_phone": "11234567890", "phrase": session_phrase}
+    )
     assert "you're in" in res.lower()
 
     # Test status
-    res = billsplit.handler(session_phrase, {"inbound_phone": default_options["inbound_phone"], "action": "status"})
+    res = billsplit.handler(
+        session_phrase,
+        {"inbound_phone": default_options["inbound_phone"], "action": "status"},
+    )
     assert "active" in res.lower()
 
     # Test status with no phrase provided (query)
-    res = billsplit.handler("", {"inbound_phone": default_options["inbound_phone"], "action": "status"})
+    res = billsplit.handler(
+        "", {"inbound_phone": default_options["inbound_phone"], "action": "status"}
+    )
     assert "active" in res.lower()
 
     # Test closing not as the original creator
     res = billsplit.handler(
-        session_phrase,
-        {
-            "inbound_phone": "11234567890",
-            "action": "close"
-        }
+        session_phrase, {"inbound_phone": "11234567890", "action": "close"}
     )
 
     assert "Only the session creator" in res
 
     # Test closing
-    res = billsplit.handler(session_phrase, {"inbound_phone": default_options["inbound_phone"], "action": "close"})
+    res = billsplit.handler(
+        session_phrase,
+        {"inbound_phone": default_options["inbound_phone"], "action": "close"},
+    )
     assert "closed" in res
     assert "notification" in res
 
     # Test status on inactive session
     res = billsplit.handler(
         session_phrase,
-        {
-            "inbound_phone": default_options["inbound_phone"],
-            "action": "status"
-        }
+        {"inbound_phone": default_options["inbound_phone"], "action": "status"},
     )
 
     assert "inactive" in res
@@ -86,12 +89,7 @@ def test_close_no_phrase(mocker, default_options):
 
     # Create a session
     res = billsplit.handler(
-        content = "15", 
-        options = {
-            **default_options,
-            "action": "start", 
-            "total": "100"
-        }
+        content="15", options={**default_options, "action": "start", "total": "100"}
     )
 
     phrase = res[-11:]
@@ -112,21 +110,15 @@ def test_close_no_phrase_multiple_sessions(default_options):
     multiple sessions but try to close a session with no phrase.
     """
     session_1 = billsplit.actions.billsplit_db.Session.new(
-        sender = default_options["inbound_phone"],
-        total = 95,
-        tip = 12
+        sender=default_options["inbound_phone"], total=95, tip=12
     )
 
     session_2 = billsplit.actions.billsplit_db.Session.new(
-        sender = default_options["inbound_phone"],
-        total = 91,
-        tip = 14
+        sender=default_options["inbound_phone"], total=91, tip=14
     )
 
     # Try closing a session without a key
-    res = billsplit.handler(
-        "", {**default_options, "action": "close"}
-    )
+    res = billsplit.handler("", {**default_options, "action": "close"})
 
     assert "provide the phrase" in res.lower()
 
@@ -162,15 +154,11 @@ def test_closing(mocker, temporary_session, default_options):
 
 def test_no_session_found_status(default_options):
     """
-    Intentionally use a very long (invalid) phrase to prevent the minute chance that 
+    Intentionally use a very long (invalid) phrase to prevent the minute chance that
     a session does actually exist.
     """
     res = billsplit.handler(
-        content = "albsdchasdcassdjlhca",
-        options = {
-            **default_options,
-            "action": "status"
-        }
+        content="albsdchasdcassdjlhca", options={**default_options, "action": "status"}
     )
 
     assert "No session was found" in res
@@ -178,15 +166,11 @@ def test_no_session_found_status(default_options):
 
 def test_no_session_found_participate(default_options):
     """
-    Intentionally use a very long (invalid) phrase to prevent the minute chance that 
+    Intentionally use a very long (invalid) phrase to prevent the minute chance that
     a session does actually exist.
     """
     res = billsplit.handler(
-        content = "15",
-        options = {
-            **default_options,
-            "phrase": "albsdchasdcassdjlhca"
-        }
+        content="15", options={**default_options, "phrase": "albsdchasdcassdjlhca"}
     )
 
     assert "No session was found" in res
@@ -194,15 +178,11 @@ def test_no_session_found_participate(default_options):
 
 def test_no_session_found_close(default_options):
     """
-    Intentionally use a very long (invalid) phrase to prevent the minute chance that 
+    Intentionally use a very long (invalid) phrase to prevent the minute chance that
     a session does actually exist.
     """
     res = billsplit.handler(
-        content = "albsdchasdcassdjlhca",
-        options = {
-            **default_options,
-            "action": "close"
-        }
+        content="albsdchasdcassdjlhca", options={**default_options, "action": "close"}
     )
 
     assert "No session was found" in res
@@ -210,14 +190,19 @@ def test_no_session_found_close(default_options):
 
 def test_non_unique_phrase(mocker):
     """Mock the `_generate_phrase` function."""
-    mocker.patch("apps.billsplit.actions.billsplit_db._generate_phrase", return_value="def not new")
+    mocker.patch(
+        "apps.billsplit.actions.billsplit_db._generate_phrase",
+        return_value="def not new"
+    )
     assert billsplit.actions.billsplit_db._generate_phrase() == "def not new"
 
     # Temporarily create that session
-    original_session = billsplit.actions.billsplit_db.Session.new("00000000000", 100, 15)
+    original_session = billsplit.actions.billsplit_db.Session.new(
+        "00000000000", 100, 15
+    )
 
     with pytest.raises(Exception):
-        new_session = billsplit.actions.billsplit_db.Session.new("00000000000", 100, 15)
+        billsplit.actions.billsplit_db.Session.new("00000000000", 100, 15)
 
     billsplit.actions.db.delete(original_session.key)
 
@@ -226,7 +211,7 @@ def test_multiple_phrases_from_database():
     """
     Test error raised when creating a `Session` using `.from_database`
     when there already exists a session with that phrase.
-    
+
     Note that this should never happen as phrase duplication is handled on the
     creation side.
     """
@@ -257,11 +242,11 @@ def test_multiple_phrases_from_database():
 
 def test_key_from_non_deployed():
     session = billsplit.actions.billsplit_db.Session(
-        phrase = "top gun dog",
-        total = 100,
-        creator = "00000000000",
-        people = {"00000000000": 13},
-        active = True
+        phrase="top gun dog",
+        total=100,
+        creator="00000000000",
+        people={"00000000000": 13},
+        active=True
     )
 
     assert not session.key
@@ -310,11 +295,7 @@ def test_status_no_phrase(default_options):
 
 def test_participate_invalid_tip(default_options, temporary_session):
     res = billsplit.handler(
-        content = "weird", 
-        options = {
-            **default_options,
-            "phrase": temporary_session
-        }
+        content="weird", options={**default_options, "phrase": temporary_session}
     )
 
     assert "invalid tip" in res.lower()

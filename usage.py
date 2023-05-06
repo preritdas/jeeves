@@ -25,10 +25,10 @@ DT_FORMAT = " ".join([DT_FORMAT_DATE, DT_FORMAT_TIME])
 
 
 def log_use(
-    phone_number: str, 
-    app_name: str, 
-    content: str, 
-    options: dict, 
+    phone_number: str,
+    app_name: str,
+    content: str,
+    options: dict,
     time: dt.datetime | None = None
 ) -> str:
     """
@@ -36,16 +36,12 @@ def log_use(
     If no time is given directly, the exact time of function call is used.
     """
     # Check all are string except options (dict) and time
-    assert all(
-        isinstance(param, str) for param in [
-            phone_number, app_name, content
-        ]
-    )
+    assert all(isinstance(param, str) for param in [phone_number, app_name, content])
 
-    if time: 
+    if time:
         assert isinstance(time, dt.datetime)
         time = time.strftime(DT_FORMAT)
-    else: 
+    else:
         time = dt.datetime.now().strftime(DT_FORMAT)
 
     payload = {
@@ -74,7 +70,7 @@ def _phone_to_name(phone_number: str) -> str:
     """
     users = permissions_db.fetch({"Phone": phone_number}).items
 
-    if len(users) != 1: 
+    if len(users) != 1:
         return phone_number
 
     return users[0]["Name"]
@@ -83,8 +79,8 @@ def _phone_to_name(phone_number: str) -> str:
 def usage_summary(date: dt.date | str = None) -> str:
     """
     Generates a usage summary based on the database.
-    
-    If `date` parameter is not given, statistics are generated for 
+
+    If `date` parameter is not given, statistics are generated for
     the current day.
     """
     if isinstance(date, str):
@@ -99,16 +95,15 @@ def usage_summary(date: dt.date | str = None) -> str:
             today_logs.append(log)
 
     total_pings = len(today_logs)
-    
+
     app_pings = {}
     for log in today_logs:
-        if log["App"] not in app_pings: 
+        if log["App"] not in app_pings:
             app_pings[log["App"]] = 1
             continue
 
         app_pings[log["App"]] += 1
 
-    
     person_uses = {}
     for log in today_logs:
         person = _phone_to_name(log["Phone"])
@@ -116,10 +111,11 @@ def usage_summary(date: dt.date | str = None) -> str:
         if person not in person_uses:
             person_uses[person] = 1
             continue
-        
+
         person_uses[person] += 1
 
-
-    return f"On {today.strftime(DT_FORMAT_DATE)}, I was pinged {total_pings} times. " \
-        f"App-specific pings are below.\n\n{app_pings}" \
+    return (
+        f"On {today.strftime(DT_FORMAT_DATE)}, I was pinged {total_pings} times. "
+        f"App-specific pings are below.\n\n{app_pings}"
         f"\n\nPerson-specific pings:\n\n{person_uses}"
+    )

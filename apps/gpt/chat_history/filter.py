@@ -20,7 +20,7 @@ class BaseFilterer(ABC):
 class DatetimeFilterer(BaseFilterer):
     """
     Filter messages by datetime.
-    
+
     Takes a start and end datetime, and returns all messages that fall within
     that range.
     """
@@ -46,7 +46,7 @@ class DatetimeFilterer(BaseFilterer):
 
 class RecencyFilterer(BaseFilterer):
     """
-    Filter messages by recency. 
+    Filter messages by recency.
 
     Takes `n_messages` and returns the `n_messages` most recent messages.
     """
@@ -64,4 +64,4 @@ class RecencyFilterer(BaseFilterer):
             return messages
 
         # Return the first n_messages
-        return messages[:self.n_messages]
+        return messages[: self.n_messages]

@@ -4,9 +4,7 @@ import usage
 
 
 APP_HELP = "Get a usage report."
-APP_OPTIONS = {
-    "date": "Date for usage metrics, ex. 2022-09-27"
-}
+APP_OPTIONS = {"date": "Date for usage metrics, ex. 2022-09-27"}
 
 
 @utils.app_handler(APP_HELP, APP_OPTIONS)

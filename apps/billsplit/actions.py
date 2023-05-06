@@ -74,6 +74,7 @@ def close(sender: str, phrase: str) -> str:
         return f"Only the session creator, {session.creator}, can close this session."
 
     session.finalize()
-    return f"The session is closed! Everyone, including you, " \
+    return (
+        f"The session is closed! Everyone, including you, "
         "should have received a notification."
-    
+    )

@@ -12,7 +12,7 @@ def handler(content: str, options: dict) -> str:
     """Handler for the Rotten Tomatoes app."""
     if not content:
         return "You didn't specify a movie."
-    
+
     try:
         movie = rt.Movie(content)
     except rt.LookupError:

@@ -8,9 +8,7 @@ from keys import KEYS
 
 
 APP_HELP = "Get a random joke."
-APP_OPTIONS = {
-    "tags": "comma separated categories, ex. nsft,dark"
-}
+APP_OPTIONS = {"tags": "comma separated categories, ex. nsft,dark"}
 
 
 def retry_joke(function):
@@ -22,7 +20,7 @@ def retry_joke(function):
         except Exception:
             # Try one more time or raise
             return function(*args, **kwargs)
-            
+
     return wrapper
 
 
@@ -30,11 +28,7 @@ def retry_joke(function):
 def random_joke(tags: str):
     endpoint = "https://api.humorapi.com/jokes/random"
     response = requests.get(
-        endpoint,
-        params = {
-            "include-tags": tags,
-            "api-key": KEYS.HumorAPI.api_key
-        }
+        endpoint, params={"include-tags": tags, "api-key": KEYS.HumorAPI.api_key}
     )
 
     return response.json()["joke"]

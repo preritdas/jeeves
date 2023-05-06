@@ -31,7 +31,7 @@ class Drink:
 
         if not response["drinks"]:
             raise errors.DrinkNotFoundError()
-        
+
         assert response
         assert len(response["drinks"]) >= 1
 
@@ -39,18 +39,18 @@ class Drink:
             raw_drink = response["drinks"][0]
 
             return cls(
-                name = raw_drink["strDrink"].strip(),
-                ingredients = _parse_ingredients(raw_drink),
-                instructions = raw_drink["strInstructions"].strip()
+                name=raw_drink["strDrink"].strip(),
+                ingredients=_parse_ingredients(raw_drink),
+                instructions=raw_drink["strInstructions"].strip()
             )
 
         drinks: list[Drink] = []
         for raw_drink in response["drinks"]:
             drinks.append(
                 cls(
-                    name = raw_drink["strDrink"].strip(),
-                    ingredients = _parse_ingredients(raw_drink),
-                    instructions = raw_drink["strInstructions"].strip()
+                    name=raw_drink["strDrink"].strip(),
+                    ingredients=_parse_ingredients(raw_drink),
+                    instructions=raw_drink["strInstructions"].strip()
                 )
             )
 
@@ -68,19 +68,23 @@ class Drink:
     @property
     def basic_format(self) -> str:
         """String format but without the 'behold's etc."""
-        return f"The {self.name.title()}.\n\nIngredients:\n{self.str_ingredients}\n\n" \
+        return (
+            f"The {self.name.title()}.\n\nIngredients:\n{self.str_ingredients}\n\n"
             f"Instructions:\n{self.instructions}"
+        )
 
     def __str__(self) -> str:
         """String format the drink."""
-        return f"Behold, the {self.name.title()}. Here's what you'll need.\n\n" \
-            f"{self.str_ingredients}\n\n{self.instructions}\n\nEnjoy. " \
+        return (
+            f"Behold, the {self.name.title()}. Here's what you'll need.\n\n"
+            f"{self.str_ingredients}\n\n{self.instructions}\n\nEnjoy. "
             f"{emoji.emojize(':clinking_glasses:')}"
+        )
 
 
 def search_cocktails(cocktail_name: str) -> list[Drink]:
     """
-    Search cocktails matching the query `cocktail_name`. 
+    Search cocktails matching the query `cocktail_name`.
     If no cocktail is found, returns an empty list.
     """
     response = requests.get(ENDPOINT + f"search.php?s={cocktail_name.strip()}")
@@ -103,8 +107,9 @@ def concat_drinks(drinks: list[Drink], limit: int = 100) -> str:
     if len(drinks) == 1:
         return str(drinks[0])
 
-    return "I have a few drinks for you.\n\n" + \
-        "\n\n----\n\n".join(drink.basic_format for drink in drinks[:limit])
+    return "I have a few drinks for you.\n\n" + "\n\n----\n\n".join(
+        drink.basic_format for drink in drinks[:limit]
+    )
 
 
 def _parse_ingredients(raw_drink: dict) -> dict[str, str]:
@@ -114,7 +119,7 @@ def _parse_ingredients(raw_drink: dict) -> dict[str, str]:
     for n_ingredient in range(1, 16):
         if not raw_drink[(loc := f"strIngredient{n_ingredient}")]:
             break
-    
+
         measurement: str | None = raw_drink[f"strMeasure{n_ingredient}"]
 
         if measurement:
@@ -130,7 +135,7 @@ def _parse_ingredients(raw_drink: dict) -> dict[str, str]:
 def random_cocktail() -> Drink:
     """Get a random cocktail."""
     response = requests.get(ENDPOINT + "random.php").json()
-    
+
     # Ensure the result is actually a cocktail
     while response["drinks"][0]["strCategory"] != "Cocktail":
         return random_cocktail()

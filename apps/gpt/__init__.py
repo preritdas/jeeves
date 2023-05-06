@@ -14,9 +14,7 @@ from apps.gpt.chat_history.models import Message
 
 
 APP_HELP = "Speak with Jeeves."
-OPTIONS = {
-    "agency": "'no' if you want a basic GPT response, not Jeeves."
-}
+OPTIONS = {"agency": "'no' if you want a basic GPT response, not Jeeves."}
 
 
 def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> str:
@@ -30,7 +28,9 @@ def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> 
 
     callback_handlers = logs_callback.create_callback_handlers(uid)
     toolkit = tool_auth.build_tools(inbound_phone, callback_handlers)
-    agent_executor = agency.create_agent_executor(toolkit, chat_history, callback_handlers)
+    agent_executor = agency.create_agent_executor(
+        toolkit, chat_history, callback_handlers
+    )
     response: str = agency.run_agent(agent_executor, content, uid)
 
     # Save message to chats database
@@ -49,7 +49,7 @@ def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> 
 @utils.app_handler(APP_HELP, OPTIONS)
 def handler(content: str, options: dict[str, str]) -> str:
     """Handler for the GPT applet."""
-    if (agency_option := options.get("agency")):
+    if agency_option := options.get("agency"):
         if agency_option.lower() in {"no", "false", "off"}:
             return completions.gpt_response(content)
 

@@ -54,7 +54,7 @@ class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
 
 
 ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS = (
-    "Input must be a JSON string with the keys \"source\" and \"query\"."
+    'Input must be a JSON string with the keys "source" and "query".'
 )
 
 no_auth_tools: list[BaseTool] = [
@@ -64,7 +64,7 @@ no_auth_tools: list[BaseTool] = [
         description=(
             "Useful for when you need to search Google. Provides links to search results "
             "that you can use Website Answerer to answer for more information."
-        )
+        ),
     ),
     Tool(
         name="Website Answerer",
@@ -72,19 +72,19 @@ no_auth_tools: list[BaseTool] = [
         description=(
             "Useful for when you need to answer a question about the content on a website. "
             "You can use this to answer questions about links found in Google Search results. "
-            f"{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the website. "
+            f'{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} "source" is the URL of the website. '
             "Do not make up websites to search - you can use Google Search to find relevant urls."
-        )
+        ),
     ),
     Tool(
         name="YouTube Answerer",
         func=retrieval.YouTubeAnswerer.answer_json_string,
         description=(
             "Useful for when you need to answer a question about the contents of a YouTube video. "
-            f"{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} \"source\" is the URL of the YouTube video. "
+            f'{ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS} "source" is the URL of the YouTube video. '
             "Do not make up YouTube videos - you can use Google Search to find relevant videos, or "
             "accept them directly from the user."
-        )
+        ),
     ),
     Tool(
         name="Headline News",
@@ -93,24 +93,23 @@ no_auth_tools: list[BaseTool] = [
             "Useful for when you need to get the top headlines from a specific category. "
             "Input must be a string with the category name. Category must be one of "
             f"{news.MANUAL_AVAILABLE_CATEGORIES}."
-        )
+        ),
     ),
     Tool(
         name="Wolfram Alpha",
         func=WolframAlphaAPIWrapper(wolfram_alpha_appid=KEYS.WolframAlpha.app_id).run,
         description=(
             "Useful for when you need to do math or anything quantitative/computational. "
-            "Input should ideally be math expressions, ex. \"8^3\", but can also be "
+            'Input should ideally be math expressions, ex. "8^3", but can also be '
             "natural language if a math expression is not possible."
-        )
+        ),
     ),
-    make_calls.CallTool(),
+    make_calls.CallTool()
 ]
 
 
 def build_tools(
-    inbound_phone: str, 
-    callback_handlers: list[BaseCallbackHandler]
+    inbound_phone: str, callback_handlers: list[BaseCallbackHandler]
 ) -> list[Tool]:
     """Build all authenticated tools given a phone number."""
     added_tools = []

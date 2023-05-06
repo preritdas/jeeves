@@ -21,11 +21,7 @@ def db_init() -> str:
     This function was designed to be called manually.
     """
     db_res: dict = permissions_db.put(
-        {
-            "Name": "Prerit Das",
-            "Phone": KEYS.Twilio.my_number,
-            "Permissions": "all"
-        }
+        {"Name": "Prerit Das", "Phone": KEYS.Twilio.my_number, "Permissions": "all"}
     )
 
     return db_res["key"]
@@ -39,12 +35,13 @@ if not permissions_db.fetch().items:
 def check_permissions(phone: str, app_name: str) -> bool:
     items = permissions_db.fetch(query={"Phone": phone}).items
 
-    if not items: return False
+    if not items:
+        return False
 
     for entry in items:
         permissions = [ele.strip() for ele in entry["Permissions"].lower().split(",")]
 
-        if "all" in permissions: 
+        if "all" in permissions:
             return True
 
         if app_name.lower() in permissions:

@@ -12,27 +12,19 @@ from voice_tools import speech_cache
 
 JEEVES_VOICE_ID = KEYS.ElevenLabs.voice_id
 
-CODECS = {
-    "ogg": "libopus"
-}
+CODECS = {"ogg": "libopus"}
 
 
 def _upload_result(bytecode: bytes, filetype: str, mime: str) -> str:
     """Upload the result to the server and return the URL."""
     url = f"https://api.upload.io/v2/accounts/{KEYS.UploadIO.account}/uploads/binary"
-    headers = {
-        "Authorization": f"Bearer {KEYS.UploadIO.api_key}",
-        "Content-Type": mime
-    }
+    headers = {"Authorization": f"Bearer {KEYS.UploadIO.api_key}", "Content-Type": mime}
 
     # Create a filename
     filename = str(uuid.uuid1()) + f".{filetype}"
 
     response = requests.post(
-        url, 
-        headers=headers, 
-        data=bytecode, 
-        params={"fileName": filename}
+        url, headers=headers, data=bytecode, params={"fileName": filename}
     )
 
     return response.json()["fileUrl"]
@@ -44,17 +36,15 @@ def _speak_jeeves(text: str) -> bytes:
 
 
 def speak_jeeves(
-    text: str, 
-    output_format: str = "mp3", 
-    output_mime: str = "audio/mpeg"
+    text: str, output_format: str = "mp3", output_mime: str = "audio/mpeg"
 ) -> str:
     """
     Speak the text using the Jeeves voice. Returns a public URL path.
-    If changing the output format or mime type, be sure to change *both* 
+    If changing the output format or mime type, be sure to change *both*
     arguments so they match. Otherwise, weird things may happen.
     """
     # Check if the speech is cached
-    if (cached_url := speech_cache.get_speech(text, output_format)):
+    if cached_url := speech_cache.get_speech(text, output_format):
         return cached_url
 
     # Generate MP3 bytecode

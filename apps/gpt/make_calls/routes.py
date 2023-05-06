@@ -22,7 +22,7 @@ MAX_RESPONSE_TIME: int = 45
 
 def speak(response: VoiceResponse, text: str) -> None:
     """
-    Use the ElevenLabs API to speak the text. Takes in a VoiceResponse object, 
+    Use the ElevenLabs API to speak the text. Takes in a VoiceResponse object,
     uses ElevenLabs to speak the text, uses UploadIO to upload the mp3 file and get
     a public-facing audio URL, then adds a <Play> tag to the repsonse object
     containing that public URL.
@@ -83,9 +83,9 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
         if "Call is not in-progress" in str(e):
             logger.info(f"{call_id}: INFO: Call was ended.")
             return
-         
+
         raise
-    
+
     return
 
 
@@ -94,7 +94,6 @@ async def handler(call_id: str):
     twiml = VoiceResponse()
     current_call = db.Call.from_call_id(call_id)
 
-  
     # If no previous conversation is present, start the conversation
     if not current_call.convo:
         logger.info(f"{call_id}: INFO: Handler picked up call.")
@@ -115,7 +114,7 @@ async def handler(call_id: str):
         speech_model="experimental_conversations"
     )
 
-    return Response(twiml.to_xml(), media_type='text/xml')
+    return Response(twiml.to_xml(), media_type="text/xml")
 
 
 @router.post("/respond")
@@ -124,12 +123,12 @@ async def respond(request: Request, call_id: str, background_tasks: BackgroundTa
 
     # Grab previous conversations and the user's voice input from the request
     event = await request.form()
-    voice_input = event['SpeechResult']
+    voice_input = event["SpeechResult"]
 
     background_tasks.add_task(
         update_call_with_response,
         call_id=call_id,
-        call_sid=event['CallSid'],
+        call_sid=event["CallSid"],
         user_speech=voice_input
     )
 
@@ -139,4 +138,4 @@ async def respond(request: Request, call_id: str, background_tasks: BackgroundTa
     logger.info(f"{call_id}: Recipient: {voice_input}")
     logger.info(f"{call_id}: INFO: Pause sent, updater started.")
 
-    return Response(twiml.to_xml(), media_type='text/xml')
+    return Response(twiml.to_xml(), media_type="text/xml")

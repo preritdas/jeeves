@@ -32,9 +32,7 @@ def test_no_query_found():
 def test_no_drink_found_error():
     with pytest.raises(cocktails.errors.DrinkNotFoundError):
         cocktails.data.Drink.from_response(
-            requests.get(
-                cocktails.data.ENDPOINT + "search.php?s=lmfao"
-            )
+            requests.get(cocktails.data.ENDPOINT + "search.php?s=lmfao")
         )
 
 
@@ -49,18 +47,15 @@ def test_not_all_drinks():
 
 def test_drink_concat():
     assert type(cocktails.data.concat_drinks([])) is str
-    assert "behold" in cocktails.data.concat_drinks(
-        [cocktails.data.Drink("test", {"ing": "1"}, "stuff")]
-    ).lower()
+    assert (
+        "behold"
+        in cocktails.data.concat_drinks(
+            [cocktails.data.Drink("test", {"ing": "1"}, "stuff")]
+        ).lower()
+    )
 
 
 def test_help():
-    help_text = cocktails.handler(
-        "", 
-        {
-            "inbound_phone": "12223334455",
-            "help": "yes"
-        }
-    )
+    help_text = cocktails.handler("", {"inbound_phone": "12223334455", "help": "yes"})
 
     assert "cocktail" in help_text.lower() and "drink" in help_text.lower()

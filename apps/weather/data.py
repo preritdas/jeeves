@@ -26,14 +26,10 @@ def sunset_format(unix: float):
     return f"{hour}:{minute} pm"
 
 
-def current_weather(
-    city: str,
-    state: str = "", 
-    country: str = ""
-) -> dict | str:
+def current_weather(city: str, state: str = "", country: str = "") -> dict | str:
     """
     Current weather. A successful response is JSON. A string return value
-    indicates an error to be sent back to the user, where the string content is 
+    indicates an error to be sent back to the user, where the string content is
     the error message.
     """
     if state and len(state) != 2:
@@ -42,9 +38,11 @@ def current_weather(
         return "Country must be a two digit code."
 
     response = requests.get(
-        WEATHER_ENDPOINT, 
+        WEATHER_ENDPOINT,
         {
-            "q": ",".join([ele for ele in [city.lower(), state.lower(), country.lower()] if ele]), 
+            "q": ",".join(
+                [ele for ele in [city.lower(), state.lower(), country.lower()] if ele]
+            ),
             "appid": KEYS.OpenWeatherMap.api_key
         }
     )
@@ -53,5 +51,5 @@ def current_weather(
 
     if "message" in response and response["message"] == "city not found":
         return f"The city '{city}' was not found."
-    
+
     return response

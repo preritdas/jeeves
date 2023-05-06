@@ -18,4 +18,4 @@ def gpt_response(prompt: str) -> str:
         ]
     )
 
-    return response.choices[0]['message']['content']
+    return response.choices[0]["message"]["content"]

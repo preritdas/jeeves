@@ -2,18 +2,12 @@ from apps import weather
 
 
 def test_handler():
-    res = weather.handler(
-        content = "",
-        options = {}
-    )
+    res = weather.handler(content="", options={})
 
     assert res
 
     # Test custom city
-    res = weather.handler(
-        content = "",
-        options = {"city": "London"}
-    )
+    res = weather.handler(content="", options={"city": "London"})
 
     assert res
 
@@ -24,7 +18,7 @@ def test_help():
 
 def test_data_invalid_info():
     """
-    Test invalid state and country codes in the app_weather.data.current_weather 
+    Test invalid state and country codes in the app_weather.data.current_weather
     function.
     """
     res = weather.handler("", {"inbound_phone": "12223334455", "state": "lol"})

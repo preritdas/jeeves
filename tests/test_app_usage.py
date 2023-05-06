@@ -1,11 +1,9 @@
+"""Test app that reports usage metrics."""
 from apps import usage
 
 
 def test_handler():
-    res = usage.handler(
-        content = "",
-        options = {}
-    )
+    res = usage.handler(content="", options={})
 
     assert "was pinged" in res
 

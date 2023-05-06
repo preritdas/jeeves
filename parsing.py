@@ -50,7 +50,7 @@ def requested_app(inbound: InboundMessage) -> tuple[Callable | None, str]:
 
     if not app_name in apps.PROGRAMS:
         return None, app_name
-    
+
     return apps.PROGRAMS.get(app_name), app_name
 
 
@@ -59,14 +59,14 @@ def _parse_options(options: str) -> dict[str, str]:
     options = options.lower()
     assert "options:" in options
 
-    options = options[len("options:"):].strip()
+    options = options[len("options:") :].strip()
     list_of_options = [ele.strip() for ele in options.split(";")]
-    
+
     return_options = {}
     for option in list_of_options:
         key, val = (ele.strip() for ele in option.split("="))
         return_options[key] = val
-    
+
     return return_options
 
 
@@ -83,14 +83,14 @@ def app_content_options(inbound: InboundMessage) -> tuple[str, dict]:
     options = {}
     for pos, line in enumerate(lines):
         line = line.lower()
-        if "app:" in line or line == "": 
+        if "app:" in line or line == "":
             continue
         if "options:" in line:
             options = _parse_options(line)
             continue
 
         break
-    else: 
-        content = False # if no other lines found
+    else:
+        content = False  # if no other lines found
 
     return "\n".join(lines[pos:]) if content else "", options

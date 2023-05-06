@@ -14,18 +14,18 @@ convo_base = deta_client.Base("conversations")
 class Call:
     """
     Contains all the relevant information in a call.
-    Provides an interface for creating, updating, 
+    Provides an interface for creating, updating,
     and downloading call attributes from the conversations
-    database. This way, only one Deta API call is required 
+    database. This way, only one Deta API call is required
     per API route.
     """
     def __init__(
-        self, 
+        self,
         key: str,
-        convo: str, 
-        goal: str, 
-        recipient_desc: str, 
-        greeting: str, 
+        convo: str,
+        goal: str,
+        recipient_desc: str,
+        greeting: str,
         greeting_url: str
     ) -> None:
         self.key = key
@@ -40,10 +40,7 @@ class Call:
         updates = self.__dict__.copy()
         del updates["key"]
 
-        convo_base.update(
-            key=self.key,
-            updates=updates
-        )
+        convo_base.update(key=self.key, updates=updates)
 
     def download(self) -> None:
         """Sync changes from the database to an existing Call object."""
