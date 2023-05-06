@@ -4,16 +4,21 @@ This module is for testing long-tail events.
 """
 import pytest
 
-import parsing
-import errors
+from parsing import validate_phone_number
 
 
-# def test_raise_on_no_app_specified():
-#     """Make sure an `errors.InvalidInbound` is raised when no app is specified."""
-#     inbound = {
-#         "phone_number": "00000000000",
-#         "body": "noapphere"
-#     }
+def test_validate_twilio_number():
+    assert validate_phone_number("+12223334455") == "12223334455"
 
-#     with pytest.raises(errors.InvalidInbound):
-#         app = parsing.requested_app(parsing.InboundMessage(**inbound))
+
+def test_validate_already_good():
+    assert validate_phone_number("12223334455") == "12223334455"
+
+
+def test_validate_bad_number():
+    with pytest.raises(ValueError):
+        validate_phone_number("123")    
+
+
+def test_validate_bad_type():
+    assert validate_phone_number(12223334455) == "12223334455"
