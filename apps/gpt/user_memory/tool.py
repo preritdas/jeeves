@@ -7,7 +7,7 @@ from apps.gpt.user_memory.database import UserMemory
 def create_user_memory_tools(user_phone: str) -> list[Tool]:
     """
     Create tools for the user memory.
-    
+
     Args:
         user_phone (str): User phone number.
 
