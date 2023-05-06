@@ -77,7 +77,14 @@ def process_telegram_inbound(inbound_id: int, text: str = "", voice_id: str = ""
     
     # Otherwise, send the message to the recognized user
     text = text or transcribe_telegram_file_id(voice_id)
-    response = generate_agent_response(text, recognized_user)
+    
+    # Generate and catch errors
+    try: 
+        response = generate_agent_response(text, recognized_user)
+    except Exception as e:
+        response = f"Unfortunately, that failed. {e}"
+    
+    # Text reply regardless of input type
     send_message(inbound_id, response)
 
     # If the response is a voice message, send one back
