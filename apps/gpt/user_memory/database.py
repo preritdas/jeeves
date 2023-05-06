@@ -58,7 +58,7 @@ class UserMemory:
         and the answer will be a string. This does not work with the string-in-string-out
         nature of an LLM agent, so it is not exposed to the user.
         """
-        docs = [Document(page_content=entry.content) for entry in self.entries]
+        docs = [Document(page_content=entry.to_string()) for entry in self.entries]
         vectorstore = FAISS.from_documents(docs, embeddings)
 
         _find_similar = lambda k: vectorstore.similarity_search(question, k=k)
