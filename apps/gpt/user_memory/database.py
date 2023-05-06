@@ -31,6 +31,15 @@ splitter = TokenTextSplitter(
 
 
 class UserMemory:
+    """
+    A user's long term memory. Stores entries, which are text snippets
+    with a timestamp.
+    
+    Initialize using the `from_user_phone` classmethod. This will fetch
+    all entries from the database. Then, use `add_entry` to add an entry
+    to the user's memory. Finally, use `answer_question` to answer a question
+    using the user's memory.
+    """
     def __init__(self, user_phone: str, entries: list[Entry]):
         self.entries = entries
         self.user_phone = validate_phone_number(user_phone)
