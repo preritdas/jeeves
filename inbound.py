@@ -9,7 +9,7 @@ import usage
 
 
 def main_handler(
-    inbound_sms_content: parsing.InboundMessage, send_response_message: bool = True
+    inbound_message: parsing.InboundMessage, send_response_message: bool = True
 ) -> dict[str, tuple | str]:
     """
     Handle all inbound messages. Returns a dictionary in the following format.
@@ -21,16 +21,14 @@ def main_handler(
 
     Keep this as simple as possible, with plenty of outsourcing.
     """
-    sender: str = inbound_sms_content.phone_number
+    sender: str = inbound_message.phone_number
 
     # Define the response action based on whether or not we want to send a response
-    if send_response_message:
-        respond = lambda response: texts.send_message(response, sender)
-    else:
-        respond = lambda response: None
+    respond = lambda response: None if not send_response_message \
+        else texts.send_message(response, sender)
 
     # App availablity
-    requested_app, app_name = parsing.requested_app(inbound_sms_content)
+    requested_app, app_name = inbound_message.requested_app
 
     if not requested_app:
         text_response = f"That app does not exist."
@@ -44,7 +42,7 @@ def main_handler(
         return {"response": text_response, "http": ("", 204)}
 
     # Run the app
-    content, options = parsing.app_content_options(inbound_sms_content)
+    content, options = inbound_message.app_content_options
     options["inbound_phone"] = sender
 
     try:

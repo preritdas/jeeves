@@ -6,52 +6,7 @@ from typing import Callable
 import pydantic
 
 # Project
-import errors
 import apps
-
-
-class InboundMessage(pydantic.BaseModel):
-    """
-    Inbound structure to be used .
-    """
-    phone_number: str
-    body: str
-
-    @pydantic.validator("phone_number")
-    def remove_plus(cls, v):
-        """Remove the plus from the phone number."""
-        if v[0] == "+":
-            return v[1:]
-        return v
-
-
-def assert_valid(inbound: InboundMessage) -> bool:
-    """Check that an inbound sms conforms to necessary structure."""
-    content: str = inbound.body
-    first_line = (all_lines := content.splitlines())[0].lower()
-
-    if not "app:" in first_line:
-        return False
-
-    return True
-
-
-def requested_app(inbound: InboundMessage) -> tuple[Callable | None, str]:
-    """Returns the handler function of an app and its name, or None
-    if the app doesn't exist."""
-    content: str = inbound.body
-    first_line = (all_lines := content.splitlines())[0].lower()
-
-    if not "app:" in first_line:
-        return apps.PROGRAMS["gpt"], "gpt"
-
-    app_ref_loc = first_line.find("app:") + len("app:")
-    app_name = first_line[app_ref_loc:].strip().lower()
-
-    if not app_name in apps.PROGRAMS:
-        return None, app_name
-
-    return apps.PROGRAMS.get(app_name), app_name
 
 
 def _parse_options(options: str) -> dict[str, str]:
@@ -70,27 +25,71 @@ def _parse_options(options: str) -> dict[str, str]:
     return return_options
 
 
-def app_content_options(inbound: InboundMessage) -> tuple[str, dict]:
-    """Returns app input content."""
-    # If using default GPT
-    if not assert_valid(inbound):  # ergo, using GPT
-        return inbound.body, {}
+class InboundMessage(pydantic.BaseModel):
+    """
+    Inbound structure to be used .
+    """
+    phone_number: str
+    body: str
 
-    raw_content: str = inbound.body
-    lines = raw_content.splitlines()
+    @pydantic.validator("phone_number")
+    def remove_plus(cls, v):
+        """Remove the plus from the phone number."""
+        if v[0] == "+":
+            return v[1:]
+        return v
 
-    content = True
-    options = {}
-    for pos, line in enumerate(lines):
-        line = line.lower()
-        if "app:" in line or line == "":
-            continue
-        if "options:" in line:
-            options = _parse_options(line)
-            continue
+    @property
+    def valid(self) -> bool:
+        """Check that an inbound sms conforms to necessary structure."""
+        content: str = self.body
+        first_line = (all_lines := content.splitlines())[0].lower()
 
-        break
-    else:
-        content = False  # if no other lines found
+        if not "app:" in first_line:
+            return False
 
-    return "\n".join(lines[pos:]) if content else "", options
+        return True
+
+    @property
+    def requested_app(self) -> tuple[Callable | None, str]:
+        """Returns the handler function of an app and its name, or None
+        if the app doesn't exist."""
+        content: str = self.body
+        first_line = (all_lines := content.splitlines())[0].lower()
+
+        if not "app:" in first_line:
+            return apps.PROGRAMS["gpt"], "gpt"
+
+        app_ref_loc = first_line.find("app:") + len("app:")
+        app_name = first_line[app_ref_loc:].strip().lower()
+
+        if not app_name in apps.PROGRAMS:
+            return None, app_name
+
+        return apps.PROGRAMS.get(app_name), app_name
+
+    @property
+    def app_content_options(self) -> tuple[str, dict]:
+        """Returns app input content."""
+        # If using default GPT
+        if not self.valid:  # ergo, using GPT
+            return self.body, {}
+
+        raw_content: str = self.body
+        lines = raw_content.splitlines()
+
+        content = True
+        options = {}
+        for pos, line in enumerate(lines):
+            line = line.lower()
+            if "app:" in line or line == "":
+                continue
+            if "options:" in line:
+                options = _parse_options(line)
+                continue
+
+            break
+        else:
+            content = False  # if no other lines found
+
+        return "\n".join(lines[pos:]) if content else "", options
