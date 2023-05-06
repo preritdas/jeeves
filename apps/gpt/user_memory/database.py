@@ -88,3 +88,12 @@ class UserMemory:
         )
 
         return qa_chain.run(input_documents=similar_docs, question=question)
+
+    def purge(self) -> bool:
+        """Delete all entries from the user's memory. Use with caution."""
+        user_items = memory_db.fetch({"user_phone": self.user_phone}).items
+
+        for item in user_items:
+            memory_db.delete(item["key"])
+
+        return True
