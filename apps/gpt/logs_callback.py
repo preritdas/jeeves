@@ -149,6 +149,11 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
         self, finish: AgentFinish, color: Optional[str] = None, **kwargs: Any
     ) -> None:
         """Run on agent end."""
+        # If no tools were used
+        if "Final Answer" in finish.log and "Thought" not in finish.log:
+            self.logger.info(f"{self.uid}: {finish.log.splitlines()[1]}")
+            return
+
         log_items = extract_log_items(finish.log, ["Thought", "Final Answer"])
 
         # Log the result
