@@ -1,5 +1,8 @@
 ---
 description: The first AI-powered personal assistant.
+cover: >-
+  https://images.unsplash.com/photo-1496942299866-9e7ab403e614?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxOTcwMjR8MHwxfHNlYXJjaHw3fHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlfGVufDB8fHx8MTY4MzUwMzYzNQ&ixlib=rb-4.0.3&q=85
+coverY: 0
 ---
 
 # Meet Jeeves.
