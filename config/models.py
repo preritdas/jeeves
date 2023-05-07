@@ -1,6 +1,8 @@
 """Models for configuration."""
 from pydantic import BaseModel, validator
 
+import pytz
+
 
 class GeneralConfig(BaseModel):
     """
@@ -14,6 +16,7 @@ class GeneralConfig(BaseModel):
     sandbox_mode: bool
     threaded_inbound: bool
     dev_phone: str
+    default_timezone: str
 
     @validator("dev_phone")
     def validate_dev_phone(cls, v):
@@ -24,6 +27,18 @@ class GeneralConfig(BaseModel):
             raise ValueError(
                 "Please provide your phone number in E.164 format, "
                 "with or without the leading +."
+            )
+
+        return v
+
+    @validator("default_timezone")
+    def validate_default_timezone(cls, v):
+        try:
+            pytz.timezone(v)
+        except pytz.exceptions.UnknownTimeZoneError:
+            raise ValueError(
+                "Please provide a valid timezone from the tz database, "
+                "ex. America/New_York."
             )
 
         return v
