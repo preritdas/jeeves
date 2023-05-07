@@ -3,7 +3,7 @@ This module defines Pydantic models for validating a YAML configuration file con
 for various services such as Twilio, Deta, HumorAPI, OpenWeatherMap, OpenAI, GoogleSerper, WolframAlpha,
 NewsAPI, ElevenLabs, UploadIO, and Transcription.
 """
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class TwilioModel(BaseModel):
