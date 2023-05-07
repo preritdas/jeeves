@@ -40,6 +40,15 @@ class ChatHistory:
         if filterer is not None:
             messages = self.filter_messages(filterer)
 
+        # Remove curly braces (confuses prompt template)
+        for message in messages:
+            message.user_input = message.user_input.replace("{", "((").replace(
+                "}", "))"
+            )
+            message.agent_response = message.agent_response.replace("{", "((").replace(
+                "}", "))"
+            )
+
         message_strings: list[str] = [
             f"Me: {message.user_input}\nJeeves: {message.agent_response}"
             for message in messages
