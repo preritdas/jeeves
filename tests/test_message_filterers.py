@@ -55,8 +55,24 @@ def temporary_messages(default_inbound) -> list[Message]:
 
 
 def test_recency_filterer(temporary_messages):
+    """
+    Test the recency filterer. Make sure it returns the correct number of messages,
+    and that the messages are sorted by datetime. Make sure the bookend messages are
+    correct. Make sure the first message isn't in there.
+    """
     filterer = RecencyFilterer(n_messages=5)
     filtered_messages = filterer.filter_messages(temporary_messages)
 
+    # Make sure 5 sorted messages
     assert len(filtered_messages) == 5
+    
+    # Make sure the bookend messages are correct (last and 2nd for 5 messages)
     assert filtered_messages[-1].user_input == "What's your favorite animal?"
+    assert filtered_messages[0].user_input == "How are you?"
+
+    # The first message shouldn't be in there (6 messages)
+    assert all(m.user_input != "Hello" for m in filtered_messages)
+
+    # Make sure the messages are in chronological order
+    assert filtered_messages == sorted(filtered_messages, key=lambda m: m.datetime)
+    
