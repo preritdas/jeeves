@@ -4,17 +4,13 @@ description: The first AI-powered personal assistant.
 
 # Meet Jeeves.
 
-## Jeeves: Your AI-Powered Personal Assistant
-
 Jeeves is a first-of-its-kind AI personal assistant designed to make your life easier and more efficient. Accessible via text, call, or Telegram message, Jeeves is available 24/7 and is built on top of state-of-the-art large language models. Fine-tuned for specific use cases, Jeeves is incredibly accurate, performant, efficient, and boasts an impressive success rate.
 
-### Exciting Features and Capabilities
+Jeeves is entirely unique to you, offering advanced functions such as:
 
-Your deployment of Jeeves is entirely unique to you, offering advanced functions such as:
-
-* Making outbound calls for reservations, appointments, and more
-* Seamlessly integrating with tools like Microsoft Teams, Todoist, and Notion
-* Supporting Zapier integration for instant access to various services like Dropbox
+* Making outbound calls for reservations, appointments, speaking with your friends... Jeeves will hold a conversation with humans (and robots) on the other side of the line to facilitate goals
+* Seamlessly integrating with tools like Microsoft Teams, Discord, Todoist, and Notion to be an effective assistant in comprehensive areas of your life
+* Supporting one-click Zapier integration to provide Jeeves access to most-any of your added tools, with [thousands available](https://zapier.com/apps).
 
 Jeeves also provides basic functions like:
 
