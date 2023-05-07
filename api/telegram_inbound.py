@@ -48,7 +48,7 @@ def send_voice_response(user_id: int, message: str):
 
 def process_telegram_inbound(
     inbound_id: int, text: str = "", voice_id: str = ""
-) -> None:
+) -> str:
     """
     Process an inbound message from Telegram.
 
@@ -72,10 +72,9 @@ def process_telegram_inbound(
 
     # If the user is not recognized, return a message
     if not recognized_user:
-        send_message(
-            inbound_id, "My apologies, sir, but it appears I don't recognize you."
-        )
-        return
+        response = "My apologies, sir, but it appears I don't recognize you."
+        send_message(inbound_id, response)
+        return response
 
     # Otherwise, send the message to the recognized user
     text = text or transcribe_telegram_file_id(voice_id)
@@ -93,7 +92,7 @@ def process_telegram_inbound(
     if voice_id and CONFIG.Telegram.voice_note_responses:
         send_voice_response(inbound_id, response)
 
-    return
+    return response
 
 
 @router.post("/inbound-telegram")
