@@ -1,3 +1,7 @@
+"""
+Test the main app, including the main handler and the main app itself.
+Testing API handlers, routers, endpoints, etc. using a FastAPI TestClient.
+"""
 from fastapi.testclient import TestClient
 import pytest
 
