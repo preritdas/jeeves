@@ -1,5 +1,5 @@
 ---
-description: The first, perfect AI personal assistant.
+description: The first AI-powered personal assistant.
 ---
 
 # Meet Jeeves.
