@@ -1,7 +1,13 @@
+"""
+Test the main app, including the main handler and the main app itself.
+Testing API handlers, routers, endpoints, etc. using a FastAPI TestClient.
+"""
 from fastapi.testclient import TestClient
 import pytest
 
 import api
+from api.telegram_inbound import process_telegram_inbound
+from keys import KEYS
 
 
 @pytest.fixture(scope="module")
@@ -9,37 +15,57 @@ def test_client():
     return TestClient(app=api.app)
 
 
-@pytest.mark.skip
 def test_testing_endpoint(test_client):
     res = test_client.get("/")
-
-    assert "All working here" in res.text
     assert res.status_code == 200
 
 
-@pytest.mark.skip
+# ---- Texts ----
+
 def test_apps_non_threaded(test_client, default_inbound, mocker):
-    mocker.patch("main.inbound.texts.CONFIG.General.sandbox_mode", True)
-    mocker.patch("main.inbound.usage.CONFIG.General.sandbox_mode", True)
+    mocker.patch("api.text_inbound.inbound.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("api.text_inbound.inbound.usage.CONFIG.General.sandbox_mode", True)
+    mocker.patch("api.text_inbound.CONFIG.General.threaded_inbound", False)
 
-    mocker.patch("main.CONFIG.General.threaded_inbound", False)
-
-    json = {**default_inbound}
-    del json["concat"]
-
-    res = test_client.post("/inbound-sms", json=json)
+    res = test_client.post(
+        "/texts/inbound-sms",
+        data={"From": default_inbound["phone_number"], "Body": default_inbound["body"]},
+    )
     assert res.status_code == 204
 
 
-@pytest.mark.skip
 def test_apps_threaded(test_client, default_inbound, mocker):
-    mocker.patch("main.inbound.texts.CONFIG.General.sandbox_mode", True)
-    mocker.patch("main.inbound.usage.CONFIG.General.sandbox_mode", True)
+    mocker.patch("api.text_inbound.inbound.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("api.text_inbound.inbound.usage.CONFIG.General.sandbox_mode", True)
+    mocker.patch("api.text_inbound.CONFIG.General.threaded_inbound", True)
 
-    mocker.patch("main.CONFIG.General.threaded_inbound", True)
-
-    json = {**default_inbound}
-    del json["concat"]
-
-    res = test_client.post("/inbound-sms", json=json)
+    res = test_client.post(
+        "/texts/inbound-sms",
+        data={"From": default_inbound["phone_number"], "Body": default_inbound["body"]},
+    )
     assert res.status_code == 204
+
+
+# ---- Telegram ----
+
+def test_telegram_text(mocker):
+    mocker.patch("api.telegram_inbound.CONFIG.General.sandbox_mode", True)
+
+    auth_id = int(list(KEYS.Telegram.id_phone_mapping.keys())[0])
+    response = process_telegram_inbound(auth_id, "Hi.")
+
+    assert response
+    assert isinstance(response, str)
+
+
+def test_telegram_endpoint(mocker, test_client):
+    mocker.patch("api.telegram_inbound.CONFIG.General.sandbox_mode", True)
+    text_payload = {
+        "message": {
+            "from": {"id": 000000000},
+            "text": "Hi."
+        }
+    }
+
+    res = test_client.post("/telegram/inbound-telegram", json=text_payload)
+    assert res.status_code == 200

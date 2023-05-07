@@ -20,14 +20,16 @@ def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
     stated preference of threaded responses to either handle the inbound in a thread
     (simply start the thread) or to wait for the processing to complete.
     """
-    if CONFIG.General.threaded_inbound:
-        process_inbound = threading.Thread(
-            target=inbound.main_handler,
-            kwargs={"inbound_sms_content": inbound_sms_content}
-        )
-        process_inbound.start()
-    else:
+    if not CONFIG.General.threaded_inbound:
         inbound.main_handler(inbound_message=inbound_sms_content)
+        return
+
+    # Otherwise, process in a thread
+    process_inbound = threading.Thread(
+        target=inbound.main_handler,
+        kwargs={"inbound_sms_content": inbound_sms_content}
+    )
+    process_inbound.start()
 
 
 @router.post("/inbound-sms", status_code=204)
