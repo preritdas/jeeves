@@ -188,3 +188,14 @@ class Keys(BaseModel):
     # Optional keys (Optional features and inactive applets/features)
     ZapierNLA: dict[str, str] | None
     NewsAPI: NewsAPIModel | None
+    
+    @validator("ZapierNLA")
+    def validate_zapier(cls, v):
+        """Check for string types."""
+        phones = list(v.keys())
+        assert all(isinstance(phone, str) for phone in phones)
+        
+        api_keys = list(v.values())
+        assert all(isinstance(key, str) for key in api_keys)
+        
+        return v
