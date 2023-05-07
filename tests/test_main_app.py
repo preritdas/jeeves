@@ -58,12 +58,11 @@ def test_telegram_text(mocker):
     assert isinstance(response, str)
 
 
-def test_telegram_endpoint(test_client):
-    auth_id = int(list(KEYS.Telegram.id_phone_mapping.keys())[0])
-
+def test_telegram_endpoint(mocker, test_client):
+    mocker.patch("api.telegram_inbound.CONFIG.General.sandbox_mode", True)
     text_payload = {
         "message": {
-            "from": {"id": auth_id},
+            "from": {"id": 000000000},
             "text": "Hi."
         }
     }
