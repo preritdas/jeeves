@@ -1,4 +1,4 @@
-"""Filter messages."""
+"""Create message filterers."""
 from abc import ABC, abstractmethod
 
 import datetime as dt
@@ -56,8 +56,8 @@ class RecencyFilterer(BaseFilterer):
 
     def filter_messages(self, messages: list[Message]) -> list[Message]:
         """Filter messages by recency."""
-        # Sort the messages by datetime, most recent first
-        messages = sorted(messages, key=lambda message: message.datetime, reverse=True)
+        # Sort the messages by datetime, most recent last (formatting)
+        messages = sorted(messages, key=lambda message: message.datetime)
 
         # If there are fewer messages than n_messages, return all messages
         if len(messages) < self.n_messages:
