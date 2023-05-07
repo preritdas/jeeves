@@ -1,3 +1,6 @@
-# Jeeves
+---
+description: The first, perfect AI personal assistant.
+---
 
-Meet Jeeves, the perfect AI personal assistant.
+# Meet Jeeves.
+

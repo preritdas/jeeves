@@ -1,3 +1,3 @@
 # Table of contents
 
-* [Jeeves](README.md)
+* [Meet Jeeves.](README.md)
