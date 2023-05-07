@@ -3,6 +3,9 @@ import utils
 
 import uuid
 import datetime as dt
+import pytz
+
+from config import CONFIG
 
 from apps.gpt import agency
 from apps.gpt import tool_auth
@@ -36,7 +39,7 @@ def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> 
     # Save message to chats database
     chat_history.add_message(
         Message(
-            datetime=dt.datetime.now(),
+            datetime=dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone)),
             inbound_phone=inbound_phone,
             user_input=content,
             agent_response=response

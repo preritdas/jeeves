@@ -1,8 +1,10 @@
 """Test the actual usage module, not the usage app."""
 import datetime as dt
+import pytz
 import string
 import random
 
+from config import CONFIG
 import usage
 
 
@@ -14,7 +16,7 @@ def test_log_use():
         app_name=TEST_APP_RANDOM,
         content="Apples",
         options={"setup": "whole foods"},
-        time=dt.datetime.now()
+        time=dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone))
     )
 
     # Try to find this item

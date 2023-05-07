@@ -12,8 +12,11 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 
 import datetime as dt
+import pytz
 
+from config import CONFIG
 from keys import KEYS
+
 from utils import validate_phone_number
 from apps.gpt.user_memory.models import Entry
 
@@ -53,7 +56,7 @@ class UserMemory:
     def add_entry(self, content: str) -> bool:
         """Add an entry to the user's memory."""
         entry = Entry(
-            datetime=dt.datetime.now(),
+            datetime=dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone)),
             user_phone=self.user_phone,
             content=content
         )

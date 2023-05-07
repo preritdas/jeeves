@@ -2,9 +2,11 @@
 import pytest
 
 import datetime as dt
+import pytz
 import string
 import random
 
+from config import CONFIG
 import usage  # fixture for temporary logs for report
 import permissions  # fixtures for temporary users
 
@@ -99,7 +101,7 @@ def users_dup_namephone() -> list[dict[str, str]]:
             "Name": " ".join([first_name, last_name]),
             "Permissions": "apps",
             "Phone": phone_number
-        },
+        }
     ]
 
     keys = [permissions.permissions_db.put(payload)["key"] for payload in users]
@@ -122,14 +124,14 @@ def temp_usage_logs():
             "app_name": "groceries",
             "content": "apples\nbananas",
             "options": {"setup": "whole foods"},
-            "time": dt.datetime.now()
+            "time": dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone))
         },
         {
             "phone_number": "12223334455",
             "app_name": "groceries",
             "content": "chicken",
             "options": {"inbound_phone": "12223334455"},
-            "time": dt.datetime.now()
+            "time": dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone))
         }
     ]
 
@@ -172,7 +174,10 @@ def outbound_call_key() -> str:
 @pytest.fixture(scope="session")
 def callback_uid() -> str:
     """UID for callback manager."""
-    return f"tests-{dt.datetime.utcnow().isoformat().replace(':', ';')}"
+    test_uid = dt.datetime.now(
+        pytz.timezone(CONFIG.General.default_timezone)
+    ).isoformat().replace(':', ';')
+    return f"test-{test_uid}"
 
 
 @pytest.fixture(scope="session")

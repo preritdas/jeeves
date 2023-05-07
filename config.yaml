@@ -2,6 +2,7 @@ General:
   sandbox_mode: false  # run in sandbox mode (no outbound SMS or Telegram)
   threaded_inbound: false  # run inbound message processing in a separate thread
   dev_phone: "12223334455"  # phone number for auth when running locally
+  default_timezone: "America/Eastern"  # default timezone for user
 
 Weather:
   default_city: McLean  # default city for weather lookup
