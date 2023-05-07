@@ -59,4 +59,4 @@ def test_recency_filterer(temporary_messages):
     filtered_messages = filterer.filter_messages(temporary_messages)
 
     assert len(filtered_messages) == 5
-    assert filtered_messages[0].user_input == "What's your favorite animal?"
+    assert filtered_messages[-1].user_input == "What's your favorite animal?"
