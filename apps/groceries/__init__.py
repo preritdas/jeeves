@@ -1,5 +1,6 @@
 """Groceries app."""
 import datetime as dt
+import pytz
 
 from utils import app_handler
 from config import CONFIG
@@ -64,11 +65,14 @@ def handler(content: str, options: dict) -> str:
     sorted_list = classification.classify_grocery_list(content, setup=setup)
 
     # IDs
+    current_time = dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone))
+    current_time = current_time.strftime(CONFIG.Groceries.full_dt_format)
+
     put_item = grocery_db.put(
         {
             "list": content,
             "phone": options["inbound_phone"],
-            "time": dt.datetime.now().strftime(CONFIG.Groceries.full_dt_format)
+            "time": current_time
         }
     )
 

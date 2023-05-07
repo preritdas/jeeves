@@ -15,8 +15,11 @@ from pydantic import BaseModel
 from typing import Callable
 import string
 import os
+
 import datetime as dt
 import pytz
+
+from config import CONFIG
 
 
 # ---- Model for prompting ----
@@ -82,16 +85,19 @@ class Prompt:
 current_dir = os.path.dirname(os.path.realpath(__file__))
 prompt_path = lambda name: os.path.join(current_dir, f"{name}.txt")
 
-# Variables for the prompts
-current_datetime = lambda: dt.datetime.now(pytz.timezone("US/Eastern")).strftime(
-    "%-I:%M%p on %A, %B %d, %Y"
-)
+def current_datetime():
+    timezone = pytz.timezone(CONFIG.General.default_timezone)
+    format_str = "%-I:%M%p on %A, %B %d, %Y"
+    return dt.datetime.now(timezone).strftime(format_str)
 
 # The reason these are stored in this Callable fashion is so the values are only
 # evaluated when the prompt is built. This is because the values may change over time,
 # ex. the date and time.
 PROMPT_INPUTS: dict[str, dict[str, Callable]] = {
-    "prefix": {"current_datetime": current_datetime},
+    "prefix": {
+        "current_datetime": current_datetime, 
+        "timezone": lambda: CONFIG.General.default_timezone
+    },
     "format_instructions": {},
     "suffix": {}
 }

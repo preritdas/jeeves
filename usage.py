@@ -4,6 +4,7 @@ import deta
 
 # Internal
 import datetime as dt
+import pytz
 import string
 import random
 
@@ -42,7 +43,9 @@ def log_use(
         assert isinstance(time, dt.datetime)
         time = time.strftime(DT_FORMAT)
     else:
-        time = dt.datetime.now().strftime(DT_FORMAT)
+        time = dt.datetime.now(
+            pytz.timezone(CONFIG.General.default_timezone)
+        ).strftime(DT_FORMAT)
 
     payload = {
         "Phone": phone_number,
