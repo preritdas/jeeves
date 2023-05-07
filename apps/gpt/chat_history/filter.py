@@ -63,5 +63,5 @@ class RecencyFilterer(BaseFilterer):
         if len(messages) < self.n_messages:
             return messages
 
-        # Return the first n_messages
-        return messages[: self.n_messages]
+        # Return the last n_messages
+        return messages[-self.n_messages :]
