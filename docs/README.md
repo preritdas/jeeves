@@ -72,4 +72,6 @@ This documentation explores Jeeves' inner workings, tooling, and future expectat
 
 ### Try Jeeves
 
-Jeeves is currently in closed testing (in other words, I'm hogging him for myself and family/friends). If you're interested in giving him employment—making him your gentleman, let's say—please reach out to me.
+Jeeves is currently in closed testing (in other words, I'm hogging him for myself and family/friends). If you're interested in giving him employment—making him your gentleman, let's say—please fill out the form below.
+
+{% embed url="https://preritdas.typeform.com/to/hVrVLeiv" %}
