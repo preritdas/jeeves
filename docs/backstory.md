@@ -73,10 +73,20 @@ E --> Y[Search Engine Optimization]
 
 For more information on vector retrievals and specific use cases, visit [URSI.ai](https://docs.ursi.ai).
 
+### LLM Agency
+
+Significant advancements in transformer processing have opened the doors to new techniques designed to extract the greatest value possible from an LLM, beyond the confines of text-in/text-out. One promising approach is _agency_, which involves utilizing LLMs to generate reasoning traces and task-specific actions in an interleaved manner. This methodology, in its first form called ReAct, provides greater synergy between reasoning and acting components and leads to improved human interpretability and trustworthiness over models that lack these components (pretty much all of them).&#x20;
+
+ReAct is a flexible LLM framework that synergizes reasoning and acting in language models. It has demonstrated its effectiveness over state-of-the-art baselines across various language and decision-making tasks. Another notable tool in the LLM agency domain is MRKL (pronounced "miracle"), which also focuses on the integration of reasoning and acting components in LLMs. In a nutshell, they provide a framework for using an LLM to direct non-LLM automated activity, whose result can be passed _back_ into the LLM for final analysis or recursion.
+
+Both ReAct and MRKL have been the subjects of published research papers, showcasing their potential in various applications such as text generation, search, and question-answering. These tools' ability to synergize reasoning and acting components paves the way for more advanced, interpretable, and trustworthy AI systems. The genius of these research papers and their resultant implementations, such as [LangChain](https://docs.langchain.com/docs/) and [Haystack](https://haystack.deepset.ai/), empower Jeeves.
+
 ### The World at a Crossroads
 
 As AI models like ChatGPT and GPT-4 continue to advance, the world is changing at an unprecedented pace. These tools are driving that change, and technology will never be the same. We now stand at one of the most important crossroads in the history of humanity. However, with rapid advancements come considerations and hesitations.
 
-Notable figures like Elon Musk and Max Tegmark, among others, have penned an [open letter](https://futureoflife.org/open-letter/pause-giant-ai-experiments/) advocating for a halt on the development of models larger than GPT-4. While AI developers are passionate about their work, there's an undeniable undertone that the capabilities being unlocked are simply astonishing, and the lack of regulation and philosophical guidance is concerning.
+Notable figures like Elon Musk and Max Tegmark, among others, have penned an [open letter](https://futureoflife.org/open-letter/pause-giant-ai-experiments/) advocating for a halt on the development of models larger than GPT-4.&#x20;
 
-In conclusion, AI models like GPT-4, Stable Diffusion, among others are radically changing the landscape of computer science and technological interactions. As we continue to develop and refine these powerful tools, we must also grapple with the implications and responsibilities that come with such advancements. As Jeeves said, "the mood will pass, sir, but the consequences will linger."
+I can say for a fact that while AI developers are passionate about their work, there's undeniably an undertone of hesitancy, born from the ever-growing realization that the capabilities unlocked are both impressive and frightening. The exponential rate of development has left us far ahead of where we thought we'd be even in recent history, and thus, philosophy and regulation are far from catching up.
+
+As we continue to develop and refine these powerful tools, we must also grapple with the implications and responsibilities that come with such advancements. As Jeeves said, "the mood will pass, sir, but the consequences will linger."
