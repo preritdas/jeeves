@@ -7,7 +7,7 @@ coverY: 0
 
 # Meet Jeeves.
 
-Jeeves is a first-of-its-kind AI personal assistant designed to make your life easier and more efficient. You can text him, call him, or even send him Telegram voice messages when you're on the go.&#x20;
+Jeeves is a first-of-its-kind AI personal assistant designed to make your life easier and more efficient. You can text him, call him, or even send him Telegram voice messages when you're on the go.
 
 Jeeves is entirely unique to you, offering advanced functions such as:
 
@@ -19,7 +19,7 @@ Built upon state-of-the-art LLMs both fine-tuned and re-engineered, coupled with
 
 ## Example Use Case
 
-Jeeves is yours - use him as you see fit. The following are some basic usage examples. Jeeves is constantly being outfitted with new capabilities, quite literally every day, not to mention that you can instantly provide him access to new tools through Zapier, as mentioned above.&#x20;
+Jeeves is yours - use him as you see fit. The following are some basic usage examples. Jeeves is constantly being outfitted with new capabilities, quite literally every day, not to mention that you can instantly provide him access to new tools through Zapier, as mentioned above.
 
 When speaking with me personally, Jeeves can...
 
@@ -64,10 +64,12 @@ Safety is a priority; Jeeves creates drafts of emails for you to review before s
 
 ## The Future of Jeeves
 
-As a rapidly evolving project, Jeeves is in active development, with new improvements, features, and tools added daily.&#x20;
+As a rapidly evolving project, Jeeves is in active development, with new improvements, features, and tools added daily.
 
-As a general thought, with the releases of powerful models like GPT-3.5 Turbo and GPT-4, particularly with the time for developers to craft innovative ways of leveraging them, AI-powered tools like Jeeves will become increasingly prevalent. He may be the first of his kind, but will certainly not be the last.&#x20;
+As a general thought, with the releases of powerful models like GPT-3.5 Turbo and GPT-4, particularly with the time for developers to craft innovative ways of leveraging them, AI-powered tools like Jeeves will become increasingly prevalent. He may be the first of his kind, but will certainly not be the last.
 
-This documentation explores Jeeves' inner workings, tooling, and future expectations as a powerful implementation of a technology we humans are yet to understand.&#x20;
+This documentation explores Jeeves' inner workings, tooling, and future expectations as a powerful implementation of a technology we humans are yet to understand.
+
+### Try Jeeves
 
 Jeeves is currently in closed testing (in other words, I'm hogging him for myself and family/friends). If you're interested in giving him employment—making him your gentleman, let's say—please reach out to me.
