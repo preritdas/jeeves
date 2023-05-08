@@ -89,6 +89,6 @@ As AI models like ChatGPT and GPT-4 continue to advance, the world is changing a
 
 Notable figures like Elon Musk and Max Tegmark, among others, have penned an [open letter](https://futureoflife.org/open-letter/pause-giant-ai-experiments/) advocating for a halt on the development of models larger than GPT-4.&#x20;
 
-I can say for a fact that while AI developers are passionate about their work, there's undeniably an undertone of hesitancy, born from the ever-growing realization that the capabilities unlocked are both impressive and frightening. The exponential rate of development has left us far ahead of where we thought we'd be even in recent history, and thus, philosophy and regulation are far from catching up.
+I can say for a fact that while AI developers are passionate about their work, there's undeniably an undertone of hesitancy, born from the ever-growing realization that the capabilities unlocked are both impressive and deeply frightening. The exponential rate of development has left us far ahead of where we thought we'd be even in recent history, and thus, philosophy and regulation are far from catching up.
 
 As we continue to develop and refine these powerful tools, we must also grapple with the implications and responsibilities that come with such advancements. As Jeeves said, "the mood will pass, sir, but the consequences will linger."
