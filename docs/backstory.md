@@ -79,6 +79,8 @@ Significant advancements in transformer processing have opened the doors to new 
 
 ReAct is a flexible LLM framework that synergizes reasoning and acting in language models. It has demonstrated its effectiveness over state-of-the-art baselines across various language and decision-making tasks. Another notable tool in the LLM agency domain is MRKL (pronounced "miracle"), which also focuses on the integration of reasoning and acting components in LLMs. In a nutshell, they provide a framework for using an LLM to direct non-LLM automated activity, whose result can be passed _back_ into the LLM for final analysis or recursion.
 
+<img src=".gitbook/assets/file.excalidraw.svg" alt="" class="gitbook-drawing">
+
 Both ReAct and MRKL have been the subjects of published research papers, showcasing their potential in various applications such as text generation, search, and question-answering. These tools' ability to synergize reasoning and acting components paves the way for more advanced, interpretable, and trustworthy AI systems. The genius of these research papers and their resultant implementations, such as [LangChain](https://docs.langchain.com/docs/) and [Haystack](https://haystack.deepset.ai/), empower Jeeves.
 
 ### The World at a Crossroads
