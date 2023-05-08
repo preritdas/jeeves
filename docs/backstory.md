@@ -28,6 +28,8 @@ GPT-4, on the other hand, represented a giant leap forward in LLM reasoning, dra
 
 Vector retrievals involve using high-dimensional vector spaces (embeddings) to represent words, phrases, and complex data, facilitating efficient searching and manipulation of information. These techniques can be applied to various industries, such as medicine, law, finance, and more. Some examples include:
 
+<img src=".gitbook/assets/file.excalidraw (1).svg" alt="" class="gitbook-drawing">
+
 1. **Information Retrieval**: Vector embeddings can be used to search through large document repositories, allowing for highly accurate retrieval of relevant sources from a highly populated data pool. Specific examples within information retrieval include:
    * **Scientific Research**: Quickly finding the most relevant research in vast repositories of scientific articles, streamlining literature reviews and keeping researchers up-to-date with the latest findings in their field.
    * **Patent Analysis**: Identifying relevant patents in large databases by comparing vector representations of patent abstracts, aiding businesses and inventors in analyzing the patent landscape, identifying potential infringement issues, or finding inspiration for new innovations.
