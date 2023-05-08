@@ -58,7 +58,7 @@ Jeeves' success is attributed to:
 
 1. Fine-tuned models and re-engineering (both model- and prompt-level) from months of obsessive work on other AI platforms
 2. Careful integration of various tools, such as low-level call-sequence API routers and real-time information handling
-3. Rigorous testing to ensure a seamless, efficient, and quick user experience that comes as close to a competent human assistant as possible, if not better
+3. Rigorous testing and model re-evaluation to ensure a seamless, efficient, and quick user experience that comes as close to a competent human assistant as possible, if not better
 
 Safety is a priority; Jeeves creates drafts of emails for you to review before sending and always discloses that he is an AI representing you when communicating with others in any form.
 
@@ -66,8 +66,8 @@ Safety is a priority; Jeeves creates drafts of emails for you to review before s
 
 As a rapidly evolving project, Jeeves is in active development, with new improvements, features, and tools added daily.&#x20;
 
-As a general thought, with the releases of powerful models like GPT-3.5 Turbo and GPT-4, AI-powered tools like Jeeves will become increasingly prevalent. He may be the first of his kind, but will certainly not be the last.&#x20;
+As a general thought, with the releases of powerful models like GPT-3.5 Turbo and GPT-4, particularly with the time for developers to craft innovative ways of leveraging them, AI-powered tools like Jeeves will become increasingly prevalent. He may be the first of his kind, but will certainly not be the last.&#x20;
 
-This documentation explores Jeeves' inner workings, tooling, and future expectations as a powerful implementation of AI technology.&#x20;
+This documentation explores Jeeves' inner workings, tooling, and future expectations as a powerful implementation of a technology we humans are yet to understand.&#x20;
 
-Jeeves is currently in closed testing. If you're interested in trying it out, please reach out for access.
+Jeeves is currently in closed testing (in other words, I'm hogging him for myself and family/friends). If you're interested in giving him employment—making him your gentleman, let's say—please reach out to me.
