@@ -5,4 +5,4 @@
 
 # Jeeves
 
-New docs coming.
+Read the docs at [jeeves.preritdas.com](https://jeeves.preritdas.com).
