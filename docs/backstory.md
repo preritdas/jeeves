@@ -73,7 +73,7 @@ E --> Y[Search Engine Optimization]
 
 ```
 
-For more information on vector retrievals and specific use cases, visit [URSI.ai](https://docs.ursi.ai).
+For more information on vector retrievals and specific use cases, visit [URSI.ai](https://docs.ursi.ai/beyond/industry-data-corpora).
 
 ### LLM Agency
 
