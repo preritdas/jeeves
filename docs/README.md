@@ -13,7 +13,7 @@ Jeeves is entirely unique to you, offering advanced functions such as:
 
 * Making outbound calls for reservations, appointments, speaking with your friends... Jeeves will hold a conversation with humans (and robots) on the other side of the line to facilitate goals
 * Seamlessly integrating with tools like Microsoft Teams, Discord, Todoist, and Notion to be an effective assistant in comprehensive areas of your life
-* Supporting one-click Zapier integration to provide Jeeves access to most-any of your added tools, with [thousands available](https://zapier.com/apps).
+* Supporting one-click Zapier integration to access most-any of your tools, with [thousands available](https://zapier.com/apps).
 
 Built upon state-of-the-art LLMs both fine-tuned and re-engineered, coupled with careful implementation of complex operations, Jeeves is incredibly accurate, performant, efficient, and boasts an impressive success rate (your human personal assistant would never walk up to you and say "Error, could not parse output").
 
