@@ -15,6 +15,10 @@ Jeeves is entirely unique to you, offering advanced functions such as:
 * Seamlessly integrating with tools like Microsoft Teams, Discord, Todoist, and Notion to be an effective assistant in comprehensive areas of your life
 * Supporting one-click Zapier integration to access most-any of your tools, with [thousands available](https://zapier.com/apps).
 
+{% embed url="https://youtu.be/nkUyWw--DNg" %}
+Jeeves takes care of dinner.
+{% endembed %}
+
 Built upon state-of-the-art LLMs both fine-tuned and re-engineered, coupled with careful implementation of complex operations, Jeeves is incredibly accurate, performant, efficient, and boasts an impressive success rate (your human personal assistant would never walk up to you and say "Error, could not parse output").
 
 ## Example Use Case
