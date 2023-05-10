@@ -81,6 +81,6 @@ def run_agent(agent_executor: AgentExecutor, query: str, uid: str) -> str:
             f"Total Tokens: {cb.total_tokens}, "
             f"Prompt Tokens: {cb.prompt_tokens}, "
             f"Completion Tokens: {cb.completion_tokens}, "
-            f"Total Cost (USD): ${cb.total_cost}."
+            f"Total Cost (USD): ${cb.total_cost:.2f}."
         )
         return res
