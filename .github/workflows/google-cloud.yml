@@ -30,6 +30,9 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
           
+      - name: Authenticate Docker for GCP
+        run: gcloud auth configure-docker
+          
       - name: Pull latest image for cache
         run: docker pull gcr.io/preritdas-api/jeeves
           
@@ -42,7 +45,6 @@ jobs:
           
       - name: Push Docker image to GCP Container Registry
         run: |
-          gcloud auth configure-docker
           docker tag jeeves gcr.io/preritdas-api/jeeves
           docker push gcr.io/preritdas-api/jeeves
   deploy:
