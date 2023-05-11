@@ -26,7 +26,8 @@ def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:
             'the keys "content" and "recipient_phone" (10-digit phone number preceded by '
             'country code, ex. "12223334455". Do not make up phone numbers - either '
             "use a phone number explicitly provided by the user, or use a phone number from a "
-            "tool that provides it for you (ex. contacts, if available). Otherwise, do not use this tool."
+            "tool that provides it for you (ex. contacts, if available). Otherwise, do not use this tool. "
+            'Write the content as you, Jeeves, not as me.'
         )
 
         def _run(self, query: str) -> str:
