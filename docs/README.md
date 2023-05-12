@@ -1,6 +1,6 @@
 ---
 description: The first omnipowered, artificially-intelligent personal assistant.
-cover: .gitbook/assets/jeeves (1).png
+cover: .gitbook/assets/small left.png
 coverY: 0
 ---
 
