@@ -1,11 +1,10 @@
 ---
 description: The first omnipowered, artificially-intelligent personal assistant.
-cover: >-
-  https://images.unsplash.com/photo-1496942299866-9e7ab403e614?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxOTcwMjR8MHwxfHNlYXJjaHw3fHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlfGVufDB8fHx8MTY4MzUwMzYzNQ&ixlib=rb-4.0.3&q=85
+cover: .gitbook/assets/jeeves (1).png
 coverY: 0
 ---
 
-# Meet Jeeves.
+# 🎩 Meet Jeeves.
 
 Jeeves is a first-of-its-kind AI personal assistant designed to make your life easier and more efficient. You can text him, call him, or even send him Telegram voice messages when you're on the go.
 

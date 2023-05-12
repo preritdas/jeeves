@@ -2,7 +2,7 @@
 description: Who is "Jeeves," and from where does this project arise?
 ---
 
-# Backstory
+# 🖥 Tech and Backstory
 
 <figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
