@@ -4,8 +4,8 @@ import deta
 import datetime as dt
 
 from jeeves.keys import KEYS
-from jeeves.applets.gpt.chat_history.models import Message
-from jeeves.applets.gpt.chat_history.filter import BaseFilterer
+from jeeves.agency.chat_history.models import Message
+from jeeves.agency.chat_history.filter import BaseFilterer
 
 
 # Initialize the chats Deta Base

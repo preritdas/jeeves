@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 import datetime as dt
 
-from jeeves.applets.gpt.chat_history.models import Message
+from jeeves.agency.chat_history.models import Message
 
 
 class BaseFilterer(ABC):

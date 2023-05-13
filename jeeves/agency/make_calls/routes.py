@@ -8,9 +8,9 @@ from urllib.parse import urlencode
 from jeeves import voice_tools as vt
 from jeeves.texts import twilio_client, BASE_URL
 
-from jeeves.applets.gpt.logs_callback import logger
-from jeeves.applets.gpt.make_calls import prompts
-from jeeves.applets.gpt.make_calls import database as db
+from jeeves.agency.logs_callback import logger
+from jeeves.agency.make_calls import prompts
+from jeeves.agency.make_calls import database as db
 
 
 router = APIRouter()

@@ -14,8 +14,8 @@ from jeeves.keys import KEYS
 from jeeves.texts import twilio_client, BASE_URL
 
 # Make calls
-from jeeves.applets.gpt.make_calls import database as db
-from jeeves.applets.gpt.logs_callback import logger
+from jeeves.agency.make_calls import database as db
+from jeeves.agency.logs_callback import logger
 
 
 class CallToolError(Exception):

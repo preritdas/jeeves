@@ -1,8 +1,8 @@
 """Create storer and answerer tools accessible in tool auth."""
 from langchain.tools import Tool
 
-from jeeves.applets.gpt.user_memory.database import UserMemory
-from jeeves.applets.gpt.user_memory.prompts import STORER_PROMPT, ANSWERER_PROMPT
+from jeeves.agency.user_memory.database import UserMemory
+from jeeves.agency.user_memory.prompts import STORER_PROMPT, ANSWERER_PROMPT
 
 
 def create_user_memory_tools(user_phone: str) -> list[Tool]:

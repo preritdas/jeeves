@@ -10,8 +10,8 @@ import re
 # Project
 from jeeves import texts
 from jeeves import voice_tools as vt
-from jeeves.applets.gpt import generate_agent_response
-from jeeves.applets.gpt.logs_callback import logger
+from jeeves.agency import generate_agent_response
+from jeeves.agency.logs_callback import logger
 
 
 # Create an API router for voice actions

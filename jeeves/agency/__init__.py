@@ -5,9 +5,17 @@ from langchain.callbacks import get_openai_callback
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import OutputParserException
 
+import uuid
+import pytz
+import datetime as dt
+
 from jeeves.keys import KEYS
-from jeeves.applets.gpt import logs_callback, prompts
-from jeeves.applets.gpt.chat_history import ChatHistory, RecencyFilterer
+from jeeves.config import CONFIG
+
+from jeeves.agency import tool_auth
+from jeeves.agency.chat_history.models import Message
+from jeeves.agency import logs_callback, prompts
+from jeeves.agency.chat_history import ChatHistory, RecencyFilterer
 
 
 # ---- Build the agent ----
@@ -84,3 +92,32 @@ def run_agent(agent_executor: AgentExecutor, query: str, uid: str) -> str:
             f"Total Cost (USD): ${cb.total_cost:.2f}."
         )
         return res
+
+
+def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> str:
+    """Build tools, create executor, and run the agent. UID is optional."""
+    # UID
+    if not uid:
+        uid = str(uuid.uuid4())
+
+    # Build chat history
+    chat_history = ChatHistory.from_inbound_phone(inbound_phone)
+
+    callback_handlers = logs_callback.create_callback_handlers(uid)
+    toolkit = tool_auth.build_tools(inbound_phone, callback_handlers)
+    agent_executor = create_agent_executor(
+        toolkit, chat_history, callback_handlers
+    )
+    response: str = run_agent(agent_executor, content, uid)
+
+    # Save message to chats database
+    chat_history.add_message(
+        Message(
+            datetime=dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone)),
+            inbound_phone=inbound_phone,
+            user_input=content,
+            agent_response=response
+        )
+    )
+
+    return response.strip()

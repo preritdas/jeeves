@@ -18,7 +18,7 @@ from jeeves.config import CONFIG
 from jeeves.keys import KEYS
 
 from jeeves.utils import validate_phone_number
-from jeeves.applets.gpt.user_memory.models import Entry
+from jeeves.agency.user_memory.models import Entry
 
 
 # Memory database

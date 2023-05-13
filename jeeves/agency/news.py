@@ -3,7 +3,7 @@ import requests
 from pydantic import BaseModel, Field
 
 from jeeves.keys import KEYS
-from jeeves.applets.gpt import retrieval
+from jeeves.agency import retrieval
 
 
 NEWS_ENDPOINT = "https://newsapi.org/v2"

@@ -4,7 +4,7 @@ import deta
 from jeeves.keys import KEYS
 from jeeves import voice_tools as vt
 
-from jeeves.applets.gpt.make_calls.prompts import generate_intro_message
+from jeeves.agency.make_calls.prompts import generate_intro_message
 
 
 deta_client = deta.Deta(KEYS.Deta.project_key)

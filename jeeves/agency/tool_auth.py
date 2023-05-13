@@ -9,11 +9,11 @@ from langchain.callbacks.base import BaseCallbackHandler
 
 from jeeves.keys import KEYS
 
-from jeeves.applets.gpt import retrieval
-from jeeves.applets.gpt import news
-from jeeves.applets.gpt import send_texts
-from jeeves.applets.gpt import make_calls
-from jeeves.applets.gpt.user_memory import create_user_memory_tools
+from jeeves.agency import retrieval
+from jeeves.agency import news
+from jeeves.agency import send_texts
+from jeeves.agency import make_calls
+from jeeves.agency.user_memory import create_user_memory_tools
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
