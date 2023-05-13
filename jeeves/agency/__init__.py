@@ -37,15 +37,11 @@ llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, tempera
 
 def create_agent_executor(
     toolkit: list[Tool],
-    chat_history: ChatHistory,
+    inbound_phone: str,
     callback_handlers: list[BaseCallbackHandler],
 ) -> AgentExecutor:
     """Create the agent given authenticated tools."""
-    agent_prompts: prompts.AgentPrompts = prompts.build_prompts(
-        chat_history=chat_history.format_messages(
-            filterer=RecencyFilterer(n_messages=5)
-        )
-    )
+    agent_prompts: prompts.AgentPrompts = prompts.build_prompts(inbound_phone)
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
@@ -101,18 +97,18 @@ def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> 
         uid = str(uuid.uuid4())
 
     # Build chat history and toolkit using inbound phone
-    chat_history = ChatHistory.from_inbound_phone(inbound_phone)
+    ChatHistory.from_inbound_phone(inbound_phone)
     toolkit = tool_auth.build_tools(inbound_phone, callback_handlers)
 
     # Run
     callback_handlers = logs_callback.create_callback_handlers(uid)
     agent_executor = create_agent_executor(
-        toolkit, chat_history, callback_handlers
+        toolkit, inbound_phone, callback_handlers
     )
     response: str = run_agent(agent_executor, content, uid)
 
     # Save message to chats database
-    chat_history.add_message(
+    ChatHistory.from_inbound_phone(inbound_phone).add_message(
         Message(
             datetime=dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone)),
             inbound_phone=inbound_phone,
