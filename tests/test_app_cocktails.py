@@ -2,7 +2,7 @@
 import pytest
 import requests
 
-from apps import cocktails
+from jeeves.apps import cocktails
 
 
 def test_handler():

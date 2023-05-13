@@ -1,8 +1,8 @@
 import random
 
-from apps import groceries
-from apps.groceries import utils
-from apps.groceries import grocery_db
+from jeeves.apps import groceries
+from jeeves.apps.groceries import utils
+from jeeves.apps.groceries import grocery_db
 
 
 def cleanup(res: str) -> None:

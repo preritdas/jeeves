@@ -1,5 +1,5 @@
-from apps import jokes
-
+"""Test the Jokes app."""
+from jeeves.apps import jokes
 
 def test_handler():
     assert jokes.handler("", options={"tags": "nsfw,dark"})

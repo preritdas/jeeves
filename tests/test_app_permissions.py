@@ -4,7 +4,7 @@ import pytest
 import random
 import string
 
-from apps import permissions
+from jeeves.apps import permissions
 
 
 def test_handler():

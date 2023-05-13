@@ -6,7 +6,7 @@ Git Pytest and Dup Namephone. Their names and phone numbers are now randomized s
 can be run concurrently without causing errors with duplicate values in the database
 causing un-tested-for results.
 """
-import permissions
+from jeeves import permissions
 
 
 def test_check_permissions(user_git_pytest):

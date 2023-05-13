@@ -1,12 +1,12 @@
 "Test the GPT app."
-from apps.gpt import handler
+from jeeves.apps.gpt import handler
 from api.voice_inbound import _process_speech
-from apps.gpt.make_calls.routes import process_user_speech
-from apps.gpt.make_calls.database import Call
-from apps.gpt.tool_auth import no_auth_tools, build_tools
-from apps.gpt.logs_callback import extract_log_items
+from jeeves.apps.gpt.make_calls.routes import process_user_speech
+from jeeves.apps.gpt.make_calls.database import Call
+from jeeves.apps.gpt.tool_auth import no_auth_tools, build_tools
+from jeeves.apps.gpt.logs_callback import extract_log_items
 
-from keys import KEYS
+from jeeves.keys import KEYS
 
 
 def test_handler(default_options):

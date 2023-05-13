@@ -1,5 +1,5 @@
 """Test broad app manager, including app to list apps."""
-import apps
+from jeeves import apps
 
 
 def test_handler(default_options):

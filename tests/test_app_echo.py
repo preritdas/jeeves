@@ -1,5 +1,5 @@
 """Test the echo app."""
-from apps import echo
+from jeeves.apps import echo
 
 
 def test_handler(mocker):

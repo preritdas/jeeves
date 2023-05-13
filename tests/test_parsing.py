@@ -4,7 +4,7 @@ This module is for testing long-tail events.
 """
 import pytest
 
-from utils import validate_phone_number
+from jeeves.utils import validate_phone_number
 
 
 def test_validate_twilio_number():

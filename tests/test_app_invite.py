@@ -7,8 +7,8 @@ import pytest
 from twilio.rest import Client  # mock an invalid client
 from twilio.base.exceptions import TwilioRestException
 
-from apps import invite
-from keys import KEYS
+from jeeves.apps import invite
+from jeeves.keys import KEYS
 
 
 def test_handler():

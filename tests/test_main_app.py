@@ -7,7 +7,7 @@ import pytest
 
 import api
 from api.telegram_inbound import process_telegram_inbound
-from keys import KEYS
+from jeeves.keys import KEYS
 
 
 @pytest.fixture(scope="module")

@@ -1,5 +1,5 @@
 """Check Vonage balance, account status, etc."""
-import texts
+from jeeves import texts
 
 
 def test_twilio_balance():

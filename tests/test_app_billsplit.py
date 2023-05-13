@@ -1,8 +1,8 @@
 """Test the billsplit app."""
 import pytest
 
-from apps import billsplit
-from apps.billsplit.actions import billsplit_db
+from jeeves.apps import billsplit
+from jeeves.apps.billsplit.actions import billsplit_db
 
 
 @pytest.fixture

@@ -1,5 +1,5 @@
 """Test app that reports usage metrics."""
-from apps import usage
+from jeeves.apps import usage
 
 
 def test_handler():

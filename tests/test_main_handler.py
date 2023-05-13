@@ -1,6 +1,6 @@
 """Testing if texts can be sandboxed with the FastAPI client."""
-import inbound
-from parsing import InboundMessage
+from jeeves import inbound
+from jeeves.parsing import InboundMessage
 
 
 def test_no_permissions(mocker, default_inbound):
