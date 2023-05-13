@@ -52,7 +52,7 @@ def test_wolfram_alpha():
 
 
 def test_text_tool(mocker, default_options):
-    mocker.patch("apps.gpt.send_texts.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("jeeves.agency.send_texts.texts.CONFIG.General.sandbox_mode", True)
 
     TextToolClass = create_text_message_tool(default_options["inbound_phone"])
     tool = TextToolClass()

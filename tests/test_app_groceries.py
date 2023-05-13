@@ -64,7 +64,7 @@ def test_translation(mocker, default_options):
     temporarily disabled due to lxml issues with Python 3.11.
     """
     mocker.patch(
-        "apps.groceries.classification.CONFIG.Groceries.translation", True
+        "jeeves.applets.groceries.classification.CONFIG.Groceries.translation", True
     )  # doesn't work
     res = groceries.handler("apples", default_options)
 
