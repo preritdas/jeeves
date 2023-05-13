@@ -58,7 +58,7 @@ class User(BaseModel):
     @classmethod
     def from_phone(cls, phone: str) -> Self | None:
         """Get a user by phone number. Returns None if not found."""
-        items = permissions_db.fetch({"Phone": phone}).items
+        items = permissions_db.fetch({"Phone": validate_phone_number(phone)}).items
 
         if not items:
             return None
