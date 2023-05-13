@@ -10,9 +10,9 @@ from jeeves.config import CONFIG
 from jeeves import usage  # fixture for temporary logs for report
 from jeeves import permissions  # fixtures for temporary users
 
-from jeeves.applets.gpt.make_calls.database import Call
-from jeeves.applets.gpt.logs_callback import create_callback_handlers
-from jeeves.applets.gpt.user_memory.database import UserMemory
+from jeeves.agency.make_calls.database import Call
+from jeeves.agency.logs_callback import create_callback_handlers
+from jeeves.agency.user_memory.database import UserMemory
 
 
 @pytest.fixture(scope="session")

@@ -5,8 +5,8 @@ import datetime as dt
 import pytz
 
 from jeeves.config import CONFIG
-from jeeves.applets.gpt.chat_history.filter import RecencyFilterer, DatetimeFilterer
-from jeeves.applets.gpt.chat_history.models import Message
+from jeeves.agency.chat_history.filter import RecencyFilterer, DatetimeFilterer
+from jeeves.agency.chat_history.models import Message
 
 
 tz = pytz.timezone(CONFIG.General.default_timezone)

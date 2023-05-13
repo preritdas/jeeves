@@ -1,7 +1,7 @@
 """Test user memory."""
 from langchain.tools import BaseTool
 
-from jeeves.applets.gpt.user_memory import UserMemory, create_user_memory_tools
+from jeeves.agency.user_memory import UserMemory, create_user_memory_tools
 
 
 def test_adding_to_memory(temporary_user_memory):
