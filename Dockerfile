@@ -11,8 +11,7 @@ RUN apt update && apt install -y ffmpeg
 COPY requirements.txt .
 
 # Install the dependencies
-RUN pip install -U pip && \
-  pip install -U wheel && \
+RUN pip install -U pip wheel && \
   pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
