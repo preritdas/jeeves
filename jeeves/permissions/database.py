@@ -12,9 +12,20 @@ permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
 
 
 class User(BaseModel):
-    """A user."""
+    """
+    A user in the permissions database.
+    
+    Attributes:
+        name: The user's name.
+        phone: The user's phone number.
+        time_offset: The user's time offset from UTC.
+        use_applets: Whether the user can use applets.
+        zapier_key: The user's Zapier key. Optional.
+        telegram_id: The user's Telegram ID. Optional.
+    """
     name: str
     phone: str
+    timezone: str
     use_applets: bool
     zapier_key: str | None = None
     telegram_id: int | None = None
@@ -23,6 +34,24 @@ class User(BaseModel):
     def validate_phone(cls, phone: str) -> str:
         """Validate phone number."""
         return validate_phone_number(phone)
+
+    @validator("timezone", pre=True)
+    def validate_timezone(cls, timezone: str) -> str:
+        """Pre to turn offset into a string."""
+        assert isinstance(timezone, str)
+        timezone = timezone.upper()
+
+        mappings: dict[str, str] = {
+            "EST": "America/New_York",
+            "CST": "America/Chicago",
+            "MST": "America/Denver",
+            "PST": "America/Los_Angeles"
+        }
+
+        if not timezone in mappings:
+            raise ValueError(f"Invalid timezone: {timezone}")
+
+        return mappings[timezone]
 
     @classmethod
     def from_phone(cls, phone: str) -> Self | None:
@@ -42,6 +71,7 @@ class User(BaseModel):
         return cls(
             name=user["Name"],
             phone=user["Phone"],
+            timezone=user["Timezone"],
             use_applets=user["UseApplets"],
             zapier_key=user["ZapierKey"],
             telegram_id=user["TelegramID"]
