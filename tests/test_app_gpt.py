@@ -1,12 +1,12 @@
 "Test the GPT app."
-from apps.gpt import handler
+from jeeves.applets.gpt import handler
 from api.voice_inbound import _process_speech
-from apps.gpt.make_calls.routes import process_user_speech
-from apps.gpt.make_calls.database import Call
-from apps.gpt.tool_auth import no_auth_tools, build_tools
-from apps.gpt.logs_callback import extract_log_items
+from jeeves.agency.make_calls.routes import process_user_speech
+from jeeves.agency.make_calls.database import Call
+from jeeves.agency.tool_auth import no_auth_tools, build_tools
+from jeeves.agency.logs_callback import extract_log_items
 
-from keys import KEYS
+from jeeves.keys import KEYS
 
 
 def test_handler(default_options):
@@ -22,11 +22,11 @@ def test_handler(default_options):
 
 def test_agency(mocker, default_options, callback_uid):
     """Test the GPT applet handler."""
-    mocker.patch("apps.gpt.__init__.uuid.uuid4", return_value=callback_uid)
+    mocker.patch("jeeves.agency.uuid.uuid4", return_value=callback_uid)
 
     # Don't add chat logs
     mocker.patch(
-        "apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None
+        "jeeves.agency.chat_history.database.ChatHistory.add_message", return_value=None
     )
 
     res = handler(content="Who are you?", options=default_options)
@@ -47,7 +47,7 @@ def test_processing_speech(
 
     # Don't add chat logs
     mocker.patch(
-        "apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None
+        "jeeves.agency.chat_history.database.ChatHistory.add_message", return_value=None
     )
 
     response = _process_speech(
@@ -66,7 +66,7 @@ def test_processing_speech_outbound(outbound_call_key, mocker):
     """Test generating the next voice response when outbound calling."""
     # Don't add chat logs
     mocker.patch(
-        "apps.gpt.chat_history.database.ChatHistory.add_message", return_value=None
+        "jeeves.agency.chat_history.database.ChatHistory.add_message", return_value=None
     )
 
     call = Call.from_call_id(call_id=outbound_call_key)

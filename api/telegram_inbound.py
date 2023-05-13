@@ -4,13 +4,13 @@ import requests
 
 from threading import Thread
 
-from keys import KEYS
-from config import CONFIG
+from jeeves.keys import KEYS
+from jeeves.config import CONFIG
 
-from utils import validate_phone_number
-from apps.gpt import generate_agent_response
-from voice_tools.transcribe import transcribe_telegram_file_id
-from voice_tools.speak import speak_jeeves
+from jeeves.utils import validate_phone_number
+from jeeves.agency import generate_agent_response
+from jeeves.voice_tools.transcribe import transcribe_telegram_file_id
+from jeeves.voice_tools.speak import speak_jeeves
 
 
 router = APIRouter()

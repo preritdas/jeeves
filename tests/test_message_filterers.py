@@ -4,9 +4,9 @@ import pytest
 import datetime as dt
 import pytz
 
-from config import CONFIG
-from apps.gpt.chat_history.filter import RecencyFilterer, DatetimeFilterer
-from apps.gpt.chat_history.models import Message
+from jeeves.config import CONFIG
+from jeeves.agency.chat_history.filter import RecencyFilterer, DatetimeFilterer
+from jeeves.agency.chat_history.models import Message
 
 
 tz = pytz.timezone(CONFIG.General.default_timezone)

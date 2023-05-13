@@ -7,8 +7,8 @@ import pytest
 from twilio.rest import Client  # mock an invalid client
 from twilio.base.exceptions import TwilioRestException
 
-from apps import invite
-from keys import KEYS
+from jeeves.applets import invite
+from jeeves.keys import KEYS
 
 
 def test_handler():
@@ -31,14 +31,14 @@ def test_invalid_phone():
 
 
 def test_inviting(mocker, default_options):
-    mocker.patch("apps.invite.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("jeeves.applets.invite.texts.CONFIG.General.sandbox_mode", True)
     res = invite.handler("14259023246", default_options)
     assert "Successfully invited" in res
 
 
 def test_failed_delivery(mocker, default_options):
     """Mock a bad API key."""
-    mocker.patch("texts.twilio_client", Client(KEYS.Twilio.account_sid, "invalid"))
+    mocker.patch("jeeves.texts.twilio_client", Client(KEYS.Twilio.account_sid, "invalid"))
 
     with pytest.raises(TwilioRestException):
         invite.handler("14259023246", default_options)

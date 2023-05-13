@@ -6,9 +6,9 @@ from fastapi import Form, APIRouter
 import threading
 
 # Project
-import inbound
-from config import CONFIG
-import parsing
+from jeeves import inbound
+from jeeves.config import CONFIG
+from jeeves import parsing
 
 
 router = APIRouter()

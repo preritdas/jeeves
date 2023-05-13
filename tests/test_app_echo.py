@@ -1,10 +1,10 @@
 """Test the echo app."""
-from apps import echo
+from jeeves.applets import echo
 
 
 def test_handler(mocker):
     # Ensure the text isn't actually sent, using sandbox mode.
-    mocker.patch("apps.echo.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("jeeves.applets.echo.texts.CONFIG.General.sandbox_mode", True)
 
     res = echo.handler(
         content="This is the message.", options={"recipient": "12223334455"}

@@ -4,8 +4,8 @@ import pytz
 import string
 import random
 
-from config import CONFIG
-import usage
+from jeeves.config import CONFIG
+from jeeves import usage
 
 
 def test_log_use():

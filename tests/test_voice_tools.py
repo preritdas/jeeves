@@ -2,7 +2,7 @@
 import string
 import random
 
-import voice_tools as vt
+from jeeves import voice_tools as vt
 
 
 def test_speak():

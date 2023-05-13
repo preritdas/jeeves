@@ -1,9 +1,9 @@
 """Test agent tools."""
-from apps.gpt.retrieval import WebsiteAnswerer, YouTubeAnswerer
-from apps.gpt.news import manual_headline_news
-from apps.gpt.tool_auth import no_auth_tools
-from apps.gpt.send_texts import create_text_message_tool
-from apps.gpt.movies import MoviesTool
+from jeeves.agency.retrieval import WebsiteAnswerer, YouTubeAnswerer
+from jeeves.agency.news import manual_headline_news
+from jeeves.agency.tool_auth import no_auth_tools
+from jeeves.agency.send_texts import create_text_message_tool
+from jeeves.agency.movies import MoviesTool
 
 
 def test_website_answerer():
@@ -52,7 +52,7 @@ def test_wolfram_alpha():
 
 
 def test_text_tool(mocker, default_options):
-    mocker.patch("apps.gpt.send_texts.texts.CONFIG.General.sandbox_mode", True)
+    mocker.patch("jeeves.agency.send_texts.texts.CONFIG.General.sandbox_mode", True)
 
     TextToolClass = create_text_message_tool(default_options["inbound_phone"])
     tool = TextToolClass()

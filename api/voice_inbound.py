@@ -8,10 +8,10 @@ from twilio.base.exceptions import TwilioRestException
 import re
 
 # Project
-import texts
-import voice_tools as vt
-from apps.gpt import generate_agent_response
-from apps.gpt.logs_callback import logger
+from jeeves import texts
+from jeeves import voice_tools as vt
+from jeeves.agency import generate_agent_response
+from jeeves.agency.logs_callback import logger
 
 
 # Create an API router for voice actions
