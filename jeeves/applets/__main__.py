@@ -2,8 +2,8 @@
 import sys
 import json
 
-from applets import PROGRAMS
-from config import CONFIG
+from jeeves.applets import PROGRAMS
+from jeeves.config import CONFIG
 
 
 if len(sys.argv) < 2:
