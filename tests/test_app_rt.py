@@ -1,5 +1,5 @@
 """Test Rotten Tomatoes app."""
-from jeeves.apps import rt
+from jeeves.applets import rt
 
 
 def test_handler():

@@ -8,7 +8,7 @@ from fastapi import FastAPI
 
 # Routers
 from api import text_inbound, voice_inbound, telegram_inbound
-from jeeves.apps.gpt import make_calls
+from jeeves.applets.gpt import make_calls
 
 
 app = FastAPI()

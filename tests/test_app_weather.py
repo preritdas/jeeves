@@ -1,5 +1,5 @@
 """Test the Weather applet."""
-from jeeves.apps import weather
+from jeeves.applets import weather
 
 
 def test_handler():

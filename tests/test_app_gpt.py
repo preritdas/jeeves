@@ -1,10 +1,10 @@
 "Test the GPT app."
-from jeeves.apps.gpt import handler
+from jeeves.applets.gpt import handler
 from api.voice_inbound import _process_speech
-from jeeves.apps.gpt.make_calls.routes import process_user_speech
-from jeeves.apps.gpt.make_calls.database import Call
-from jeeves.apps.gpt.tool_auth import no_auth_tools, build_tools
-from jeeves.apps.gpt.logs_callback import extract_log_items
+from jeeves.applets.gpt.make_calls.routes import process_user_speech
+from jeeves.applets.gpt.make_calls.database import Call
+from jeeves.applets.gpt.tool_auth import no_auth_tools, build_tools
+from jeeves.applets.gpt.logs_callback import extract_log_items
 
 from jeeves.keys import KEYS
 

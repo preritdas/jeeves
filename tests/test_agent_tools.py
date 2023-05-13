@@ -1,9 +1,9 @@
 """Test agent tools."""
-from jeeves.apps.gpt.retrieval import WebsiteAnswerer, YouTubeAnswerer
-from jeeves.apps.gpt.news import manual_headline_news
-from jeeves.apps.gpt.tool_auth import no_auth_tools
-from jeeves.apps.gpt.send_texts import create_text_message_tool
-from jeeves.apps.gpt.movies import MoviesTool
+from jeeves.applets.gpt.retrieval import WebsiteAnswerer, YouTubeAnswerer
+from jeeves.applets.gpt.news import manual_headline_news
+from jeeves.applets.gpt.tool_auth import no_auth_tools
+from jeeves.applets.gpt.send_texts import create_text_message_tool
+from jeeves.applets.gpt.movies import MoviesTool
 
 
 def test_website_answerer():

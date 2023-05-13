@@ -6,7 +6,7 @@ from typing import Callable
 import pydantic
 
 # Project
-from jeeves import apps
+from jeeves import applets
 from jeeves.utils import validate_phone_number
 
 
@@ -57,15 +57,15 @@ class InboundMessage(pydantic.BaseModel):
         first_line = (all_lines := content.splitlines())[0].lower()
 
         if not "app:" in first_line:
-            return apps.PROGRAMS["gpt"], "gpt"
+            return applets.PROGRAMS["gpt"], "gpt"
 
         app_ref_loc = first_line.find("app:") + len("app:")
         app_name = first_line[app_ref_loc:].strip().lower()
 
-        if not app_name in apps.PROGRAMS:
+        if not app_name in applets.PROGRAMS:
             return None, app_name
 
-        return apps.PROGRAMS.get(app_name), app_name
+        return applets.PROGRAMS.get(app_name), app_name
 
     @property
     def app_content_options(self) -> tuple[str, dict]:

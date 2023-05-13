@@ -8,7 +8,7 @@ from jeeves.keys import KEYS
 from jeeves.config import CONFIG
 
 from jeeves.utils import validate_phone_number
-from jeeves.apps.gpt import generate_agent_response
+from jeeves.applets.gpt import generate_agent_response
 from jeeves.voice_tools.transcribe import transcribe_telegram_file_id
 from jeeves.voice_tools.speak import speak_jeeves
 

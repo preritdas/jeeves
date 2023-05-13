@@ -7,7 +7,7 @@ import random
 import string
 
 # Project
-from jeeves.apps import wordhunt
+from jeeves.applets import wordhunt
 
 
 @pytest.fixture
