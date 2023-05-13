@@ -17,6 +17,7 @@ class User(BaseModel):
     
     Attributes:
         name: The user's name.
+        gender_male: if True, male, if False, female.
         phone: The user's phone number.
         time_offset: The user's time offset from UTC.
         use_applets: Whether the user can use applets.
@@ -24,6 +25,7 @@ class User(BaseModel):
         telegram_id: The user's Telegram ID. Optional.
     """
     name: str
+    gender_male: bool
     phone: str
     timezone: str
     use_applets: bool
@@ -70,6 +72,7 @@ class User(BaseModel):
         user = items[0]
         return cls(
             name=user["Name"],
+            gender_male=user["GenderMale"],
             phone=user["Phone"],
             timezone=user["Timezone"],
             use_applets=user["UseApplets"],
