@@ -1,8 +1,8 @@
 """WordHunt board solving app."""
-import utils
+from jeeves import utils
 
 # import pyximport; pyximport.install(language_level=3)
-from apps.wordhunt import pure_wordhunt as wordhunt
+from jeeves.apps.wordhunt import pure_wordhunt as wordhunt
 
 
 APP_HELP = (

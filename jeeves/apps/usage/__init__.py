@@ -1,6 +1,6 @@
 """Read usage data from usage module."""
-import utils
-import usage
+from jeeves import utils
+from jeeves import usage
 
 
 APP_HELP = "Get a usage report."

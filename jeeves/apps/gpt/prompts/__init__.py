@@ -19,7 +19,7 @@ import os
 import datetime as dt
 import pytz
 
-from config import CONFIG
+from jeeves.config import CONFIG
 
 
 # ---- Model for prompting ----

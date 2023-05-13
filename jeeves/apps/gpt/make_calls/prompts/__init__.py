@@ -7,7 +7,7 @@ import os
 import datetime as dt
 import pytz
 
-from keys import KEYS
+from jeeves.keys import KEYS
 
 
 llm = ChatOpenAI(

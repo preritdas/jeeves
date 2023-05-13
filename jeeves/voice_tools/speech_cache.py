@@ -1,7 +1,7 @@
 """Cache spoken text audio urls."""
 import deta
 
-from keys import KEYS
+from jeeves.keys import KEYS
 
 
 deta_client = deta.Deta(KEYS.Deta.project_key)

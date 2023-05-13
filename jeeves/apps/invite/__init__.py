@@ -1,7 +1,6 @@
 """Invite a new user to use Jeeves."""
-import utils
-
-import texts
+from jeeves import utils
+from jeeves import texts
 
 
 APP_HELP = (

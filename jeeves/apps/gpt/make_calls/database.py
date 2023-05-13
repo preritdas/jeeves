@@ -1,10 +1,10 @@
 """Store and retrieve conversations and greetings."""
 import deta
 
-from keys import KEYS
-import voice_tools as vt
+from jeeves.keys import KEYS
+from jeeves import voice_tools as vt
 
-from apps.gpt.make_calls.prompts import generate_intro_message
+from jeeves.apps.gpt.make_calls.prompts import generate_intro_message
 
 
 deta_client = deta.Deta(KEYS.Deta.project_key)

@@ -1,19 +1,19 @@
 """GPT applet."""
-import utils
+from jeeves import utils
 
 import uuid
 import datetime as dt
 import pytz
 
-from config import CONFIG
+from jeeves.config import CONFIG
 
-from apps.gpt import agency
-from apps.gpt import tool_auth
-from apps.gpt import completions
-from apps.gpt import logs_callback
+from jeeves.apps.gpt import agency
+from jeeves.apps.gpt import tool_auth
+from jeeves.apps.gpt import completions
+from jeeves.apps.gpt import logs_callback
 
-from apps.gpt.chat_history import ChatHistory
-from apps.gpt.chat_history.models import Message
+from jeeves.apps.gpt.chat_history import ChatHistory
+from jeeves.apps.gpt.chat_history.models import Message
 
 
 APP_HELP = "Speak with Jeeves."

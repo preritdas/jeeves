@@ -4,7 +4,7 @@ from langchain.agents.tools import BaseTool
 import json
 from typing import Any, Coroutine
 
-import texts
+from jeeves import texts
 
 
 def create_text_message_tool(inbound_phone: str) -> type[BaseTool]:

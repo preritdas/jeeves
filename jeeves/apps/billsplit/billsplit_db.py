@@ -4,8 +4,8 @@ import requests
 
 import random
 
-from keys import KEYS
-import texts
+from jeeves.keys import KEYS
+from jeeves import texts
 
 
 deta_client = deta.Deta(KEYS.Deta.project_key)

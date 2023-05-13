@@ -5,7 +5,7 @@ Read permissions stored in a Deta Base.
 import deta
 
 # Project
-from keys import KEYS
+from jeeves.keys import KEYS
 
 
 deta_client = deta.Deta(KEYS.Deta.project_key)

@@ -10,8 +10,8 @@ import re
 from typing import Dict, Any, List, Optional, Union
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 
-from keys import KEYS
-from config import CONFIG
+from jeeves.keys import KEYS
+from jeeves.config import CONFIG
 
 
 def extract_log_items(log: str, fields: list[str]) -> list[str]:

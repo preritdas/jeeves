@@ -1,7 +1,7 @@
 """Split the bill and vote on tip."""
-import utils
+from jeeves import utils
 
-from apps.billsplit import actions
+from jeeves.apps.billsplit import actions
 
 
 APP_HELP = (

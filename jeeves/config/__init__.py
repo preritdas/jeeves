@@ -4,12 +4,13 @@ Read config.yaml.
 import os
 import yaml
 
-from config import models
+from jeeves.config import models
 
 
 config_path = os.path.join(
     (current_dir := os.path.realpath(os.path.dirname(__file__))),
     "..",  # parent dir since module is in a subdirectory
+    "..",  # past jeeves directory
     "config.yaml"
 )
 

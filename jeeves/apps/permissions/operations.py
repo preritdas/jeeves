@@ -1,5 +1,5 @@
 """Database management CRUD operations: updating, deleting, viewing, creating."""
-from permissions import permissions_db
+from jeeves.permissions import permissions_db
 
 
 def create_permissions(name: str, phone: str, value: str) -> str:

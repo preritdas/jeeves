@@ -1,5 +1,5 @@
 """Query the permissions database."""
-from permissions import permissions_db
+from jeeves.permissions import permissions_db
 
 
 class QueryError(Exception):

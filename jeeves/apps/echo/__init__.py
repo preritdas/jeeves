@@ -1,5 +1,6 @@
-import texts
-import utils
+"""Echo app."""
+from jeeves import texts
+from jeeves import utils
 
 
 APP_HELP = "Send a message (content) to someone else on my behalf."

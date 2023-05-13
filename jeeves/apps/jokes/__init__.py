@@ -3,8 +3,8 @@ import requests
 
 from functools import wraps
 
-import utils
-from keys import KEYS
+from jeeves import utils
+from jeeves.keys import KEYS
 
 
 APP_HELP = "Get a random joke."

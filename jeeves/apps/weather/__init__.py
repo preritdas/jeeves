@@ -1,9 +1,9 @@
 """Weather data."""
-import utils
-from config import CONFIG
+from jeeves import utils
+from jeeves.config import CONFIG
 
-from apps.weather import data
-from apps.weather.data import kelvin_to_farenheit as farenheit
+from jeeves.apps.weather import data
+from jeeves.apps.weather.data import kelvin_to_farenheit as farenheit
 
 
 APP_HELP = "Get weather data."

@@ -14,11 +14,11 @@ from langchain.chains.question_answering import load_qa_chain
 import datetime as dt
 import pytz
 
-from config import CONFIG
-from keys import KEYS
+from jeeves.config import CONFIG
+from jeeves.keys import KEYS
 
-from utils import validate_phone_number
-from apps.gpt.user_memory.models import Entry
+from jeeves.utils import validate_phone_number
+from jeeves.apps.gpt.user_memory.models import Entry
 
 
 # Memory database

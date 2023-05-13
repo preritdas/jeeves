@@ -2,10 +2,10 @@
 Process and handle inbound requests. This is where the `main_handler` is defined,
 called by the FastAPI route and given inbound information.
 """
-import parsing
-import permissions
-import texts
-import usage
+from jeeves import parsing
+from jeeves import permissions
+from jeeves import texts
+from jeeves import usage
 
 
 def main_handler(

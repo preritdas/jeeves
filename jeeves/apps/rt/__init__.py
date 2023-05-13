@@ -1,7 +1,7 @@
 """Rotten Tomatoes app."""
 import rottentomatoes as rt
 
-import utils
+from jeeves import utils
 
 
 APP_HELP = "Rotten Tomatoes info on movies. Specify the movie title as message content."

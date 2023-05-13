@@ -1,8 +1,8 @@
 """Applet to create and update user permissions."""
-import utils
+from jeeves import utils
 
-from apps.permissions import query
-from apps.permissions import operations
+from jeeves.apps.permissions import query
+from jeeves.apps.permissions import operations
 
 
 APP_HELP = (

@@ -6,8 +6,8 @@ from typing import Callable
 import pydantic
 
 # Project
-import apps
-from utils import validate_phone_number
+from jeeves import apps
+from jeeves.utils import validate_phone_number
 
 
 def _parse_options(options: str) -> dict[str, str]:

@@ -5,12 +5,12 @@ from twilio.base.exceptions import TwilioRestException
 
 from urllib.parse import urlencode
 
-import voice_tools as vt
-from texts import twilio_client, BASE_URL
+from jeeves import voice_tools as vt
+from jeeves.texts import twilio_client, BASE_URL
 
-from apps.gpt.logs_callback import logger
-from apps.gpt.make_calls import prompts
-from apps.gpt.make_calls import database as db
+from jeeves.apps.gpt.logs_callback import logger
+from jeeves.apps.gpt.make_calls import prompts
+from jeeves.apps.gpt.make_calls import database as db
 
 
 router = APIRouter()

@@ -5,22 +5,22 @@ Contains all individual apps as submodules, importable with `from apps import bi
 from typing import Callable
 
 # Apps
-from apps import groceries
-from apps import wordhunt
-from apps import echo
-from apps import permissions
-from apps import jokes
-from apps import weather
-from apps import invite
-from apps import usage
-from apps import rt
-from apps import cocktails
-from apps import billsplit
-from apps import gpt
+from jeeves.apps import groceries
+from jeeves.apps import wordhunt
+from jeeves.apps import echo
+from jeeves.apps import permissions
+from jeeves.apps import jokes
+from jeeves.apps import weather
+from jeeves.apps import invite
+from jeeves.apps import usage
+from jeeves.apps import rt
+from jeeves.apps import cocktails
+from jeeves.apps import billsplit
+from jeeves.apps import gpt
 
 # Project
-import utils
-import permissions as perms
+from jeeves import utils
+from jeeves import permissions as perms
 
 
 @utils.app_handler(app_help="See a list of available apps.")

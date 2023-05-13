@@ -2,12 +2,12 @@
 import datetime as dt
 import pytz
 
-from utils import app_handler
-from config import CONFIG
+from jeeves.utils import app_handler
+from jeeves.config import CONFIG
 
-from apps.groceries import classification
-from apps.groceries.utils import SETUPS
-from permissions import deta_client
+from jeeves.apps.groceries import classification
+from jeeves.apps.groceries.utils import SETUPS
+from jeeves.permissions import deta_client
 
 
 APP_HELP = "Organize your grocery list into categories."

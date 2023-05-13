@@ -5,9 +5,9 @@ from langchain.callbacks import get_openai_callback
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.schema import OutputParserException
 
-from keys import KEYS
-from apps.gpt import logs_callback, prompts
-from apps.gpt.chat_history import ChatHistory, RecencyFilterer
+from jeeves.keys import KEYS
+from jeeves.apps.gpt import logs_callback, prompts
+from jeeves.apps.gpt.chat_history import ChatHistory, RecencyFilterer
 
 
 # ---- Build the agent ----

@@ -7,13 +7,13 @@ from langchain.utilities.zapier import ZapierNLAWrapper
 from langchain.agents.agent_toolkits import ZapierToolkit
 from langchain.callbacks.base import BaseCallbackHandler
 
-from keys import KEYS
+from jeeves.keys import KEYS
 
-from apps.gpt import retrieval
-from apps.gpt import news
-from apps.gpt import send_texts
-from apps.gpt import make_calls
-from apps.gpt.user_memory import create_user_memory_tools
+from jeeves.apps.gpt import retrieval
+from jeeves.apps.gpt import news
+from jeeves.apps.gpt import send_texts
+from jeeves.apps.gpt import make_calls
+from jeeves.apps.gpt.user_memory import create_user_memory_tools
 
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):

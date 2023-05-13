@@ -10,12 +10,12 @@ from urllib.parse import urlencode
 from typing import Any, Coroutine
 
 # Project
-from keys import KEYS
-from texts import twilio_client, BASE_URL
+from jeeves.keys import KEYS
+from jeeves.texts import twilio_client, BASE_URL
 
 # Make calls
-from apps.gpt.make_calls import database as db
-from apps.gpt.logs_callback import logger
+from jeeves.apps.gpt.make_calls import database as db
+from jeeves.apps.gpt.logs_callback import logger
 
 
 class CallToolError(Exception):
