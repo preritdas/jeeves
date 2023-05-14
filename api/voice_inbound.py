@@ -7,6 +7,9 @@ from twilio.base.exceptions import TwilioRestException
 # Standard library
 import re
 
+# API
+from api.verification import validate_twilio_request
+
 # Project
 from jeeves import texts
 from jeeves import voice_tools as vt
@@ -137,6 +140,10 @@ async def incoming_call(request: Request):
     the user to have another chance to speak, as if the call has restarted, without
     having to hang up and call again.
     """
+    # Validate the request
+    if not await validate_twilio_request(request):
+        return Response(status_code=401)
+
     response = VoiceResponse()
     form = await request.form()
 
@@ -168,6 +175,10 @@ async def process_speech(background_tasks: BackgroundTasks, request: Request):
     is updated with speech, the pause tag seems to be abandoned, meaning the user gets a response
     as soon as it is ready.
     """
+    # Validate the request
+    if not await validate_twilio_request(request):
+        return Response(status_code=401)
+
     response = VoiceResponse()
     form = await request.form()
 
