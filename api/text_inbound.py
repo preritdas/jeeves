@@ -1,11 +1,14 @@
 """Handle inbound text messages."""
 # External
-from fastapi import Form, APIRouter
+from fastapi import Form, APIRouter, Request
 
 # Local
 import threading
 
-# Project
+# API
+from api.verification import validate_twilio_request 
+
+# Jeeves
 from jeeves import inbound
 from jeeves.config import CONFIG
 from jeeves import parsing
@@ -33,8 +36,12 @@ def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
 
 
 @router.post("/inbound-sms", status_code=204)
-def main_handler_wrapper(From: str = Form(...), Body: str = Form(...)):
+async def main_handler_wrapper(request: Request, From: str = Form(...), Body: str = Form(...)):
     """Handle the inbound, routing it to the handler."""
+    # Validate the request
+    if not await validate_twilio_request(request):
+        return "Verification failed."
+
     # Validate the data
     inbound_model = parsing.InboundMessage(phone_number=From, body=Body)
 
