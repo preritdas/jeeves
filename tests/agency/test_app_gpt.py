@@ -1,7 +1,7 @@
 "Test the GPT app."
 from jeeves.applets.gpt import handler
 from api.voice_inbound import _process_speech
-from jeeves.agency.make_calls.routes import process_user_speech
+from api.voice_outbound import process_user_speech
 from jeeves.agency.make_calls.database import Call
 from jeeves.agency.tool_auth import no_auth_tools, build_tools
 from jeeves.agency.logs_callback import extract_log_items
