@@ -98,10 +98,10 @@ def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> 
 
     # Build chat history and toolkit using inbound phone
     ChatHistory.from_inbound_phone(inbound_phone)
+    callback_handlers = logs_callback.create_callback_handlers(uid)
     toolkit = tool_auth.build_tools(inbound_phone, callback_handlers)
 
     # Run
-    callback_handlers = logs_callback.create_callback_handlers(uid)
     agent_executor = create_agent_executor(
         toolkit, inbound_phone, callback_handlers
     )
