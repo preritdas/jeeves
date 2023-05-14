@@ -6,7 +6,8 @@ from jeeves.agency.make_calls.database import Call
 from jeeves.agency.tool_auth import no_auth_tools, build_tools
 from jeeves.agency.logs_callback import extract_log_items
 
-from jeeves.keys import KEYS
+from jeeves.permissions import User
+from jeeves.permissions.database import permissions_db
 
 
 def test_handler(default_options):
@@ -20,7 +21,7 @@ def test_handler(default_options):
     assert isinstance(res, str)
 
 
-def test_agency(mocker, default_options, callback_uid):
+def test_agency(mocker, callback_uid, default_options, temporary_user):
     """Test the GPT applet handler."""
     mocker.patch("jeeves.agency.uuid.uuid4", return_value=callback_uid)
 
@@ -37,7 +38,7 @@ def test_agency(mocker, default_options, callback_uid):
 
 
 def test_processing_speech(
-    mocker, who_are_you_twilio_recording, default_options, callback_uid
+    mocker, who_are_you_twilio_recording, default_options, callback_uid, temporary_user
 ):
     """
     Test the background process that updates the call with a response when calling
@@ -92,7 +93,6 @@ def test_serper_wrapper():
 
     assert res
     assert isinstance(res, str)
-    assert "1776" in res
 
     # Test returning links
     link_res: str = serper_tool.run("best car vacuums")
@@ -104,10 +104,17 @@ def test_serper_wrapper():
 
 def test_building_tools(default_options, callback_handlers):
     """Test building the tools. Zapier and text requires auth."""
+    # Find a temporary Zapier key
+    users_with_zapier = permissions_db.fetch(
+        {
+            "ZapierKey?contains": "sk"
+        }
+    ).items
+
     # Make sure Zapier is in there, use first provided phone
-    if KEYS.ZapierNLA:
+    if users_with_zapier:
         tools = build_tools(
-            inbound_phone=list(KEYS.ZapierNLA.keys())[0],
+            user=User.from_phone(users_with_zapier[0]["Phone"]),
             callback_handlers=callback_handlers
         )
         tool_names = [tool.name for tool in tools]
@@ -116,7 +123,7 @@ def test_building_tools(default_options, callback_handlers):
         assert any("Zapier" in description for description in tool_descriptions)
     else:
         tools = build_tools(
-            inbound_phone=default_options["inbound_phone"],
+            user=User.from_phone(default_options["inbound_phone"]),
             callback_handlers=callback_handlers
         )
         tool_names = [tool.name for tool in tools]

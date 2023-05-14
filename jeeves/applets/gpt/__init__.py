@@ -1,5 +1,6 @@
 """Interface for speaking with Jeeves as an applet."""
 from jeeves import utils
+from jeeves.permissions import User
 
 from jeeves.agency import generate_agent_response
 from jeeves.applets.gpt import completions
@@ -15,4 +16,5 @@ def handler(content: str, options: dict[str, str]) -> str:
         if agency_option.lower() in {"no", "false", "off"}:
             return completions.gpt_response(content)
 
-    return generate_agent_response(content, options["inbound_phone"])
+    user = User.from_phone(options["inbound_phone"])
+    return generate_agent_response(content, user)

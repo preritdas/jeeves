@@ -11,6 +11,7 @@ import re
 from jeeves import texts
 from jeeves import voice_tools as vt
 from jeeves.agency import generate_agent_response
+from jeeves.permissions import User
 from jeeves.agency.logs_callback import logger
 
 
@@ -48,13 +49,18 @@ def _process_speech(inbound_phone: str, audio_url: str, call_sid: str) -> VoiceR
 
     response = VoiceResponse()
 
-    # Generate raw response content
+    # Authenticate
+    user: User | None = User.from_phone(inbound_phone)
+
+    # Generate raw response content according to length and auth status
     if len(user_speech.split()) < 2:
         response_content = "Sir, please call me once more with more to say."
+    elif user is None:
+        response_content = "I don't recognize you. Please register with me first."
     else:
         response_content = generate_agent_response(
             content=user_speech,
-            inbound_phone=inbound_phone,
+            user=user,
             uid=f"inboundcall-{call_sid}"
         )
 

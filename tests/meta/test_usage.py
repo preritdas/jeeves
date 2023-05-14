@@ -28,8 +28,8 @@ def test_log_use():
     usage.usage_db.delete(key)
 
 
-def test_phone_to_name(user_git_pytest):
-    assert usage._phone_to_name(user_git_pytest["Phone"]) == user_git_pytest["Name"]
+def test_phone_to_name(temporary_user):
+    assert usage._phone_to_name(temporary_user["Phone"]) == temporary_user["Name"]
     assert usage._phone_to_name("11234567890") == "11234567890"
 
 

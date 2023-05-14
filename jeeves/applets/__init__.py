@@ -20,7 +20,6 @@ from jeeves.applets import gpt
 
 # Project
 from jeeves import utils
-from jeeves import permissions as perms
 
 
 @utils.app_handler(app_help="See a list of available apps.")
@@ -29,7 +28,6 @@ def handler(content: str, options: dict):
     accessible_apps: list[str] = [
         f"- {app}"
         for app in PROGRAMS.keys()
-        if perms.check_permissions(phone=options["inbound_phone"], app_name=app)
     ]
 
     available_apps = "\n".join(accessible_apps)

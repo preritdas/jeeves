@@ -19,7 +19,9 @@ import os
 import datetime as dt
 import pytz
 
-from jeeves.config import CONFIG
+from jeeves.permissions import User
+from jeeves.agency.chat_history import ChatHistory
+from jeeves.agency.chat_history import RecencyFilterer
 
 
 # ---- Model for prompting ----
@@ -85,27 +87,34 @@ class Prompt:
 current_dir = os.path.dirname(os.path.realpath(__file__))
 prompt_path = lambda name: os.path.join(current_dir, f"{name}.txt")
 
-def current_datetime():
-    timezone = pytz.timezone(CONFIG.General.default_timezone)
-    format_str = "%-I:%M%p on %A, %B %d, %Y"
-    return dt.datetime.now(timezone).strftime(format_str)
-
 # The reason these are stored in this Callable fashion is so the values are only
 # evaluated when the prompt is built. This is because the values may change over time,
 # ex. the date and time.
-PROMPT_INPUTS: dict[str, dict[str, Callable]] = {
-    "prefix": {
-        "current_datetime": current_datetime, 
-        "timezone": lambda: CONFIG.General.default_timezone
-    },
-    "format_instructions": {},
-    "suffix": {}
-}
+
+def build_prompt_inputs(user: User) -> dict[str, dict[str, Callable]]:
+    """Build the prompt inputs dictionary."""
+    assert user
+    
+    def get_current_datetime():
+        timezone = pytz.timezone(user.timezone)
+        format_str = "%-I:%M%p on %A, %B %d, %Y"
+        return dt.datetime.now(timezone).strftime(format_str)
+
+    return {
+        "prefix": {
+            "current_datetime": get_current_datetime, 
+            "timezone": lambda: user.timezone,
+            "my_name": lambda: user.name,
+            "address_me": lambda: "sir" if user.gender_male else "ma'am"
+        },
+        "format_instructions": {},
+        "suffix": {}
+    }
 
 
-def _build_prompt(name: str, **kwargs) -> Prompt:
+def _build_prompt(name: str, prompt_inputs: dict[str, dict[str, Callable]], **kwargs) -> Prompt:
     """Build the prompt with the given name. Pass in any inputs as kwargs."""
-    if name not in PROMPT_INPUTS:
+    if name not in prompt_inputs:
         raise ValueError(f"Prompt name {name} not found.")
 
     if not os.path.exists(prompt_path(name)):
@@ -116,7 +125,7 @@ def _build_prompt(name: str, **kwargs) -> Prompt:
 
     # Input dictionary will evaluate the functions in PROMPT_INPUTS[name]
     input_dict: dict[str, str] = {
-        var: PROMPT_INPUTS[name][var]() for var in PROMPT_INPUTS[name]
+        var: prompt_inputs[name][var]() for var in prompt_inputs[name]
     }
 
     # Add any kwargs to the input dictionary
@@ -125,10 +134,15 @@ def _build_prompt(name: str, **kwargs) -> Prompt:
     return Prompt(template=template, input_variables=input_dict)
 
 
-def build_prompts(chat_history: str) -> AgentPrompts:
+def build_prompts(user: User) -> AgentPrompts:
     """Build the prompts inserting any variables necessary."""
+    chat_history = ChatHistory.from_inbound_phone(user.phone).format_messages(
+        filterer=RecencyFilterer(5)
+    )
+    prompt_inputs = build_prompt_inputs(user)
+
     return AgentPrompts(
-        prefix=_build_prompt("prefix").build_prompt(),
-        format_instructions=_build_prompt("format_instructions").build_prompt(),
-        suffix=_build_prompt("suffix").build_prompt(chat_history=chat_history)
+        prefix=_build_prompt("prefix", prompt_inputs).build_prompt(),
+        format_instructions=_build_prompt("format_instructions", prompt_inputs).build_prompt(),
+        suffix=_build_prompt("suffix", prompt_inputs).build_prompt(chat_history=chat_history)
     )

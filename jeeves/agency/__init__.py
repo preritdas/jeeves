@@ -11,11 +11,12 @@ import datetime as dt
 
 from jeeves.keys import KEYS
 from jeeves.config import CONFIG
+from jeeves.permissions import User
 
 from jeeves.agency import tool_auth
 from jeeves.agency.chat_history.models import Message
 from jeeves.agency import logs_callback, prompts
-from jeeves.agency.chat_history import ChatHistory, RecencyFilterer
+from jeeves.agency.chat_history import ChatHistory
 
 
 # ---- Build the agent ----
@@ -37,15 +38,11 @@ llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, tempera
 
 def create_agent_executor(
     toolkit: list[Tool],
-    chat_history: ChatHistory,
+    user: User,
     callback_handlers: list[BaseCallbackHandler],
 ) -> AgentExecutor:
     """Create the agent given authenticated tools."""
-    agent_prompts: prompts.AgentPrompts = prompts.build_prompts(
-        chat_history=chat_history.format_messages(
-            filterer=RecencyFilterer(n_messages=5)
-        )
-    )
+    agent_prompts: prompts.AgentPrompts = prompts.build_prompts(user)
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
@@ -94,27 +91,30 @@ def run_agent(agent_executor: AgentExecutor, query: str, uid: str) -> str:
         return res
 
 
-def generate_agent_response(content: str, inbound_phone: str, uid: str = "") -> str:
+def generate_agent_response(content: str, user: User, uid: str = "") -> str:
     """Build tools, create executor, and run the agent. UID is optional."""
     # UID
     if not uid:
         uid = str(uuid.uuid4())
 
-    # Build chat history
-    chat_history = ChatHistory.from_inbound_phone(inbound_phone)
+    assert user
 
+    # Build chat history and toolkit using inbound phone
+    ChatHistory.from_inbound_phone(user.phone)
     callback_handlers = logs_callback.create_callback_handlers(uid)
-    toolkit = tool_auth.build_tools(inbound_phone, callback_handlers)
+    toolkit = tool_auth.build_tools(user, callback_handlers)
+
+    # Run
     agent_executor = create_agent_executor(
-        toolkit, chat_history, callback_handlers
+        toolkit, user, callback_handlers
     )
     response: str = run_agent(agent_executor, content, uid)
 
     # Save message to chats database
-    chat_history.add_message(
+    ChatHistory.from_inbound_phone(user.phone).add_message(
         Message(
             datetime=dt.datetime.now(pytz.timezone(CONFIG.General.default_timezone)),
-            inbound_phone=inbound_phone,
+            inbound_phone=user.phone,
             user_input=content,
             agent_response=response
         )

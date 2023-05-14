@@ -3,24 +3,7 @@ from jeeves import inbound
 from jeeves.parsing import InboundMessage
 
 
-def test_no_permissions(mocker, default_inbound):
-    mocker.patch("jeeves.inbound.texts.CONFIG.General.sandbox_mode", True)
-    mocker.patch("jeeves.inbound.usage.CONFIG.General.sandbox_mode", True)
-    mocker.patch("jeeves.inbound.permissions.check_permissions", return_value=False)
-
-    inbound_payload = {
-        **default_inbound,
-        "phone_number": "19283728192" 
-    }
-
-    res = inbound.main_handler(InboundMessage(**inbound_payload))
-
-    assert "you don't have permission" in res["response"]
-    assert not res["http"][0]
-    assert 200 <= res["http"][1] < 300
-
-
-def test_invalid_app(mocker, default_inbound):
+def test_invalid_app(mocker, default_inbound, temporary_user):
     mocker.patch("jeeves.inbound.texts.CONFIG.General.sandbox_mode", True)
     mocker.patch("jeeves.inbound.usage.CONFIG.General.sandbox_mode", True)
 
@@ -36,12 +19,12 @@ def test_invalid_app(mocker, default_inbound):
     assert 200 <= res["http"][1] < 300
 
 
-def test_run_app(mocker, user_git_pytest):
+def test_run_app(mocker, temporary_user):
     mocker.patch("jeeves.inbound.texts.CONFIG.General.sandbox_mode", True)
     mocker.patch("jeeves.inbound.usage.CONFIG.General.sandbox_mode", True)
 
     inbound_payload = {
-        "phone_number": user_git_pytest["Phone"],
+        "phone_number": temporary_user["Phone"],
         "body": "app: apps",
     }
 
@@ -52,12 +35,12 @@ def test_run_app(mocker, user_git_pytest):
     assert 200 <= res["http"][1] < 300
 
 
-def test_app_error_handling(mocker, user_git_pytest):
+def test_app_error_handling(mocker, temporary_user):
     mocker.patch("jeeves.inbound.texts.CONFIG.General.sandbox_mode", True)
     mocker.patch("jeeves.inbound.usage.CONFIG.General.sandbox_mode", True)
 
     inbound_payload = {
-        "phone_number": user_git_pytest["Phone"],
+        "phone_number": temporary_user["Phone"],
         "body": (
             "app: wordhunt\n"
             "options: width = notnumber; height = notnumber\n"

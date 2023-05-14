@@ -8,6 +8,7 @@ from langchain.agents.agent_toolkits import ZapierToolkit
 from langchain.callbacks.base import BaseCallbackHandler
 
 from jeeves.keys import KEYS
+from jeeves.permissions import User
 
 from jeeves.agency import retrieval
 from jeeves.agency import news
@@ -110,28 +111,23 @@ no_auth_tools: list[BaseTool] = [
 
 
 def build_tools(
-    inbound_phone: str, callback_handlers: list[BaseCallbackHandler]
-) -> list[Tool]:
+    user: User, callback_handlers: list[BaseCallbackHandler]
+) -> list[BaseTool]:
     """Build all authenticated tools given a phone number."""
-    added_tools = []
-
-    # Standardize phone number when checking auth
-    if inbound_phone.startswith("+"):
-        inbound_phone = inbound_phone[1:]
+    added_tools: list[BaseTool] = []
 
     # Zapier
-    if KEYS.ZapierNLA and inbound_phone in KEYS.ZapierNLA:
-        zapier_key = KEYS.ZapierNLA[inbound_phone]
-        zapier_wrapper = ZapierNLAWrapper(zapier_nla_api_key=zapier_key)
+    if user.zapier_key:
+        zapier_wrapper = ZapierNLAWrapper(zapier_nla_api_key=user.zapier_key)
         zapier_toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier_wrapper)
         added_tools.extend(zapier_toolkit.get_tools())
 
     # Text messages
-    TextToolClass = send_texts.create_text_message_tool(inbound_phone)
+    TextToolClass = send_texts.create_text_message_tool(user.phone)
     added_tools.append(TextToolClass())
 
     # User longterm memory
-    added_tools.extend(create_user_memory_tools(inbound_phone))
+    added_tools.extend(create_user_memory_tools(user.phone))
 
     # Add all tools together
     tools = no_auth_tools + added_tools
