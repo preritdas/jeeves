@@ -20,7 +20,7 @@ def test_handler(default_options):
     assert isinstance(res, str)
 
 
-def test_agency(mocker, default_options, callback_uid):
+def test_agency(mocker, callback_uid, default_options, temporary_user):
     """Test the GPT applet handler."""
     mocker.patch("jeeves.agency.uuid.uuid4", return_value=callback_uid)
 
@@ -37,7 +37,7 @@ def test_agency(mocker, default_options, callback_uid):
 
 
 def test_processing_speech(
-    mocker, who_are_you_twilio_recording, default_options, callback_uid
+    mocker, who_are_you_twilio_recording, default_options, callback_uid, temporary_user
 ):
     """
     Test the background process that updates the call with a response when calling
