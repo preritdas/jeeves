@@ -29,7 +29,7 @@ def main_handler(
         else texts.send_message(response, sender)
 
     if not user:
-        text_response = ("You are not registered with me, sir.")
+        text_response = ("You are not registered with me.")
         respond(text_response)
         return {"response": text_response, "http": ("", 204)}
 
