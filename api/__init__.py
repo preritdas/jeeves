@@ -10,7 +10,10 @@ from fastapi import FastAPI
 from api import text_inbound, voice_inbound, telegram_inbound, voice_outbound
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Jeeves Backend API",
+    description="Full backend powering Jeeves. Note that ALL routes are protected."
+)
 
 
 @app.get("/", status_code=200)
