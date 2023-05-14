@@ -3,6 +3,7 @@ from deta import Deta
 from pydantic import BaseModel, validator
 
 from typing import Self
+import time
 
 from jeeves.keys import KEYS
 from jeeves.utils import validate_phone_number
@@ -58,7 +59,12 @@ class User(BaseModel):
     @classmethod
     def from_phone(cls, phone: str) -> Self | None:
         """Get a user by phone number. Returns None if not found."""
-        items = permissions_db.fetch({"Phone": validate_phone_number(phone)}).items
+        try:
+            items = permissions_db.fetch({"Phone": validate_phone_number(phone)}).items
+        except Exception as e:
+            if "Request-sent" in str(e):
+                time.sleep(0.5)
+                items = permissions_db.fetch({"Phone": validate_phone_number(phone)}).items
 
         if not items:
             return None
@@ -85,7 +91,12 @@ class User(BaseModel):
         """
         Get a user by Telegram ID. Returns None if not found.
         """
-        items = permissions_db.fetch({"TelegramID": telegram_id}).items
+        try:
+            items = permissions_db.fetch({"TelegramID": telegram_id}).items
+        except Exception as e:
+            if "Request-sent" in str(e):
+                time.sleep(0.5)
+                items = permissions_db.fetch({"TelegramID": telegram_id}).items
 
         if not items:
             return None
