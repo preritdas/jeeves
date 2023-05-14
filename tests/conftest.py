@@ -8,7 +8,7 @@ import random
 
 from jeeves.config import CONFIG
 from jeeves import usage  # fixture for temporary logs for report
-from jeeves import permissions  # fixtures for temporary users
+from jeeves.permissions.database import permissions_db  # fixtures for temporary users
 
 from jeeves.agency.make_calls.database import Call
 from jeeves.agency.logs_callback import create_callback_handlers
@@ -36,80 +36,26 @@ def default_options(default_inbound) -> dict[str, str]:
 
 
 @pytest.fixture(scope="session")
-def user_only_groceries() -> dict[str, str]:
-    """
-    Temporary user who only has access to the groceries app.
-
-    Test calling another app with only these permissions to test
-    permissions edge case.
-    """
-    first_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
-    last_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
-
-    phone = "".join(
-        [str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) for _ in range(10)]
-    )
-
-    user_attrs = {
-        "Name": f"{first_name} {last_name}",
-        "Permissions": "groceries",
-        "Phone": phone
-    }
-
-    key = permissions.permissions_db.put(user_attrs)["key"]
-    yield user_attrs
-    permissions.permissions_db.delete(key)
-
-
-@pytest.fixture(scope="session")
-def user_git_pytest(default_inbound) -> dict[str, str]:
+def temporary_user(default_inbound) -> dict[str, str]:
     """Temporary random user with maximum permissions."""
     first_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
     last_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
 
     user_attrs = {
         "Name": f"{first_name} {last_name}",
-        "Permissions": "all",
-        "Phone": default_inbound["phone_number"]
+        "Phone": default_inbound["phone_number"],
+        "Timezone": "EST",
+        "UseApplets": True,
+        "GenderMale": True,
+        "ZapierKey": None,
+        "TelegramID": None
     }
 
-    key = permissions.permissions_db.put(user_attrs)["key"]
+    key = permissions_db.put(user_attrs)["key"]
     yield user_attrs
-    permissions.permissions_db.delete(key)
 
-
-@pytest.fixture(scope="session")
-def users_dup_namephone() -> list[dict[str, str]]:
-    """
-    Temporary users with the same name and phone number to test
-    handling duplicate entries.
-    """
-    first_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
-    last_name = "".join(random.sample(string.ascii_lowercase, 5)).title()
-
-    phone_number = "".join(
-        [str(random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])) for _ in range(10)]
-    )
-
-    users = [
-        {
-            "Name": " ".join([first_name, last_name]),
-            "Permissions": "groceries",
-            "Phone": phone_number
-        },
-        {
-            "Name": " ".join([first_name, last_name]),
-            "Permissions": "apps",
-            "Phone": phone_number
-        }
-    ]
-
-    keys = [permissions.permissions_db.put(payload)["key"] for payload in users]
-    yield users
-
-    # Remove the temporary entries
-    for key in keys:
-        permissions.permissions_db.delete(key)
+    # Delete the user
+    permissions_db.delete(key)
 
 
 @pytest.fixture
