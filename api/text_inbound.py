@@ -27,7 +27,7 @@ def route_to_handler(inbound_sms_content: parsing.InboundMessage) -> None:
     # Otherwise, process in a thread
     process_inbound = threading.Thread(
         target=inbound.main_handler,
-        kwargs={"inbound_sms_content": inbound_sms_content}
+        kwargs={"inbound_message": inbound_sms_content}
     )
     process_inbound.start()
 
