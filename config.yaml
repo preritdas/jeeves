@@ -19,3 +19,4 @@ GPT:
 
 Telegram:
   voice_note_responses: false  # when spoken to, include a voice note response
+  threaded_inbound: true  # process Telegram in a thread. This should always be on, except for isolated test cases.

@@ -113,8 +113,12 @@ async def handle_inbound_telegram(request: Request) -> str:
         send_message(inbound_id, "I'm sorry, sir, but I don't understand that yet.")
         return ""
 
-    # Process the inbound message in a thread
+    # Don't process the inbound message in a thread if configured
+    if not CONFIG.Telegram.threaded_inbound:
+        process_telegram_inbound(**process_kwargs)
+        return ""
+
+    # Otherwise, process in a thread
     process_thread = Thread(target=process_telegram_inbound, kwargs=process_kwargs)
     process_thread.start()
-
     return ""

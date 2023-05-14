@@ -59,7 +59,9 @@ def test_telegram_text(mocker):
 
 
 def test_telegram_endpoint(mocker, test_client):
+    mocker.patch("api.telegram_inbound.CONFIG.Telegram.threaded_inbound", False)
     mocker.patch("api.telegram_inbound.CONFIG.General.sandbox_mode", True)
+
     text_payload = {
         "message": {
             "from": {"id": 000000000},
