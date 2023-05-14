@@ -68,7 +68,10 @@ def process_telegram_inbound(
 
     # If the user is not recognized, return a message
     if not user:
-        response = "My apologies, sir, but it appears I don't recognize you."
+        response = (
+            "My apologies, but it appears I don't recognize you. "
+            f"Your telegram ID is {inbound_id}."
+        )
         send_message(inbound_id, response)
         return response
 
