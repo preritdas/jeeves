@@ -51,11 +51,11 @@ def test_apps_threaded(test_client, default_inbound, mocker):
 def test_telegram_text(mocker):
     mocker.patch("api.telegram_inbound.CONFIG.General.sandbox_mode", True)
 
-    auth_id = int(list(KEYS.Telegram.id_phone_mapping.keys())[0])
-    response = process_telegram_inbound(auth_id, "Hi.")
+    response = process_telegram_inbound(1101010101, "Hi.")
 
     assert response
     assert isinstance(response, str)
+    assert "don't recognize" in response
 
 
 def test_telegram_endpoint(mocker, test_client):
