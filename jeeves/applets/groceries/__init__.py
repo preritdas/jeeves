@@ -1,13 +1,18 @@
 """Groceries app."""
+from deta import Deta
+
 import datetime as dt
 import pytz
 
 from jeeves.utils import app_handler
 from jeeves.config import CONFIG
+from jeeves.keys import KEYS
 
 from jeeves.applets.groceries import classification
 from jeeves.applets.groceries.utils import SETUPS
-from jeeves.permissions import deta_client
+
+
+deta_client = Deta(KEYS.Deta.project_key)
 
 
 APP_HELP = "Organize your grocery list into categories."
