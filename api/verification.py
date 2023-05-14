@@ -22,3 +22,13 @@ async def validate_twilio_request(request: Request) -> bool:
 
     # Validate the request
     return twilio_validator.validate(url, form, request.headers["X-Twilio-Signature"])
+
+
+async def validate_telegram_request(request: Request) -> bool:
+    """Use the auth token and request url and form to verify."""
+    if "X-Telegram-Bot-Api-Secret-Token" not in request.headers:
+        return False
+
+    # Validate the request
+    return request.headers["X-Telegram-Bot-Api-Secret-Token"] == \
+        KEYS.Telegram.api_secret_token
