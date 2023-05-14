@@ -2,6 +2,7 @@
 from fastapi import Request
 from twilio.request_validator import RequestValidator
 
+from jeeves.texts import BASE_URL
 from jeeves.keys import KEYS
 
 
@@ -15,7 +16,7 @@ async def validate_twilio_request(request: Request) -> bool:
         return False
 
     # Get the request url
-    url = str(request.url)
+    url = BASE_URL + request.url.path
 
     # Get the request form
     form = await request.form()
