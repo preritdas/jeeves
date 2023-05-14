@@ -140,16 +140,15 @@ class PapertrailModel(BaseModel):
     port: int
 
 
-# class TelegramModel(BaseModel):
-#     """
-#     A Pydantic model for Telegram configurations.
+class TelegramModel(BaseModel):
+    """
+    A Pydantic model for Telegram configurations.
 
-#     Attributes:
-#         bot_token (str): The Telegram bot token.
-#         id_phone_mapping (dict[str, str]): A dictionary mapping ID to phone number.
-#     """
-#     bot_token: str
-#     id_phone_mapping: dict[int, str]
+    Attributes:
+        bot_token (str): The Telegram bot token.
+        id_phone_mapping (dict[str, str]): A dictionary mapping ID to phone number.
+    """
+    bot_token: str
 
 
 class Keys(BaseModel):
@@ -183,4 +182,5 @@ class Keys(BaseModel):
     UploadIO: UploadIOModel
     Transcription: TranscriptionModel
     Papertrail: PapertrailModel
+    Telegram: TelegramModel
     
