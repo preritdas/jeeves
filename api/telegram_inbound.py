@@ -1,8 +1,10 @@
 """Routes to handle inbound messages (text and voice) from Telegram."""
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Response
 import requests
 
 from threading import Thread
+
+from api.verification import validate_telegram_request
 
 from jeeves.keys import KEYS
 from jeeves.config import CONFIG
@@ -99,6 +101,10 @@ async def handle_inbound_telegram(request: Request) -> str:
     """
     Handle inbound messages from Telegram.
     """
+    # Validate the request
+    if not await validate_telegram_request(request):
+        return Response(status_code=401)
+
     req = await request.json()
     inbound_id = int(req["message"]["from"]["id"])
 
