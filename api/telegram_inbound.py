@@ -6,8 +6,8 @@ from threading import Thread
 
 from jeeves.keys import KEYS
 from jeeves.config import CONFIG
+from jeeves.permissions import User
 
-from jeeves.utils import validate_phone_number
 from jeeves.agency import generate_agent_response
 from jeeves.voice_tools.transcribe import transcribe_telegram_file_id
 from jeeves.voice_tools.speak import speak_jeeves
@@ -64,14 +64,10 @@ def process_telegram_inbound(
         raise ValueError("You must provide either text or voice.")
 
     # Try to get the phone number from the inbound ID
-    recognized_user: str = KEYS.Telegram.id_phone_mapping.get(inbound_id, "")
-
-    # If user is recognized, use inbound model to validate the phone number
-    if recognized_user:
-        recognized_user = validate_phone_number(recognized_user)
+    user: User | None = User.from_telegram_id(inbound_id)
 
     # If the user is not recognized, return a message
-    if not recognized_user:
+    if not user:
         response = "My apologies, sir, but it appears I don't recognize you."
         send_message(inbound_id, response)
         return response
@@ -81,7 +77,7 @@ def process_telegram_inbound(
 
     # Generate and catch errors
     try:
-        response = generate_agent_response(text, recognized_user)
+        response = generate_agent_response(text, user.phone)
     except Exception as e:
         response = f"Unfortunately, that failed. {e}"
 
