@@ -1,3 +1,4 @@
-"""Jeeves' ability to make and handle outbound calls."""
-from jeeves.agency.make_calls.routes import router
+"""
+Jeeves' ability to make and handle outbound calls. Routes are defined in the API module.
+"""
 from jeeves.agency.make_calls.call_tool import CallTool
