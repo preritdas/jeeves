@@ -91,9 +91,8 @@ prompt_path = lambda name: os.path.join(current_dir, f"{name}.txt")
 # evaluated when the prompt is built. This is because the values may change over time,
 # ex. the date and time.
 
-def build_prompt_inputs(inbound_phone: str) -> dict[str, dict[str, Callable]]:
+def build_prompt_inputs(user: User) -> dict[str, dict[str, Callable]]:
     """Build the prompt inputs dictionary."""
-    user = User.from_phone(inbound_phone)
     assert user
     
     def get_current_datetime():
@@ -135,12 +134,12 @@ def _build_prompt(name: str, prompt_inputs: dict[str, dict[str, Callable]], **kw
     return Prompt(template=template, input_variables=input_dict)
 
 
-def build_prompts(inbound_phone: str) -> AgentPrompts:
+def build_prompts(user: User) -> AgentPrompts:
     """Build the prompts inserting any variables necessary."""
-    chat_history = ChatHistory.from_inbound_phone(inbound_phone).format_messages(
+    chat_history = ChatHistory.from_inbound_phone(user.phone).format_messages(
         filterer=RecencyFilterer(5)
     )
-    prompt_inputs = build_prompt_inputs(inbound_phone)
+    prompt_inputs = build_prompt_inputs(user)
 
     return AgentPrompts(
         prefix=_build_prompt("prefix", prompt_inputs).build_prompt(),

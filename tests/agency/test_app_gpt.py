@@ -6,7 +6,7 @@ from jeeves.agency.make_calls.database import Call
 from jeeves.agency.tool_auth import no_auth_tools, build_tools
 from jeeves.agency.logs_callback import extract_log_items
 
-from jeeves.keys import KEYS
+from jeeves.permissions import User
 from jeeves.permissions.database import permissions_db
 
 
@@ -114,7 +114,7 @@ def test_building_tools(default_options, callback_handlers):
     # Make sure Zapier is in there, use first provided phone
     if users_with_zapier:
         tools = build_tools(
-            inbound_phone=users_with_zapier[0]["Phone"],
+            user=User.from_phone(users_with_zapier[0]["Phone"]),
             callback_handlers=callback_handlers
         )
         tool_names = [tool.name for tool in tools]
@@ -123,7 +123,7 @@ def test_building_tools(default_options, callback_handlers):
         assert any("Zapier" in description for description in tool_descriptions)
     else:
         tools = build_tools(
-            inbound_phone=default_options["inbound_phone"],
+            user=User.from_phone(default_options["inbound_phone"]),
             callback_handlers=callback_handlers
         )
         tool_names = [tool.name for tool in tools]

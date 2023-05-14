@@ -77,7 +77,7 @@ def process_telegram_inbound(
 
     # Generate and catch errors
     try:
-        response = generate_agent_response(text, user.phone)
+        response = generate_agent_response(text, user)
     except Exception as e:
         response = f"Unfortunately, that failed. {e}"
 

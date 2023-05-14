@@ -60,7 +60,7 @@ def _process_speech(inbound_phone: str, audio_url: str, call_sid: str) -> VoiceR
     else:
         response_content = generate_agent_response(
             content=user_speech,
-            inbound_phone=inbound_phone,
+            user=user,
             uid=f"inboundcall-{call_sid}"
         )
 

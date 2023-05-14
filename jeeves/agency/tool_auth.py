@@ -111,13 +111,10 @@ no_auth_tools: list[BaseTool] = [
 
 
 def build_tools(
-    inbound_phone: str, callback_handlers: list[BaseCallbackHandler]
+    user: User, callback_handlers: list[BaseCallbackHandler]
 ) -> list[BaseTool]:
     """Build all authenticated tools given a phone number."""
     added_tools: list[BaseTool] = []
-
-    # Auth
-    user = User.from_phone(inbound_phone)
 
     # Zapier
     if user.zapier_key:
@@ -126,11 +123,11 @@ def build_tools(
         added_tools.extend(zapier_toolkit.get_tools())
 
     # Text messages
-    TextToolClass = send_texts.create_text_message_tool(inbound_phone)
+    TextToolClass = send_texts.create_text_message_tool(user.phone)
     added_tools.append(TextToolClass())
 
     # User longterm memory
-    added_tools.extend(create_user_memory_tools(inbound_phone))
+    added_tools.extend(create_user_memory_tools(user.phone))
 
     # Add all tools together
     tools = no_auth_tools + added_tools
