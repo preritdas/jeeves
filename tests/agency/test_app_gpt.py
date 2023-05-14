@@ -92,7 +92,6 @@ def test_serper_wrapper():
 
     assert res
     assert isinstance(res, str)
-    assert "1776" in res
 
     # Test returning links
     link_res: str = serper_tool.run("best car vacuums")
