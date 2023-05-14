@@ -7,6 +7,7 @@ from jeeves.agency.tool_auth import no_auth_tools, build_tools
 from jeeves.agency.logs_callback import extract_log_items
 
 from jeeves.keys import KEYS
+from jeeves.permissions.database import permissions_db
 
 
 def test_handler(default_options):
@@ -103,10 +104,17 @@ def test_serper_wrapper():
 
 def test_building_tools(default_options, callback_handlers):
     """Test building the tools. Zapier and text requires auth."""
+    # Find a temporary Zapier key
+    users_with_zapier = permissions_db.fetch(
+        {
+            "ZapierKey?contains": "sk"
+        }
+    ).items
+
     # Make sure Zapier is in there, use first provided phone
-    if KEYS.ZapierNLA:
+    if users_with_zapier:
         tools = build_tools(
-            inbound_phone=list(KEYS.ZapierNLA.keys())[0],
+            inbound_phone=users_with_zapier[0]["Phone"],
             callback_handlers=callback_handlers
         )
         tool_names = [tool.name for tool in tools]
