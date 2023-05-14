@@ -79,3 +79,30 @@ class User(BaseModel):
             zapier_key=user["ZapierKey"],
             telegram_id=user["TelegramID"]
         )
+
+    @classmethod
+    def from_telegram_id(cls, telegram_id: int) -> Self | None:
+        """
+        Get a user by Telegram ID. Returns None if not found.
+        """
+        items = permissions_db.fetch({"TelegramID": telegram_id}).items
+
+        if not items:
+            return None
+        
+        if len(items) > 1:
+            raise ValueError(
+                f"Multiple users found with the same Telegram ID. "
+                f"This is almost certainly an error."
+            )
+        
+        user = items[0]
+        return cls(
+            name=user["Name"],
+            gender_male=user["GenderMale"],
+            phone=user["Phone"],
+            timezone=user["Timezone"],
+            use_applets=user["UseApplets"],
+            zapier_key=user["ZapierKey"],
+            telegram_id=user["TelegramID"]
+        )
