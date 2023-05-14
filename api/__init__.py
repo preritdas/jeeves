@@ -7,11 +7,13 @@ endpoint.
 from fastapi import FastAPI
 
 # Routers
-from api import text_inbound, voice_inbound, telegram_inbound
-from jeeves.agency import make_calls
+from api import text_inbound, voice_inbound, telegram_inbound, voice_outbound
 
 
-app = FastAPI()
+app = FastAPI(
+    title="Jeeves Backend API",
+    description="Full backend powering Jeeves. Note that ALL routes are protected."
+)
 
 
 @app.get("/", status_code=200)
@@ -26,5 +28,5 @@ app.include_router(
 )
 app.include_router(voice_inbound.router, prefix="/voice", tags=["Voice Inbound"])
 app.include_router(
-    make_calls.router, prefix="/voice/outbound", tags=["Voice Outbound Calls"]
+    voice_outbound.router, prefix="/voice/outbound", tags=["Voice Outbound Calls"]
 )

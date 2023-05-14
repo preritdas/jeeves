@@ -5,6 +5,8 @@ from twilio.base.exceptions import TwilioRestException
 
 from urllib.parse import urlencode
 
+from api.verification import validate_twilio_request
+
 from jeeves import voice_tools as vt
 from jeeves.texts import twilio_client, BASE_URL
 
@@ -90,7 +92,12 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
 
 
 @router.post("/handler")
-async def handler(call_id: str):
+async def handler(request: Request, call_id: str):
+    """Write doc."""
+    # Validate the request
+    if not await validate_twilio_request(request):
+        return Response(status_code=401)
+
     twiml = VoiceResponse()
     current_call = db.Call.from_call_id(call_id)
 
@@ -119,6 +126,11 @@ async def handler(call_id: str):
 
 @router.post("/respond")
 async def respond(request: Request, call_id: str, background_tasks: BackgroundTasks):
+    """Write doc."""
+    # Validate the request
+    if not await validate_twilio_request(request):
+        return Response(status_code=401)
+
     twiml = VoiceResponse()
 
     # Grab previous conversations and the user's voice input from the request
