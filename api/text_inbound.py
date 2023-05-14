@@ -1,6 +1,6 @@
 """Handle inbound text messages."""
 # External
-from fastapi import Form, APIRouter, Request
+from fastapi import Form, APIRouter, Request, Response
 
 # Local
 import threading
@@ -40,7 +40,7 @@ async def main_handler_wrapper(request: Request, From: str = Form(...), Body: st
     """Handle the inbound, routing it to the handler."""
     # Validate the request
     if not await validate_twilio_request(request):
-        return "Verification failed."
+        return Response(status_code=401)
 
     # Validate the data
     inbound_model = parsing.InboundMessage(phone_number=From, body=Body)
