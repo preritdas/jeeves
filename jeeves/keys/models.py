@@ -3,7 +3,7 @@ This module defines Pydantic models for validating a YAML configuration file con
 for various services such as Twilio, Deta, HumorAPI, OpenWeatherMap, OpenAI, GoogleSerper, WolframAlpha,
 NewsAPI, ElevenLabs, UploadIO, and Transcription.
 """
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 
 class TwilioModel(BaseModel):
@@ -84,14 +84,14 @@ class WolframAlphaModel(BaseModel):
     app_id: str
 
 
-class NewsAPIModel(BaseModel):
-    """
-    A Pydantic model for NewsAPI configurations.
+# class NewsAPIModel(BaseModel):
+#     """
+#     A Pydantic model for NewsAPI configurations.
 
-    Attributes:
-        api_key (str): The NewsAPI API key.
-    """
-    api_key: str
+#     Attributes:
+#         api_key (str): The NewsAPI API key.
+#     """
+#     api_key: str
 
 
 class ElevenLabsModel(BaseModel):
@@ -140,16 +140,16 @@ class PapertrailModel(BaseModel):
     port: int
 
 
-class TelegramModel(BaseModel):
-    """
-    A Pydantic model for Telegram configurations.
+# class TelegramModel(BaseModel):
+#     """
+#     A Pydantic model for Telegram configurations.
 
-    Attributes:
-        bot_token (str): The Telegram bot token.
-        id_phone_mapping (dict[str, str]): A dictionary mapping ID to phone number.
-    """
-    bot_token: str
-    id_phone_mapping: dict[int, str]
+#     Attributes:
+#         bot_token (str): The Telegram bot token.
+#         id_phone_mapping (dict[str, str]): A dictionary mapping ID to phone number.
+#     """
+#     bot_token: str
+#     id_phone_mapping: dict[int, str]
 
 
 class Keys(BaseModel):
@@ -183,19 +183,4 @@ class Keys(BaseModel):
     UploadIO: UploadIOModel
     Transcription: TranscriptionModel
     Papertrail: PapertrailModel
-    Telegram: TelegramModel
-
-    # Optional keys (Optional features and inactive applets/features)
-    ZapierNLA: dict[str, str] | None
-    NewsAPI: NewsAPIModel | None
     
-    @validator("ZapierNLA")
-    def validate_zapier(cls, v):
-        """Check for string types."""
-        phones = list(v.keys())
-        assert all(isinstance(phone, str) for phone in phones)
-        
-        api_keys = list(v.values())
-        assert all(isinstance(key, str) for key in api_keys)
-        
-        return v
