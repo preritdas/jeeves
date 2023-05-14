@@ -93,7 +93,13 @@ def update_call_with_response(call_id: str, call_sid: str, user_speech: str) -> 
 
 @router.post("/handler")
 async def handler(request: Request, call_id: str):
-    """Write doc."""
+    """
+    This route will be called by Twilio on two occasions:
+    1. When the user first picks up the phone
+    2. When the user responds to Jeeves
+
+    This route will gather the user's voice input and redirect to /respond.
+    """
     # Validate the request
     if not await validate_twilio_request(request):
         return Response(status_code=401)
@@ -126,7 +132,13 @@ async def handler(request: Request, call_id: str):
 
 @router.post("/respond")
 async def respond(request: Request, call_id: str, background_tasks: BackgroundTasks):
-    """Write doc."""
+    """
+    This route will be called by Twilio when the user responds to Jeeves, having
+    been redirected by /handler. This route will accept the user's transcribed
+    input (transcribed by Twilio) and immediately respond to Twilio to prevent
+    a timeout. It will respond with a <Pause> tag to keep the user on the line.
+    It then starts a background task to update the call with Jeeves' response.
+    """
     # Validate the request
     if not await validate_twilio_request(request):
         return Response(status_code=401)
