@@ -10,13 +10,23 @@ from jeeves.keys import KEYS
 twilio_validator = RequestValidator(KEYS.Twilio.auth_token)
 
 
-async def validate_twilio_request(request: Request) -> bool:
-    """Use the auth token and request url and form to verify."""
+async def validate_twilio_request(request: Request, path: str = "") -> bool:
+    """
+    Use the auth token and request url and form to verify.
+    
+    Args:
+        request (Request): The request to validate.
+        path (str, optional): Optional path. Provide this for outbound calls as 
+            the call id at the end is used when Twilio hashes.
+    """
     if "X-Twilio-Signature" not in request.headers:
         return False
 
     # Get the request url
-    url = BASE_URL + request.url.path
+    if not path:
+        path = request.url.path
+
+    url = BASE_URL + path
 
     # Get the request form
     form = await request.form()

@@ -101,7 +101,11 @@ async def handler(request: Request, call_id: str):
     This route will gather the user's voice input and redirect to /respond.
     """
     # Validate the request
-    if not await validate_twilio_request(request):
+    validation = await validate_twilio_request(
+        request, path=f"/voice/outbound/handler?call_id={call_id}"
+    )
+
+    if not validation:
         return Response(status_code=401)
 
     twiml = VoiceResponse()
@@ -140,7 +144,11 @@ async def respond(request: Request, call_id: str, background_tasks: BackgroundTa
     It then starts a background task to update the call with Jeeves' response.
     """
     # Validate the request
-    if not await validate_twilio_request(request):
+    validation = await validate_twilio_request(
+        request, path=f"/voice/outbound/respond?call_id={call_id}"
+    )
+
+    if not validation:
         return Response(status_code=401)
 
     twiml = VoiceResponse()
