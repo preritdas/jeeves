@@ -65,7 +65,9 @@ class User(BaseModel):
         to refresh it and update the access token both in the User object 
         and in the database.
         """
-        if access_token_expired(values["zapier_access_token"]):
+        token = values["zapier_access_token"]
+
+        if token and access_token_expired(token):
             values["zapier_access_token"] = refresh_zapier_access_token(
                 values["zapier_refresh_token"]
             )
