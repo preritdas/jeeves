@@ -4,8 +4,6 @@ description: Communicate with Jeeves through Telegram
 
 # 📱 Telegram
 
-## Setup
-
 This is super easy.&#x20;
 
 1. Add Jeeves, @therealjeevesbot.
