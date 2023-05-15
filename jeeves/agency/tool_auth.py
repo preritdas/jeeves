@@ -118,7 +118,9 @@ def build_tools(
 
     # Zapier
     if user.zapier_key:
-        zapier_wrapper = ZapierNLAWrapper(zapier_nla_api_key=user.zapier_key)
+        zapier_wrapper = ZapierNLAWrapper(
+            zapier_nla_oauth_access_token=user.zapier_access_token
+        )
         zapier_toolkit = ZapierToolkit.from_zapier_nla_wrapper(zapier_wrapper)
         added_tools.extend(zapier_toolkit.get_tools())
 
