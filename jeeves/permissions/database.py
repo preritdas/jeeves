@@ -111,6 +111,8 @@ class User(BaseModel):
             if "Request-sent" in str(e):
                 time.sleep(0.5)
                 items = permissions_db.fetch({"Phone": validate_phone_number(phone)}).items
+            
+            raise e  # re-raise the exception if it's not a Request-sent error
 
         if not items:
             return None
