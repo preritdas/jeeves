@@ -4,6 +4,7 @@ import requests
 from functools import wraps
 from json import JSONDecodeError
 
+from jeeves.errors import ZapierAuthenticationError
 from jeeves.keys import KEYS
 
 
@@ -88,7 +89,7 @@ def access_token_expired(access_token: str) -> bool:
     try:
         res_json = res.json()
     except JSONDecodeError as e:
-        raise ValueError(
+        raise ZapierAuthenticationError(
             "Failed to check if access token is expired. Response code "
             f"{res.status_code}, content: {res.content}. JSON decode error: {e}"
         )
@@ -98,6 +99,12 @@ def access_token_expired(access_token: str) -> bool:
 
     if "success" in res_json and res_json["success"]:  # res_json["success"] is True
         return False
+
+    raise ZapierAuthenticationError(
+        "Failed to check if access token is expired. Response code "
+        f"{res.status_code}, content: {res.content}. Unknown case - error not found "
+        "in response, nor success."
+    )
 
 
 def refresh_zapier_access_token(refresh_token: str) -> str:
