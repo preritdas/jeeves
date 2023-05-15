@@ -117,7 +117,7 @@ def build_tools(
     added_tools: list[BaseTool] = []
 
     # Zapier
-    if user.zapier_key:
+    if user.zapier_access_token:
         zapier_wrapper = ZapierNLAWrapper(
             zapier_nla_oauth_access_token=user.zapier_access_token
         )
