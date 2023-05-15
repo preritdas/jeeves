@@ -96,7 +96,7 @@ def test_telegram_endpoint(mocker, test_client):
 
     text_payload = {
         "message": {
-            "from": {"id": 000000000},
+            "from": {"id": 999999999},
             "text": "Hi."
         }
     }
