@@ -30,7 +30,8 @@ class User(BaseModel):
     phone: str
     timezone: str
     use_applets: bool
-    zapier_key: str | None = None
+    zapier_access_token: str | None = None
+    zapier_refresh_token: str | None = None
     telegram_id: int | None = None
 
     @validator("phone")
@@ -82,7 +83,8 @@ class User(BaseModel):
             phone=user["Phone"],
             timezone=user["Timezone"],
             use_applets=user["UseApplets"],
-            zapier_key=user["ZapierKey"],
+            zapier_access_token=user["ZapierAccessToken"],
+            zapier_refresh_token=user["ZapierRefreshToken"],
             telegram_id=user["TelegramID"]
         )
 
