@@ -152,6 +152,20 @@ class TelegramModel(BaseModel):
     api_secret_token: str
 
 
+class ZapierModel(BaseModel):
+    """
+    Model for Zapier providership.
+    
+    Attributes:
+        provider_id (str): The provider ID.
+        client_id (str): The client ID.
+        client_secret (str): The client secret key.
+    """
+    provider_id: str
+    client_id: str
+    client_secret: str
+
+
 class Keys(BaseModel):
     """
     A Pydantic model for validating all API keys configurations.
@@ -170,6 +184,8 @@ class Keys(BaseModel):
         UploadIO (UploadIOModel): The UploadIO configuration model.
         Transcription (TranscriptionModel): The Transcription configuration model.
         Papertrail (PapertrailModel): The Papertrail logging configuration model.
+        Telegram (TelegramModel): The Telegram configuration model.
+        Zapier (ZapierModel): The Zapier configuration model.
     """
     # Required keys (tests and active applets)
     Twilio: TwilioModel
@@ -184,4 +200,5 @@ class Keys(BaseModel):
     Transcription: TranscriptionModel
     Papertrail: PapertrailModel
     Telegram: TelegramModel
+    Zapier: ZapierModel
     

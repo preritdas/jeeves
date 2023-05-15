@@ -1,5 +1,9 @@
 """Utilities for everything."""
+import requests
+
 from functools import wraps
+
+from jeeves.keys import KEYS
 
 
 def app_handler(app_help: str, app_options: dict = {}):
@@ -66,3 +70,38 @@ REQUEST_HEADERS: dict[str, str] = {
     "Accept": "text/html",
     "Referer": "https://www.google.com",
 }
+
+
+# ---- Zapier ----
+
+def access_token_expired(access_token: str) -> bool:
+    """Determine if an access token has expired."""
+    url = "https://nla.zapier.com/api/v1/check"
+    res = requests.get(
+        url,
+        headers={
+            "Authorization": f"Bearer {access_token}",
+        },
+    )
+
+    return not res.json()["success"]
+
+
+def refresh_zapier_access_token(refresh_token: str) -> str:
+    """Generate a new access token if the old one is expired."""
+    url = "https://nla.zapier.com/oauth/token/"
+    res = requests.post(
+        url,
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data={
+            "client_id": KEYS.Zapier.client_id,
+            "client_secret": KEYS.Zapier.client_secret,
+            "refresh_token": refresh_token,
+            "grant_type": "refresh_token",
+        }
+    )
+
+    res.raise_for_status()
+    return res.json()["access_token"]

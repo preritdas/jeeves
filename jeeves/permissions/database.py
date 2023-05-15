@@ -1,12 +1,12 @@
 """Permissions database."""
 from deta import Deta
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, root_validator
 
 from typing import Self
 import time
 
 from jeeves.keys import KEYS
-from jeeves.utils import validate_phone_number
+from jeeves.utils import validate_phone_number, refresh_zapier_access_token, access_token_expired
 
 
 permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
@@ -25,12 +25,14 @@ class User(BaseModel):
         zapier_key: The user's Zapier key. Optional.
         telegram_id: The user's Telegram ID. Optional.
     """
+    key: str
     name: str
     gender_male: bool
     phone: str
     timezone: str
     use_applets: bool
-    zapier_key: str | None = None
+    zapier_access_token: str | None = None
+    zapier_refresh_token: str | None = None
     telegram_id: int | None = None
 
     @validator("phone")
@@ -56,6 +58,26 @@ class User(BaseModel):
 
         return mappings[timezone]
 
+    @root_validator
+    def validate_zapier(cls, values: dict) -> dict:
+        """
+        Check the access token for validity. If it's invalid, use the refresh token 
+        to refresh it and update the access token both in the User object 
+        and in the database.
+        """
+        token = values["zapier_access_token"]
+
+        if token and access_token_expired(token):
+            values["zapier_access_token"] = refresh_zapier_access_token(
+                values["zapier_refresh_token"]
+            )
+            permissions_db.update(
+                {"ZapierAccessToken": values["zapier_access_token"]},
+                values["key"]
+            )
+
+        return values
+
     @classmethod
     def from_phone(cls, phone: str) -> Self | None:
         """Get a user by phone number. Returns None if not found."""
@@ -77,12 +99,14 @@ class User(BaseModel):
 
         user = items[0]
         return cls(
+            key=user["key"],
             name=user["Name"],
             gender_male=user["GenderMale"],
             phone=user["Phone"],
             timezone=user["Timezone"],
             use_applets=user["UseApplets"],
-            zapier_key=user["ZapierKey"],
+            zapier_access_token=user["ZapierAccessToken"],
+            zapier_refresh_token=user["ZapierRefreshToken"],
             telegram_id=user["TelegramID"]
         )
 

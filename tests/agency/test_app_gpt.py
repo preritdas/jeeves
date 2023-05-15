@@ -105,11 +105,10 @@ def test_serper_wrapper():
 def test_building_tools(default_options, callback_handlers):
     """Test building the tools. Zapier and text requires auth."""
     # Find a temporary Zapier key
-    users_with_zapier = permissions_db.fetch(
-        {
-            "ZapierKey?contains": "sk"
-        }
-    ).items
+    users_with_zapier = [
+        user for user in permissions_db.fetch().items
+        if user["ZapierAccessToken"]
+    ]
 
     # Make sure Zapier is in there, use first provided phone
     if users_with_zapier:

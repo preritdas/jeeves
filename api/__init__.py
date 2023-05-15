@@ -7,7 +7,7 @@ endpoint.
 from fastapi import FastAPI
 
 # Routers
-from api import text_inbound, voice_inbound, telegram_inbound, voice_outbound
+from api import text_inbound, voice_inbound, telegram_inbound, voice_outbound, authentication
 
 
 app = FastAPI(
@@ -30,3 +30,4 @@ app.include_router(voice_inbound.router, prefix="/voice", tags=["Voice Inbound"]
 app.include_router(
     voice_outbound.router, prefix="/voice/outbound", tags=["Voice Outbound Calls"]
 )
+app.include_router(authentication.router, prefix="/auth", tags=["Authentication"])
