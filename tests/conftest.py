@@ -47,7 +47,8 @@ def temporary_user(default_inbound) -> dict[str, str]:
         "Timezone": "EST",
         "UseApplets": True,
         "GenderMale": True,
-        "ZapierKey": None,
+        "ZapierAccessToken": None,
+        "ZapierRefreshToken": None,
         "TelegramID": None
     }
 
