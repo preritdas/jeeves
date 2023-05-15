@@ -1,5 +1,6 @@
 """Routes for authenticating, ex. Zapier."""
-from fastapi import APIRouter, Response
+from fastapi import APIRouter
+from fastapi.responses import RedirectResponse
 import requests
 from deta import Deta
 
@@ -12,8 +13,18 @@ router = APIRouter()
 permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
 
 
+@router.get("/zapier-start/{user_key}")
+async def zapier_start(user_key: str) -> str:
+    """Create the link for the user to use to start with Zapier."""
+    return RedirectResponse(
+        f"https://nla.zapier.com/oauth/authorize?"
+        f"client_id={KEYS.Zapier.client_id}&response_type=code"
+        "&scope=nla%3Aexposed_actions%3Aexecute"
+    )
+
+
 @router.get("/zapier-handler/{user_key}")
-async def handle_zapier(user_key: str, code: str):
+def handle_zapier(user_key: str, code: str):
     """
     Handle a Zapier authentication code. Takes the code and update's the user's
     access token in the permissions database.
@@ -26,10 +37,10 @@ async def handle_zapier(user_key: str, code: str):
     user = permissions_db.get(user_key)
 
     if not user:
-        return Response("User not found.", status_code=404)
+        return {"error": "User not found."}
 
     # Generate the access token and refresh token
-    url = "https://nla.zapier.com/oauth/token"
+    url = "https://nla.zapier.com/oauth/token/"
     res = requests.post(
         url,
         data={
@@ -44,7 +55,7 @@ async def handle_zapier(user_key: str, code: str):
     )
 
     if res.status_code != 200:
-        return Response("Error generating access token.", status_code=500)
+        return {"error": "Error generating access token."}
 
     # Update the user's access token
     user["ZapierAccessToken"] = res.json()["access_token"]
@@ -53,4 +64,4 @@ async def handle_zapier(user_key: str, code: str):
     # Save the user
     permissions_db.put(user)
 
-    return Response("Success!", status_code=200)
+    return {"status": "success"}
