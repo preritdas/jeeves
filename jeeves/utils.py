@@ -74,7 +74,7 @@ REQUEST_HEADERS: dict[str, str] = {
 
 # ---- Zapier ----
 
-def update_access_token(refresh_token: str) -> str:
+def refresh_zapier_access_token(refresh_token: str) -> str:
     """Generate a new access token."""
     url = "https://nla.zapier.com/oauth/token"
     res = requests.post(
