@@ -79,6 +79,30 @@ class User(BaseModel):
         return values
 
     @classmethod
+    def _from_db_key(cls, key: str) -> Self:
+        """
+        Create an object given a key from the database. Use this private
+        classmethod when creating other public classmethods that retrieve
+        the key in various ways, ex. via phone or via Telegram.
+        """
+        user = permissions_db.get(key)
+
+        if not user:
+            raise ValueError(f"User with key {key} not found.")
+
+        return cls(
+            key=user["key"],
+            name=user["Name"],
+            gender_male=user["GenderMale"],
+            phone=user["Phone"],
+            timezone=user["Timezone"],
+            use_applets=user["UseApplets"],
+            zapier_access_token=user["ZapierAccessToken"],
+            zapier_refresh_token=user["ZapierRefreshToken"],
+            telegram_id=user["TelegramID"]
+        )
+
+    @classmethod
     def from_phone(cls, phone: str) -> Self | None:
         """Get a user by phone number. Returns None if not found."""
         try:
@@ -98,17 +122,7 @@ class User(BaseModel):
             )
 
         user = items[0]
-        return cls(
-            key=user["key"],
-            name=user["Name"],
-            gender_male=user["GenderMale"],
-            phone=user["Phone"],
-            timezone=user["Timezone"],
-            use_applets=user["UseApplets"],
-            zapier_access_token=user["ZapierAccessToken"],
-            zapier_refresh_token=user["ZapierRefreshToken"],
-            telegram_id=user["TelegramID"]
-        )
+        return cls._from_db_key(user["key"])
 
     @classmethod
     def from_telegram_id(cls, telegram_id: int) -> Self | None:
@@ -132,12 +146,4 @@ class User(BaseModel):
             )
         
         user = items[0]
-        return cls(
-            name=user["Name"],
-            gender_male=user["GenderMale"],
-            phone=user["Phone"],
-            timezone=user["Timezone"],
-            use_applets=user["UseApplets"],
-            zapier_key=user["ZapierKey"],
-            telegram_id=user["TelegramID"]
-        )
+        return cls._from_db_key(user["key"])
