@@ -4,7 +4,7 @@ Use threading to instantly return a response at the inbound-sms
 endpoint.
 """
 # External
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 
 # Routers
 from api import text_inbound, voice_inbound, telegram_inbound, voice_outbound, authentication
@@ -17,12 +17,8 @@ app = FastAPI(
 
 
 @app.get("/", status_code=200)
-async def test(request: Request):
-    return {
-        "json": await request.json(),
-        "path_params": dict(request.path_params),
-        "query_params": dict(request.query_params)
-    }
+async def test():
+    return "API alive and well."
 
 
 # Include the routers
