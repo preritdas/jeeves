@@ -1,6 +1,7 @@
 """Routes for authenticating, ex. Zapier."""
 from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
+
 import requests
 from deta import Deta
 
@@ -8,12 +9,30 @@ import urllib.parse
 
 from jeeves.texts import BASE_URL
 from jeeves.keys import KEYS
+from jeeves.utils import validate_phone_number
 
 
 router = APIRouter()
-
-
 permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
+
+
+@router.get("/user-by-phone/{phone_number}")
+async def user_by_phone(phone_number: str) -> dict:
+    """Get the user's key by their phone number."""
+    try:
+        phone_number = validate_phone_number(phone_number)
+    except ValueError as e:
+        return {"error": f"Invalid phone number. {str(e)}"}
+
+    res = permissions_db.fetch({"Phone": phone_number}).items
+
+    if not res:
+        return {"error": "User not found."}
+
+    if len(res) > 1:
+        return {"error": "Multiple users found."}
+
+    return {"user": res[0]["key"]}
 
 
 @router.get("/zapier-start/{user_key}")
