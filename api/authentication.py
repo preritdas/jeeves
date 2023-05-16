@@ -4,6 +4,8 @@ from fastapi.responses import RedirectResponse
 import requests
 from deta import Deta
 
+import urllib.parse
+
 from jeeves.texts import BASE_URL
 from jeeves.keys import KEYS
 
@@ -18,6 +20,7 @@ permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
 async def zapier_start(user_key: str) -> str:
     """Create the link for the user to use to start with Zapier."""
     redirect_uri = BASE_URL + f"/auth/zapier-handler/{user_key}"
+    redirect_uri = urllib.parse.quote_plus(redirect_uri)
 
     return RedirectResponse(
         f"https://nla.zapier.com/oauth/authorize?"
