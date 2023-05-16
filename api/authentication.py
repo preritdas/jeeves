@@ -42,15 +42,15 @@ def handle_zapier(state: str, code: str):
         code (str): The authentication code.
     """
     # Find the user in the database
-    user = permissions_db.get(state)
+    user: dict = permissions_db.get(state)
 
     if not user:
         return {"error": "User not found."}
 
     # Generate the access token and refresh token
-    url = "https://nla.zapier.com/oauth/token/"
+    "https://nla.zapier.com/oauth/token/"
     res = requests.post(
-        url,
+        url="https://nla.zapier.com/oauth/token/",
         data={
             "client_id": KEYS.Zapier.client_id,
             "client_secret": KEYS.Zapier.client_secret,
@@ -66,8 +66,13 @@ def handle_zapier(state: str, code: str):
         return {"error": "Error generating access token."}
 
     # Update the user's access token
-    user["ZapierAccessToken"] = res.json()["access_token"]
-    user["ZapierRefreshToken"] = res.json()["refresh_token"]
+    res_json = res.json()
+    user.update(
+        {
+            "ZapierAccessToken": res_json["access_token"],
+            "ZapierRefreshToken": res_json["refresh_token"]
+        }
+    )
 
     # Save the user
     permissions_db.put(user)
