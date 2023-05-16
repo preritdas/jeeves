@@ -17,11 +17,11 @@ app = FastAPI(
 
 
 @app.get("/", status_code=200)
-def test(request: Request):
+async def test(request: Request):
     return {
-        "json": request.json(),
+        "json": await request.json(),
         "path_params": dict(request.path_params),
-        "query_params": (request.query_params)
+        "query_params": dict(request.query_params)
     }
 
 
