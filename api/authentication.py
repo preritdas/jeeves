@@ -24,7 +24,7 @@ async def zapier_start(user_key: str) -> str:
 
     return RedirectResponse(
         f"https://nla.zapier.com/oauth/authorize/"
-        f"&client_id={KEYS.Zapier.client_id}&response_type=code"
+        f"?client_id={KEYS.Zapier.client_id}&response_type=code"
         f"&redirect_uri={redirect_uri}"
         f"&state={user_key}"
         "&scope=nla%3Aexposed_actions%3Aexecute"
