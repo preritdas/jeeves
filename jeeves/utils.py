@@ -78,9 +78,8 @@ REQUEST_HEADERS: dict[str, str] = {
 
 def access_token_expired(access_token: str) -> bool:
     """Determine if an access token has expired."""
-    url = "https://nla.zapier.com/api/v1/check"
     res = requests.get(
-        url,
+        url="https://nla.zapier.com/api/v1/check",
         headers={
             "Authorization": f"Bearer {access_token}",
         },
@@ -109,9 +108,8 @@ def access_token_expired(access_token: str) -> bool:
 
 def refresh_zapier_access_token(refresh_token: str) -> str:
     """Generate a new access token if the old one is expired."""
-    url = "https://nla.zapier.com/oauth/token/"
     res = requests.post(
-        url,
+        url="https://nla.zapier.com/oauth/token/",
         headers={
             "Content-Type": "application/x-www-form-urlencoded",
         },
