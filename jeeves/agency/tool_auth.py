@@ -1,7 +1,6 @@
 """Load tools depending on authorization."""
 from langchain.agents import Tool
 from langchain.tools import BaseTool
-from langchain.utilities import GoogleSerperAPIWrapper
 from langchain.utilities.wolfram_alpha import WolframAlphaAPIWrapper
 from langchain.utilities.zapier import ZapierNLAWrapper
 from langchain.agents.agent_toolkits import ZapierToolkit
@@ -15,44 +14,7 @@ from jeeves.agency import news
 from jeeves.agency import send_texts
 from jeeves.agency import make_calls
 from jeeves.agency.user_memory import create_user_memory_tools
-
-
-class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
-    """Same as the GoogleSerperAPIWrapper but provides URLs to results."""
-    def _parse_results(self, results: dict) -> str:
-        snippets = []
-
-        if results.get("answerBox"):
-            answer_box = results.get("answerBox", {})
-            if answer_box.get("answer"):
-                return answer_box.get("answer")
-            elif answer_box.get("snippet"):
-                return answer_box.get("snippet").replace("\n", " ")
-            elif answer_box.get("snippetHighlighted"):
-                return ", ".join(answer_box.get("snippetHighlighted"))
-
-        if results.get("knowledgeGraph"):
-            kg = results.get("knowledgeGraph", {})
-            title = kg.get("title")
-            entity_type = kg.get("type")
-            if entity_type:
-                snippets.append(f"{title}: {entity_type}.")
-            description = kg.get("description")
-            if description:
-                snippets.append(description)
-            for attribute, value in kg.get("attributes", {}).items():
-                snippets.append(f"{title} {attribute}: {value}.")
-
-        for result in results["organic"][: self.k]:
-            if "snippet" in result:
-                snippets.append(f"{result['snippet']} ({result['link']})")
-            for attribute, value in result.get("attributes", {}).items():
-                snippets.append(f"{attribute}: {value}.")
-
-        if len(snippets) == 0:
-            return "No good Google Search Result was found"
-
-        return " ".join(snippets)
+from jeeves.agency.serper_wrapper import GoogleSerperAPIWrapperURL
 
 
 ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS = (
