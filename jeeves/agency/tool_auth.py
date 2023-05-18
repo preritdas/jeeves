@@ -19,7 +19,7 @@ from jeeves.agency.user_memory import create_user_memory_tools
 
 class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
     """Same as the GoogleSerperAPIWrapper but provides URLs to results."""
-    def _parse_results(self, results: dict) -> str:
+    def _parse_snippets(self, results: dict) -> str:
         snippets = []
 
         if results.get("answerBox"):
@@ -43,7 +43,7 @@ class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
             for attribute, value in kg.get("attributes", {}).items():
                 snippets.append(f"{title} {attribute}: {value}.")
 
-        for result in results["organic"][: self.k]:
+        for result in results[self.result_key_for_type[self.type]][: self.k]:
             if "snippet" in result:
                 snippets.append(f"{result['snippet']} ({result['link']})")
             for attribute, value in result.get("attributes", {}).items():
@@ -52,7 +52,7 @@ class GoogleSerperAPIWrapperURL(GoogleSerperAPIWrapper):
         if len(snippets) == 0:
             return "No good Google Search Result was found"
 
-        return " ".join(snippets)
+        return snippets
 
 
 ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS = (
