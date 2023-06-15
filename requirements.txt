@@ -12,7 +12,7 @@ inflect==6.0.4  # word singularization and pluralization
 mypytoolkit>=1.5.60  # utils
 
 # Jokes
-requests==2.29.0  # ping Humor API
+requests==2.31.0  # ping Humor API
 
 # Rotten Tomatoes
 rottentomatoes-python==0.5.17  # movie data retrieval
