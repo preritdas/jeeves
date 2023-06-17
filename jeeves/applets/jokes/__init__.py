@@ -36,4 +36,5 @@ def random_joke(tags: str):
 
 @utils.app_handler(APP_HELP, APP_OPTIONS)
 def handler(content: str, options: dict) -> str:
-    return random_joke(options.get("tags", ""))
+    return "App currently disabled."
+    # return random_joke(options.get("tags", ""))

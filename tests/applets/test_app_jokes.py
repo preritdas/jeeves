@@ -1,6 +1,10 @@
 """Test the Jokes app."""
+import pytest
+
 from jeeves.applets import jokes
 
+
+@pytest.mark.skip
 def test_handler():
     assert jokes.handler("", options={"tags": "nsfw,dark"})
 
