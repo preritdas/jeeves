@@ -67,7 +67,6 @@ def handle_zapier(state: str, code: str):
         return {"error": "User not found."}
 
     # Generate the access token and refresh token
-    "https://nla.zapier.com/oauth/token/"
     res = requests.post(
         url="https://nla.zapier.com/oauth/token/",
         data={
