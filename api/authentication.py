@@ -73,7 +73,8 @@ def handle_zapier(state: str, code: str):
             "client_id": KEYS.Zapier.client_id,
             "client_secret": KEYS.Zapier.client_secret,
             "code": code,
-            "grant_type": "authorization_code"
+            "grant_type": "authorization_code",
+            "redirect_uri": BASE_URL + "/auth/zapier-handler/"
         },
         headers={
             "Content-Type": "application/x-www-form-urlencoded"
