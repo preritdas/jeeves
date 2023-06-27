@@ -1,4 +1,5 @@
-fastapi==0.98.0  # API
+fastapi==0.100.0-beta1  # API
+pydantic==2.0b2
 deta==1.1.0  # databases throughout
 
 # Server
