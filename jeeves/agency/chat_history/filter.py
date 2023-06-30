@@ -83,7 +83,15 @@ class TokenCountFilterer(BaseFilterer):
         self.max_tokens = int(max_tokens)
 
     def filter_messages(self, messages: list[Message]) -> list[Message]:
-        """Filter messages by token count."""
+        """
+        Filter messages by token count.
+        
+        A note on reversing the messages: the messages are sorted by datetime,
+        most recent last. This means that the messages are in chronological
+        order. We flip the order because we want to work from most recent 
+        to least recent. Then we return a yet-again flipped list so that the
+        returned messages are in chronological order.
+        """
         # Sort the messages by datetime, most recent last (formatting)
         messages = sorted(messages, key=lambda message: message.datetime)
 
@@ -101,4 +109,4 @@ class TokenCountFilterer(BaseFilterer):
             token_count += count
             return_messages.append(message)
 
-        return return_messages
+        return return_messages[::-1]
