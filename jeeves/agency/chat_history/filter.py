@@ -1,9 +1,15 @@
 """Create message filterers."""
-from abc import ABC, abstractmethod
+import tiktoken
 
+from abc import ABC, abstractmethod
 import datetime as dt
 
 from jeeves.agency.chat_history.models import Message
+
+
+def _count_tokens(content: str) -> int:
+    """Count the number of tokens in the content."""
+    return len(tiktoken.encoding_for_model("gpt-4").encode(content))
 
 
 class BaseFilterer(ABC):
@@ -65,3 +71,34 @@ class RecencyFilterer(BaseFilterer):
 
         # Return the last n_messages
         return messages[-self.n_messages :]
+
+
+class TokenCountFilterer(BaseFilterer):
+    """
+    Filter messages by token count. Return all messages whose collective token
+    count is less than `max_tokens`.
+    """
+    def __init__(self, max_tokens: int) -> None:
+        """Initialize the filterer."""
+        self.max_tokens = int(max_tokens)
+
+    def filter_messages(self, messages: list[Message]) -> list[Message]:
+        """Filter messages by token count."""
+        # Sort the messages by datetime, most recent last (formatting)
+        messages = sorted(messages, key=lambda message: message.datetime)
+
+        return_messages: list[Message] = []
+        token_count = 0
+        for message in messages[::-1]:
+            # Count tokens roughly by adding all conversational content
+            count = _count_tokens(message.user_input + " " + message.agent_response)
+
+            # If the token count is greater than the max, break
+            if token_count + count > self.max_tokens:
+                break
+
+            # Otherwise, add the message to the return list
+            token_count += count
+            return_messages.append(message)
+
+        return return_messages
