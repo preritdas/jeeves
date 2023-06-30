@@ -78,7 +78,7 @@ class TokenCountFilterer(BaseFilterer):
     Filter messages by token count. Return all messages whose collective token
     count is less than `max_tokens`.
     """
-    def __init__(self, max_tokens: int) -> None:
+    def __init__(self, max_tokens: int = 1000) -> None:
         """Initialize the filterer."""
         self.max_tokens = int(max_tokens)
 
