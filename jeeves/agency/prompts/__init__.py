@@ -21,7 +21,7 @@ import pytz
 
 from jeeves.permissions import User
 from jeeves.agency.chat_history import ChatHistory
-from jeeves.agency.chat_history import RecencyFilterer
+from jeeves.agency.chat_history import TokenCountFilterer
 
 
 # ---- Model for prompting ----
@@ -137,7 +137,7 @@ def _build_prompt(name: str, prompt_inputs: dict[str, dict[str, Callable]], **kw
 def build_prompts(user: User) -> AgentPrompts:
     """Build the prompts inserting any variables necessary."""
     chat_history = ChatHistory.from_inbound_phone(user.phone).format_messages(
-        filterer=RecencyFilterer(5)
+        filterer=TokenCountFilterer()
     )
     prompt_inputs = build_prompt_inputs(user)
 

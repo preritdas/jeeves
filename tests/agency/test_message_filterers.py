@@ -5,7 +5,7 @@ import datetime as dt
 import pytz
 
 from jeeves.config import CONFIG
-from jeeves.agency.chat_history.filter import RecencyFilterer, DatetimeFilterer
+from jeeves.agency.chat_history.filter import RecencyFilterer, DatetimeFilterer, TokenCountFilterer, _count_tokens
 from jeeves.agency.chat_history.models import Message
 
 
@@ -118,3 +118,17 @@ def test_datetime_filterer_empty_result(temporary_messages):
 
     # Make sure no messages are within the specified range
     assert len(filtered_messages) == 0
+
+
+# ---- Tokens ----
+
+def test_token_filterer(temporary_messages):
+    """
+    Test the token filterer. Make sure it returns the correct messages that fall
+    within the specified token range.
+    """
+    last_three_messages: list[Message] = temporary_messages[-3:]
+    last_three_tokens = sum(_count_tokens(m.user_input + m.agent_response) for m in last_three_messages)
+
+    filtered = TokenCountFilterer(max_tokens=last_three_tokens+1).filter_messages(temporary_messages)
+    assert len(filtered) == 3

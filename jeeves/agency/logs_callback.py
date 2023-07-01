@@ -86,7 +86,7 @@ class AgentLoggingCallbackHandler(BaseCallbackHandler):
         self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any
     ) -> None:
         """Print out that we are entering a chain."""
-        class_name = serialized["name"]
+        class_name = serialized["id"][-1]
         self.logger.info(f"{self.uid}: AgentStart: Entering new {class_name} chain...")
         self.logger.info(f"{self.uid}: UserInput: {inputs['input']}")
 
