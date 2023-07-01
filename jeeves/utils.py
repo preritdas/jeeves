@@ -106,8 +106,12 @@ def access_token_expired(access_token: str) -> bool:
     )
 
 
-def refresh_zapier_access_token(refresh_token: str) -> str:
-    """Generate a new access token if the old one is expired."""
+def refresh_zapier_access_token(refresh_token: str) -> tuple[str, str]:
+    """
+    Generate a new access token if the old one is expired.
+    
+    Returns a tuple of (access_token, refresh_token).
+    """
     res = requests.post(
         url="https://nla.zapier.com/oauth/token/",
         headers={
@@ -122,4 +126,5 @@ def refresh_zapier_access_token(refresh_token: str) -> str:
     )
 
     res.raise_for_status()
-    return res.json()["access_token"]
+    res_json = res.json()
+    return res_json["access_token"], res_json["refresh_token"]
