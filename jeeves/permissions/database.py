@@ -68,11 +68,17 @@ class User(BaseModel):
         token = values["zapier_access_token"]
 
         if token and access_token_expired(token):
-            values["zapier_access_token"] = refresh_zapier_access_token(
-                values["zapier_refresh_token"]
+            # Refresh the access token and update the refresh token
+            values["zapier_access_token"], values["zapier_refresh_token"] = (
+                refresh_zapier_access_token(values["zapier_refresh_token"])
             )
+
+            # Update the database
             permissions_db.update(
-                {"ZapierAccessToken": values["zapier_access_token"]},
+                {
+                    "ZapierAccessToken": values["zapier_access_token"],
+                    "ZapierRefreshToken": values["zapier_refresh_token"]
+                },
                 values["key"]
             )
 
