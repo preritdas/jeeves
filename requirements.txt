@@ -1,4 +1,4 @@
-fastapi==0.99.0  # API
+fastapi==0.99.1  # API
 deta==1.1.0  # databases throughout
 
 # Server
