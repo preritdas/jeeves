@@ -30,7 +30,7 @@ class BaseAgentResponse(BaseModel):
     response: str
 
 
-@router.get("/run", status_code=200)
+@router.post("/run", status_code=200)
 async def base_agent(job: BaseAgentJob) -> BaseAgentResponse:
     """Run a base agent job."""
     # Check the password
