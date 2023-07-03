@@ -7,7 +7,7 @@ endpoint.
 from fastapi import FastAPI
 
 # Routers
-from api import text_inbound, voice_inbound, telegram_inbound, voice_outbound, authentication
+from api import base_agent, text_inbound, voice_inbound, telegram_inbound, voice_outbound, authentication
 
 
 app = FastAPI(
@@ -22,6 +22,7 @@ async def test():
 
 
 # Include the routers
+app.include_router(base_agent.router, prefix="/base-agent", tags=["Base Agent"])
 app.include_router(text_inbound.router, prefix="/texts", tags=["Text Inbound"])
 app.include_router(
     telegram_inbound.router, prefix="/telegram", tags=["Telegram Inbound"]
