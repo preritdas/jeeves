@@ -154,11 +154,15 @@ def build_base_agent_prompts() -> AgentPrompts:
     """
     Build prompts for an agent that has no User.
     """
-    BASE_AGENT_INPUTS: dict[str, str] = {
-        "my_name": "a generic user",
-        "address_me": "sir",
-        "timezone": "EST",
-        "current_datetime": lambda tz_str: get_current_datetime(tz_str)
+    BASE_AGENT_INPUTS = {
+        "prefix": {
+            "my_name": lambda: "a generic user",
+            "address_me": lambda: "sir",
+            "timezone": lambda: "EST",
+            "current_datetime": lambda: get_current_datetime("EST")
+        },
+        "format_instructions": {},
+        "suffix": {}
     }
 
     SUFFIX: str = "Begin!\n\nInput: {input}\n{agent_scratchpad}"
