@@ -94,15 +94,20 @@ prompt_path = lambda name: os.path.join(current_dir, f"{name}.txt")
 def build_prompt_inputs(user: User) -> dict[str, dict[str, Callable]]:
     """Build the prompt inputs dictionary."""
     assert user
-    
-    def get_current_datetime():
-        timezone = pytz.timezone(user.timezone)
-        format_str = "%-I:%M%p on %A, %B %d, %Y"
-        return dt.datetime.now(timezone).strftime(format_str)
+
+def get_current_datetime(tz_str: str):
+    timezone = pytz.timezone(tz_str)
+    format_str = "%-I:%M%p on %A, %B %d, %Y"
+    return dt.datetime.now(timezone).strftime(format_str)
+
+
+def build_prompt_inputs(user: User) -> dict[str, dict[str, Callable]]:
+    """Build the prompt inputs dictionary."""
+    assert user
 
     return {
         "prefix": {
-            "current_datetime": get_current_datetime, 
+            "current_datetime": lambda tz_str: get_current_datetime(tz_str),
             "timezone": lambda: user.timezone,
             "my_name": lambda: user.name,
             "address_me": lambda: "sir" if user.gender_male else "ma'am"
