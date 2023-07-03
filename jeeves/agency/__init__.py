@@ -121,3 +121,24 @@ def generate_agent_response(content: str, user: User, uid: str = "") -> str:
     )
 
     return response.strip()
+
+
+def generate_base_agent_response(content: str, uid: str = "") -> str:
+    """Create executor and run the agent. UID is optional."""
+    # UID
+    if not uid:
+        uid = str(uuid.uuid4())
+
+    # Build toolkit using default callback handlers
+    callback_handlers = logs_callback.create_callback_handlers(uid)
+    toolkit = tool_auth.NO_AUTH_TOOLS
+
+    # Insert callback handlers for all tools
+    for tool in toolkit:
+        tool.callbacks = callback_handlers
+
+    # Run
+    agent_executor = create_agent_executor(toolkit, None, callback_handlers)
+    response: str = run_agent(agent_executor, content, uid)
+
+    return response.strip()
