@@ -55,6 +55,24 @@ def create_agent_executor(
     )
 
 
+def create_base_agent_executor(
+    toolkit: list[Tool],
+    callback_handlers: list[BaseCallbackHandler],
+) -> AgentExecutor:
+    """Create the agent executor without a User object."""
+    agent_prompts: prompts.AgentPrompts = prompts.build_base_agent_prompts()
+    agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
+        llm=llm,
+        tools=toolkit,
+        prefix=agent_prompts.prefix,
+        format_instructions=agent_prompts.format_instructions,
+        suffix=agent_prompts.suffix
+    )
+    return AgentExecutor(
+        agent=agent, tools=toolkit, verbose=True, callbacks=callback_handlers
+    )
+
+
 # ---- Run the agent ----
 
 def retry_couldnt_parse(function):
@@ -138,7 +156,7 @@ def generate_base_agent_response(content: str, uid: str = "") -> str:
         tool.callbacks = callback_handlers
 
     # Run
-    agent_executor = create_agent_executor(toolkit, None, callback_handlers)
+    agent_executor = create_base_agent_executor(toolkit, callback_handlers)
     response: str = run_agent(agent_executor, content, uid)
 
     return response.strip()
