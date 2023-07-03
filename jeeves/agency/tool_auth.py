@@ -21,7 +21,7 @@ ANSWERER_JSON_STRING_INPUT_INSTRUCTIONS = (
     'Input must be a JSON string with the keys "source" and "query".'
 )
 
-no_auth_tools: list[BaseTool] = [
+NO_AUTH_TOOLS: list[BaseTool] = [
     Tool(
         name="Google Search",
         func=GoogleSerperAPIWrapperURL(serper_api_key=KEYS.GoogleSerper.api_key).run,
@@ -94,7 +94,7 @@ def build_tools(
     added_tools.extend(create_user_memory_tools(user.phone))
 
     # Add all tools together
-    tools = no_auth_tools + added_tools
+    tools = NO_AUTH_TOOLS + added_tools
 
     # Check for proper tool types
     if not all(isinstance(tool, BaseTool) for tool in tools):

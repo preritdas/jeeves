@@ -3,7 +3,7 @@ from jeeves.applets.gpt import handler
 from api.voice_inbound import _process_speech
 from api.voice_outbound import process_user_speech
 from jeeves.agency.make_calls.database import Call
-from jeeves.agency.tool_auth import no_auth_tools, build_tools
+from jeeves.agency.tool_auth import NO_AUTH_TOOLS, build_tools
 from jeeves.agency.logs_callback import extract_log_items
 
 from jeeves.permissions import User
@@ -83,7 +83,7 @@ def test_processing_speech_outbound(outbound_call_key, mocker):
 
 def test_serper_wrapper():
     """Test the serper wrapper."""
-    serper_tool = no_auth_tools[0]
+    serper_tool = NO_AUTH_TOOLS[0]
 
     # Make sure we got the right one
     assert serper_tool.name == "Google Search"
