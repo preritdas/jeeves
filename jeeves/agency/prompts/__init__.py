@@ -107,7 +107,7 @@ def build_prompt_inputs(user: User) -> dict[str, dict[str, Callable]]:
 
     return {
         "prefix": {
-            "current_datetime": lambda tz_str: get_current_datetime(tz_str),
+            "current_datetime": lambda: get_current_datetime(user.timezone),
             "timezone": lambda: user.timezone,
             "my_name": lambda: user.name,
             "address_me": lambda: "sir" if user.gender_male else "ma'am"
