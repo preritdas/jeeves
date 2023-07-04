@@ -143,9 +143,8 @@ def generate_agent_response(content: str, user: User, uid: str = "") -> str:
 
 def generate_base_agent_response(content: str, uid: str = "") -> str:
     """Create executor and run the agent. UID is optional."""
-    # UID
-    if not uid:
-        uid = str(uuid.uuid4())
+    # Use overridden uid or create a new one
+    uid = uid or str(uuid.uuid4())
 
     # Build toolkit using default callback handlers
     callback_handlers = logs_callback.create_callback_handlers(uid)
