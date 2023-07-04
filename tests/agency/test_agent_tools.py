@@ -1,7 +1,7 @@
 """Test agent tools."""
 from jeeves.agency.retrieval import WebsiteAnswerer, YouTubeAnswerer
 from jeeves.agency.news import manual_headline_news
-from jeeves.agency.tool_auth import no_auth_tools
+from jeeves.agency.tool_auth import NO_AUTH_TOOLS
 from jeeves.agency.send_texts import create_text_message_tool
 from jeeves.agency.movies import MoviesTool
 
@@ -36,7 +36,7 @@ def test_headlines():
 
 def test_wolfram_alpha():
     # Find the Wolfram tool
-    query_res = [tool for tool in no_auth_tools if "Wolfram" in tool.name]
+    query_res = [tool for tool in NO_AUTH_TOOLS if "Wolfram" in tool.name]
 
     if not query_res:
         raise ValueError("Wolfram Alpha tool not found.")

@@ -6,6 +6,16 @@ NewsAPI, ElevenLabs, UploadIO, and Transcription.
 from pydantic import BaseModel
 
 
+class BaseAgentModel(BaseModel):
+    """
+    Protection for the base agent endpoint.
+
+    Attributes:
+        password (str): The password for the base agent.
+    """
+    password: str
+
+
 class TwilioModel(BaseModel):
     """
     A Pydantic model for Twilio configurations.
@@ -188,6 +198,7 @@ class Keys(BaseModel):
         Zapier (ZapierModel): The Zapier configuration model.
     """
     # Required keys (tests and active applets)
+    BaseAgent: BaseAgentModel
     Twilio: TwilioModel
     Deta: DetaModel
     HumorAPI: HumorAPIModel

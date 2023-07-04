@@ -91,18 +91,20 @@ prompt_path = lambda name: os.path.join(current_dir, f"{name}.txt")
 # evaluated when the prompt is built. This is because the values may change over time,
 # ex. the date and time.
 
+
+def get_current_datetime(tz_str: str):
+    timezone = pytz.timezone(tz_str)
+    format_str = "%-I:%M%p on %A, %B %d, %Y"
+    return dt.datetime.now(timezone).strftime(format_str)
+
+
 def build_prompt_inputs(user: User) -> dict[str, dict[str, Callable]]:
     """Build the prompt inputs dictionary."""
     assert user
-    
-    def get_current_datetime():
-        timezone = pytz.timezone(user.timezone)
-        format_str = "%-I:%M%p on %A, %B %d, %Y"
-        return dt.datetime.now(timezone).strftime(format_str)
 
     return {
         "prefix": {
-            "current_datetime": get_current_datetime, 
+            "current_datetime": lambda: get_current_datetime(user.timezone),
             "timezone": lambda: user.timezone,
             "my_name": lambda: user.name,
             "address_me": lambda: "sir" if user.gender_male else "ma'am"
@@ -145,4 +147,28 @@ def build_prompts(user: User) -> AgentPrompts:
         prefix=_build_prompt("prefix", prompt_inputs).build_prompt(),
         format_instructions=_build_prompt("format_instructions", prompt_inputs).build_prompt(),
         suffix=_build_prompt("suffix", prompt_inputs).build_prompt(chat_history=chat_history)
+    )
+
+
+def build_base_agent_prompts() -> AgentPrompts:
+    """
+    Build prompts for an agent that has no User.
+    """
+    BASE_AGENT_INPUTS = {
+        "prefix": {
+            "my_name": lambda: "a generic user",
+            "address_me": lambda: "sir",
+            "timezone": lambda: "EST",
+            "current_datetime": lambda: get_current_datetime("EST")
+        },
+        "format_instructions": {},
+        "suffix": {}
+    }
+
+    SUFFIX: str = "Begin!\n\nInput: {input}\n{agent_scratchpad}"
+
+    return AgentPrompts(
+        prefix=_build_prompt("prefix", BASE_AGENT_INPUTS).build_prompt(),
+        format_instructions=_build_prompt("format_instructions", BASE_AGENT_INPUTS).build_prompt(),
+        suffix=SUFFIX
     )

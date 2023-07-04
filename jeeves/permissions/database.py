@@ -143,9 +143,8 @@ class User(BaseModel):
             if "Request-sent" in str(e):
                 time.sleep(0.5)
                 items = permissions_db.fetch({"TelegramID": telegram_id}).items
-            
-            # re-raise the exception if it's not a Request-sent error
-            raise e
+            else:
+                raise e  # re-raise the exception if it's not a Request-sent error
 
         if not items:
             return None
