@@ -1,7 +1,7 @@
 """
 Get info on movies. This tool is inactive because it's currently easier for the 
 agent to just Google the movie's name and use Website Answerer on the 
-Rotten Tomatoes link. It did this on it's own in testing.
+Rotten Tomatoes link. It did this on its own in testing.
 """
 from langchain.agents.tools import BaseTool
 import rottentomatoes as rt
