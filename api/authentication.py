@@ -17,8 +17,12 @@ permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
 
 
 @router.get("/user-by-phone/{phone_number}")
-async def user_by_phone(phone_number: str) -> dict:
+async def user_by_phone(phone_number: str, access_code: str) -> dict:
     """Get the user's key by their phone number."""
+    # Check the access code
+    if access_code != KEYS.General.auth_access_code:
+        return {"error": "Invalid access code."}
+
     try:
         phone_number = validate_phone_number(phone_number)
     except ValueError as e:
