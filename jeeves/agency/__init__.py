@@ -51,7 +51,11 @@ def create_agent_executor(
         suffix=agent_prompts.suffix
     )
     return AgentExecutor(
-        agent=agent, tools=toolkit, verbose=True, callbacks=callback_handlers
+        agent=agent,
+        tools=toolkit,
+        max_iterations=50,
+        verbose=True,
+        callbacks=callback_handlers
     )
 
 
@@ -69,7 +73,11 @@ def create_base_agent_executor(
         suffix=agent_prompts.suffix
     )
     return AgentExecutor(
-        agent=agent, tools=toolkit, verbose=True, callbacks=callback_handlers
+        agent=agent,
+        tools=toolkit,
+        max_iterations=50,
+        verbose=True,
+        callbacks=callback_handlers
     )
 
 
