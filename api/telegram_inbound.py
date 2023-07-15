@@ -106,8 +106,13 @@ async def handle_inbound_telegram(request: Request) -> str:
         return Response(status_code=401)
 
     req = await request.json()
-    inbound_id = int(req["message"]["from"]["id"])
 
+    # If unprocessable update (for now)
+    if "message" not in req:
+        return ""
+
+    # Get the inbound ID of the user
+    inbound_id = int(req["message"]["from"]["id"])
     process_kwargs = {"inbound_id": inbound_id}
 
     # Get the inbound body
