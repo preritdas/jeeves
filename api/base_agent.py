@@ -34,7 +34,7 @@ class BaseAgentResponse(BaseModel):
 async def base_agent(job: BaseAgentJob) -> BaseAgentResponse:
     """Run a base agent job."""
     # Check the password
-    if job.password != KEYS.BaseAgent.password:
+    if job.password != KEYS.General.base_agent_password:
         return BaseAgentResponse(response=f"Incorrect password: {job.password}.")
 
     return BaseAgentResponse(response=generate_base_agent_response(job.query))
