@@ -41,7 +41,10 @@ async def user_by_phone(phone_number: str, access_code: str) -> dict:
 
 @router.get("/zapier-start/{user_key}")
 async def zapier_start(user_key: str) -> RedirectResponse:
-    """Create the link for the user to use to start with Zapier."""
+    """
+    Create the link for the user to use to start with Zapier. Redirects the user
+    to their Zapier authentication setup page.
+    """
     redirect_uri = BASE_URL + "/auth/zapier-handler/"
     redirect_uri = urllib.parse.quote_plus(redirect_uri)
 
