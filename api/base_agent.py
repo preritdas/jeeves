@@ -1,6 +1,6 @@
 """Protected API access to a userless Jeeves base agent."""
-from pydantic import BaseModel, validator
-from fastapi import APIRouter
+from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException
 
 from jeeves.agency import generate_base_agent_response
 from jeeves.keys import KEYS
@@ -30,11 +30,14 @@ class BaseAgentResponse(BaseModel):
     response: str
 
 
-@router.post("/run", status_code=200)
+@router.post("/run")
 async def base_agent(job: BaseAgentJob) -> BaseAgentResponse:
     """Run a base agent job."""
     # Check the password
     if job.password != KEYS.General.base_agent_password:
-        return BaseAgentResponse(response=f"Incorrect password: {job.password}.")
+        raise HTTPException(
+            status_code=401, 
+            detail=f"Incorrect password: {job.password}."
+        )
 
     return BaseAgentResponse(response=generate_base_agent_response(job.query))
