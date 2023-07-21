@@ -1,14 +1,13 @@
 fastapi==0.100.0  # API
-deta==1.1.0  # databases throughout
+deta==1.2.0  # databases throughout
 
 # Server
-gunicorn==20.1.0
-uvicorn==0.21.1
+gunicorn==21.2.0
+uvicorn==0.23.1
 python-multipart==0.0.6
 
 # Groceries
-inflect==6.0.4  # word singularization and pluralization
-# translators==5.4.2  # optional item translation, broken in 3.11 (lxml) as of 10-29-22
+inflect==7.0.0  # word singularization and pluralization
 mypytoolkit>=1.5.60  # utils
 
 # Jokes
@@ -18,19 +17,19 @@ requests==2.31.0  # ping Humor API
 rottentomatoes-python==0.5.17  # movie data retrieval
 
 # Cocktails
-emoji==2.2.0  # emojis in drink formatting
+emoji==2.6.0  # emojis in drink formatting
 
 # GPT
 openai==0.27.8  # gpt and ada embeddings
-langchain==0.0.238  # chains for easy llm use
+langchain==0.0.239  # chains for easy llm use
 faiss-cpu==1.7.4  # vector db
-tiktoken==0.3.3  # tokenize, splitting for retrieval
+tiktoken==0.4.0  # tokenize, splitting for retrieval
 
 # Tools
 wolframalpha==5.0.0  # math tool
 beautifulsoup4==4.12.2  # web scraping tool
 
 # Inbound
-twilio==8.1.0  # respond with texts, voice calls
-elevenlabs==0.2.7  # jeeves voice, tts
+twilio==8.5.0  # respond with texts, voice calls
+elevenlabs==0.2.21  # jeeves voice, tts
 pydub==0.25.1  # audio conversion
