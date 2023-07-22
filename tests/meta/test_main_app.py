@@ -78,7 +78,7 @@ def test_apps_threaded(test_client, default_inbound, mocker):
 def test_telegram_text(mocker):
     mocker.patch("api.telegram_inbound.CONFIG.General.sandbox_mode", True)
 
-    response = process_telegram_inbound(1101010101, "Hi.")
+    response = process_telegram_inbound(1101010101, 1101010011, "Hi.")
 
     assert response
     assert isinstance(response, str)
@@ -97,7 +97,8 @@ def test_telegram_endpoint(mocker, test_client):
     text_payload = {
         "message": {
             "from": {"id": 999999999},
-            "text": "Hi."
+            "text": "Hi.",
+            "message_id": 999999999,
         }
     }
 
