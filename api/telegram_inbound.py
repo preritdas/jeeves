@@ -15,26 +15,34 @@ from jeeves.voice_tools.transcribe import transcribe_telegram_file_id
 from jeeves.voice_tools.speak import speak_jeeves
 
 
+# Create the main router for Telegram operations
 router = APIRouter()
 
 
-def send_message(user_id: int, message: str):
+def send_message(user_id: int, message: str, reply_id: int) -> bool:
     """
-    Send a message to a Telegram user.
+    Send a message to a Telegram user as a reply to a message.
     """
     if CONFIG.General.sandbox_mode:
         return True
 
     url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendMessage"
-    res = requests.post(url, data={"chat_id": user_id, "text": message})
+    res = requests.post(
+        url, 
+        data={
+            "chat_id": user_id, 
+            "text": message, 
+            "reply_to_message_id": reply_id
+        }
+    )
 
     res.raise_for_status()
     return True if res.status_code == 200 else False
 
 
-def send_voice_response(user_id: int, message: str):
+def send_voice_response(user_id: int, message: str, reply_id: int):
     """
-    Send a voice response to a Telegram user.
+    Send a voice response to a Telegram user as a reply to a message.
     """
     if CONFIG.General.sandbox_mode:
         return True
@@ -42,22 +50,30 @@ def send_voice_response(user_id: int, message: str):
     voice_url = speak_jeeves(message, output_format="OGG", output_mime="audio/ogg")
 
     url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendVoice"
-    res = requests.post(url, data={"chat_id": user_id, "voice": voice_url})
+    res = requests.post(
+        url, 
+        data={
+            "chat_id": user_id, 
+            "voice": voice_url,
+            "reply_to_message_id": reply_id
+        }
+    )
 
     res.raise_for_status()
     return True if res.status_code == 200 else False
 
 
 def process_telegram_inbound(
-    inbound_id: int, text: str = "", voice_id: str = ""
+    inbound_id: int, reply_id: int, text: str = "", voice_id: str = ""
 ) -> str:
     """
     Process an inbound message from Telegram.
 
     This is the main handler for inbound Telegram messages. It will receive a request
-    from Telegram, parse the request, and send the message to the appropriate user.
-    If the user is not recognized, it will return a message to the user. If the input
-    type is not recognized, it will return a fail message to the user.
+    from Telegram, parse the request, and send the message to the appropriate user as 
+    a reply to the user's inbound message. If the user is not recognized, it will 
+    return a message to the user. If the input type is not recognized, it will return 
+    a failure message to the user.
     """
     # Check for proper usage
     if text and voice_id:
@@ -87,11 +103,11 @@ def process_telegram_inbound(
         response = f"Unfortunately, that failed. {e}"
 
     # Text reply regardless of input type
-    send_message(inbound_id, response)
+    send_message(inbound_id, response, reply_id)
 
     # If the response is a voice message, send one back
     if voice_id and CONFIG.Telegram.voice_note_responses:
-        send_voice_response(inbound_id, response)
+        send_voice_response(inbound_id, response, reply_id)
 
     return response
 
@@ -113,7 +129,8 @@ async def handle_inbound_telegram(request: Request) -> str:
 
     # Get the inbound ID of the user
     inbound_id = int(req["message"]["from"]["id"])
-    process_kwargs = {"inbound_id": inbound_id}
+    reply_id = int(req["message"]["message_id"])
+    process_kwargs = {"inbound_id": inbound_id, "reply_id": reply_id}
 
     # Get the inbound body
     if "text" in req["message"]:
