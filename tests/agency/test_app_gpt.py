@@ -24,7 +24,7 @@ def test_handler(default_options):
 
 def test_agency(mocker, callback_uid, default_options, temporary_user):
     """Test the GPT applet handler."""
-    mocker.patch("jeeves.agency.uuid.uuid4", return_value=callback_uid)
+    mocker.patch("jeeves.agency._create_uid", return_value=callback_uid)
 
     # Don't add chat logs
     mocker.patch(

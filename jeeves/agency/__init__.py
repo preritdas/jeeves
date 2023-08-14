@@ -117,12 +117,14 @@ def run_agent(agent_executor: AgentExecutor, query: str, uid: str) -> str:
         return res
 
 
+def _create_uid() -> str:
+    """Create a unique ID for an agent run."""
+    return str(uuid.uuid4())
+
+
 def generate_agent_response(content: str, user: User, uid: str = "") -> str:
     """Build tools, create executor, and run the agent. UID is optional."""
-    # UID
-    if not uid:
-        uid = str(uuid.uuid4())
-
+    uid = uid or _create_uid()
     assert user
 
     # Build chat history and toolkit using inbound phone
@@ -152,7 +154,7 @@ def generate_agent_response(content: str, user: User, uid: str = "") -> str:
 def generate_base_agent_response(content: str, uid: str = "") -> str:
     """Create executor and run the agent. UID is optional."""
     # Use overridden uid or create a new one
-    uid = uid or str(uuid.uuid4())
+    uid = uid or _create_uid()
 
     # Build toolkit using default callback handlers
     callback_handlers = logs_callback.create_callback_handlers(uid)
