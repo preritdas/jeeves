@@ -8,6 +8,7 @@ from jeeves.agency.logs_callback import extract_log_items
 
 from jeeves.permissions import User
 from jeeves.permissions.database import permissions_db
+from jeeves.keys import KEYS
 
 
 def test_handler(default_options):
@@ -102,35 +103,22 @@ def test_serper_wrapper():
     assert "https" in link_res
 
 
-def test_building_tools(default_options, callback_handlers):
-    """Test building the tools. Zapier and text requires auth."""
-    # Find a temporary Zapier key
-    users_with_zapier = [
-        user for user in permissions_db.fetch().items
-        if user["ZapierAccessToken"]
-    ]
+def test_building_tools(callback_handlers):
+    """
+    Test building the tools. Zapier and text requires auth, so test it by 
+    building tools on my own phone number.
+    """
+    # Make sure Zapier is in there, using my own phone number
+    tools = build_tools(
+        user=User.from_phone(KEYS.Twilio.my_number),
+        callback_handlers=callback_handlers
+    )
+    tool_names = [tool.name for tool in tools]
+    tool_descriptions = [tool.description for tool in tools]
 
-    # Make sure Zapier is in there, use first provided phone
-    if users_with_zapier:
-        tools = build_tools(
-            user=User.from_phone(users_with_zapier[0]["Phone"]),
-            callback_handlers=callback_handlers
-        )
-        tool_names = [tool.name for tool in tools]
-        tool_descriptions = [tool.description for tool in tools]
-
-        assert any("Zapier" in description for description in tool_descriptions)
-    else:
-        tools = build_tools(
-            user=User.from_phone(default_options["inbound_phone"]),
-            callback_handlers=callback_handlers
-        )
-        tool_names = [tool.name for tool in tools]
-        tool_descriptions = [tool.description for tool in tools]
-
-    # General
     assert tools
     assert any("Text Message" in name for name in tool_names)
+    assert any("Zapier" in description for description in tool_descriptions)
 
 
 def test_log_formatting():
