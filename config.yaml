@@ -4,6 +4,10 @@ General:
   dev_phone: "12223334455"  # phone number for auth when running locally
   default_timezone: "US/Eastern"  # default timezone for user
 
+Security:
+  validate_twilio_inbound: true
+  validate_telegram_inbound: true
+
 Weather:
   default_city: McLean  # default city for weather lookup
 
