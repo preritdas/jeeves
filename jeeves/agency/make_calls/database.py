@@ -70,7 +70,7 @@ class Call:
         _id = CONVERSATIONS_COLL.insert_one(attrs).inserted_id
 
         # Call is a dictionary of the newly added item
-        return cls(_id=_id, **attrs)
+        return cls(key=str(_id), **attrs)
 
     @classmethod
     def from_call_id(cls, call_id: str) -> "Call":
