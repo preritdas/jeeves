@@ -1,5 +1,5 @@
 """Interact with a chats Deta Base to facilitate chat history."""
-import deta
+from pymongo import MongoClient
 
 import datetime as dt
 
@@ -9,7 +9,7 @@ from jeeves.agency.chat_history.filter import BaseFilterer
 
 
 # Initialize the chats Deta Base
-chats_base = deta.Deta(KEYS.Deta.project_key).Base("chats")
+CHATS_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["chats"]
 
 
 class ChatHistory:
@@ -70,7 +70,7 @@ class ChatHistory:
             len(inbound_phone) == 11
         ), "Inbound phone number must be 11 digits, E.164 format."
 
-        user_messages = chats_base.fetch({"inbound_phone": inbound_phone}).items
+        user_messages = CHATS_COLL.find({"inbound_phone": inbound_phone})
 
         # Parse the messages into a list of Message objects
         messages = [
@@ -90,4 +90,4 @@ class ChatHistory:
         Add a message to the database.
         Returns a dictionary of the full database entry.
         """
-        return chats_base.put(message.to_dict())
+        return CHATS_COLL.insert_one(message.to_dict())
