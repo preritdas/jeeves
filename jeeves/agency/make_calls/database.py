@@ -44,7 +44,7 @@ class Call:
         del updates["_id"]
         del updates["key"]
 
-        CONVERSATIONS_COLL.update_one({"_id": self._id}, updates)
+        CONVERSATIONS_COLL.update_one({"_id": self._id}, {"$set": updates})
 
     def download(self) -> None:
         """Sync changes from the database to an existing Call object."""
@@ -67,9 +67,11 @@ class Call:
             "greeting_url": vt.speak.speak_jeeves(greeting)
         }
 
+        # Add to collection. Get ID and later stringify it for the key
         _id = CONVERSATIONS_COLL.insert_one(attrs).inserted_id
 
         # Call is a dictionary of the newly added item
+        del attrs["_id"]  # Mongo adds an id field, but we don't want it
         return cls(key=str(_id), **attrs)
 
     @classmethod
@@ -81,3 +83,13 @@ class Call:
     def delete(self) -> None:
         """Delete the call record from the database."""
         CONVERSATIONS_COLL.delete_one({"_id": self._id})
+
+
+
+    # @classmethod
+    # def from_call_id(cls, call_id: str) -> "Call":
+    #     """Initialize a call object using just a call id."""
+    #     call = CONVERSATIONS_COLL.find_one({"_id": ObjectId(call_id)})
+    #     key = str(call["_id"])
+    #     del call["_id"]
+    #     return cls(key=key, **call)
