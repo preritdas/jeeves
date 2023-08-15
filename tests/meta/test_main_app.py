@@ -29,6 +29,9 @@ def test_apps_no_auth(test_client, default_inbound, mocker):
     mocker.patch("api.text_inbound.inbound.usage.CONFIG.General.sandbox_mode", True)
     mocker.patch("api.text_inbound.CONFIG.General.threaded_inbound", False)
 
+    # This test tests a 401 response with no validation so mock the config
+    mocker.patch("api.text_inbound.CONFIG.Security.validate_twilio_inbound", True)
+
     res = test_client.post(
         "/texts/inbound-sms",
         data={"From": default_inbound["phone_number"], "Body": default_inbound["body"]},
