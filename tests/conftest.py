@@ -1,6 +1,6 @@
 """Fixtures etc."""
 import pytest
-from bson.objectid import ObjectID
+from bson.objectid import ObjectId
 
 import datetime as dt
 import pytz
@@ -53,7 +53,7 @@ def temporary_user(default_inbound) -> dict[str, str]:
         "TelegramID": None
     }
 
-    _id: ObjectID = PERMISSIONS_COLL.insert_one(user_attrs).inserted_id
+    _id: ObjectId = PERMISSIONS_COLL.insert_one(user_attrs).inserted_id
     yield user_attrs
 
     # Delete the user

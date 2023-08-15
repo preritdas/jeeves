@@ -67,7 +67,7 @@ def handle_zapier(state: str, code: str):
     access token in the permissions database.
 
     Args:
-        state (str): The user key - str of ObjectID for their user entry.
+        state (str): The user key - str of ObjectId for their user entry.
         code (str): The authentication code.
     """
     # Find the user in the database
