@@ -1,5 +1,6 @@
 """Store and retrieve conversations and greetings."""
-import deta
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 from jeeves.keys import KEYS
 from jeeves import voice_tools as vt
@@ -7,8 +8,8 @@ from jeeves import voice_tools as vt
 from jeeves.agency.make_calls.prompts import generate_intro_message
 
 
-deta_client = deta.Deta(KEYS.Deta.project_key)
-convo_base = deta_client.Base("conversations")
+# Connect to the database collection
+CONVERSATIONS_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["conversations"]
 
 
 class Call:
@@ -28,7 +29,9 @@ class Call:
         greeting: str,
         greeting_url: str
     ) -> None:
+        """Initialize a call object."""
         self.key = key
+        self._id = ObjectId(key)
         self.convo = convo
         self.goal = goal
         self.recipient_desc = recipient_desc
@@ -38,16 +41,14 @@ class Call:
     def upload(self) -> None:
         """Update the call record in Deta."""
         updates = self.__dict__.copy()
+        del updates["_id"]
         del updates["key"]
 
-        convo_base.update(key=self.key, updates=updates)
+        CONVERSATIONS_COLL.update_one({"_id": self._id}, updates)
 
     def download(self) -> None:
         """Sync changes from the database to an existing Call object."""
-        try:
-            call = convo_base.get(self.key)
-        except Exception:  # try one more time
-            call = convo_base.get(self.key)
+        call = CONVERSATIONS_COLL.find_one({"_id": self._id})
 
         # Update all attributes
         self.__dict__.update(call)
@@ -66,24 +67,17 @@ class Call:
             "greeting_url": vt.speak.speak_jeeves(greeting)
         }
 
-        try:
-            call = convo_base.put(data=attrs)
-        except Exception:  # try one more time
-            call = convo_base.put(data=attrs)
+        _id = CONVERSATIONS_COLL.insert_one(attrs).inserted_id
 
         # Call is a dictionary of the newly added item
-        return cls(**call)
+        return cls(_id=_id, **attrs)
 
     @classmethod
     def from_call_id(cls, call_id: str) -> "Call":
         """Initialize a call object using just a call id."""
-        try:
-            call = convo_base.get(call_id)
-        except Exception:
-            call = convo_base.get(call_id)
-
+        call = CONVERSATIONS_COLL.find_one({"_id": ObjectId(call_id)})
         return cls(**call)
 
     def delete(self) -> None:
         """Delete the call record from the database."""
-        convo_base.delete(self.key)
+        CONVERSATIONS_COLL.delete_one({"_id": self._id})
