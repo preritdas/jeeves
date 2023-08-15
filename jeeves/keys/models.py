@@ -46,6 +46,16 @@ class DetaModel(BaseModel):
     project_key: str
 
 
+class MongoDBModel(BaseModel):
+    """
+    A Pydantic model for MongoDB configurations.
+
+    Attributes:
+        connect_str (str): The MongoDB connection string with username and pwd.
+    """
+    connect_str: str
+
+
 class HumorAPIModel(BaseModel):
     """
     A Pydantic model for HumorAPI configurations.
@@ -203,6 +213,7 @@ class Keys(BaseModel):
     General: GeneralModel
     Twilio: TwilioModel
     Deta: DetaModel
+    MongoDB: MongoDBModel
     HumorAPI: HumorAPIModel
     OpenWeatherMap: OpenWeatherMapModel
     OpenAI: OpenAIModel
