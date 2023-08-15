@@ -1,5 +1,6 @@
 """Fixtures etc."""
 import pytest
+from bson.objectid import ObjectID
 
 import datetime as dt
 import pytz
@@ -8,7 +9,7 @@ import random
 
 from jeeves.config import CONFIG
 from jeeves import usage  # fixture for temporary logs for report
-from jeeves.permissions.database import permissions_db  # fixtures for temporary users
+from jeeves.permissions.database import PERMISSIONS_COLL  # fixtures for temporary users
 
 from jeeves.agency.make_calls.database import Call
 from jeeves.agency.logs_callback import create_callback_handlers
@@ -52,11 +53,11 @@ def temporary_user(default_inbound) -> dict[str, str]:
         "TelegramID": None
     }
 
-    key = permissions_db.put(user_attrs)["key"]
+    _id: ObjectID = PERMISSIONS_COLL.insert_one(user_attrs).inserted_id
     yield user_attrs
 
     # Delete the user
-    permissions_db.delete(key)
+    PERMISSIONS_COLL.delete_one({"_id": _id})
 
 
 @pytest.fixture
