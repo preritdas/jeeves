@@ -1,5 +1,6 @@
 fastapi==0.101.1  # API
 deta==1.2.0  # databases throughout
+pymongo==4.4.1  # mongo db
 
 # Server
 gunicorn==21.2.0
