@@ -4,6 +4,7 @@ from twilio.request_validator import RequestValidator
 
 from jeeves.texts import BASE_URL
 from jeeves.keys import KEYS
+from jeeves.config import CONFIG
 
 
 # Create Twilio request validator
@@ -19,6 +20,10 @@ async def validate_twilio_request(request: Request, path: str = "") -> bool:
         path (str, optional): Optional path. Provide this for outbound calls as 
             the call id at the end is used when Twilio hashes.
     """
+    # If validation is off, don't validate
+    if not CONFIG.Security.validate_twilio_inbound:
+        return True
+
     if "X-Twilio-Signature" not in request.headers:
         return False
 
@@ -37,6 +42,10 @@ async def validate_twilio_request(request: Request, path: str = "") -> bool:
 
 async def validate_telegram_request(request: Request) -> bool:
     """Use the auth token and request url and form to verify."""
+    # If validation is off, don't validate
+    if not CONFIG.Security.validate_telegram_inbound:
+        return True
+
     if "X-Telegram-Bot-Api-Secret-Token" not in request.headers:
         return False
 

@@ -43,6 +43,18 @@ class GeneralConfig(BaseModel):
 
         return v
 
+    
+class SecurityConfig(BaseModel):
+    """
+    Security configuration, validation of various services.
+
+    Attributes:
+        validate_twilio_inbound (bool): Whether to validate inbound Twilio requests.
+        validate_telegram_inbound (bool): Whether to validate inbound Telegram requests.
+    """
+    validate_twilio_inbound: bool 
+    validate_telegram_inbound: bool 
+
 
 class WeatherConfig(BaseModel):
     """
@@ -110,6 +122,7 @@ class Config(BaseModel):
         GPT (GPTConfig): GPT configuration.
     """
     General: GeneralConfig
+    Security: SecurityConfig
     Weather: WeatherConfig
     Groceries: GroceriesConfig
     Cocktails: CocktailsConfig
