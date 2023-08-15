@@ -78,18 +78,10 @@ class Call:
     def from_call_id(cls, call_id: str) -> "Call":
         """Initialize a call object using just a call id."""
         call = CONVERSATIONS_COLL.find_one({"_id": ObjectId(call_id)})
-        return cls(**call)
+        key = str(call["_id"])
+        del call["_id"]
+        return cls(key=key, **call)
 
     def delete(self) -> None:
         """Delete the call record from the database."""
         CONVERSATIONS_COLL.delete_one({"_id": self._id})
-
-
-
-    # @classmethod
-    # def from_call_id(cls, call_id: str) -> "Call":
-    #     """Initialize a call object using just a call id."""
-    #     call = CONVERSATIONS_COLL.find_one({"_id": ObjectId(call_id)})
-    #     key = str(call["_id"])
-    #     del call["_id"]
-    #     return cls(key=key, **call)
