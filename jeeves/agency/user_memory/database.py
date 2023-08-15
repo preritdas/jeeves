@@ -2,7 +2,7 @@
 Long term memory tool. Jeeves decides when to store items, 
 then uses the tool to retrieve items to get more information.
 """
-from deta import Deta
+from pymongo import MongoClient
 
 from langchain.schema import Document
 from langchain.chat_models import ChatOpenAI
@@ -21,8 +21,8 @@ from jeeves.utils import validate_phone_number
 from jeeves.agency.user_memory.models import Entry
 
 
-# Memory database
-memory_db = Deta(KEYS.Deta.project_key).Base("user_memory")
+# Memory database collection
+MEMORY_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["user_memory"]
 
 
 # Question answering stuff
@@ -50,7 +50,7 @@ class UserMemory:
     @classmethod
     def from_user_phone(cls, user_phone: str) -> "UserMemory":
         """Get all entries from a user."""
-        entries = memory_db.fetch({"user_phone": validate_phone_number(user_phone)}).items
+        entries = MEMORY_COLL.find({"user_phone": validate_phone_number(user_phone)})
         return cls(user_phone=user_phone, entries=[Entry(**entry) for entry in entries])
 
     def add_entry(self, content: str) -> bool:
@@ -62,7 +62,7 @@ class UserMemory:
         )
 
         self.entries.append(entry)
-        memory_db.put(entry.to_dict())
+        MEMORY_COLL.insert_one(entry.to_dict())
         return True
 
     def answer_question(self, question: str) -> str:
@@ -95,9 +95,5 @@ class UserMemory:
 
     def purge(self) -> bool:
         """Delete all entries from the user's memory. Use with caution."""
-        user_items = memory_db.fetch({"user_phone": self.user_phone}).items
-
-        for item in user_items:
-            memory_db.delete(item["key"])
-
+        MEMORY_COLL.delete_many({"user_phone": validate_phone_number(self.user_phone)})
         return True
