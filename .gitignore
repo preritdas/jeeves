@@ -1,6 +1,7 @@
 venv/
 win_venv/
 wsl_venv/
+test.ipynb
 
 # Private IDE config files
 .vscode/

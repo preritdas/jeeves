@@ -1,6 +1,7 @@
 """Tracking app usage for reports."""
 # External
 import deta
+from pymongo import MongoClient
 
 # Internal
 import datetime as dt
@@ -16,6 +17,7 @@ from jeeves.config import CONFIG
 deta = deta.Deta(KEYS.Deta.project_key)
 usage_db = deta.Base("usage")
 permissions_db = deta.Base("permissions")
+PERMISSIONS_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["permissions"]
 
 
 # Standardized date and time formats
@@ -71,12 +73,12 @@ def _phone_to_name(phone_number: str) -> str:
     Assuming all users were initialized in the permissions database, which is
     in fact necessary, all converstions theoretically should be successful.
     """
-    users = permissions_db.fetch({"Phone": phone_number}).items
+    result = list(PERMISSIONS_COLL.find({"Phone": phone_number}))
 
-    if len(users) != 1:
+    if len(result) != 1:
         return phone_number
 
-    return users[0]["Name"]
+    return result[0]["Name"]
 
 
 def usage_summary(date: dt.date | str = None) -> str:

@@ -6,7 +6,7 @@ from langchain.text_splitter import TokenTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 
 import requests
-import deta
+from pymongo import MongoClient
 
 from bs4 import BeautifulSoup
 import requests
@@ -26,8 +26,7 @@ splitter = TokenTextSplitter(
 
 
 # Deta Base for caching conversions
-deta_client = deta.Deta(KEYS.Deta.project_key)
-conversions_db = deta_client.Base("conversions_cache")
+CONVERSIONS_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["conversions_cache"]
 
 
 class ConversionError(Exception):
@@ -132,11 +131,11 @@ class YouTubeAnswerer(BaseAnswerer):
             video_id = self.source
 
         # Check if the video has already been converted
-        cached = conversions_db.fetch(
-            query={"answerer": "YouTubeAnswerer", "video_id": video_id}
+        cache_res = CONVERSIONS_COLL.find_one(
+            {"answerer": "YouTubeAnswerer", "video_id": video_id}
         )
-        if cached.items:
-            return cached.items[0]["transcription"]
+        if cache_res:
+            return cache_res["transcription"]
 
         # Then get the transcript
         response = requests.post(
@@ -151,7 +150,7 @@ class YouTubeAnswerer(BaseAnswerer):
             )
 
         # Cache the transcription
-        conversions_db.put(
+        CONVERSIONS_COLL.insert_one(
             {
                 "answerer": "YouTubeAnswerer",
                 "video_id": video_id,
