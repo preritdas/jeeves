@@ -3,7 +3,8 @@ from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
 
 import requests
-from deta import Deta
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 import urllib.parse
 
@@ -13,7 +14,7 @@ from jeeves.utils import validate_phone_number
 
 
 router = APIRouter()
-permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
+PERMISSIONS_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["permissions"]
 
 
 @router.get("/user-by-phone/{phone_number}")
@@ -28,7 +29,7 @@ async def user_by_phone(phone_number: str, access_code: str) -> dict:
     except ValueError as e:
         return {"error": f"Invalid phone number. {str(e)}"}
 
-    res = permissions_db.fetch({"Phone": phone_number}).items
+    res = list(PERMISSIONS_COLL.find({"Phone": phone_number}))
 
     if not res:
         return {"error": "User not found."}
@@ -36,11 +37,13 @@ async def user_by_phone(phone_number: str, access_code: str) -> dict:
     if len(res) > 1:
         return {"error": "Multiple users found."}
 
-    return {"user": res[0]["key"]}
+    object_id = res[0]["_id"]
+    string_id = str(object_id)
+    return {"user": string_id}
 
 
-@router.get("/zapier-start/{user_key}")
-async def zapier_start(user_key: str) -> RedirectResponse:
+@router.get("/zapier-start/{user_id}")
+async def zapier_start(user_id: str) -> RedirectResponse:
     """
     Create the link for the user to use to start with Zapier. Redirects the user
     to their Zapier authentication setup page.
@@ -52,7 +55,7 @@ async def zapier_start(user_key: str) -> RedirectResponse:
         f"https://nla.zapier.com/oauth/authorize/"
         f"?client_id={KEYS.Zapier.client_id}&response_type=code"
         f"&redirect_uri={redirect_uri}"
-        f"&state={user_key}"
+        f"&state={user_id}"
         "&scope=nla%3Aexposed_actions%3Aexecute"
     )
 
@@ -64,11 +67,11 @@ def handle_zapier(state: str, code: str):
     access token in the permissions database.
 
     Args:
-        state (str): The user key - Deta key for their user entry.
+        state (str): The user key - str of ObjectID for their user entry.
         code (str): The authentication code.
     """
     # Find the user in the database
-    user: dict = permissions_db.get(state)
+    user: dict = PERMISSIONS_COLL.find_one({"_id": ObjectId(state)})
 
     if not user:
         return {"error": "User not found."}
@@ -93,14 +96,12 @@ def handle_zapier(state: str, code: str):
 
     # Update the user's access token
     res_json = res.json()
-    user.update(
-        {
-            "ZapierAccessToken": res_json["access_token"],
-            "ZapierRefreshToken": res_json["refresh_token"]
-        }
-    )
+    db_updates = {
+        "ZapierAccessToken": res_json["access_token"],
+        "ZapierRefreshToken": res_json["refresh_token"]
+    }
 
     # Save the user
-    permissions_db.put(user)
+    PERMISSIONS_COLL.update_one({"_id": ObjectId(state)}, {"$set": db_updates})
 
     return {"status": "success"}
