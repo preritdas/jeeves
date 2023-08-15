@@ -5,7 +5,7 @@ General:
   default_timezone: "US/Eastern"  # default timezone for user
 
 Security:
-  validate_twilio_inbound: true
+  validate_twilio_inbound: false
   validate_telegram_inbound: true
 
 Weather:
