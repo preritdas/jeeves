@@ -28,4 +28,4 @@ def get_speech(text: str, filetype: str) -> str:
     if not item:
         return ""
 
-    return ["URL"]
+    return item["URL"]
