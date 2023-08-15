@@ -1,15 +1,16 @@
 """Permissions database."""
-from deta import Deta
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 from pydantic import BaseModel, validator, root_validator
 
 from typing import Self
-import time
 
 from jeeves.keys import KEYS
 from jeeves.utils import validate_phone_number, refresh_zapier_access_token, access_token_expired
 
 
-permissions_db = Deta(KEYS.Deta.project_key).Base("permissions")
+# Connect to the MongoDB permissions database collection
+PERMISSIONS_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["permissions"]
 
 
 class User(BaseModel):
@@ -25,7 +26,7 @@ class User(BaseModel):
         zapier_key: The user's Zapier key. Optional.
         telegram_id: The user's Telegram ID. Optional.
     """
-    key: str
+    _id: ObjectId
     name: str
     gender_male: bool
     phone: str
@@ -74,30 +75,30 @@ class User(BaseModel):
             )
 
             # Update the database
-            permissions_db.update(
-                {
+            PERMISSIONS_COLL.update_one(
+                {"_id": values["_id"]},
+                {"$set": {
                     "ZapierAccessToken": values["zapier_access_token"],
                     "ZapierRefreshToken": values["zapier_refresh_token"]
-                },
-                values["key"]
+                }}
             )
 
         return values
 
     @classmethod
-    def _from_db_key(cls, key: str) -> Self:
+    def _from_db_id(cls, _id: ObjectId) -> Self:
         """
         Create an object given a key from the database. Use this private
         classmethod when creating other public classmethods that retrieve
         the key in various ways, ex. via phone or via Telegram.
         """
-        user = permissions_db.get(key)
+        user = PERMISSIONS_COLL.find_one({"_id": _id})
 
         if not user:
-            raise ValueError(f"User with key {key} not found.")
+            raise ValueError(f"User with _id {_id} not found.")
 
         return cls(
-            key=user["key"],
+            _id=user["_id"],
             name=user["Name"],
             gender_male=user["GenderMale"],
             phone=user["Phone"],
@@ -111,14 +112,7 @@ class User(BaseModel):
     @classmethod
     def from_phone(cls, phone: str) -> Self | None:
         """Get a user by phone number. Returns None if not found."""
-        try:
-            items = permissions_db.fetch({"Phone": validate_phone_number(phone)}).items
-        except Exception as e:
-            if "Request-sent" in str(e):
-                time.sleep(0.5)
-                items = permissions_db.fetch({"Phone": validate_phone_number(phone)}).items
-            else:
-                raise e  # re-raise the exception if it's not a Request-sent error
+        items = list(PERMISSIONS_COLL.find({"Phone": validate_phone_number(phone)}))
 
         if not items:
             return None
@@ -130,21 +124,14 @@ class User(BaseModel):
             )
 
         user = items[0]
-        return cls._from_db_key(user["key"])
+        return cls._from_db_id(user["_id"])
 
     @classmethod
     def from_telegram_id(cls, telegram_id: int) -> Self | None:
         """
         Get a user by Telegram ID. Returns None if not found.
         """
-        try:
-            items = permissions_db.fetch({"TelegramID": telegram_id}).items
-        except Exception as e:
-            if "Request-sent" in str(e):
-                time.sleep(0.5)
-                items = permissions_db.fetch({"TelegramID": telegram_id}).items
-            else:
-                raise e  # re-raise the exception if it's not a Request-sent error
+        items = list(PERMISSIONS_COLL.find({"TelegramID": telegram_id}))
 
         if not items:
             return None
@@ -156,4 +143,4 @@ class User(BaseModel):
             )
         
         user = items[0]
-        return cls._from_db_key(user["key"])
+        return cls._from_db_id(user["_id"])
