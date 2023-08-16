@@ -26,7 +26,7 @@ class User(BaseModel):
         zapier_key: The user's Zapier key. Optional.
         telegram_id: The user's Telegram ID. Optional.
     """
-    _id: ObjectId
+    db_id: ObjectId
     name: str
     gender_male: bool
     phone: str
@@ -35,6 +35,9 @@ class User(BaseModel):
     zapier_access_token: str | None = None
     zapier_refresh_token: str | None = None
     telegram_id: int | None = None
+
+    class Config:
+        arbitrary_types_allowed = True
 
     @validator("phone")
     def validate_phone(cls, phone: str) -> str:
@@ -76,7 +79,7 @@ class User(BaseModel):
 
             # Update the database
             PERMISSIONS_COLL.update_one(
-                {"_id": values["_id"]},
+                {"_id": values["db_id"]},
                 {"$set": {
                     "ZapierAccessToken": values["zapier_access_token"],
                     "ZapierRefreshToken": values["zapier_refresh_token"]
@@ -86,19 +89,19 @@ class User(BaseModel):
         return values
 
     @classmethod
-    def _from_db_id(cls, _id: ObjectId) -> Self:
+    def _from_db_id(cls, db_id: ObjectId) -> Self:
         """
         Create an object given a key from the database. Use this private
         classmethod when creating other public classmethods that retrieve
         the key in various ways, ex. via phone or via Telegram.
         """
-        user = PERMISSIONS_COLL.find_one({"_id": _id})
+        user = PERMISSIONS_COLL.find_one({"_id": db_id})
 
         if not user:
-            raise ValueError(f"User with _id {_id} not found.")
+            raise ValueError(f"User with _id {db_id} not found.")
 
         return cls(
-            _id=user["_id"],
+            db_id=user["_id"],
             name=user["Name"],
             gender_male=user["GenderMale"],
             phone=user["Phone"],
