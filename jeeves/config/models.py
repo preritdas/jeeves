@@ -1,5 +1,5 @@
 """Models for configuration."""
-from pydantic import BaseModel, validator
+from pydantic import field_validator, BaseModel
 
 import pytz
 
@@ -18,7 +18,7 @@ class GeneralConfig(BaseModel):
     dev_phone: str
     default_timezone: str
 
-    @validator("dev_phone")
+    @field_validator("dev_phone")
     def validate_dev_phone(cls, v):
         if v.startswith("+"):
             return v[1:]
@@ -31,7 +31,7 @@ class GeneralConfig(BaseModel):
 
         return v
 
-    @validator("default_timezone")
+    @field_validator("default_timezone")
     def validate_default_timezone(cls, v):
         try:
             pytz.timezone(v)
