@@ -1,4 +1,5 @@
 fastapi==0.101.1  # API
+pydantic==2.2.0  # force v2
 deta==1.2.0  # databases throughout
 pymongo==4.4.1  # mongo db
 
