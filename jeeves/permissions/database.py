@@ -46,7 +46,7 @@ class User(BaseModel):
 
     @field_validator("timezone")
     def validate_timezone(cls, timezone: str) -> str:
-        """Mode is 'before' to turn offset into a string."""
+        """Convert timezone to Olson format, for pytz in prompt formatting."""
         assert isinstance(timezone, str)
         timezone = timezone.upper()
 
