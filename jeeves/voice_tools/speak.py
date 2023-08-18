@@ -1,5 +1,4 @@
 """Use ElevenLabs to speak."""
-import elevenlabs
 import requests
 from pydub import AudioSegment
 
@@ -9,8 +8,6 @@ import uuid
 from jeeves.keys import KEYS
 from jeeves.voice_tools import speech_cache
 
-
-JEEVES_VOICE_ID = KEYS.ElevenLabs.voice_id
 
 CODECS = {"ogg": "libopus"}
 
@@ -32,7 +29,20 @@ def _upload_result(bytecode: bytes, filetype: str, mime: str) -> str:
 
 def _speak_jeeves(text: str) -> bytes:
     """Speak the text using the Jeeves voice. Returns MP3 bytecode."""
-    return elevenlabs.generate(text, KEYS.ElevenLabs.api_key, JEEVES_VOICE_ID)
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{KEYS.ElevenLabs.voice_id}"
+    headers = {
+        "xi-api-key": KEYS.ElevenLabs.api_key
+    }
+    data = {
+        "text": text,
+        "model_id": KEYS.ElevenLabs.eleven_model,
+        "voice_settings": {"stability": 0.5, "similarity_boost": 0.5},
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    response.raise_for_status()
+
+    return response.content
 
 
 def speak_jeeves(
