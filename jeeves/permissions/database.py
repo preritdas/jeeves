@@ -1,7 +1,7 @@
 """Permissions database."""
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import ConfigDict, BaseModel, field_validator, model_validator
 
 from typing import Self
 
@@ -36,8 +36,8 @@ class User(BaseModel):
     zapier_refresh_token: str | None = None
     telegram_id: int | None = None
 
-    class Config:
-        arbitrary_types_allowed = True
+    # Pydantic configuration
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @field_validator("phone")
     def validate_phone(cls, phone: str) -> str:
