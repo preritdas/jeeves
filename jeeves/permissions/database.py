@@ -1,7 +1,7 @@
 """Permissions database."""
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from pydantic import BaseModel, validator, model_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 from typing import Self
 
@@ -39,14 +39,14 @@ class User(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    @validator("phone")
+    @field_validator("phone")
     def validate_phone(cls, phone: str) -> str:
         """Validate phone number."""
         return validate_phone_number(phone)
 
-    @validator("timezone", pre=True)
+    @field_validator("timezone")
     def validate_timezone(cls, timezone: str) -> str:
-        """Pre to turn offset into a string."""
+        """Mode is 'before' to turn offset into a string."""
         assert isinstance(timezone, str)
         timezone = timezone.upper()
 
