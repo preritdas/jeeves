@@ -123,9 +123,11 @@ class ElevenLabsModel(BaseModel):
     Attributes:
         api_key (str): The ElevenLabs API key.
         voice_id (str): The ElevenLabs voice ID.
+        eleven_model (str): The ElevenLabs generation model.
     """
     api_key: str
     voice_id: str
+    eleven_model: str
 
 
 class UploadIOModel(BaseModel):

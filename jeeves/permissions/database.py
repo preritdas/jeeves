@@ -1,7 +1,7 @@
 """Permissions database."""
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from pydantic import BaseModel, validator, root_validator
+from pydantic import ConfigDict, BaseModel, field_validator, model_validator
 
 from typing import Self
 
@@ -36,17 +36,17 @@ class User(BaseModel):
     zapier_refresh_token: str | None = None
     telegram_id: int | None = None
 
-    class Config:
-        arbitrary_types_allowed = True
+    # Pydantic configuration
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    @validator("phone")
+    @field_validator("phone")
     def validate_phone(cls, phone: str) -> str:
         """Validate phone number."""
         return validate_phone_number(phone)
 
-    @validator("timezone", pre=True)
+    @field_validator("timezone")
     def validate_timezone(cls, timezone: str) -> str:
-        """Pre to turn offset into a string."""
+        """Convert timezone to Olson format, for pytz in prompt formatting."""
         assert isinstance(timezone, str)
         timezone = timezone.upper()
 
@@ -62,31 +62,29 @@ class User(BaseModel):
 
         return mappings[timezone]
 
-    @root_validator
-    def validate_zapier(cls, values: dict) -> dict:
+    @model_validator(mode="after")
+    def validate_zapier(self) -> dict:
         """
         Check the access token for validity. If it's invalid, use the refresh token 
         to refresh it and update the access token both in the User object 
         and in the database.
         """
-        token = values["zapier_access_token"]
-
-        if token and access_token_expired(token):
+        if self.zapier_access_token and access_token_expired(self.zapier_access_token):
             # Refresh the access token and update the refresh token
-            values["zapier_access_token"], values["zapier_refresh_token"] = (
-                refresh_zapier_access_token(values["zapier_refresh_token"])
+            self.zapier_access_token, self.zapier_refresh_token = (
+                refresh_zapier_access_token(self.zapier_refresh_token)
             )
 
             # Update the database
             PERMISSIONS_COLL.update_one(
-                {"_id": values["db_id"]},
+                {"_id": self.db_id},
                 {"$set": {
-                    "ZapierAccessToken": values["zapier_access_token"],
-                    "ZapierRefreshToken": values["zapier_refresh_token"]
+                    "ZapierAccessToken": self.zapier_access_token,
+                    "ZapierRefreshToken": self.zapier_refresh_token
                 }}
             )
 
-        return values
+        return self
 
     @classmethod
     def _from_db_id(cls, db_id: ObjectId) -> Self:

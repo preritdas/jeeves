@@ -1,5 +1,5 @@
 """Models for the user memory tool."""
-from pydantic import BaseModel, validator
+from pydantic import field_validator, BaseModel
 
 import datetime as dt
 
@@ -10,9 +10,9 @@ class Entry(BaseModel):
     user_phone: str
     content: str
 
-    @validator("datetime", pre=True)
+    @field_validator("datetime", mode="before")
     def parse_datetime(cls, v):
-        """Parse datetime."""
+        """Parse datetime. Mode is before to convert to datetime before validation."""
         if isinstance(v, str):
             return dt.datetime.fromisoformat(v)
         elif isinstance(v, dt.datetime):
