@@ -12,7 +12,7 @@ class Entry(BaseModel):
 
     @field_validator("datetime", mode="before")
     def parse_datetime(cls, v):
-        """Parse datetime. Mode is before to convert to datetime before validation."""
+        """Parse datetime. Mode is 'before' to convert to datetime before validation."""
         if isinstance(v, str):
             return dt.datetime.fromisoformat(v)
         elif isinstance(v, dt.datetime):
