@@ -127,7 +127,7 @@ class ElevenLabsModel(BaseModel):
     """
     api_key: str
     voice_id: str
-    eleven_model: str
+    eleven_model: str = "eleven_monolingual_v1"
 
 
 class UploadIOModel(BaseModel):
