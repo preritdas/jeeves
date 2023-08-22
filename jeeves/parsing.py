@@ -3,7 +3,7 @@ Parsing inbound messages for content.
 """
 from typing import Callable
 
-import pydantic
+from pydantic import field_validator, BaseModel
 
 # Project
 from jeeves import applets
@@ -26,14 +26,14 @@ def _parse_options(options: str) -> dict[str, str]:
     return return_options
 
 
-class InboundMessage(pydantic.BaseModel):
+class InboundMessage(BaseModel):
     """
     Inbound structure to be used .
     """
     phone_number: str
     body: str
 
-    @pydantic.validator("phone_number")
+    @field_validator("phone_number")
     def remove_plus(cls, v):
         """Remove the plus from the phone number."""
         return validate_phone_number(v)
