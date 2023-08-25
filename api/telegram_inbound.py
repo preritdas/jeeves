@@ -19,22 +19,24 @@ from jeeves.voice_tools.speak import speak_jeeves
 router = APIRouter()
 
 
-def send_message(user_id: int, message: str, reply_id: int) -> bool:
+def send_message(user_id: int, message: str, reply_id: int | None = None) -> bool:
     """
     Send a message to a Telegram user as a reply to a message.
     """
     if CONFIG.General.sandbox_mode:
         return True
 
+    payload = {
+        "chat_id": user_id, 
+        "text": message, 
+        "reply_to_message_id": reply_id
+    }
+
+    if reply_id:
+        payload["reply_to_message_id"] = reply_id
+
     url = f"https://api.telegram.org/bot{KEYS.Telegram.bot_token}/sendMessage"
-    res = requests.post(
-        url, 
-        data={
-            "chat_id": user_id, 
-            "text": message, 
-            "reply_to_message_id": reply_id
-        }
-    )
+    res = requests.post(url, data=payload)
 
     res.raise_for_status()
     return True if res.status_code == 200 else False
