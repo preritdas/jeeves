@@ -1,4 +1,7 @@
 """Test agent tools."""
+import requests
+
+from jeeves.utils import CHROME_REQUEST_HEADERS
 from jeeves.agency.retrieval import WebsiteAnswerer, YouTubeAnswerer
 from jeeves.agency.news import manual_headline_news
 from jeeves.agency.tool_auth import NO_AUTH_TOOLS
@@ -25,6 +28,17 @@ def test_youtube_answerer():
 
     assert answer
     assert "Unfortunately cannot answer" not in answer
+
+
+def test_youtube_parsers():
+    video_link = "https://www.youtube.com/watch?v=d1KT39pDiY0&ab_channel=MattWalsh"
+    content = requests.get(video_link, headers=CHROME_REQUEST_HEADERS).text
+
+    assert YouTubeAnswerer._parse_video_title(content) == (
+        "Paper Straws Confirmed To Be Worse Than Plastic Straws"
+    )
+
+    assert YouTubeAnswerer._parse_video_channel(content) == "Matt Walsh"
 
 
 def test_headlines():
