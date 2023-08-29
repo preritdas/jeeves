@@ -120,15 +120,35 @@ class WebsiteAnswerer(BaseAnswerer):
 class YouTubeAnswerer(BaseAnswerer):
     """Answerer for YouTube videos."""
 
+    @staticmethod
+    def _video_source_to_url(video_source: str) -> str:
+        """Convert a YouTube video ID to a URL."""
+        if "youtube" in video_source:
+            return video_source.split("?v=")[1]
+        elif "youtu.be" in video_source:
+            return video_source.split("/")[-1]
+        elif len(video_source) == 11:  # Assume it's just the video ID
+            return video_source
+
+        raise ValueError(f"Could not parse YouTube video source {video_source}.")
+
+    @staticmethod
+    def _video_title(video_url: str) -> str:
+        """
+        Get the title of a YouTube video.
+
+        Args:
+            video_url: URL of the YouTube video.
+
+        Returns:
+            (str) The title of the video.
+        """
+
+
     def convert(self) -> str:
         """Convert YouTube video to text."""
         # First parse the video ID
-        if "youtube" in self.source:
-            video_id = self.source.split("?v=")[1]
-        elif "youtu.be" in self.source:
-            video_id = self.source.split("/")[-1]
-        else:  # Assume it's just the video ID
-            video_id = self.source
+        video_id = self._video_source_to_url(self.source)
 
         # Check if the video has already been converted
         cache_res = CONVERSIONS_COLL.find_one(
