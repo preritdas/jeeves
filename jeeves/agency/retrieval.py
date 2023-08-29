@@ -144,6 +144,41 @@ class YouTubeAnswerer(BaseAnswerer):
             (str) The title of the video.
         """
 
+    @staticmethod
+    def _parse_video_title(html_content: str) -> str:
+        """
+        Parse the title of a YouTube video from the HTML.
+        Returns an empty string if the title cannot be found.
+        """
+        title_start = html_content.find("only screen and (max")
+
+        if title_start == -1:
+            return ""
+
+        title_start += 92  # link and other stuff, advance to title
+        title_end = html_content[title_start:].find("</title")
+        title = html_content[title_start : title_start + title_end]
+
+        # Remove the " - YouTube" suffix
+        if title.endswith(" - YouTube"):
+            title = title[:-10]
+
+        return title
+
+    @staticmethod
+    def _parse_video_channel(html_content: str) -> str:
+        """
+        Parse the channel of a YouTube video from the HTML.
+        Returns an empty string if the channel cannot be found.
+        """
+        search_str = 'link itemprop="name" content="'
+        channel_start = html_content.find(search_str)
+        channel_start += len(search_str)
+
+        if channel_start == -1:
+            return ""
+
+        return html_content[channel_start:].split('"')[0]
 
     def convert(self) -> str:
         """Convert YouTube video to text."""
