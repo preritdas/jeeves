@@ -204,13 +204,26 @@ class YouTubeAnswerer(BaseAnswerer):
                 f"YouTube transcription failed: {response.content.decode()}"
             )
 
+        # Get the transcription
+        transcription = response.json()["transcription"]
+
+        # Insert title and source into the transcription
+        html_content = requests.get(self.source, headers=utils.CHROME_REQUEST_HEADERS).text
+        title = self._parse_video_title(html_content)
+        channel = self._parse_video_channel(html_content)
+        
+        if title:
+            transcription = f"Title: {title}\n\n" + transcription
+        if channel:
+            transcription = f"Channel: {channel}\n\n" + transcription
+
         # Cache the transcription
         CONVERSIONS_COLL.insert_one(
             {
                 "answerer": "YouTubeAnswerer",
                 "video_id": video_id,
-                "transcription": response.json()["transcription"]
+                "transcription": transcription
             }
         )
 
-        return response.json()["transcription"]
+        return transcription
