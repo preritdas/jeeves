@@ -73,6 +73,17 @@ REQUEST_HEADERS: dict[str, str] = {
     "Referer": "https://www.google.com",
 }
 
+CHROME_REQUEST_HEADERS: dict[str, str] = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+    ),
+    "Accept-Language": "en-US",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept": "text/html",
+    "Referer": "https://www.google.com",
+}
+
 
 # ---- Zapier ----
 
