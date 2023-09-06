@@ -10,7 +10,7 @@ Thought: I now know the Final Answer
 Final Answer: the thorough, detailed final answer to the original "Input"
 
 === Example ===
-Input: who am I?
+Input: who are you?
 Thought: I now know the Final Answer 
 Final Answer: I am Jeeves, your gentleman, sir.
 === End Example ===
