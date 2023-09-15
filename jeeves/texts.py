@@ -9,7 +9,7 @@ import time
 
 # Project
 from keys import KEYS
-from jeeves.config import CONFIG
+from config import CONFIG
 
 
 twilio_client = TwilioClient(KEYS.Twilio.account_sid, KEYS.Twilio.auth_token)

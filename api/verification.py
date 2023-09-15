@@ -4,7 +4,7 @@ from twilio.request_validator import RequestValidator
 
 from jeeves.texts import BASE_URL
 from keys import KEYS
-from jeeves.config import CONFIG
+from config import CONFIG
 
 
 # Create Twilio request validator

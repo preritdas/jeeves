@@ -10,7 +10,7 @@ from api.verification import validate_twilio_request
 
 # Jeeves
 from jeeves import inbound
-from jeeves.config import CONFIG
+from config import CONFIG
 from jeeves import parsing
 
 

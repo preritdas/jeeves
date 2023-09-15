@@ -1,6 +1,6 @@
 """Weather data."""
 from jeeves import utils
-from jeeves.config import CONFIG
+from config import CONFIG
 
 from jeeves.applets.weather import data
 from jeeves.applets.weather.data import kelvin_to_farenheit as farenheit

@@ -7,7 +7,7 @@ from threading import Thread
 from api.verification import validate_telegram_request
 
 from keys import KEYS
-from jeeves.config import CONFIG
+from config import CONFIG
 from jeeves.permissions import User
 
 from jeeves.agency import generate_agent_response

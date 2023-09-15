@@ -11,7 +11,7 @@ import random
 
 # Project
 from keys import KEYS
-from jeeves.config import CONFIG
+from config import CONFIG
 
 
 deta = deta.Deta(KEYS.Deta.project_key)
