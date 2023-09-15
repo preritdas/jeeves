@@ -3,7 +3,7 @@ Responsible for turning a list of groceries with quantity into a classified
 ordered list.
 """
 # Project
-from jeeves.config import CONFIG
+from config import CONFIG
 from jeeves.applets.groceries import utils
 
 

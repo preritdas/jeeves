@@ -1,7 +1,7 @@
 """Completion backend using the OpenAI SDK for the GPT applet."""
 import openai
 
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 # Authennticate OpenAI

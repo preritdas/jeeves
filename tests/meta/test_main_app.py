@@ -6,7 +6,7 @@ Testing API handlers, routers, endpoints, etc. using a FastAPI TestClient.
 from fastapi.testclient import TestClient
 import pytest
 
-from jeeves.keys import KEYS
+from keys import KEYS
 
 import api
 from api.telegram_inbound import process_telegram_inbound

@@ -5,8 +5,8 @@ import datetime as dt
 import pytz
 
 from jeeves.utils import app_handler
-from jeeves.config import CONFIG
-from jeeves.keys import KEYS
+from config import CONFIG
+from keys import KEYS
 
 from jeeves.applets.groceries import classification
 from jeeves.applets.groceries.utils import SETUPS

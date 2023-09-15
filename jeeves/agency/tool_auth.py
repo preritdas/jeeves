@@ -6,7 +6,7 @@ from langchain.utilities.zapier import ZapierNLAWrapper
 from langchain.agents.agent_toolkits import ZapierToolkit
 from langchain.callbacks.base import BaseCallbackHandler
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.permissions import User
 
 from jeeves.agency import retrieval

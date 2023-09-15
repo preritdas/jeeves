@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 
 # App
 from api import app
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 @pytest.fixture(scope="module")

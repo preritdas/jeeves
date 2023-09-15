@@ -4,7 +4,7 @@ import requests
 
 import random
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves import texts
 
 

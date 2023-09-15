@@ -1,6 +1,6 @@
 """Get cocktail drink recommendations with ingredients and instructions."""
 from jeeves import utils
-from jeeves.config import CONFIG
+from config import CONFIG
 
 from jeeves.applets.cocktails import data
 from jeeves.applets.cocktails import errors  # unit tests

@@ -4,7 +4,7 @@ import pytest
 import datetime as dt
 import pytz
 
-from jeeves.config import CONFIG
+from config import CONFIG
 from jeeves.agency.chat_history.filter import RecencyFilterer, DatetimeFilterer, TokenCountFilterer, _count_tokens
 from jeeves.agency.chat_history.models import Message
 

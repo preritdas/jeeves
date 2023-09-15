@@ -9,8 +9,8 @@ import uuid
 import pytz
 import datetime as dt
 
-from jeeves.keys import KEYS
-from jeeves.config import CONFIG
+from keys import KEYS
+from config import CONFIG
 from jeeves.permissions import User
 
 from jeeves.agency import tool_auth

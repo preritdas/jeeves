@@ -10,8 +10,8 @@ import string
 import random
 
 # Project
-from jeeves.keys import KEYS
-from jeeves.config import CONFIG
+from keys import KEYS
+from config import CONFIG
 
 
 deta = deta.Deta(KEYS.Deta.project_key)

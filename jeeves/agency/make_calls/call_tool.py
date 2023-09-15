@@ -10,7 +10,7 @@ from urllib.parse import urlencode
 from typing import Any, Coroutine
 
 # Project
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.texts import twilio_client, BASE_URL
 
 # Make calls

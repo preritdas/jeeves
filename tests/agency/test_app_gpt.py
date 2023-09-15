@@ -7,7 +7,7 @@ from jeeves.agency.tool_auth import NO_AUTH_TOOLS, build_tools
 from jeeves.agency.logs_callback import extract_log_items
 
 from jeeves.permissions import User
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 def test_handler(default_options):

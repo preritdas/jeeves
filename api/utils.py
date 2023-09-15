@@ -1,7 +1,7 @@
 """Various API utilities."""
 import requests
 
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 def set_telegram_webhook(webhook_url: str) -> bool:

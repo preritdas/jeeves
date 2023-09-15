@@ -4,7 +4,7 @@ import pytz
 import string
 import random
 
-from jeeves.config import CONFIG
+from config import CONFIG
 from jeeves import usage
 
 
