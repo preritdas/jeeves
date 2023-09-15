@@ -10,7 +10,6 @@ from keys import models
 keys_path = os.path.join(
     (current_dir := os.path.realpath(os.path.dirname(__file__))),
     "..",  # parent dir since module is in a subdirectory
-    "..",  # past jeeves directory
     "keys.yaml"
 )
 
