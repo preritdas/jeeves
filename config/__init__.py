@@ -4,7 +4,7 @@ Read config.yaml.
 import os
 import yaml
 
-from jeeves.config import models
+from config import models
 
 
 config_path = os.path.join(
