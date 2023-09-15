@@ -3,7 +3,7 @@ from pymongo import MongoClient
 
 import datetime as dt
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.agency.chat_history.models import Message
 from jeeves.agency.chat_history.filter import BaseFilterer
 

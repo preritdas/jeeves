@@ -2,7 +2,7 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves import voice_tools as vt
 
 from jeeves.agency.make_calls.prompts import generate_intro_message

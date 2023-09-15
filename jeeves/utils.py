@@ -5,7 +5,7 @@ from functools import wraps
 from json import JSONDecodeError
 
 from jeeves.errors import ZapierAuthenticationError
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 def app_handler(app_help: str, app_options: dict = {}):

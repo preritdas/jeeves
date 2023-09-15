@@ -6,7 +6,7 @@ from threading import Thread
 
 from api.verification import validate_telegram_request
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.config import CONFIG
 from jeeves.permissions import User
 

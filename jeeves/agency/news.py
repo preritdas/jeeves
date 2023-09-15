@@ -2,7 +2,7 @@
 import requests
 from pydantic import BaseModel, Field
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.agency import retrieval
 
 

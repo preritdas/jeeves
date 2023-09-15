@@ -8,7 +8,7 @@ from twilio.rest import Client as TwilioClient
 import time
 
 # Project
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.config import CONFIG
 
 

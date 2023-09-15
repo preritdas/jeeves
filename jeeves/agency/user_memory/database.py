@@ -15,7 +15,7 @@ import datetime as dt
 import pytz
 
 from jeeves.config import CONFIG
-from jeeves.keys import KEYS
+from keys import KEYS
 
 from jeeves.utils import validate_phone_number
 from jeeves.agency.user_memory.models import Entry

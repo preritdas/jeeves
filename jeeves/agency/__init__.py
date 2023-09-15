@@ -9,7 +9,7 @@ import uuid
 import pytz
 import datetime as dt
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.config import CONFIG
 from jeeves.permissions import User
 

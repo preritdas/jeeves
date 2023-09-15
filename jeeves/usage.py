@@ -10,7 +10,7 @@ import string
 import random
 
 # Project
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.config import CONFIG
 
 

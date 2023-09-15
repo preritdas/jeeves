@@ -4,7 +4,7 @@ Read keys.yaml.
 import os
 import yaml
 
-from jeeves.keys import models
+from keys import models
 
 
 keys_path = os.path.join(

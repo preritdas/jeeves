@@ -10,7 +10,7 @@ import re
 from typing import Dict, Any, List, Optional, Union
 from langchain.schema import LLMResult, AgentAction, AgentFinish
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.config import CONFIG
 
 
