@@ -90,4 +90,5 @@ class ChatHistory:
         Add a message to the database.
         Returns a dictionary of the full database entry.
         """
+        self.messages.append(message)  # add the message to local store, though unused
         return CHATS_COLL.insert_one(message.to_dict())
