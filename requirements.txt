@@ -23,7 +23,7 @@ emoji==2.8.0  # emojis in drink formatting
 
 # GPT
 openai==0.27.8  # gpt and ada embeddings
-langchain==0.0.292  # chains for easy llm use
+langchain==0.0.293  # chains for easy llm use
 faiss-cpu==1.7.4  # vector db
 tiktoken==0.4.0  # tokenize, splitting for retrieval
 
