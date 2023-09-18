@@ -3,8 +3,8 @@ from fastapi import Request
 from twilio.request_validator import RequestValidator
 
 from jeeves.texts import BASE_URL
-from jeeves.keys import KEYS
-from jeeves.config import CONFIG
+from keys import KEYS
+from config import CONFIG
 
 
 # Create Twilio request validator

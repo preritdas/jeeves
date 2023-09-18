@@ -8,7 +8,7 @@ from functools import wraps
 import time
 import io
 
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 # Authenticate OpenAI

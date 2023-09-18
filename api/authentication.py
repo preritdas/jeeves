@@ -9,7 +9,7 @@ from bson.objectid import ObjectId
 import urllib.parse
 
 from jeeves.texts import BASE_URL
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.utils import validate_phone_number
 
 

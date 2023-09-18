@@ -5,7 +5,7 @@ from pydantic import ConfigDict, BaseModel, field_validator, model_validator
 
 from typing import Self
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.utils import validate_phone_number, refresh_zapier_access_token, access_token_expired
 
 

@@ -14,7 +14,7 @@ import json
 from abc import ABC, abstractmethod
 
 from jeeves import utils
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)

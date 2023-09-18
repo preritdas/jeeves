@@ -1,7 +1,7 @@
 """Cache spoken text audio urls."""
 from pymongo import MongoClient
 
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 SPEECH_COLL = MongoClient(KEYS.MongoDB.connect_str)["Jeeves"]["voice_cache"]

@@ -5,7 +5,7 @@ from pydub import AudioSegment
 import io
 import uuid
 
-from jeeves.keys import KEYS
+from keys import KEYS
 from jeeves.voice_tools import speech_cache
 
 

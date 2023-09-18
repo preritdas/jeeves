@@ -4,7 +4,7 @@ import requests
 from functools import wraps
 
 from jeeves import utils
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 APP_HELP = "Get a random joke."

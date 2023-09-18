@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException
 
 from jeeves.agency import generate_base_agent_response
-from jeeves.keys import KEYS
+from keys import KEYS
 
 
 router = APIRouter()

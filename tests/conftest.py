@@ -7,7 +7,7 @@ import pytz
 import string
 import random
 
-from jeeves.config import CONFIG
+from config import CONFIG
 from jeeves import usage  # fixture for temporary logs for report
 from jeeves.permissions.database import PERMISSIONS_COLL  # fixtures for temporary users
 
