@@ -1,4 +1,4 @@
-fastapi==0.103.1  # API
+fastapi==0.103.2  # API
 pydantic==2.2.1  # force v2
 deta==1.2.0  # databases throughout
 pymongo==4.4.1  # mongo db
