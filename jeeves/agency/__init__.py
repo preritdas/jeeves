@@ -53,6 +53,7 @@ def create_agent_executor(
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
+        handle_parsing_errors=True,
         prefix=agent_prompts.prefix,
         format_instructions=agent_prompts.format_instructions,
         suffix=agent_prompts.suffix
@@ -75,6 +76,7 @@ def create_base_agent_executor(
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
+        handle_parsing_errors=True,
         prefix=agent_prompts.prefix,
         format_instructions=agent_prompts.format_instructions,
         suffix=agent_prompts.suffix
