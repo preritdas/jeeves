@@ -20,6 +20,7 @@ Cocktails:
 
 GPT:
   base_openai_model: gpt-4
+  temperature: 0
   console_agent: false  # print verbosely to console
 
 Telegram:

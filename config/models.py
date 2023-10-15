@@ -96,6 +96,7 @@ class GPTConfig(BaseModel):
         console_agent (bool): Whether to log to the console.
     """
     base_openai_model: str
+    temperature: int | float
     console_agent: bool
 
     @field_validator("base_openai_model")
@@ -103,6 +104,15 @@ class GPTConfig(BaseModel):
         if v not in {"gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-16k"}:
             raise ValueError(
                 "Invalid OpenAI base LLM model provided."
+            )
+
+        return v
+
+    @field_validator("temperature")
+    def validate_temperature(cls, v):
+        if v < 0 or v > 2:
+            raise ValueError(
+                "Temperature must be between 0 and 2."
             )
 
         return v
