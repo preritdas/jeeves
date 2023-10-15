@@ -9,7 +9,7 @@ Security:
   validate_telegram_inbound: true
 
 Weather:
-  default_city: McLean  # default city for weather lookup
+  default_city: New York  # default city for weather lookup
 
 Groceries:
   translation: false  # support classification of foreign items
