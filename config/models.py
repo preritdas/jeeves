@@ -95,7 +95,17 @@ class GPTConfig(BaseModel):
     Attributes:
         console_agent (bool): Whether to log to the console.
     """
+    base_openai_model: str
     console_agent: bool
+
+    @field_validator("base_openai_model")
+    def validate_base_openai_model(cls, v):
+        if v not in {"gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-16k"}:
+            raise ValueError(
+                "Invalid OpenAI base LLM model provided."
+            )
+
+        return v
 
 
 class TelegramConfig(BaseModel):
