@@ -34,7 +34,14 @@ class InternalThoughtZeroShotAgent(ZeroShotAgent):
         return ""
 
 
-llm = ChatOpenAI(model_name="gpt-4", openai_api_key=KEYS.OpenAI.api_key, temperature=0)
+# --- Create the LLM and AgentExecutor ---
+
+llm = ChatOpenAI(
+    model_name=CONFIG.GPT.base_openai_model, 
+    openai_api_key=KEYS.OpenAI.api_key, 
+    temperature=CONFIG.GPT.temperature
+)
+
 
 def create_agent_executor(
     toolkit: list[Tool],
@@ -46,6 +53,7 @@ def create_agent_executor(
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
+        handle_parsing_errors=True,
         prefix=agent_prompts.prefix,
         format_instructions=agent_prompts.format_instructions,
         suffix=agent_prompts.suffix
@@ -68,6 +76,7 @@ def create_base_agent_executor(
     agent = InternalThoughtZeroShotAgent.from_llm_and_tools(
         llm=llm,
         tools=toolkit,
+        handle_parsing_errors=True,
         prefix=agent_prompts.prefix,
         format_instructions=agent_prompts.format_instructions,
         suffix=agent_prompts.suffix

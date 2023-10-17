@@ -9,7 +9,7 @@ Security:
   validate_telegram_inbound: true
 
 Weather:
-  default_city: McLean  # default city for weather lookup
+  default_city: New York  # default city for weather lookup
 
 Groceries:
   translation: false  # support classification of foreign items
@@ -19,6 +19,8 @@ Cocktails:
   result_limit: 3  # number of results to return
 
 GPT:
+  base_openai_model: gpt-4
+  temperature: 0
   console_agent: false  # print verbosely to console
 
 Telegram:
