@@ -52,7 +52,7 @@ jobs:
           service: 'jeeves'
           image: gcr.io/preritdas-api/jeeves:pr-preview-${{ github.event.number }}
           tag: pr-preview-${{ github.event.number }}
-          flags: '--min-instances=0 --cpu=2 --memory=4Gi --allow-unauthenticated --no-cpu-throttling --cpu-boost'
+          flags: '--min-instances=0 --cpu=2 --memory=4Gi --timeout=5m --allow-unauthenticated --no-cpu-throttling --cpu-boost'
           no_traffic: true
 
       - name: Comment deployment
