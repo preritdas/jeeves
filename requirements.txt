@@ -5,7 +5,7 @@ pymongo==4.4.1  # mongo db
 
 # Server
 gunicorn==21.2.0
-uvicorn==0.23.2
+uvicorn==0.24.0
 python-multipart==0.0.6
 
 # Groceries
