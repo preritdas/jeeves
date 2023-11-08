@@ -17,5 +17,9 @@ RUN pip install -U pip wheel && \
 # Copy the rest of the application code into the container
 COPY . .
 
+# Add a run script to the PATH
+RUN echo 'gunicorn -b :8000 --timeout 0 -k uvicorn.workers.UvicornWorker api:app' > /bin/serve-api && \
+    chmod +x /bin/serve-api
+
 # Run the API
 CMD exec gunicorn -k uvicorn.workers.UvicornWorker --workers 3 --timeout 0 api:app
