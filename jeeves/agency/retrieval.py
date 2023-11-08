@@ -120,15 +120,70 @@ class WebsiteAnswerer(BaseAnswerer):
 class YouTubeAnswerer(BaseAnswerer):
     """Answerer for YouTube videos."""
 
+    @staticmethod
+    def _video_source_to_url(video_source: str) -> str:
+        """Convert a YouTube video ID to a URL."""
+        if "youtube" in video_source:
+            return video_source.split("?v=")[1]
+        elif "youtu.be" in video_source:
+            return video_source.split("/")[-1]
+        elif len(video_source) == 11:  # Assume it's just the video ID
+            return video_source
+
+        raise ValueError(f"Could not parse YouTube video source {video_source}.")
+
+    @staticmethod
+    def _video_title(video_url: str) -> str:
+        """
+        Get the title of a YouTube video.
+
+        Args:
+            video_url: URL of the YouTube video.
+
+        Returns:
+            (str) The title of the video.
+        """
+
+    @staticmethod
+    def _parse_video_title(html_content: str) -> str:
+        """
+        Parse the title of a YouTube video from the HTML.
+        Returns an empty string if the title cannot be found.
+        """
+        title_start = html_content.find("only screen and (max")
+
+        if title_start == -1:
+            return ""
+
+        title_start += 92  # link and other stuff, advance to title
+        title_end = html_content[title_start:].find("</title")
+        title = html_content[title_start : title_start + title_end]
+
+        # Remove the " - YouTube" suffix
+        if title.endswith(" - YouTube"):
+            title = title[:-10]
+
+        return title
+
+    @staticmethod
+    def _parse_video_channel(html_content: str) -> str:
+        """
+        Parse the channel of a YouTube video from the HTML.
+        Returns an empty string if the channel cannot be found.
+        """
+        search_str = 'link itemprop="name" content="'
+        channel_start = html_content.find(search_str)
+        channel_start += len(search_str)
+
+        if channel_start == -1:
+            return ""
+
+        return html_content[channel_start:].split('"')[0]
+
     def convert(self) -> str:
         """Convert YouTube video to text."""
         # First parse the video ID
-        if "youtube" in self.source:
-            video_id = self.source.split("?v=")[1]
-        elif "youtu.be" in self.source:
-            video_id = self.source.split("/")[-1]
-        else:  # Assume it's just the video ID
-            video_id = self.source
+        video_id = self._video_source_to_url(self.source)
 
         # Check if the video has already been converted
         cache_res = CONVERSIONS_COLL.find_one(
@@ -149,13 +204,26 @@ class YouTubeAnswerer(BaseAnswerer):
                 f"YouTube transcription failed: {response.content.decode()}"
             )
 
+        # Get the transcription
+        transcription = response.json()["transcription"]
+
+        # Insert title and source into the transcription
+        html_content = requests.get(self.source, headers=utils.CHROME_REQUEST_HEADERS).text
+        title = self._parse_video_title(html_content)
+        channel = self._parse_video_channel(html_content)
+        
+        if title:
+            transcription = f"Title: {title}\n\n" + transcription
+        if channel:
+            transcription = f"Channel: {channel}\n\n" + transcription
+
         # Cache the transcription
         CONVERSIONS_COLL.insert_one(
             {
                 "answerer": "YouTubeAnswerer",
                 "video_id": video_id,
-                "transcription": response.json()["transcription"]
+                "transcription": transcription
             }
         )
 
-        return response.json()["transcription"]
+        return transcription
