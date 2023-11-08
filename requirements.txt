@@ -5,7 +5,7 @@ pymongo==4.4.1  # mongo db
 
 # Server
 gunicorn==21.2.0
-uvicorn==0.23.2
+uvicorn==0.24.0
 python-multipart==0.0.6
 
 # Groceries
@@ -23,7 +23,7 @@ emoji==2.8.0  # emojis in drink formatting
 
 # GPT
 openai==0.28.1  # gpt and ada embeddings
-langchain==0.0.326  # chains for easy llm use
+langchain==0.0.319  # chains for easy llm use
 faiss-cpu==1.7.4  # vector db
 tiktoken==0.4.0  # tokenize, splitting for retrieval
 
