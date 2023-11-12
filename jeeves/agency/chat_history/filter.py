@@ -20,7 +20,6 @@ class BaseFilterer(ABC):
         """
         Filter the messages. Input schema is the same as output schema. Order matters.
         """
-        raise NotImplementedError
 
 
 class DatetimeFilterer(BaseFilterer):
