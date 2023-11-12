@@ -67,11 +67,9 @@ Safety is a priority; Jeeves creates drafts of emails for you to review before s
 
 ## The Future of Jeeves
 
-As a rapidly evolving project, Jeeves is in active development, with new improvements, features, and tools added daily.
+(Edited Nov, 2023) –– As LLM agent technologies (model, prompt, facilitation levels) advance, Jeeves in his current state becomes almost irrelevant. Over the last several months, many of Jeeves' features became standard in traditional LLM services––ex. ChatGPT browsing, ChatGPT plugins, Zapier AI Actions, ChatGPT voice (iOS), and various platform-level AI integrations. Of course, this was always expected, and is ultimately best for the ecosystem!
 
-As a general thought, with the releases of powerful models like GPT-3.5 Turbo and GPT-4, particularly with the time for developers to craft innovative ways of leveraging them, AI-powered tools like Jeeves will become increasingly prevalent. He may be the first of his kind, but will certainly not be the last.
-
-This documentation explores Jeeves' inner workings, tooling, and future expectations as a powerful implementation of a technology we humans are yet to understand.
+I still use him regularly to synthesize all features into one interface, particularly given the ability to voice chat through Telegram, make phone calls, and access all of my personal accounts. Nonetheless, this documentation explores Jeeves' inner workings, tooling, and future expectations as a powerful implementation of a technology we humans have yet to understand.
 
 ### Try Jeeves
 
