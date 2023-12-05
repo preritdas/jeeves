@@ -1,5 +1,5 @@
 ---
-description: An artificially-intelligent personal assistant, created in 2022.
+description: An artificially-intelligent personal assistant created in 2022.
 cover: .gitbook/assets/small left.png
 coverY: 0
 ---
