@@ -6,7 +6,11 @@ coverY: 0
 
 # 🎩 Meet Jeeves.
 
-Jeeves (now [open source](https://github.com/preritdas/jeeves)) is an AI personal assistant designed to make your life easier and more efficient. You can text him, call him, or send him Telegram voice messages when you're on the go.
+{% hint style="success" %}
+Jeeves is now [open source](https://github.com/preritdas/jeeves).&#x20;
+{% endhint %}
+
+Jeeves is an AI personal assistant designed to make your life easier and more efficient. You can text him, call him, or send him Telegram voice messages when you're on the go.
 
 Jeeves is entirely unique to you, offering advanced functions such as:
 
