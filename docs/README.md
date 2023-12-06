@@ -22,7 +22,7 @@ Jeeves is entirely unique to you, offering advanced functions such as:
 Jeeves takes care of dinner.
 {% endembed %}
 
-Built upon state-of-the-art LLMs both fine-tuned and re-engineered, coupled with careful implementation of complex operations, Jeeves is incredibly accurate, performant, efficient, and boasts an impressive success rate (your human personal assistant would never walk up to you and say "Error, could not parse output").
+Built upon [state-of-the-art LLMs](#user-content-fn-1)[^1] both fine-tuned and re-engineered, coupled with careful implementation of complex operations, Jeeves is incredibly accurate, performant, efficient, and boasts an impressive success rate (your human personal assistant would never walk up to you and say "Error, could not parse output").
 
 ## Example Use Case
 
@@ -84,3 +84,5 @@ I still use him regularly to synthesize all features into one interface, particu
 Jeeves is currently in closed testing (in other words, I'm hogging him for myself and family/friends). If you're interested in giving him employment—making him your gentleman, let's say—please fill out the form below.
 
 {% embed url="https://preritdas.typeform.com/to/hVrVLeiv" %}
+
+[^1]: `mistral-7b-v0.1`, `gpt-3.5-turbo`, `gpt-4`, `gpt-4-1106-preview`
