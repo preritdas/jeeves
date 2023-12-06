@@ -1,7 +1,7 @@
 fastapi==0.103.2  # API
 pydantic==2.2.1  # force v2
 deta==1.2.0  # databases throughout
-pymongo==4.4.1  # mongo db
+pymongo==4.6.1  # mongo db
 
 # Server
 gunicorn==21.2.0
