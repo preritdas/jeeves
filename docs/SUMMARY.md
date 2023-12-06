@@ -3,7 +3,7 @@
 * [🎩 Meet Jeeves.](README.md)
 * [🖥 Tech and Backstory](tech-and-backstory.md)
 
-## 😎 Getting Started
+## Getting Started
 
 * [⛸ Initiation](getting-started/initiation.md)
 * [⚡ Zapier](getting-started/zapier.md)
