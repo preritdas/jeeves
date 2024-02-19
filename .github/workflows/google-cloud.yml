@@ -58,7 +58,7 @@ jobs:
         with:
           service: 'jeeves'
           image: gcr.io/preritdas-api/jeeves
-          flags: '--min-instances=1 --cpu=2 --memory=4Gi --timeout=5m --allow-unauthenticated --no-cpu-throttling --cpu-boost'
+          flags: '--min-instances=0 --cpu=2 --memory=4Gi --timeout=5m --allow-unauthenticated --no-cpu-throttling --cpu-boost'
           no_traffic: false
           
       - name: Allocate traffic to latest deployment
