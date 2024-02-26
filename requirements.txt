@@ -1,11 +1,11 @@
-fastapi==0.109.2  # API
+fastapi==0.110.0  # API
 pydantic==2.2.1  # force v2
 deta==1.2.0  # databases throughout
-pymongo==4.6.1  # mongo db
+pymongo==4.6.2  # mongo db
 
 # Server
 gunicorn==21.2.0
-uvicorn[standard]==0.24.0
+uvicorn[standard]==0.27.1
 python-multipart==0.0.7
 
 # Groceries
