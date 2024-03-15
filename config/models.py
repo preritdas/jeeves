@@ -101,7 +101,7 @@ class GPTConfig(BaseModel):
 
     @field_validator("base_openai_model")
     def validate_base_openai_model(cls, v):
-        if v not in {"gpt-4", "gpt-4-1106-preview", "gpt-3.5-turbo", "gpt-3.5-turbo-16k"}:
+        if v not in {"gpt-4", "gpt-4-1106-preview", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4-0125-preview"}:
             raise ValueError(
                 "Invalid OpenAI base LLM model provided."
             )
