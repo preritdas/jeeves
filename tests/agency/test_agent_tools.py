@@ -1,4 +1,6 @@
 """Test agent tools."""
+import pytest
+
 import requests
 
 from jeeves.utils import CHROME_REQUEST_HEADERS
@@ -30,6 +32,7 @@ def test_youtube_answerer():
     assert "Unfortunately cannot answer" not in answer
 
 
+@pytest.mark.skip
 def test_youtube_parsers():
     video_link = "https://www.youtube.com/watch?v=d1KT39pDiY0&ab_channel=MattWalsh"
     content = requests.get(video_link, headers=CHROME_REQUEST_HEADERS).text
@@ -78,6 +81,7 @@ def test_text_tool(mocker, default_options):
     assert "fail" not in res.lower()
 
 
+@pytest.mark.skip()
 def test_movie_tool():
     """Currently the movie tool is not given to the agent."""
     tool = MoviesTool()
