@@ -1,7 +1,9 @@
 """Test Rotten Tomatoes app."""
 from jeeves.applets import rt
+import pytest
 
 
+@pytest.mark.skip(reason="Until RT package is patched.")
 def test_handler():
     top_gun = rt.handler("top gun", {"inbound_phone": "12223334455"})
     assert "Top Gun" in top_gun
