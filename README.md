@@ -5,4 +5,4 @@
 
 # Jeeves
 
-Read the docs at [jeeves.preritdas.com](https://jeeves.preritdas.com).
+Not really maintained anymore unfortunately. Read the docs at [jeeves.preritdas.com](https://jeeves.preritdas.com).
