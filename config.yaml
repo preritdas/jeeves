@@ -19,8 +19,8 @@ Cocktails:
   result_limit: 3  # number of results to return
 
 GPT:
-  base_openai_model: gpt-4o
-  temperature: 0
+  base_openai_model: o1-preview
+  temperature: 0.5
   console_agent: false  # print verbosely to console
 
 Telegram:
